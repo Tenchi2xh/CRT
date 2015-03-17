@@ -12,4 +12,4 @@
 - Specifications document
 - Maven project created via NetBeans
     - Some dependencies
-    - Default license header
+    - Default license header (GPL3)
