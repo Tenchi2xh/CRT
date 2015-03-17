@@ -17,7 +17,17 @@ Ray Tracing is a technique for computer optical calculations used for rendering 
 
 ## Workflow
 
-All work will be kept up to date on GitHub, on a dedicated repository^[http://github.com/Tenchi2xh/CRT]. The documentation and report will be updated on a weekly basis.
+All work will be kept up to date on GitHub, on a dedicated repository[^http://github.com/Tenchi2xh/CRT]. The documentation and report will be updated on a weekly basis.
+
+The main project will be created using Maven for easy to manage dependencies and automated building. 
+
+The documentation will be written using Markdown mixed in with some \LaTeX, then converted to \LaTeX using Pandoc via templates. The documentation will include:
+
+- This document
+- The main report
+- A development journal
+ 
+Lastly, a small 7000 lines prototype of the core functionalities of this project was done last summer for experimenting and learning purposes. This prototype only deals with part of the rendering functionality and didn't include any of the rest (see below). Although some of the code will be refactored into the new project, most of the existing code will be totally corrected and rewritten.
 
 # Project specifications
 
@@ -84,3 +94,5 @@ All views will export their scenes into XML: the format will have to be well-def
 Saved XML files will include the user scene, all cameras and project settings.
 
 ## Basic animations
+
+An animation mode will activate at the press of a button to display additional buttons and settings for rendering basic animations. In the code, a global variable representing time will be usable to make entity positions relative to time, and the animation mode will render the scene frame by frame, incrementing the time global. 
