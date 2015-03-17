@@ -1,7 +1,5 @@
+![Logo](res/logo/logo.png)
+
 # CRT - Cathode Ray Tracer
 
-(TODO: Logo)
-
-## Planned features:
-
-(TODO)
+Licensed under the [GNU General Public License V3](http://www.gnu.org/licenses/)
