@@ -1,0 +1,9 @@
+Requires:
+
+- GraphViz
+- Latex CMU Fonts
+
+Optional:
+
+- NetBeans PlantUML plugin
+- IrfanView PostScript plugin for EPS files
