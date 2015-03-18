@@ -12,4 +12,8 @@
 - Specifications document
 - Maven project created via NetBeans
     - Some dependencies
-    - Default license header (GPL3)
+    - Default license header set (GPL3)
+- Logo design
+    - First simple attempt
+    - Created CRT effect as a Photoshop action and patterns
+    - Multiple sizes
