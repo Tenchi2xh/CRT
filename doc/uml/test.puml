@@ -1,0 +1,28 @@
+@startuml
+
+title Relationships - Class Diagram
+
+package "net.team2xh.crt" {
+
+abstract class Dwelling <<Stereo>> {
+  + int Windows
+  - void LockTheDoor()
+}
+
+class Apartment
+class "House<T>" as House
+class Commune
+
+class Owner
+
+}
+
+Dwelling <|-down- Apartment: Test
+Dwelling <|-down- Commune
+Dwelling <|-down- House
+
+Dwelling "*" -right- "1" Owner
+
+note bottom of House: Lorem ipsum <i>dolor</i> sit amet
+
+@enduml
