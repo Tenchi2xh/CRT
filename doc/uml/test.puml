@@ -1,6 +1,6 @@
 @startuml
 
-title Relationships - Class Diagram
+'title Relationships - Class Diagram
 
 package "net.team2xh.crt" {
 
