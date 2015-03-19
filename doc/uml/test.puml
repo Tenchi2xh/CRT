@@ -1,7 +1,5 @@
 @startuml
 
-'title Relationships - Class Diagram
-
 package "net.team2xh.crt" {
 
 abstract class Dwelling <<Stereo>> {
