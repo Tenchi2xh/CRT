@@ -1,0 +1,6 @@
+- Acknowledgements, Appendix, Bibliography at the end with letter numbering
+- Foreword before Abstract instead of Acknowledgements
+- Thesis folder with source files, and separate chapters. Script will cat the abstract, and then the rest in alphabetical order
+- Try report class (try --chapters)
+- Find out about minted
+- Desaturate default color scheme with script, keep publicity colors
