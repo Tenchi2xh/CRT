@@ -4,14 +4,34 @@
 [x] Acknowledgements, Appendix, Bibliography at the end with letter numbering
 [x] Foreword before Abstract instead of Acknowledgements
 [x] Thesis folder with source files, and separate chapters. Script will cat the abstract, and then the rest in alphabetical order
-[-] Find out about minted
 [x] Desaturate default color scheme with script, keep publicity colors
+
+[-] Find out about minted -> pandoc problem
+[-] Find out about Eukleides
+
+# Thesis sections
+
+[x] Scenes
+[~] Ray tracing
+[~] Language
+
+# UML diagrams
+
+[x] Rendering activity
+[x] Rendering class
+[~] ANTLR
 
 # Raytracer
 
-- Gamma for color blending ! https://www.youtube.com/watch?v=LKnqECcg6Gw
+[-] Gamma for color blending ! https://www.youtube.com/watch?v=LKnqECcg6Gw
 
 # Refactoring
 
-- Settings, Lights and Camera all inside Scene
-- Aperture, FOV etc. in Camera
+[-] Settings, Lights and Camera all inside Scene
+[-] Aperture, FOV etc. in Camera
+
+# Grammar changes
+
+[-] Unify settings
+[-] Procedure notation
+[-] Review style
