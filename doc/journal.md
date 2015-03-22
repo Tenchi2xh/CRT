@@ -17,3 +17,11 @@
     - First simple attempt
     - Created CRT effect as a Photoshop action and patterns
     - Multiple sizes
+
+# 16.03.2015 - 22.03.2015
+
+- \LaTeX thesis template
+- UML class diagrams for rendering process, ANTLR4 structure
+- Some sequence diagrams
+- Paragraphs on the rendering process and grammar parsing
+- Reworked the grammar

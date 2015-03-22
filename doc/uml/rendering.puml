@@ -1,0 +1,72 @@
+@startuml
+
+set namespaceSeparator none
+hide empty members
+
+class Tracer {
+    + int[][] render()
+    - Pigment trace()
+}
+
+hide Tracer fields
+
+class Scene {
+    + void add(Entity)
+}
+
+hide Scene fields
+
+class Settings {
+    ...
+    + void addLight(Light)
+}
+
+class Light {
+    + Vector3 origin
+    + double falloff
+    + double ambient
+    + Pigment color
+}
+
+hide Light methods
+
+abstract class Entity {
+    + Material material
+    + {abstract} Hit intersect(Ray r)
+}
+
+class Camera {
+    - Vector3 position
+    - double roll
+    - Matrix4 viewMatrix
+}
+
+hide Camera methods
+
+class Box
+abstract class "..."
+
+abstract class CSG
+class Union
+class Difference
+class Intersection
+
+Settings o-- Light
+Settings -- Camera
+
+Entity <|-- Box
+Entity <|-- "..."
+Entity <|-- CSG
+
+CSG *-- Entity
+
+Scene *-- Entity
+
+Tracer -- Settings
+Tracer -- Scene
+
+CSG <|-- Union
+CSG <|-- Difference
+CSG <|-- Intersection
+
+@enduml
