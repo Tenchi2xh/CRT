@@ -21,6 +21,7 @@
 # 16.03.2015 - 22.03.2015
 
 - \LaTeX thesis template
+- Python script for building thesis
 - UML class diagrams for rendering process, ANTLR4 structure
 - Some sequence diagrams
 - Paragraphs on the rendering process and grammar parsing

@@ -1,9 +1,23 @@
 % \documentclass[$if(fontsize)$$fontsize$,$endif$$if(lang)$$lang$,$endif$$if(papersize)$$papersize$,$endif$$for(classoption)$$classoption$$sep$,$endfor$]{$documentclass$}
-\documentclass[a4paper, twocolumn, 10pt]{article}
-\setlength{\columnsep}{1.15cm}
+\documentclass[a4paper, twocolumn, 10pt]{report}
+\setlength{\columnsep}{1cm}
 
 % for headers
 \usepackage{fancyhdr}
+
+% for pretty code snippets
+% \usepackage{minted}
+
+% simple chapters
+\makeatletter
+\def\@makechapterhead#1{%
+  \vspace*{50\p@}%
+  {\parindent \z@ \raggedright \normalfont
+    \interlinepenalty\@M
+    \Huge\bfseries  \thechapter.\quad #1\par\nobreak
+    \vskip 40\p@
+  }}
+\makeatother
 
 % for sticking footnotes to the bottom of pages
 \usepackage[bottom]{footmisc}
@@ -20,11 +34,11 @@
 %     \newpage}
 
 % for custom figures
-\newcommand{\customfig}[2] {
-  \begin{figure}[h]
+\newcommand{\customfig}[3] {
+  \begin{figure}[!htbp]
       \centering
       \includegraphics[width=\columnwidth,keepaspectratio]{#1}
-      \caption{#2}
+      \caption[#2]{#2#3}
   \end{figure}
 }
 
@@ -258,6 +272,29 @@ $for(include-before)$
 $include-before$
 
 $endfor$
+
+\makeatletter
+\renewcommand\tableofcontents{%
+    \section*{\contentsname}%
+    \@mkboth{\MakeUppercase\contentsname}%
+        {\MakeUppercase\contentsname}%
+    \@starttoc{toc}%
+}
+\renewcommand\listoftables{%
+    \section*{\listtablename}%
+    \@mkboth{\MakeUppercase\listtablename}%
+        {\MakeUppercase\listtablename}%
+    \@starttoc{lot}%
+}
+\renewcommand\listoffigures{%
+    \section*{\listfigurename}%
+    \@mkboth{\MakeUppercase\listfigurename}%
+        {\MakeUppercase\listfigurename}%
+    \@starttoc{lof}%
+}
+\makeatother
+
+
 $if(toc)$
 {
 \hypersetup{linkcolor=black}
@@ -266,13 +303,13 @@ $if(toc)$
 \renewcommand{\contentsname}{Table of Contents}
 \pagenumbering{roman}
 \tableofcontents
-\addcontentsline{toc}{section}{Table of Contents}
+\addcontentsline{toc}{chapter}{Table of Contents}
 \newpage
 \listoffigures
-\addcontentsline{toc}{section}{List of Figures}
+\addcontentsline{toc}{chapter}{List of Figures}
 \newpage
 \listoftables
-\addcontentsline{toc}{section}{List of Tables}
+\addcontentsline{toc}{chapter}{List of Tables}
 \newpage
 \twocolumn
 }
@@ -281,7 +318,7 @@ $endif$
 % header
 \pagestyle{fancy}
 \fancyhf{}
-\rhead{\leftmark}
+\rhead{\rightmark}
 \cfoot{\thepage}
 \renewcommand{\headrulewidth}{0pt}
 

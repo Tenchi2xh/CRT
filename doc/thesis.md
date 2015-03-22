@@ -1,358 +1,182 @@
 \onecolumn
-\section*{Acknowledgements}
-\addcontentsline{toc}{section}{Acknowledgements}
-
-Cumque novissima atque **Caeni** tendentes, est pectus inania ferarum: nubila
-septemflua gestanda e merito. Iuncta mirantem ad hosti, corpora axes nox a moram
-ministri mei, numine sentiat; repurgat caelo ubi. Te
-repetita aspicit fraude, iubent percussis absitque et avenis teneo, Quin vide
-iunci atria, artus imago premeretur.
-
-Io adspice cetera flagrantemque orbae; mandate crudelis furta et causam in fonte
-tene senes freta, orbe Solis? Cervus pondere fatis Proserpina divam in
-alta cinguntur erat, arva a sacra Athamas Orpheu meliore
-sufficit stillataque. *Ille sceleri*: per qua mixta subiere
-virtus quater puer inmortalis latet monstravit patriam, hic opus tua hos
-thalamos. Solos eversae petebar quoniam, hic exhalat lenisque murmure ut in nunc
-sit vicerat mente.
-
-Saxa levi per auras in et res loquendi vidit est inde silvis de. Novaque
-aris ipsam reppulit genitor, et dolebis tendere: arma recepta portus Deucalion
-pecoris est dividite. *Simul* rotatum et *illud* et canam de Deianira condidit
-cum? Regina mox fatiferum quid.
-
-Diu me quem glacialis **lanient**; inmensum oculis mea anteit rudentes Thesea nate
-duce et habebam postquam. Et votique visum Semeleia Poeante meum tardius
-nullasque serpens ipsa quinque solita. Et et praefoderat tamquam memori quibus
-aliquando; consistere rustica iunctarum bracchia viderat et parum. In haesit
-miserabile, isto illa Cycneia, tolli quam.
-
-\twocolumn
+\section*{Foreword}
+\addcontentsline{toc}{chapter}{Foreword}
+Foreword...\twocolumn
 \pagenumbering{arabic}
 
-\begin{abstract}
-Cumque novissima atque Caeni tendentes, est pectus inania ferarum: nubila
-septemflua gestanda e merito. Iuncta mirantem ad hosti, corpora axes nox a moram
-ministri mei, numine sentiat; repurgat caelo ubi. Te
-repetita aspicit fraude, iubent percussis absitque et avenis teneo, Quin vide
-iunci atria, artus imago premeretur.
 
-Io adspice cetera flagrantemque orbae; mandate crudelis furta et causam in fonte
-tene senes freta, orbe Solis? Cervus pondere fatis Proserpina divam in
-alta cinguntur erat, arva a sacra Athamas Orpheu meliore
-sufficit stillataque. Ille sceleri: per qua mixta subiere
-virtus quater puer inmortalis latet monstravit patriam, hic opus tua hos
-thalamos. Solos eversae petebar quoniam, hic exhalat lenisque murmure ut in nunc
-sit vicerat mente.
-
-Saxa levi per auras in et res loquendi vidit est inde silvis de. Novaque
-aris ipsam reppulit genitor, et dolebis tendere: arma recepta portus Deucalion
-pecoris est dividite. Simul rotatum et illud et canam de Deianira condidit
-cum? Regina mox fatiferum quid.
+\newpage
 
-Diu me quem glacialis lanient; inmensum oculis mea anteit rudentes Thesea nate
-duce et habebam postquam. Et votique visum Semeleia Poeante meum tardius
-nullasque serpens ipsa quinque solita. Et et praefoderat tamquam memori quibus
-aliquando; consistere rustica iunctarum bracchia viderat et parum. In haesit
-miserabile, isto illa Cycneia, tolli quam.
-\end{abstract}
-
-# Pennas magni
-
-## Ante est perpetuaque clarum
-
-Lorem markdownum niveis sternitur; flere manu videntur oscula cacumine regalia
-tecta; at pacem. Accipienda virtute illum [dederitis](http://jaspervdj.be/) in
-illo fusum spemque raucaque reddere si dum quaeque? Congressus sum **non**,
-violentaque fessusque invidiae iungere obumbrat quoque nocuit. Semper it
-spectare ero mora dura nec vilisque cornua ingeniis obliquo Rhesum sepulcrum
-parenti? Concipit minus abiit, [conplecti latosque
-equo](http://textfromdog.tumblr.com/) quoque, multorum crimen bacchae.
+# Rendering process
 
-Aestu an *Pylio quacumque nivosos* contigit et [huic
-contra](http://heeeeeeeey.com/); et [tanta
-caelestes](http://html9responsiveboilerstrapjs.com/) quot coniugium resoluto,
-refovet. Fugit et victrix illis; securaque felicia! Ut finem volucres colonis!
+Rendering an image involves several steps. The general thought process is as follows: what objects are placed on the scene? What are they made of and how does *light* interact with them? Where is the camera placed, and where is it pointing to? How many light sources are present in the scene, and which ones have an effect on which objects? What rendering options are enabled?
 
-## Nacta arida alter
+To answer these questions, we will see what classes represent a scene and how to trace rays in the following sections. 
 
-Et fuere edidit enim caecos sensit magni. Viro illic superesse multos dextra
-nulla fallaciter pericula velari et nec magno restant fidumque. Nec ira si nunc
-sanguine artus viro Procne et sitim carmina, ipse **nos**, quique et
-*innabilis*.
+## Scenes
 
-- Medea iam alto torvis reclusit separat
-- Aut qualis vestros clavigeri nulloque
-- Salutant umerique constitit viveret namque postquam
-- Ausa prece reliquit gramina virtutis terrae illam
+A scene is represented by a `Scene` class which contains all the entities that will be drawn, as well as all important information on how to draw them:
 
-\customfig{uml/test.eps}{A class diagram}
-
-## Mille germanaeque undis
+- A list of entities
+- A list of light sources
+- A camera
+- A `Settings` object
 
-Hoc [iam abstrahor](http://example.com/), auras. Ritus velo cultores trepida.
-Opus non, Icare, o Hymenaeus sui est habent et.
+### Entities
 
-Discedit solebant conpendia, nec *tibi ferro*, oculos odore castris. Gemellam
-mactare, in *verso*, gravidis qui sex dumque ipsis, mihi nostri. Sua fit:
-certare tellusque Hylonome in factae pudori habeto dilacerant caesariem raptam
-usquam revulsum istis pudor, dat veluti. Aonides caraeque inmunitamque arcum.
+Entities are primitives volumes that can easily be described with mathematical equations, such as boxes (*parallelepipeds*), spheres, cones, planes and half-planes, etc. Each entity must provide an `intersect()` method for computing its intersection points with a given ray, which we will need later on to do the rendering. 
 
-## Quamvis senatus
-
-Genu nunc Latini quo Proteaque videres ritu quod rapta, si. Nunc vires fluctus
-coepta. Numam tibi vir inhospita cultis, ruit aratro moenia iussos habeant nec
-labori Stygia ingenio regisque.
-
-Quaeque dedecus quo Telamon Lelex solum vacuas, quae in Talia turbatis iussaque
-candidus hosti iam? Venit exit fuerat et voce non ictus silvae ponunt usus;
-proxima praeside qua collo quo, quarto Iunoni. [Clamor
-confidit](http://www.lipsum.com/) idem putat: nos retro imago illo.
-
-# Forma abductas quoque Rhodope lacrimis negata
+Entities also contain a `Material` object, which will describe what the entity is made of. Materials possess several attributes that describe how light interacts with it:
 
-## Qua his
-
-Lorem markdownum modo; debere et ferat et mortali lacrimis genibus, humana?
-Addidit more leves felix, apud [aevum undis
-vestigia](http://omgcatsinspace.tumblr.com/), illic.
-
-> Gratus excedere dixit erat vetantis, debita. Est omnes, cum, tibi stimulis
-> motaeque iam rerum forem ipsum.
-
-## Vocisque tumebat
-
-Pastoris Pleionesque tabe lunae thalamos concutit, cura voracis vastior omne
-sit. **Atrides** quem! Ira pectus manu haberet id iuvenem inde quanta. Ingens
-innocuum in manibus color micat aeriaeque inplerit haec dicunt dea omnia ista
-Troiani cum.
+- A color, provided by the `Pigment` class
+- Reflectivity, for shiny surfaces
+- Transparency, defining how many photons can go through.
+- Refractive index, defining how much light is slowed down when passing through the material.
+- A diffuse factor, which makes light bounce diffusely.
+- Specularity, for harsh highlights (this is a computer graphics trick, it is not physically accurate).
+- Shininess, defining how sharp the specular highlight will be.
 
-Falsa ait tutus et tempore arbor mihi *Cycnum Caesareo Victor* primum
-conchaeque supplex alis felicesque fluit pro contingat denique. Et adhibere,
-non umeris est vidisse caelestique di in pecorum movere texique, timido
-nefasque, operum his.
-
-\customfig{uml/test.eps}{A class diagram}
+Only having mathematical primitives is however very limiting for a creative user. To remedy this, an entity can also be the result of a CSG operation, which can be a union, a difference or an intersection. CSG operations will be explained in details in the section on ray tracing.
 
-## Sagitta fide postquam semine
+### Light sources
 
-Si qui verteris vires utque: Cyprio qua serpens Thracis nondum. Aequor rogantum
-pectora simul pervia, et illa tellurem vivere me fugientem olim inpatiens nollet
-confinia acumine culta longus. Ubi Venus in coeperat si Aiax tamen partim
-tulerunt se fatemur rediit.
+Light sources give color to entities, and is the target of all the rays we bounce off entities. A light source is defined by the `Light` class and has the following properties:
 
-Tuas armis: te inter **ventis anxia** quo penates clausit. Concipit mater, in
-neve fuit, tenebat *tibi*, nisi super flavus, ora scelus. Formidabilis longo
-tororum, est vestes guttura; sed tibi senior. Melior nulloque cremavit Pallada
-spem noxque triplex caeloque media mihi et trabs horrentia! Coniuge lapsae
-foliisque et dictis recedit excussit arripit.
+- A point of origin, defining from where the light is shining.
+- A *falloff* factor: describes the natural effect observable in nature, where light follows an inverse square law: the intensity of light from a point source is inversely proportional to the square of the distance from the source. We receive only a fourth of the photons from a light source twice as far away.
+- A color, given by the `Pigment` class
+- An ambient light factor: because simulating global illumination is mathematically difficult and takes a lot of processing, we can simulate ambient light (accumulation of light that bounces of many surfaces) by setting an ambient factor, which will basically add a fraction of the value of its color and intensity. 
 
-## Contemnere mundum
+### Camera
 
-Partim audita Pallas coniciunt actum ore in cortice
-[Cimoli](http://www.mozilla.org/). Per fonte triplex geniti. Silvarum finibus,
-membra factos **saxo** proiecto non, [amanti](http://news.ycombinator.com/)
-vincetis pallet: fessam hominem in. Fumida auster!
+A lit and populated scene still needs a window through which we will observe it: the `Camera` class defines the point of view of our rendered scene. It has a position, a direction vector, and a focal length (field of view angle). To further add to the user's creative possibilities, we implemented several features which aim to mimic real-life cameras:
 
-- Conceptas indoctum capillos
-- Agam successu corpora et inque senior ventis
-- Nec et possumus tergum de pressere promptum
-- Vulnere falcato instabilis esse
+- Depth of field (DOF), creating a plane in which objects are sharp, and blurry beyond.
+- An aperture shape, which will be used to physically simulate the shape that *bokeh* will have (see figure below).
+- A focal distance, defining at which distance objects are sharp.
 
-\customfig{uml/test.eps}{A class diagram}
+\customfig{img/bokeh.jpg}{Real-life \emph{bokeh}}{: the blurriness of out-of-focus objects will take the shape of the camera's aperture (pinhole). Here, the \emph{bokeh} is pentagonal.}
 
-Lecti Vidi haec in foret habuissem licuit locorum ab latus habebis, perit orbem
-meae sponte illi longe iacuit. Et peperit laeva?
+### Settings
 
-# Quondam et Hector arduus adflatuque fama vulnera
+The `Settings` class encapsulates all remaining options for customizing the way we render a scene:
 
-## Concipit redemit femur
+- Picture resolution
+- Gamma value
+- Super-sampling factor
+- Number of DOF samples
+- Recursion depth
 
-Lorem markdownum tempore. Mei est. Et transit omnia inculpata erit stamina
-puellari ponti. Locum saepe Cythereiadasque tellus serasque et esset tristis;
-nec aera prior eodem formosa.
+The meaning of these settings will further be explained in the section regarding ray tracing.
 
-1. Veniensque revelli ubi duroque studiis Ulixe
-2. Hunc minor illis terrae sati diu multum
-3. Omnes matres
-4. Torva discedite et inque sinistra cratera ferae
+### Class structure
 
-Sedent tantaeque videnda tenentem caelum si iusto plus moturaque evitata
-Orpheus, potentior sitiemus. Gente et procorum amborum usus novae perosus
-fratresque ut tuli parantem subdita. Esse suus maternae cessit, adeo autumnos
-flammas, tamen contraria silvisque lacusque. Hominis ad quod clipeum agmine,
-flammas **ille**, unam? Fata ibat ea quoque decebat aut quod pignora rigent
-intrat?
+\customfig{uml/rendering_edit.eps}{Rendering process class diagram}{}
 
-Quod silenti templis. Ab fiat vinci adflixit
-[solvit](http://www.reddit.com/r/haskell)! Ferre aethere, nam volucrum turba
-inque superest [tibi vincet torreri](http://imgur.com/) quae, trita, et prodidit
-quem; innumerae!
+## Ray tracing
 
-## Vocant sono abest esse infelix verba
+Ray:
 
-Nusquam horrentia graves, vincloque multos tincto oraque in militia minimus non
-nata aures venerande, tibi auras vestram. Adspicere teneat moenia capta Ulixem
-iuris **Assyrius hostis dammas**, metuendus. Praevia faciemque saepe, horrifer?
+$$ \vec{o} + t\vec{r} $$
 
-- Vides vos tincto amor flammis
-- Quoque agit
-- Non crederet ungues
-- Et vetustas summoque
-- Duobus tellus in est nec non specie
+Sphere:
 
-Frater medeare: sequatur mihi; haec torquetur oscula conreptus dimittit utar,
-sparsit; Redditus. [Stricto](http://omfgdogs.com/) paret tuaque si nondum,
-obsedit ulterius, ego praesens creatas, non. Dirae habetque illis aliquemque
-corpore misit illa cum arte egreditur in mihi, esse pectore: sui. Crevit aperire
-imperio et elige dabis, tamen vocat inprobe quibus laborum eras sub vota
-Ausoniae [bella fata](http://kimjongunlookingatthings.tumblr.com/).
+Ray-sphere intersection:
 
-\customfig{uml/test.eps}{A class diagram}
+### Process
 
-- Illis nodosa
-- Loca geratur
-- Elisi agit valens et illum dei corrigit
+\customfig{uml/rendering_activity.eps}{Rendering process activity diagram}{}
 
-Flumina ora ventis trunca remittas. Petendo mea, certamina altissima animusque
-cortice nisi, *dedisses o alumnae*, certe dentes mora. Vestra nec **servant
-caput praeposuisse** viros condeturque umbra **te haec alis** laudis. Pennis
-fortissime data Ausonia regis duabuset pedibusque ponit non hunc *mihi illic
-confessis* sola, non. Quasi quo quo, et quoque non pondere cantu adspicit
-flammis.
+### Constructive solid geometry
 
-# Mergit hora virisque
+\customfig{img/csg.png}{A piano foot obtained from CSG operations}{}
 
-## Vineta ipse stratoque et vaticinos vagantem sub
 
-**Lorem markdownum** perfida iter pastorve hoc domus armentis umeris. Iamque
-[et](http://imgur.com/) populumque et gerebat longe [laeva
-electarumque](http://zeus.ugent.be/) animum; par flet in ire scelerata retro
-ipsum amando. Sed colubris tibi causa succedere novissima sagitta patrem avem,
-sedes. Fontis nomen, in sustinet pulsabantque emicat orbem versasque, plausu
-eunti. **Lacerum patrio** teneri: est flesse ilia, duro.
+\newpage
 
-## Porrigit turba in feret profuso sciat
+# Language
 
-Ipse sic questuque abit, est et amor bifores Hippomenen insignia. Vultusque
-licet conligit Libys duos quae flumine sunt.
+So far, we can compose and render scenes by directly writing them in Java, instancing `Scene` and `Entity` objects. But for the user to compose his own scenes, we need to define a language: the CRT scripting language.
 
-Eodem defenderet Lyncides ab memores virentes; ipsum in omnia incipiat avidum.
-Adversa sermonibus uritur virginis et visa accedere, me abest. Diversas mihi
-pereunt fera coniunx altior cedere erat aliquid tremat.
+...
 
-## Indigetem fuit est
+- Imperative, no objects
+- Procedures with parameters, no functions
+- Variables can store entities
+- Nesting scopes
 
-Terricula timidas expalluit mirabere sinu velamina vix Naxon, ego supplex atque
-uvis quosque adsit. Nisi sororem virgo se idque litusque coniunx. Esse imperio:
-moriens is [tantae](http://zeus.ugent.be/) mille labores Clymene. Mihi dabitur
-[est](http://www.metafilter.com/) dabantur aquas planguntur aequor.
+## ANTLR4
 
-**Ille aprum** specto! Aut femina! Dicere erat: alta nec Dianam tempora,
-purpureis robore socerque cornua sors ensis: vidit. Cum capillos longa sequentis
-sed quo, corpus quod tandem caput, et oras, ille, inquam.
+\customfig{uml/antlr.eps}{Classes generated by ANTLR4}{}
 
-## Ara hanc Phrygia infelix morientia et exercet
+## Grammar
 
-Danaas paucis, *animoque* temptant movit animalia, cum in tenus. Excitat
-**contenta** ad animo, est miscuit resoluta, in [rumpit reliquit
-commissas](http://html9responsiveboilerstrapjs.com/) Oenides.
+## Compiling process
 
-Et corpus, an Asida di aves reddere, quae quid in hiscere cavas pharetra in
-putares inclusum. Tuae dura! **Illa mea**.
+```
+set title  = "Example 01"
+set author = "Tenchi (tenchi@team2xh.net)"
+set date   = "08.06.2014"
+set notes  = "Sample CRT scene in TRC language,"
+             "language specification exploration."
 
-# Medea amantes et prima parantem
+# Sample camera
+let cam = Camera(position -> vec3 (0.0, 0.5, -0.5),
+                 pointing -> vec3 (0.0, 0.0, 0.0))
 
-## Tamen si ciconia Ausoniae est venter
+let redLight = Light
+(
+    position -> vec3 (1.0, 1.0, 1.0),
+    color    -> rgb  (1.0, 0.9, 0.8)
+)
 
-Lorem markdownum picea ab altos mutavit: venefica adpulit et altera. Si nostro
-tergoque nostris rapere, nec es, excipit, at ut perdes delphina mea velaque
-valeant.
+let box1 = Box
+(
+    corner1 -> vec3 (-0.2, 0.0, -0.2),
+    corner2 -> vec3 (0.2, 0.4, 0.2),
+    color   -> rgb  (0.5, 0.5, 0.5)
+)
 
-Vulnus Cecropidas laedere fuerat Pirithoum mercede litora huic canum exsangui
-regnumque quid; quid. Ipse fertur, mitti picae, inundet asper, notissima
-aeternus dignus pro currus ut. Credita robora hirsutus vocavit at quam per
-inquit, sua palmas, sine rudente cuius!
+let sphere1 = Sphere
+(
+    origin -> vec3 (0.0, 0.4, 0.0),
+    radius -> 0.2
+)
 
-\customfig{uml/test.eps}{A class diagram}
+let tub = box1 - sphere1
 
-Nec cognovit sed nomina Hippolytum: **videri** vagantes
-[videor](http://www.mozilla.org/) uterque, sospes fuit ut, illo et Triviae diu
-saepe. Primum [est amanti](http://imgur.com/) possem seu sanguis vidit terrent
-tergoque sub crebros tumidi.
+# Ground
+let plane1 = Plane
+(
+    normal   -> vec3 (0.0, 1.0, 0.0),
+    position -> vec3 (0.0, 0.0, 0.0)
+)
 
-Negabit et quid caligine aversae relicta, precor manus quem ut accepere. Omnia
-Iuno alitibus, utrumque grandior nymphae caelo populoque penatibus quae; tum
-noctis. Ubi refert duro redditur iactanti: litora: molli Pallas.
+set settings = Settings
+(
+    gamma      -> 1.0,
+    background -> rgb (1.0, 1.0, 1.0),
+    camera     -> cam,
+    lights     -> [redLight, blueLight]
+)
 
-## Nato spiritus ramis in latus Achille lapidoso
+scene {
+    box1 <scale 3.0> - sphere1 <scale vec3 (1.0, 1.0, 2.0)>,
+    tub <scale 2.0, translate vec3 (1.0, 0.0, 1.0)>
+}
+```
 
-Molibar magnaque! Vinci adsuetasque cum pectine dixit norat nec ire nympharum
-cumque ipsaque sit agros.
 
-- Fallunt Troianaque minimos tecum natos omen sed
-- Tyranni data equos exstanti nulla et operi
-- Iste nervus multaque dicentem cunctantem ignes annos
-- Est vetorque incidit virginis terruerit fiducia tulit
-- Thetis tam vox tu
-- Et undis
+\onecolumn
+\setcounter{chapter}{0}
+\renewcommand\thechapter{\Alph{chapter}}
+\chapter{Acknowledgements}
+Acknowledgements...
 
-Manibus Orchamus, aula qui, equum nefas, ubi vix, **flavam** una Phoebus
-ferrumque? Virentibus nostra umidus, ea evectus quas reverti circum, manifesta.
 
-Ab patris femina agris auras ardua ut **ferarum cui ignis** gelidas erat
-iuvenalia et. Ripas revincta *potes ei* imae, biformis super porrexit et
-**miserat** quicquid. Duobus veni urbi
-[grani](http://kimjongunlookingatthings.tumblr.com/) te corpore quaeque cunas
-nomina non.
+\chapter{Appendix}
+Appendix...
 
-# Restantem quoniam luctatur gaudia
 
-## Hic lumina imago
-
-Lorem markdownum fixa, esse, ore erit [Proetum
-stipes](http://omgcatsinspace.tumblr.com/), formidabilis liceat et tenui
-numinis. Monstra est tertius magni regis vivit cura nisi iugo in temerarius
-foedusque? Deus aquis fatis est texit vim ministeriis suum, mora sparsitque
-obstas infestae lacrimis sublimis per vertit vestras artus pugnat.
-
-\customfig{uml/test.eps}{A class diagram}
-
-## Viscera Dianae illa futuri cupido magna placido
-
-Non capillis Dardanio: locuturo! Radice cornu et Argolica comitem; in nobis
-nigraque quid ulterius, Erysicthone post exhibet, et. Pectus **saevam ita**
-avitum matrona rogabat caput odium!
-
-Ora positis arsuris nobis aperite ferat, est forent, me tetigere serisque
-**amor iam sinuaverat** si messes, ignotum. Rima et sparsos habeto tenet nunc
-sonitu abluere, in Phoebeius, ab oculos bonis magno murmure squamaque femina!
-Erroribus venerat queritur ut Insula, mea vides iunctam trunco. Est traherent
-vicem; ficti omnes perosam demittere at ferro sceleratos, opaca primusque
-colli at!
-
-## Pedes urbe
-
-Consedit et ab in datos concita. Sustinet epulas tecti, ora multoque avidus
-natos animis foedantem facturus in classi nomen tumidam. Ire mea flumen.
-
-Penetravit ducere moriens potuit et silvae prior. Prodit angue: virorum condidit
-habet in arida **fallitque** crines orandus, ora. Crudele cladis. Sertis cum cum
-riget de frigus instituit.
-
-## Bina erat ibi a pars revexit rogus
-
-Amantis ablata caelitibus fuisset **incognita tanta committi** contactu tremens
-ipsamque medius intrat, enixa. Tenuesque nec, et raras videtur certis cristata
-tempora esset.
-
-- Est usus herbis ferrugine et nata novissima
-- Exstabant mitia rictus sceptroque animam
-- Fuerat celsior enim me magis Pelion corporis
-- Susceptaque domus paludibus nate rursusque nomine
-- Misi in surgere dea sordida fatum laboriferi
-
-Neque dependebat tibi, ignes est. Attollit **frena exsangues** hinc, *et* nais
-que feram pectora Pelasgi furta. Meminit [inde](http://www.metafilter.com/),
-remissis contemnere facies at pallenti fraxinus in debebat mutatis se. O qua hoc
-fuit illum dedit, cur qui subvolat aede!
+\chapter{Bibliography}
+Bibliography...

@@ -1,0 +1,33 @@
+@startuml
+
+set namespaceSeparator none
+hide empty members
+
+class CRTLexer {
+
+}
+
+class CRTParser {
+
+}
+
+interface CRTListener {
+
+}
+
+interface CRTVisitor {
+
+}
+
+class CRTBaseListener {
+
+}
+
+class CRTBaseVisitor {
+
+}
+
+CRTVisitor <|-- CRTBaseVisitor
+CRTListener <|-- CRTBaseListener
+
+@enduml
