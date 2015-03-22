@@ -42,7 +42,7 @@ Light sources give color to entities, and is the target of all the rays we bounc
 
 A lit and populated scene still needs a window through which we will observe it: the `Camera` class defines the point of view of our rendered scene. It has a position, a direction vector, and a focal length (field of view angle). To further add to the user's creative possibilities, we implemented several features which aim to mimic real-life cameras:
 
-- Depth of field (DOF), creating a plane in which objects are sharp, and blurry beyond.
+- Depth of field (DOF), effect that creates a plane in which objects are sharp, and blurry outside, akin to a tilt-shift effect in photography.
 - An aperture shape, which will be used to physically simulate the shape that *bokeh* will have (see figure below).
 - A focal distance, defining at which distance objects are sharp.
 

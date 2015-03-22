@@ -81,6 +81,12 @@ $$ \vec{o} + t\vec{r} $$
 
 Sphere:
 
+\begin{eukleides}
+A B C triangle
+I = incircle(A,B,C)
+draw(A,B,C) ; draw(I)
+\end{eukleides}
+
 Ray-sphere intersection:
 
 ### Process
