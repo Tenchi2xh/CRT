@@ -51,7 +51,7 @@ Light sources give color to entities, and is the target of all the rays we bounc
 
 A lit and populated scene still needs a window through which we will observe it: the `Camera` class defines the point of view of our rendered scene. It has a position, a direction vector, and a focal length (field of view angle). To further add to the user's creative possibilities, we implemented several features which aim to mimic real-life cameras:
 
-- Depth of field (DOF), creating a plane in which objects are sharp, and blurry beyond.
+- Depth of field (DOF), effect that creates a plane in which objects are sharp, and blurry outside, akin to a tilt-shift effect in photography.
 - An aperture shape, which will be used to physically simulate the shape that *bokeh* will have (see figure below).
 - A focal distance, defining at which distance objects are sharp.
 
@@ -80,12 +80,6 @@ Ray:
 $$ \vec{o} + t\vec{r} $$
 
 Sphere:
-
-\begin{eukleides}
-A B C triangle
-I = incircle(A,B,C)
-draw(A,B,C) ; draw(I)
-\end{eukleides}
 
 Ray-sphere intersection:
 
@@ -119,7 +113,7 @@ So far, we can compose and render scenes by directly writing them in Java, insta
 
 ## Compiling process
 
-```
+``` { .haskell .numberLines } 
 set title  = "Example 01"
 set author = "Tenchi (tenchi@team2xh.net)"
 set date   = "08.06.2014"

@@ -6,8 +6,7 @@
 [x] Thesis folder with source files, and separate chapters. Script will cat the abstract, and then the rest in alphabetical order
 [x] Desaturate default color scheme with script, keep publicity colors
 
-[-] Find out about minted -> pandoc problem
-[-] Find out about Eukleides
+[-] Find out about tkz-euclide
 
 # Thesis sections
 

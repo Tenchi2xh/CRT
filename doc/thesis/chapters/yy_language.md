@@ -17,7 +17,7 @@ So far, we can compose and render scenes by directly writing them in Java, insta
 
 ## Compiling process
 
-```
+``` { .haskell .numberLines } 
 set title  = "Example 01"
 set author = "Tenchi (tenchi@team2xh.net)"
 set date   = "08.06.2014"
