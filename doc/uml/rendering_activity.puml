@@ -1,0 +1,25 @@
+@startuml
+
+start
+
+:Prepare pixel coordinates;
+
+fork
+    :Generate initial ray;
+    repeat
+    partition trace() {
+        :Find closest\nintersecting entity;
+        :Add all light\ncolor components;
+    }
+    repeat while (Reflective?) is (new ray)
+fork again
+    :.../
+fork again
+    :.../
+endfork
+
+:Gather all resulting colors;
+
+stop
+
+@enduml
