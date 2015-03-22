@@ -4,8 +4,8 @@ set namespaceSeparator none
 hide empty members
 
 class Tracer {
-    + int[][] render()
-    - Pigment trace()
+    + {static} int[][] render()
+    - {static} Pigment trace()
 }
 
 hide Tracer fields

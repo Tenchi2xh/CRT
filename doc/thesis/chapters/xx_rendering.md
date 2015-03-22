@@ -48,6 +48,9 @@ A lit and populated scene still needs a window through which we will observe it:
 
 \customfig{img/bokeh.jpg}{Real-life \emph{bokeh}}{: the blurriness of out-of-focus objects will take the shape of the camera's aperture (pinhole). Here, the \emph{bokeh} is pentagonal.}
 
+#### Field of view
+#### Camera matrix
+
 ### Settings
 
 The `Settings` class encapsulates all remaining options for customizing the way we render a scene:
@@ -62,22 +65,66 @@ The meaning of these settings will further be explained in the section regarding
 
 ### Class structure
 
+In the following class diagram are all the main classes involved in the rendering of a scene. The `Tracer` class contains the static methods responsible for the actual ray tracing. They are invoked with a `Scene` object as a parameter, which contains all of the other classes. Also, we can notice that the `CSG` operators follow the *composite* design pattern, being an `Entity` composed of other `Entity`.  
+
 \customfig{uml/rendering_edit.eps}{Rendering process class diagram}{}
 
 ## Ray tracing
+
+- Reverse path of a light ray
+- Accumulate all colors along the way
+- Recursion
+- 3d diagram with virtual screen and pixels
 
 Ray:
 
 $$ \vec{o} + t\vec{r} $$
 
 Sphere:
-
 Ray-sphere intersection:
 
+- Diagram
+
 ### Process
+
+- Parallel via Java 8
+- Find closest
+- Keep distance in memory for falloff
+- For each light
+    - Find if intersection point is hit by light
+    - Compute color
+    - Bounce if reflective, recurse
 
 \customfig{uml/rendering_activity.eps}{Rendering process activity diagram}{}
 
 ### Constructive solid geometry
 
 \customfig{img/csg.png}{A piano foot obtained from CSG operations}{}
+
+#### Union
+#### Difference
+#### Intersection
+
+### Background projections
+
+- Take other 3d diagram and apply projection
+- List projections
+
+### Depth of field
+
+- Vector shifting diagram
+- Aperture shape diagrams
+- Effect of aperture
+- Effect of focal distance
+- Number of DOF samples
+- List shapes with a few pics
+
+### Materials
+#### Procedural texturing
+#### Bump mapping
+#### UV Mapping
+
+### Misc
+
+- Gamma value
+- Super-sampling factor

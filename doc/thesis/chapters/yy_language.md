@@ -8,6 +8,7 @@ So far, we can compose and render scenes by directly writing them in Java, insta
 - Procedures with parameters, no functions
 - Variables can store entities
 - Nesting scopes
+- Modifiers
 
 ## ANTLR4
 
