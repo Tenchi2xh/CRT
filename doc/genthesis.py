@@ -45,7 +45,7 @@ cat("thesis/bibliography.md")
 print "Building PDF..."
 
 os.system('pandoc thesis.md -o pdf/thesis.pdf --toc \
-          --template="templates/thesis.tex" -N \
+          --template="templates/thesis.tex" -N --listings \
           -V lang=english -V geometry:hmargin=1.5cm -V geometry:vmargin=2.3cm \
           -V urlcolor=blue -V linkcolor=black --latex-engine=xelatex --chapters')
 

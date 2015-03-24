@@ -1,0 +1,59 @@
+set title  = "Example 01"
+set author = "Tenchi (tenchi@team2xh.net)"
+set date   = "08.06.2014"
+set notes  = "Sample CRT scene in TRC language"
+
+let frontCam = Camera(position -> vec3 (0.0, 0.5, -0.5),
+                 pointing -> vec3 (0.0, 0.0, 0.0))
+
+let topCam = Camera
+(
+    position -> vec3 (0.0, 1.0, 0.0)
+    pointing -> vec3 (0.0, 0.0, 0.0)
+)
+
+let redLight = Light
+(
+    position -> vec3 (1.0, 1.0, 1.0),
+    color    -> rgb  (1.0, 0.9, 0.8)
+)
+
+let blueLight = Light
+(
+    position -> vec3 (-1.0, -1.0, -1.0),
+    color    -> rgb  (0.8, 0.9, 1.0)
+)
+
+let box1 = Box
+(
+    corner1 -> vec3 (-0.2, 0.0, -0.2),
+    corner2 -> vec3 (0.2, 0.4, 0.2),
+    color   -> rgb  (0.5, 0.5, 0.5)
+)
+
+let sphere1 = Sphere
+(
+    origin -> vec3 (0.0, 0.4, 0.0),
+    radius -> 0.2
+)
+
+let tub = box1 - sphere1
+
+let plane1 = Plane
+(
+    normal   -> vec3 (0.0, 1.0, 0.0),
+    position -> vec3 (0.0, 0.0, 0.0)
+)
+
+set settings = Settings
+(
+    gamma      -> 1.0,
+    background -> rgb (1.0, 1.0, 1.0),
+    camera     -> cam,
+    lights     -> [redLight, blueLight]
+)
+
+scene {
+    box1 <scale 3.0> - sphere1 <scale vec3 (1.0, 1.0, 2.0)>,
+    tub <scale 2.0, translate vec3 (1.0, 0.0, 1.0)>
+}

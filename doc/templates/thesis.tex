@@ -2,11 +2,34 @@
 \documentclass[a4paper, twocolumn, 10pt]{report}
 \setlength{\columnsep}{1cm}
 
+% for code blocks
+\usepackage{listings}
+\usepackage{xcolor}
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  numbers=left,
+  keywordstyle=\color[rgb]{0.13,0.29,0.53}\bfseries,
+  stringstyle=\color[rgb]{0.31,0.60,0.02},
+  commentstyle=\color[rgb]{0.56,0.35,0.01}\itshape,
+  numberstyle=\tiny,
+  stepnumber=1,
+  numbersep=5pt,
+  backgroundcolor=\color[RGB]{248,248,248},
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  tabsize=2,
+  captionpos=b,
+  breaklines=true,
+  breakatwhitespace=true,
+  breakautoindent=true,
+  escapeinside={\%*}{*)},
+  linewidth=\columnwidth,
+  basewidth=0.5em,
+}
+
 % for headers
 \usepackage{fancyhdr}
-
-% for pretty code snippets
-% \usepackage{minted}
 
 % simple chapters
 \makeatletter
@@ -186,25 +209,25 @@ $endif$
 % $endfor$
 
 % Two column fix
-\makeatletter
-\let\oldlt\longtable
-\let\endoldlt\endlongtable
-\def\longtable{\@ifnextchar[\longtable@i \longtable@ii}
-\def\longtable@i[#1]{\begin{figure}[t]
-\onecolumn
-\begin{minipage}{0.5\textwidth}
-\oldlt[#1]
-}
-\def\longtable@ii{\begin{figure}[t]
-\onecolumn
-\begin{minipage}{0.5\textwidth}
-\oldlt
-}
-\def\endlongtable{\endoldlt
-\end{minipage}
-\twocolumn
-\end{figure}}
-\makeatother
+% \makeatletter
+% \let\oldlt\longtable
+% \let\endoldlt\endlongtable
+% \def\longtable{\@ifnextchar[\longtable@i \longtable@ii}
+% \def\longtable@i[#1]{\begin{figure}[t]
+% \onecolumn
+% \begin{minipage}{0.5\textwidth}
+% \oldlt[#1]
+% }
+% \def\longtable@ii{\begin{figure}[t]
+% \onecolumn
+% \begin{minipage}{0.5\textwidth}
+% \oldlt
+% }
+% \def\endlongtable{\endoldlt
+% \end{minipage}
+% \twocolumn
+% \end{figure}}
+% \makeatother
 
 \begin{document}
 
@@ -292,6 +315,8 @@ $endfor$
         {\MakeUppercase\listfigurename}%
     \@starttoc{lof}%
 }
+\renewcommand\lstlistingname{Code Listing}
+\renewcommand\lstlistlistingname{List of Code Listings}
 \makeatother
 
 
@@ -310,6 +335,9 @@ $if(toc)$
 \newpage
 \listoftables
 \addcontentsline{toc}{chapter}{List of Tables}
+\newpage
+\lstlistoflistings
+\addcontentsline{toc}{chapter}{List of Code Listings}
 \newpage
 \twocolumn
 }
