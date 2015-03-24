@@ -2,22 +2,22 @@
 
 Rendering an image involves several steps. The general thought process is as follows: what objects are placed on the scene? What are they made of and how does *light* interact with them? Where is the camera placed, and where is it pointing to? How many light sources are present in the scene, and which ones have an effect on which objects? What rendering options are enabled?
 
-To answer these questions, we will see what classes represent a scene and how to trace rays in the following sections. 
+To answer these questions, this chapter will outline the classes representing a scene and how ray tracing works. 
 
 ## Scenes
 
-A scene is represented by a `Scene` class which contains all the entities that will be drawn, as well as all important information on how to draw them:
+We call "scene" the composition of *elements* and *parameters* that, after the rendering process is finished, define what the final image looks like. In CRT, a scene is represented by the `Scene` class which contains all the entities that will be drawn, as well as all important information on how to draw them:
 
-- A list of entities
+- A list of entities, the objects composing the rendered world
 - A list of light sources
 - A camera
-- A `Settings` object
+- Other settings, stored in a `Settings` object
 
 ### Entities
 
-Entities are primitives volumes that can easily be described with mathematical equations, such as boxes (*parallelepipeds*), spheres, cones, planes and half-planes, etc. Each entity must provide an `intersect()` method for computing its intersection points with a given ray, which we will need later on to do the rendering. 
+Entities are primitives volumes that can easily be described with *mathematical equations*, such as boxes (*parallelepipeds*), spheres, cones, planes and half-planes, etc. Each entity has a position in space and must provide an `intersect()` method for computing its intersection points with a given ray, which we will need later on to do the rendering. 
 
-Entities also contain a `Material` object, which will describe what the entity is made of. Materials possess several attributes that describe how light interacts with it:
+Entities also contain a `Material` property, which defines what material the entity is made out of. Materials possess several attributes that describe how light interacts with it:
 
 - A color, provided by the `Pigment` class
 - Reflectivity, for shiny surfaces
@@ -27,16 +27,18 @@ Entities also contain a `Material` object, which will describe what the entity i
 - Specularity, for harsh highlights (this is a computer graphics trick, it is not physically accurate).
 - Shininess, defining how sharp the specular highlight will be.
 
-Only having mathematical primitives is however very limiting for a creative user. To remedy this, an entity can also be the result of a CSG operation, which can be a union, a difference or an intersection. CSG operations will be explained in details in the section on ray tracing.
+Only having mathematical primitives is however very limiting for a creative user. To remedy this, an entity can also be the result of a *CSG*^[Constructive solid geometry] *operation*, which can be either a union, a difference or an intersection. CSG operations will be explained in further details in the section on ray tracing.
 
 ### Light sources
 
-Light sources give color to entities, and is the target of all the rays we bounce off entities. A light source is defined by the `Light` class and has the following properties:
+Light sources illuminate a scene and give entities a component of their colors. When ray tracing, they are the targets of all the rays we back-trace from the camera lens and bounce off entities. A light source is defined by the `Light` class and has the following properties:
 
 - A point of origin, defining from where the light is shining.
 - A *falloff* factor: describes the natural effect observable in nature, where light follows an inverse square law: the intensity of light from a point source is inversely proportional to the square of the distance from the source. We receive only a fourth of the photons from a light source twice as far away.
 - A color, given by the `Pigment` class
 - An ambient light factor: because simulating global illumination is mathematically difficult and takes a lot of processing, we can simulate ambient light (accumulation of light that bounces of many surfaces) by setting an ambient factor, which will basically add a fraction of the value of its color and intensity. 
+
+One has to keep in mind that each additional light source adds up to the amount of rays to bounce and thus linearly increase computation time.
 
 ### Camera
 
@@ -49,6 +51,7 @@ A lit and populated scene still needs a window through which we will observe it:
 \customfig{img/bokeh.jpg}{Real-life \emph{bokeh}}{: the blurriness of out-of-focus objects will take the shape of the camera's aperture (pinhole). Here, the \emph{bokeh} is pentagonal.}
 
 #### Field of view
+
 #### Camera matrix
 
 ### Settings
@@ -65,7 +68,7 @@ The meaning of these settings will further be explained in the section regarding
 
 ### Class structure
 
-In the following class diagram are all the main classes involved in the rendering of a scene. The `Tracer` class contains the static methods responsible for the actual ray tracing. They are invoked with a `Scene` object as a parameter, which contains all of the other classes. Also, we can notice that the `CSG` operators follow the *composite* design pattern, being an `Entity` composed of other `Entity`.  
+In the following class diagram are all the main classes involved in the rendering of a scene. The `Tracer` class contains the static methods responsible for the actual ray tracing. They are invoked with a `Scene` object as a parameter, which contains references to all of the other classes. Also, we can notice that the `CSG` operators follow the *composite* design pattern, being an entity type composed of other entities.
 
 \customfig{uml/rendering_edit.eps}{Rendering process class diagram}{}
 
