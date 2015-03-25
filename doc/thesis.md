@@ -11,7 +11,7 @@ Foreword...\twocolumn
 
 Rendering an image involves several steps. The general thought process is as follows: what objects are placed on the scene? What are they made of and how does *light* interact with them? Where is the camera placed, and where is it pointing to? How many light sources are present in the scene, and which ones have an effect on which objects? What rendering options are enabled?
 
-To answer these questions, this chapter will outline the classes representing a scene and how ray tracing works. 
+To answer these questions, this chapter will outline the classes representing a scene and how ray tracing works, all designed in an object-oriented style, using common design patterns when relevant.
 
 ## Scenes
 
