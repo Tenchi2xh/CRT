@@ -56,41 +56,41 @@ MyMacro () {
 
 --Config----------------------------------------------------
 
-Config {    
+Config {
     title      -> "Example 01"
     author     -> "Tenchi (tenchi@team2xh.net)"
     date       -> "08.06.2014"
-    notes      -> "Sample CRT scene in TRC language" 
+    notes      -> "Sample CRT scene in TRC language"
     gamma      -> 1.0
     background -> rgb (1.0, 1.0, 1.0)
     camera     -> frontCam
-    lights     -> [redLight, blueLight]   
+    lights     -> [redLight, blueLight]
 }
 
 --Scene-----------------------------------------------------
 
 Scene {
-    # Anonymous entity
+    -- Anonymous entity
     Box {
         corner1 -> vec3 (-0.2, 0.0, -0.2)
         corner2 -> vec3 (0.2, 0.4, 0.2)
         color   -> rgb  (0.5, 0.5, 0.5)
     }
-    # Saved entity
+    -- Saved entity
     box1
-    # Saved entity with modifier
+    -- Saved entity with modifier
     box1 <scale 3.0>
-    # Inline CSG difference
-    box1 - sphere1 <scale vec3 (1.0, 1.0, 2.0)>
-    # Multiple modifiers
+    -- Inline CSG difference
+    box3 ^  box1 - sphere1 <scale vec3 (1.0, 1.0, 2.0)>
+    -- Multiple modifiers
     tub <scale 2.0, translate vec3 (1.0, 0.0, 1.0)>
-    # Block CSG
+    -- Block CSG
     Intersection {
         box1
         tub
-        #...
+        -- ...
         sphere1
     }
-    # Macro call
+    -- Macro call
     MyMacro()
 }
