@@ -3,9 +3,9 @@
 set namespaceSeparator none
 hide empty members
 
-class Tracer {
-    + {static} int[][] render()
-    - {static} Pigment trace()
+class Tracer <<Singleton>> {
+    + Pigment[][] render()
+    - Pigment trace()
 }
 
 hide Tracer fields
@@ -31,9 +31,22 @@ class Light {
 hide Light methods
 
 abstract class Entity {
-    + Material material
     + {abstract} Hit intersect(Ray r)
 }
+
+hide Entity attributes
+
+class Material {
+    + Pigment color
+    + double reflectivity
+    + double transparency
+    + double refractIndex
+    + double diffuse
+    + double specular
+    + double shininess
+}
+
+hide Material methods
 
 class Camera {
     - Vector3 position
@@ -43,25 +56,29 @@ class Camera {
 
 hide Camera methods
 
+
+abstract class CSG
 class Box
 abstract class "..."
 
-abstract class CSG
 class Union
 class Difference
 class Intersection
 
-Scene o-- Light
-Scene *-- Entity
-Scene -- Camera
+Entity "1" -left- "*" Material
 
+Scene "1" o-left- "*" Light
+Scene "1" -- "1" Camera
+Scene "1" *-- "*" Entity
+
+CSG "1" *-up- "2, n "  Entity
+
+Entity <|-- CSG
 Entity <|-- Box
 Entity <|-- "..."
-Entity <|-- CSG
 
-CSG *-- Entity
 
-Scene -right- Settings
+Scene "1" -right- "1" Settings
 Tracer -- Scene
 
 CSG <|-- Union
