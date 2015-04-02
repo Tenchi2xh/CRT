@@ -31,6 +31,8 @@ import net.team2xh.crt.raytracer.Material;
 import net.team2xh.crt.raytracer.Pigment;
 import net.team2xh.crt.raytracer.Scene;
 import net.team2xh.crt.raytracer.Tracer;
+import net.team2xh.crt.raytracer.entities.Box;
+import net.team2xh.crt.raytracer.entities.Plane;
 import net.team2xh.crt.raytracer.entities.Sphere;
 import net.team2xh.crt.raytracer.math.Vector3;
 
@@ -46,42 +48,55 @@ public class TestTracer {
 
     public TestTracer() {
 
+        Vector3 l1 = new Vector3(0.2, 0.25, 0);
+        Vector3 l2 = new Vector3(-0.2, 0.25, 0);
+        Vector3 l3 = new Vector3(0.0, 0.3, -1.0);
 
-        Camera camera = new Camera(new Vector3(0.0, 0.5, -0.5), new Vector3(0.0, 0.0, 0.0), 120);
+        Camera camera = new Camera(new Vector3(0, 0.5, -1), new Vector3(0.0, 0.0, 0.0), 80);
         Scene scene = Scene.createScene(1280, 720, camera);
 
-        Light lightAbove = new Light(new Vector3(0.2, 0.25, -0.3), new Pigment(0.65, 0.5, 0.4));
-        Light lightAbove2 = new Light(new Vector3(-0.2, 0.0, -0.3), new Pigment(0.65, 0.5, 0.4));
-        Light lightCenter = new Light(new Vector3(0.0, 0.0, -0.4), /*new Pigment(0.65, 0.5, 0.4)*/ new Pigment(1.0));
-        Light lightCenter2 = new Light(new Vector3(0.0, 0.2, 1.0), /*new Pigment(0.65, 0.5, 0.7)*/ new Pigment(1.0));
+        Light light1 = new Light(l1, new Pigment(0.75, 0.2, 0.1));
+        Light light2 = new Light(l2, new Pigment(0.1, 0.2, 0.75));
+        Light light3 = new Light(l3, new Pigment(0.0, 0.8, 0.8));
+        Light sun = new Light(new Vector3(0, 1000, 0), new Pigment(0.6));
 
-        lightAbove.setAmbient(0.1);
-        lightAbove2.setAmbient(0.1);
-        lightCenter.setAmbient(0.1);
-        lightCenter2.setAmbient(0.1);
-        lightAbove.setFalloff(1.3);
-        lightAbove2.setFalloff(1.3);
-        lightCenter.setFalloff(3.225);
-        lightCenter2.setFalloff(0.525);
+        light1.setAmbient(0.1);
+        light2.setAmbient(0.1);
+        light3.setAmbient(0.0);
+        light1.setFalloff(1.7);
+        light2.setFalloff(1.7);
+        light3.setFalloff(1.0);
+        sun.setAmbient(0.0);
 
-        scene.addLight(lightCenter2);
-        scene.setBackground(new Background(new Pigment(0,0,1), new Pigment(1,0,0)));
+        scene.addLight(light1);
+        scene.addLight(light2);
+        scene.addLight(light3);
+        scene.addLight(sun);
+        scene.setBackground(new Background(new Pigment(0,0,1), new Pigment(0,1,1)));
 
         scene.getSettings().setRecursionDepth(2);
 
-        Material sphereMat = new Material(new Pigment(0.7), 0.7);
+        Material sphereMat = new Material(new Pigment(0.7, 0.1, 0.1), 0.3);
         sphereMat.setSpecular(1.0);
-        sphereMat.setShininess(100.0);
+        sphereMat.setShininess(50.0);
 
-        scene.add(new Sphere(new Vector3(0.0,  0.125, -0.3), 0.065, sphereMat));
-        scene.add(new Sphere(new Vector3(0.0, -0.125, -0.3), 0.065, sphereMat));
-        // Spiral
-        for (int i = 0; i < 50; ++i) {
-            double x = Math.cos(i / 3.0) * 0.2;
-            double y = 0.125 - (i * 0.005);
-            double z = Math.sin(i / 3.0) * 0.2 - 0.3;
-            scene.add(new Sphere(new Vector3(x, y, z), 0.01, sphereMat));
+        scene.add(new Plane(new Vector3(0, 1, 0), new Vector3(0.0, -0.25, 0.0), new Material(new Pigment(1.0))));
+
+        scene.add(new Box(new Vector3(0.4, -.25, 1.0), new Vector3(0.6, 0.4, -0.1), sphereMat));
+
+        for (int i = 0; i < 15; ++i) {
+            scene.add(new Sphere(new Vector3(-0.3, -0.125, 0.0 + 0.3*i), 0.125, sphereMat));
         }
+        //scene.add(new Plane(new Vector3(-1, 0, 0), new Vector3(0.25, 0, 0.0), new Material(new Pigment(1.0))));
+//        scene.add(new Sphere(new Vector3(0.0,  0.125, -0.3), 0.065, sphereMat));
+//        scene.add(new Sphere(new Vector3(0.0, -0.125, -0.3), 0.065, sphereMat));
+        // Spiral
+//        for (int i = 0; i < 50; ++i) {
+//            double x = Math.cos(i / 3.0) * 0.2;
+//            double y = 0.125 - (i * 0.005);
+//            double z = Math.sin(i / 3.0) * 0.2 - 0.3;
+//            scene.add(new Sphere(new Vector3(x, y, z), 0.01, sphereMat));
+//        }
 
         Tracer tracer = new Tracer(scene);
 

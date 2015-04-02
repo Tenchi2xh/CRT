@@ -28,6 +28,9 @@ public class Vector3 {
     /** Unit X vector */ final public static Vector3 X = new Vector3(1.0, 0.0, 0.0);
     /** Unit Y vector */ final public static Vector3 Y = new Vector3(0.0, 1.0, 0.0);
     /** Unit Z vector */ final public static Vector3 Z = new Vector3(0.0, 0.0, 1.0);
+    /** Unit X vector */ final public static Vector3 Xm = new Vector3(-1.0, 0.0, 0.0);
+    /** Unit Y vector */ final public static Vector3 Ym = new Vector3(0.0, -1.0, 0.0);
+    /** Unit Z vector */ final public static Vector3 Zm = new Vector3(0.0, 0.0, -1.0);
 
     /** X component */ public double x;
     /** Y component */ public double y;
@@ -164,6 +167,15 @@ public class Vector3 {
      */
     public Vector3 invert() {
         return new Vector3(-x, -y, -z);
+    }
+
+    /**
+     * Returns an array with the three vector components.
+     *
+     * @return Components array
+     */
+    public double[] components() {
+        return new double[] {x, y, z};
     }
 
     @Override

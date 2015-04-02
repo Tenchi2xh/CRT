@@ -79,6 +79,7 @@ public class Sphere extends Entity {
         return new Hit(this, intersects, point, distance, normal);
     }
 
+    @Override
     public Hit intersect(Ray ray) {
         boolean intersects = true;
         Vector3 point = null;

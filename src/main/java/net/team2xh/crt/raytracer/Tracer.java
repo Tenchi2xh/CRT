@@ -105,7 +105,7 @@ public class Tracer {
                 // Add ambient component
                 if (l.ambient > 0)
                     pigment.addSelf(
-                        light.mul(l.ambient).mul(isl).mul(1.0 - m.reflectivity)
+                        light.mul(l.ambient).mul(1.0 - m.reflectivity)
                     );
 
 
