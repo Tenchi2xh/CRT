@@ -55,6 +55,6 @@ public class Plane extends Entity {
             }
         }
 
-        return new Hit(this, intersects, point, distance, normal);
+        return new Hit(this, intersects, point, distance, distance + 0.01, normal);
     }
 }

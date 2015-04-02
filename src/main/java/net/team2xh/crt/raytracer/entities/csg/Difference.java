@@ -39,15 +39,30 @@ public class Difference extends Entity {
     public Hit intersect(Ray ray) {
 
         Hit hitA = a.intersect(ray);
+        Hit hitB = b.intersect(ray);
+        hitA.setEntity(this);
+        hitB.setEntity(this);
 
-        if (hitA.intersects()) {
-            Hit hitB = b.intersect(ray);
+        if (hitA.intersects() && hitB.intersects()) {
+            double a0 = hitA.entry();
+            double a1 = hitA.exit();
+            double b0 = hitB.entry();
+            double b1 = hitB.exit();
 
-            if (hitB.intersects() && hitB.distance() < hitA.distance()) {
-                Ray insideB = new Ray(ray.direction, hitA.point());
-                return b.intersect(insideB);
+            if (a1 >= b0 && a1 <= b1 || b1 >= a0 && b1 <= a1) {
+                if (b0 > a0)
+                    return hitA;
+                // We are in intersection, that should be void
+                Ray newRay = new Ray(ray.direction, ray.origin.add(ray.direction.multiply(b0 + 0.001)));
+                Hit newHit = b.intersect(newRay);
+                newHit.setEntity(this);
+                if (b1 < a1)
+                    return newHit;
+                else
+                    return Hit.miss;
             }
         }
+
         return hitA;
     }
 

@@ -65,7 +65,7 @@ public class Tracer {
         for (Entity e : scene.getEntities()) {
             Hit h = e.intersect(ray);
             if (h.intersects()) {
-                double dist = h.distance();
+                double dist = h.entry();
                 if (minDist == -1 || dist < minDist) {
                     minDist = dist;
                     closest = h;

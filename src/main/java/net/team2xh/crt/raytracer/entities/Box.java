@@ -57,7 +57,8 @@ public class Box extends Entity {
 
         boolean hits = false;
         Vector3 point = Vector3.O;
-        double t = 0;
+        double entry = 0;
+        double exit = 0;
         Vector3 normal = Vector3.O;
 
         double tmin, tmax, tymin, tymax, tzmin, tzmax;
@@ -109,14 +110,15 @@ public class Box extends Entity {
                     tmax = tzmax;
                 }
                 if (tmin <= tmax && tmax > 0.0001) {
-                    t = tmin;
+                    entry = tmin;
+                    exit = tmax;
                     hits = true;
-                    point = ray.origin.add(ray.direction.multiply(t));
+                    point = ray.origin.add(ray.direction.multiply(entry));
                 }
             }
         }
 
-        return new Hit(this, hits, point, t, normal);
+        return new Hit(this, hits, point, entry, exit, normal);
 
     }
 

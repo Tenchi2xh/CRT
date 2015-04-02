@@ -35,19 +35,24 @@ public class Union extends Entity {
         this.b = b;
     }
 
+    // TODO: constructor with material
+
     @Override
     public Hit intersect(Ray ray) {
 
         Hit hitA = a.intersect(ray);
         Hit hitB = b.intersect(ray);
+        hitA.setEntity(this);
+        hitB.setEntity(this);
 
         if (hitA.intersects()) {
+            if (hitB.intersects())
+                return (hitA.entry() < hitB.entry()) ? hitA : hitB;
             return hitA;
         } else if (hitB.intersects()) {
             return hitB;
-        } else {
-            return new Hit(null, false, null, 0, null);
         }
+        return new Hit(null, false, null, 0, 0, null);
     }
 
 }

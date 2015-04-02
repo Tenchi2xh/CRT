@@ -32,8 +32,10 @@ import net.team2xh.crt.raytracer.Pigment;
 import net.team2xh.crt.raytracer.Scene;
 import net.team2xh.crt.raytracer.Tracer;
 import net.team2xh.crt.raytracer.entities.Box;
+import net.team2xh.crt.raytracer.entities.Entity;
 import net.team2xh.crt.raytracer.entities.Plane;
 import net.team2xh.crt.raytracer.entities.Sphere;
+import net.team2xh.crt.raytracer.entities.csg.*;
 import net.team2xh.crt.raytracer.math.Vector3;
 
 /**
@@ -48,45 +50,61 @@ public class TestTracer {
 
     public TestTracer() {
 
-        Vector3 l1 = new Vector3(0.2, 0.25, 0);
-        Vector3 l2 = new Vector3(-0.2, 0.25, 0);
-        Vector3 l3 = new Vector3(0.0, 0.3, -1.0);
-
-        Camera camera = new Camera(new Vector3(0, 0.5, -1), new Vector3(0.0, 0.0, 0.0), 80);
+        Camera camera = new Camera(new Vector3(0, 0.5, -1), new Vector3(0.0, 0.0, 0.0), 50);
         Scene scene = Scene.createScene(1280, 720, camera);
 
-        Light light1 = new Light(l1, new Pigment(0.75, 0.2, 0.1));
-        Light light2 = new Light(l2, new Pigment(0.1, 0.2, 0.75));
-        Light light3 = new Light(l3, new Pigment(0.0, 0.8, 0.8));
-        Light sun = new Light(new Vector3(0, 1000, 0), new Pigment(0.6));
+        Light lightR = new Light(new Vector3(0.3, 0.3, 0), new Pigment(0.75, 0.2, 0.2));
+        Light lightB = new Light(new Vector3(-0.3, 0.3, 0), new Pigment(0.2, 0.2, 0.75));
+        Light lightF1 = new Light(new Vector3(-0.3, 0.3, -0.8), new Pigment(0.75, 0.75, 0.75));
+        Light lightF2 = new Light(new Vector3(0.3, 0.3, -0.8), new Pigment(0.75, 0.75, 0.75));
+        Light sun = new Light(new Vector3(-600, 1000, -400), new Pigment(0.8));
+        Light center = new Light(Vector3.O, new Pigment(0.75, 0.2, 0.2));
 
-        light1.setAmbient(0.1);
-        light2.setAmbient(0.1);
-        light3.setAmbient(0.0);
-        light1.setFalloff(1.7);
-        light2.setFalloff(1.7);
-        light3.setFalloff(1.0);
-        sun.setAmbient(0.0);
+        lightR.setAmbient(0.1);
+        lightB.setAmbient(0.1);
+        lightR.setFalloff(1.7);
+        lightB.setFalloff(1.7);
+        lightF1.setFalloff(0.5);
+        lightF2.setFalloff(0.5);
+        center.setFalloff(10.5);
+        sun.setAmbient(0.1);
 
-        scene.addLight(light1);
-        scene.addLight(light2);
-        scene.addLight(light3);
+//        scene.addLight(lightR);
+//        scene.addLight(lightB);
+        scene.addLight(lightF1);
+        scene.addLight(lightF2);
         scene.addLight(sun);
+//        scene.addLight(center);
         scene.setBackground(new Background(new Pigment(0,0,1), new Pigment(0,1,1)));
 
         scene.getSettings().setRecursionDepth(2);
 
-        Material sphereMat = new Material(new Pigment(0.7, 0.1, 0.1), 0.3);
+        Material sphereMat = new Material(new Pigment(0.7), 0.3);
         sphereMat.setSpecular(1.0);
         sphereMat.setShininess(50.0);
 
-        scene.add(new Plane(new Vector3(0, 1, 0), new Vector3(0.0, -0.25, 0.0), new Material(new Pigment(1.0))));
+        Material dieMat = new Material(new Pigment(0.6), 0.0);
+        dieMat.setSpecular(1.0);
+        dieMat.setShininess(50.0);
+
+        scene.add(new Plane(new Vector3(0, 1, 0), new Vector3(0.0, -0.3, 0.0), new Material(new Pigment(1.0))));
 
         scene.add(new Box(new Vector3(0.4, -.25, 1.0), new Vector3(0.6, 0.4, -0.1), sphereMat));
 
         for (int i = 0; i < 15; ++i) {
-            scene.add(new Sphere(new Vector3(-0.3, -0.125, 0.0 + 0.3*i), 0.125, sphereMat));
+            scene.add(new Sphere(new Vector3(-0.5, -0.125, 0.0 + 0.3*i), 0.125, sphereMat));
         }
+
+        Box box = new Box(new Vector3(-0.2, -0.2, -0.2), new Vector3(0.2, 0.2, 0.2), dieMat);
+        Sphere sphere = new Sphere(new Vector3(0, 0, 0), 0.3, sphereMat);
+        Sphere sphere2 = new Sphere(new Vector3(-0.1, 0.1, -0.1), 0.2, sphereMat);
+
+        Entity test = new Difference(box, sphere2);
+        Entity test2 = new Intersection(box, sphere2);
+
+        scene.add(test);
+        scene.add(sphere2);
+
         //scene.add(new Plane(new Vector3(-1, 0, 0), new Vector3(0.25, 0, 0.0), new Material(new Pigment(1.0))));
 //        scene.add(new Sphere(new Vector3(0.0,  0.125, -0.3), 0.065, sphereMat));
 //        scene.add(new Sphere(new Vector3(0.0, -0.125, -0.3), 0.065, sphereMat));
@@ -125,17 +143,12 @@ public class TestTracer {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
 
-        System.out.println("OADKOKDSA");
-        image.repaint();
-
         ForkJoinPool pool = new ForkJoinPool(4);
         pool.execute(() -> tracer.render(3, (int[][] p, Integer i) -> draw(p, i, w, h)));
 
     }
 
     public void draw(int[][] picture, int pass, int w, int h) {
-        System.out.println("Pass " + pass);
-        System.out.println(picture[100][100]);
         int x0 = w < image.getWidth() ? (image.getWidth() / 2) - (w/2) : 0;
         int y0 = h < image.getHeight() ? (image.getHeight() / 2) - (h/2) : 0;
         int step = (int) Math.pow(2, pass);

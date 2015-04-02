@@ -26,3 +26,15 @@
 - Some sequence diagrams
 - Paragraphs on the rendering process and grammar parsing
 - Reworked the grammar
+
+# 23.03.2015 - 30.03.2015
+
+- Established basic ray tracing skeleton
+- Refactored code from old prototype
+- Changed structure according to new decisions made with supervisor
+- Added Box primitive
+
+# 01.04.2015 - 07.04.2015
+
+- Work on CSG operations
+- Corrections to Sphere primitive intersection and normals

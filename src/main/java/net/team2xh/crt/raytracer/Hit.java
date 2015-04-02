@@ -25,17 +25,21 @@ import net.team2xh.crt.raytracer.math.Vector3;
  */
 public class Hit {
 
+    final public static Hit miss = new Hit(null, false, null, 0, 0, null);
+
     private Entity entity;
     private boolean intersects;
     private Vector3 point;
-    private double distance;
+    private double entry;
+    private double exit;
     private Vector3 normal;
 
-    public Hit(Entity entity, boolean intersects, Vector3 point, double distance, Vector3 normal) {
+    public Hit(Entity entity, boolean intersects, Vector3 point, double entry, double exit, Vector3 normal) {
         this.entity = entity;
         this.intersects = intersects;
         this.point = point;
-        this.distance = distance;
+        this.entry = entry;
+        this.exit = exit;
         this.normal = normal;
     }
 
@@ -45,16 +49,26 @@ public class Hit {
         return entity;
     }
 
+    public void setEntity(Entity entity) {
+        this.entity = entity;
+    }
+
     public Vector3 point() {
         if (!intersects)
             throw new RuntimeException("Ray does not intersect.");
         return point;
     }
 
-    public double distance() {
+    public double entry() {
         if (!intersects)
             throw new RuntimeException("Ray does not intersect.");
-        return distance;
+        return entry;
+    }
+
+    public double exit() {
+        if (!intersects)
+            throw new RuntimeException("Ray does not intersect.");
+        return exit;
     }
 
     public Vector3 normal() {

@@ -36,54 +36,12 @@ public class Sphere extends Entity {
         this.radius = radius;
     }
 
-    // @Override
-    public Hit intersectOld(Ray ray) {
-
-        /**
-         * http://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection
-         */
-
-        boolean intersects = false;
-        Vector3 point = null;
-        double distance = 0;
-        Vector3 normal = null;
-
-        // delta = v^2 - w^2 + r^2
-        Vector3 co = ray.origin.subtract(center);
-        double v = ray.direction.dot(co);
-        double w = co.magnitude();
-        double delta = v*v - w*w + radius*radius;
-
-        if (delta == 0) {
-            System.out.println("ONLY ONE");
-            distance = -v;
-            intersects = true;
-        } else if (delta > 0) {
-            // 2 solutions, return the nearest for now
-            double d1 = -v - Math.sqrt(delta);
-            double d2 = -v + Math.sqrt(delta);
-            distance = Math.min(d1, d2);
-            intersects = true;
-        }
-
-        if (intersects) {
-            point = ray.origin.add(ray.direction.multiply(distance));
-            normal = point.subtract(center).normalize();
-            // Invert normal if ray originates from inside the sphere
-            // if (co.magnitude() < radius) {
-            //     System.out.println("INSIDE");
-            //     normal = normal.invert();
-            // }
-        }
-
-        return new Hit(this, intersects, point, distance, normal);
-    }
-
     @Override
     public Hit intersect(Ray ray) {
         boolean intersects = true;
         Vector3 point = null;
-        double distance = -1;
+        double entry = 0;
+        double exit = 0;
         Vector3 normal = null;
         Vector3 l = center.subtract(ray.origin);
         double tca = l.dot(ray.direction);
@@ -96,14 +54,30 @@ public class Sphere extends Entity {
             else {
                 // System.out.println("OKDAOKDSAOKSODK");
                 double thc = Math.sqrt(radius*radius - d2);
-                distance = (tca - thc < 0) ? tca + thc : tca - thc;
-                point = ray.origin.add(ray.direction.multiply(distance));
+
+                // Have to figure out which way is in the ray's direction
+
+                double t0 = tca - thc;
+                double t1 = tca + thc;
+
+                // http://www.scratchapixel.com/old/assets/Uploads/Lesson007/l007-rayspherecases.png
+                if (t0 > 0 && t1 > 0) {
+                    entry = t0;
+                    exit = t1;
+                } else if (t0 == t1) {
+                    entry = t0;
+                    exit = t1;
+                } else if (t0 < 0 && t1 > 0) {
+                    entry = t1;
+                    exit = t0;
+                }
+
+                point = ray.origin.add(ray.direction.multiply(entry));
                 normal = point.subtract(center).normalize();
-                if (l.magnitude() < radius)
-                    normal = normal.invert();
+
             }
         }
-        return new Hit(this, intersects, point, distance, normal);
+        return new Hit(this, intersects, point, entry, exit, normal);
     }
 
     // @Override

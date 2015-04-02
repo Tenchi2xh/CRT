@@ -41,14 +41,29 @@ public class Intersection extends Entity {
 
         Hit hitA = a.intersect(ray);
         Hit hitB = b.intersect(ray);
+        hitA.setEntity(this);
+        hitB.setEntity(this);
 
         if (hitA.intersects() && hitB.intersects()) {
-            if (hitA.distance() > hitB.distance())
-                return hitA;
-            return hitB;
+            double a0 = hitA.entry();
+            double a1 = hitA.exit();
+            double b0 = hitB.entry();
+            double b1 = hitB.exit();
+            // Both are hit, but are they spacially sharing the same space..
+            // Entry and exit points must overlap
+            // A: -----a0=====a1--------
+            // B: --------b0=====b1-----
+            //             or
+            // A: --------a0=====a1-----
+            // B: -----b0=====b1--------
+            if (a1 >= b0 && a1 <= b1 || b1 >= a0 && b1 <= a1) {
+                if (a0 > b0)
+                    return hitA;
+                return hitB;
+            }
         }
 
-        return new Hit(null, false, null, 0, null);
+        return new Hit(null, false, null, 0, 0, null);
     }
 
 }
