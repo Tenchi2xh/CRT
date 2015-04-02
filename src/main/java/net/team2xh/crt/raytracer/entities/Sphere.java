@@ -61,12 +61,12 @@ public class Sphere extends Entity {
                 double t1 = tca + thc;
 
                 // http://www.scratchapixel.com/old/assets/Uploads/Lesson007/l007-rayspherecases.png
-                if (t0 > 0 && t1 > 0) {
+                if (t0 >= 0 && t1 > 0) {
                     entry = t0;
                     exit = t1;
                 } else if (t0 == t1) {
                     entry = t0;
-                    exit = t1;
+                    exit = t0;
                 } else if (t0 < 0 && t1 > 0) {
                     entry = t1;
                     exit = t0;
@@ -74,6 +74,10 @@ public class Sphere extends Entity {
 
                 point = ray.origin.add(ray.direction.multiply(entry));
                 normal = point.subtract(center).normalize();
+
+//                if (t0 < 0 && t1 > 0) {
+//                    normal = normal.invert();
+//                }
 
             }
         }

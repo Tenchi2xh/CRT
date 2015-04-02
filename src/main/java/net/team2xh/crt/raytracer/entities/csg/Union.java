@@ -16,6 +16,7 @@
  */
 package net.team2xh.crt.raytracer.entities.csg;
 
+import java.util.List;
 import net.team2xh.crt.raytracer.Hit;
 import net.team2xh.crt.raytracer.Ray;
 import net.team2xh.crt.raytracer.entities.Entity;
@@ -53,6 +54,19 @@ public class Union extends Entity {
             return hitB;
         }
         return new Hit(null, false, null, 0, 0, null);
+    }
+
+    public static Union join(List<Entity> entities) {
+        if (entities.size() < 2)
+            throw new RuntimeException("List too small");
+
+        Entity accu = entities.get(0);
+
+        for (int i = 1; i < entities.size(); ++i) {
+            accu = new Union(accu, entities.get(i));
+        }
+
+        return (Union) accu;
     }
 
 }

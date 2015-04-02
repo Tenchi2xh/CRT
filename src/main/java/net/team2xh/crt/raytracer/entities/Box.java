@@ -104,12 +104,12 @@ public class Box extends Entity {
             if (!((tmin > tzmax) || (tzmin > tmax))) {
                 if (tzmin > tmin) {
                     tmin = tzmin;
-                    normal = (dy >= 0) ? Vector3.Zm : Vector3.Z;
+                    normal = (dz >= 0) ? Vector3.Zm : Vector3.Z;
                 }
                 if (tzmax < tmax) {
                     tmax = tzmax;
                 }
-                if (tmin <= tmax && tmax > 0.0001) {
+                if (tmax > 0.0001) {
                     entry = tmin;
                     exit = tmax;
                     hits = true;

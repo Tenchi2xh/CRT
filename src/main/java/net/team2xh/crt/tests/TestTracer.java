@@ -20,6 +20,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -55,8 +57,8 @@ public class TestTracer {
 
         Light lightR = new Light(new Vector3(0.3, 0.3, 0), new Pigment(0.75, 0.2, 0.2));
         Light lightB = new Light(new Vector3(-0.3, 0.3, 0), new Pigment(0.2, 0.2, 0.75));
-        Light lightF1 = new Light(new Vector3(-0.3, 0.3, -0.8), new Pigment(0.75, 0.75, 0.75));
-        Light lightF2 = new Light(new Vector3(0.3, 0.3, -0.8), new Pigment(0.75, 0.75, 0.75));
+        Light lightF1 = new Light(new Vector3(-0.3, 0.3, -0.8), new Pigment(0.75, 0.0, 0.75));
+        Light lightF2 = new Light(new Vector3(0.3, 0.3, -0.8), new Pigment(0.75, 0.75, 0.0));
         Light sun = new Light(new Vector3(-600, 1000, -400), new Pigment(0.8));
         Light center = new Light(Vector3.O, new Pigment(0.75, 0.2, 0.2));
 
@@ -71,15 +73,15 @@ public class TestTracer {
 
 //        scene.addLight(lightR);
 //        scene.addLight(lightB);
-        scene.addLight(lightF1);
-        scene.addLight(lightF2);
+//        scene.addLight(lightF1);
+//        scene.addLight(lightF2);
         scene.addLight(sun);
 //        scene.addLight(center);
         scene.setBackground(new Background(new Pigment(0,0,1), new Pigment(0,1,1)));
 
         scene.getSettings().setRecursionDepth(2);
 
-        Material sphereMat = new Material(new Pigment(0.7), 0.3);
+        Material sphereMat = new Material(new Pigment(0.2), 0.3);
         sphereMat.setSpecular(1.0);
         sphereMat.setShininess(50.0);
 
@@ -96,14 +98,30 @@ public class TestTracer {
         }
 
         Box box = new Box(new Vector3(-0.2, -0.2, -0.2), new Vector3(0.2, 0.2, 0.2), dieMat);
-        Sphere sphere = new Sphere(new Vector3(0, 0, 0), 0.3, sphereMat);
-        Sphere sphere2 = new Sphere(new Vector3(-0.1, 0.1, -0.1), 0.2, sphereMat);
+        Sphere sphere = new Sphere(new Vector3(-0.2, 0.2, -0.2), 0.275, sphereMat);
 
-        Entity test = new Difference(box, sphere2);
-        Entity test2 = new Intersection(box, sphere2);
+        Entity test = new Difference(box, sphere);
+
+
+        List<Entity> dice = new LinkedList<>();
+        dice.add(test);
+        for (int i = 0; i < 3; ++i) {
+            dice.add(new Sphere(new Vector3((1./2.5)*-0.2, (1./2)*-0.2 + i*(1./2)*0.2, -0.2), 0.03, sphereMat));
+        }
+        for (int i = 0; i < 3; ++i) {
+            dice.add(new Sphere(new Vector3((1./2.5)*0.2, (1./2)*-0.2 + i*(1./2)*0.2, -0.2), 0.03, sphereMat));
+        }
+        for (int i = 0; i < 2; ++i) {
+            dice.add(new Sphere(new Vector3((1./2.5)*0.2, 0.2, (1./2)*-0.2 + i*(1.)*0.2), 0.03, sphereMat));
+        }
+        for (int i = 0; i < 2; ++i) {
+            dice.add(new Sphere(new Vector3((1./2.5)*-0.2, 0.2, (1./2)*-0.2 + i*(1.)*0.2), 0.03, sphereMat));
+        }
+
+        //test = Difference.subtract(dice);
 
         scene.add(test);
-        scene.add(sphere2);
+//        scene.add(sphere3);
 
         //scene.add(new Plane(new Vector3(-1, 0, 0), new Vector3(0.25, 0, 0.0), new Material(new Pigment(1.0))));
 //        scene.add(new Sphere(new Vector3(0.0,  0.125, -0.3), 0.065, sphereMat));
@@ -116,6 +134,7 @@ public class TestTracer {
 //            scene.add(new Sphere(new Vector3(x, y, z), 0.01, sphereMat));
 //        }
 
+        scene.getSettings().setSupersampling(2);
         Tracer tracer = new Tracer(scene);
 
         w = 1280;

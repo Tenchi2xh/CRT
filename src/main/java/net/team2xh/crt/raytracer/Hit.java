@@ -59,10 +59,18 @@ public class Hit {
         return point;
     }
 
+    public void setPoint(Vector3 point) {
+        this.point = point;
+    }
+
     public double entry() {
         if (!intersects)
             throw new RuntimeException("Ray does not intersect.");
         return entry;
+    }
+
+    public void setEntry(double entry) {
+        this.entry = entry;
     }
 
     public double exit() {

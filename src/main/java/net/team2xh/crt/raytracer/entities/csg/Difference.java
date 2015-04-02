@@ -16,9 +16,11 @@
  */
 package net.team2xh.crt.raytracer.entities.csg;
 
+import java.util.List;
 import net.team2xh.crt.raytracer.Hit;
 import net.team2xh.crt.raytracer.Ray;
 import net.team2xh.crt.raytracer.entities.Entity;
+import net.team2xh.crt.raytracer.math.Vector3;
 
 /**
  *
@@ -53,17 +55,33 @@ public class Difference extends Entity {
                 if (b0 > a0)
                     return hitA;
                 // We are in intersection, that should be void
-                Ray newRay = new Ray(ray.direction, ray.origin.add(ray.direction.multiply(b0 + 0.001)));
+                Ray newRay = new Ray(ray.direction, ray.origin.add(ray.direction.multiply(b0 + 0.0001)));
                 Hit newHit = b.intersect(newRay);
+                newHit.setPoint(ray.origin.add(ray.direction.multiply(b0 + newHit.entry() - 0.0001)));
+//                System.out.println(b0 + "\t" + newHit.entry() + "\t" + b1 + "\t" + (b0 + newHit.entry()));
+                newHit.setEntry(b0 + newHit.entry() - 0.0001);
                 newHit.setEntity(this);
-                if (b1 < a1)
-                    return newHit;
+                if (b1 < a1 && newHit.intersects())
+                    return new Hit(this, true, ray.origin.add(ray.direction.multiply(b1)), b1, a1, newHit.normal());
                 else
                     return Hit.miss;
             }
         }
 
         return hitA;
+    }
+
+    public static Difference subtract(List<Entity> entities) {
+        if (entities.size() < 2)
+            throw new RuntimeException("List too small");
+
+        Entity accu = entities.get(0);
+
+        for (int i = 1; i < entities.size(); ++i) {
+            accu = new Difference(accu, entities.get(i));
+        }
+
+        return (Difference) accu;
     }
 
 }
