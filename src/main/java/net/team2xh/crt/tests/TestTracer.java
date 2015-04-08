@@ -100,7 +100,7 @@ public class TestTracer {
         Box box = new Box(new Vector3(-0.2, -0.2, -0.2), new Vector3(0.2, 0.2, 0.2), dieMat);
         Sphere sphere = new Sphere(new Vector3(0.0, 0.0, 0.0), 0.275, sphereMat);
 
-        Entity test = new Union(box, sphere);
+        Entity test = new Intersection(box, sphere);
 
 
         List<Entity> dice = new LinkedList<>();
@@ -118,7 +118,7 @@ public class TestTracer {
             dice.add(new Sphere(new Vector3((1./2.5)*-0.2, 0.2, (1./2)*-0.2 + i*(1.)*0.2), 0.03, sphereMat));
         }
 
-        //test = CSG.subtract(dice);
+        test = CSG.subtract(dice);
 
         scene.add(test);
 //        scene.add(sphere3);

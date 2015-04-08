@@ -36,5 +36,11 @@
 
 # 01.04.2015 - 07.04.2015
 
-- Work on CSG operations
+- Work on CSG operations:
+    + Union OK
+    + Intersection OK
+    + Difference has buggy normals but works
+- Change in `Hit` class model to indicate entry and exit points of `Ray`
 - Corrections to Sphere primitive intersection and normals
+- Rendering classes refactoring
+- Rendering UML diagram split in two, added cardinalities and fixed a few aspects
