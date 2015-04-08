@@ -39,21 +39,21 @@ import net.team2xh.crt.raytracer.math.Vector3;
  */
 public class Tracer {
 
-    private Settings settings;
-    private Scene scene;
-
     private JProgressBar pb = null;
     private int counter = 0;
     private double total = 0;
 
-    private Random rand = new Random(1337);
+    private final Random rand = new Random(1337);
 
-    public Tracer(Scene scene) {
-        this.settings = scene.getSettings();
-        this.scene = scene;
+    private static final Tracer instance = new Tracer();
+
+    private Tracer() { }
+
+    public static Tracer getInstance() {
+        return instance;
     }
 
-    private Pigment trace(Ray ray, int depth, double totalDist) {
+    private Pigment trace(Ray ray, int depth, double totalDist, Scene scene) {
 
         // Base color is black
         Pigment pigment = new Pigment(0.0);
@@ -133,7 +133,7 @@ public class Tracer {
             if (m.reflectivity > 0 && depth > 0) {
                 Vector3 reflection = ray.direction.reflect(n);
                 Ray reflectionRay = new Ray(reflection, closest.point());
-                Pigment reflectionColor = trace(reflectionRay, depth - 1, totalDist);
+                Pigment reflectionColor = trace(reflectionRay, depth - 1, totalDist, scene);
                 pigment.addSelf(reflectionColor.mul(m.reflectivity));
             }
         } else {
@@ -147,7 +147,9 @@ public class Tracer {
         this.pb = pb;
     }
 
-    private void processPixel(int[] coords, int[][] image) {
+    private void processPixel(int[] coords, int[][] image, Scene scene) {
+        Settings settings = scene.getSettings();
+
         int supersampling = settings.supersampling;
         int x = coords[0];
         int y = coords[1];
@@ -159,14 +161,14 @@ public class Tracer {
                 for (int j = 0; j < supersampling; ++j) {
                     double dy = (1.0 * j / supersampling) - 0.5;
 
-                    samples[i][j] = traceCoords(x + dx, y + dy);
+                    samples[i][j] = traceCoords(x + dx, y + dy, scene);
                     // Ray ray = getPrimaryRay(x + dx, y + dy);
                     // samples[i][j] = trace(ray, settings.recurDepth, 0);
                 }
             }
             image[x][y] = Pigment.getAverage(samples).rgb(settings.showClip);
         } else {
-            image[x][y] = traceCoords(x, y).rgb(settings.showClip);
+            image[x][y] = traceCoords(x, y, scene).rgb(settings.showClip);
             // Ray ray = getPrimaryRay(x, y);
             // image[x][y] = trace(ray, settings.recurDepth, 0).rgb();
         }
@@ -178,7 +180,9 @@ public class Tracer {
         SwingUtilities.invokeLater(() -> pb.setValue((int)(++counter * 100 / total)));
     }
 
-    public int[][] render(int passes, BiConsumer<int[][], Integer> drawer) {
+    public int[][] render(int passes, BiConsumer<int[][], Integer> drawer, Scene scene) {
+
+        Settings settings = scene.getSettings();
 
         boolean[][] done = new boolean[settings.width][settings.height];
 
@@ -206,7 +210,7 @@ public class Tracer {
         for (int i = 0; i < passes; ++i) {
             final int j = i+1;
             // SwingUtilities.invokeLater(() -> pb.setString("Pass " + j + "/" + passes));
-            coords.get(i).parallelStream().forEach((int[] c) -> processPixel(c, image));
+            coords.get(i).parallelStream().forEach((int[] c) -> processPixel(c, image, scene));
             drawer.accept(image, passes - i - 1);
         }
         long end = System.currentTimeMillis();
@@ -217,7 +221,9 @@ public class Tracer {
         return image;
     }
 
-    private Pigment traceCoords(double x, double y) {
+    private Pigment traceCoords(double x, double y, Scene scene) {
+
+        Settings settings = scene.getSettings();
 
         // TODO: option to toggle camera distance ISL
 
@@ -319,18 +325,15 @@ public class Tracer {
                 Vector3 newDirection = direction.add(aperturePoint);
                 Vector3 newOrigin = origin.subtract(aperturePoint);
 
-                samples[i] = trace(new Ray(newDirection, newOrigin), settings.recurDepth, 0);
+                samples[i] = trace(new Ray(newDirection, newOrigin), settings.recurDepth, 0, scene);
             }
             pigment = Pigment.getAverage(samples);
         }
         else {
-            pigment = trace(new Ray(direction, origin), settings.recurDepth, 0);
+            pigment = trace(new Ray(direction, origin), settings.recurDepth, 0, scene);
         }
 
         return pigment;
     }
 
-    public Settings getSettings() {
-        return settings;
-    }
 }

@@ -135,7 +135,7 @@ public class TestTracer {
 //        }
 
         scene.getSettings().setSupersampling(2);
-        Tracer tracer = new Tracer(scene);
+        Tracer tracer = Tracer.getInstance();
 
         w = 1280;
         h = 720;
@@ -163,7 +163,7 @@ public class TestTracer {
         f.setVisible(true);
 
         ForkJoinPool pool = new ForkJoinPool(4);
-        pool.execute(() -> tracer.render(3, (int[][] p, Integer i) -> draw(p, i, w, h)));
+        pool.execute(() -> tracer.render(3, (int[][] p, Integer i) -> draw(p, i, w, h), scene));
 
     }
 
