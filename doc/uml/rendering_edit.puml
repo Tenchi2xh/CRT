@@ -1,5 +1,7 @@
 @startuml
 
+' TODO: separate Entity into its own diagram
+
 set namespaceSeparator none
 hide empty members
 
