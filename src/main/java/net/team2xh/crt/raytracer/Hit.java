@@ -28,7 +28,7 @@ public class Hit {
     final public static Hit miss = new Hit(null, false, null, 0, 0, null);
 
     private Entity entity;
-    private boolean intersects;
+    private final boolean intersects;
     private Vector3 point;
     private double entry;
     private double exit;

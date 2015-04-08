@@ -27,7 +27,7 @@ import net.team2xh.crt.raytracer.math.Vector3;
  */
 public class Plane extends Entity {
 
-    private Vector3 normal, position;
+    private final Vector3 normal, position;
 
     public Plane(Vector3 normal, Vector3 position, Material material) {
         super(material);

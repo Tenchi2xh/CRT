@@ -16,17 +16,9 @@
  */
 package net.team2xh.crt.raytracer.math;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Random;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import net.team2xh.crt.gui.util.GUIToolkit;
 
 /**
  *
@@ -195,48 +187,6 @@ public class PoissonDiskDistributions {
         }
 
         return pointList;
-    }
-
-    public static void main(String[] args) {
-
-        JFrame f = new JFrame("Bokeh tester");
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        JPanel t = new JPanel() {
-            @Override
-            public Dimension getPreferredSize() { return new Dimension(450, 450); }
-            @Override
-            public void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                int w = Math.min(getWidth(), getHeight());
-                int o = (getWidth() / 2) - (w / 2);
-                ((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g.setColor(Color.WHITE);
-                g.fillRect(o, 0, w, w);
-                g.setColor(Color.GRAY);
-                g.drawOval(o, 0, w, w);
-                long start = System.currentTimeMillis();
-
-                List<double[]> points = randomCirclePoints(100);
-                System.out.println(points.size());
-
-                int rr = (int)(cR * w / 2.0);
-                int rr2 = rr/2;
-                g.drawOval(o - rr2, 0 - rr2, w + rr, w + rr);
-                g.setColor(Color.BLACK);
-                for (double[] p : points) {
-                    g.drawOval(o+(int)(p[0]*(w/2) - rr2 + (w/2)), (int)(p[1]*(w/2) - rr2 + (w/2)),rr,rr);
-
-                }
-                long time = System.currentTimeMillis() - start;
-                g.drawString(time + "ms", 0, 10);
-            }
-        };
-
-        f.add(t);
-        f.pack();
-        GUIToolkit.centerFrame(f);
-        f.setVisible(true);
     }
 
 }

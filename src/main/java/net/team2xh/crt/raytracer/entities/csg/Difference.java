@@ -20,7 +20,6 @@ import java.util.List;
 import net.team2xh.crt.raytracer.Hit;
 import net.team2xh.crt.raytracer.Ray;
 import net.team2xh.crt.raytracer.entities.Entity;
-import net.team2xh.crt.raytracer.math.Vector3;
 
 /**
  *
@@ -29,7 +28,7 @@ import net.team2xh.crt.raytracer.math.Vector3;
 public class Difference extends Entity {
 
     // A - B
-    private Entity a, b;
+    private final Entity a, b;
 
     public Difference(Entity a, Entity b) {
         super(a.material);

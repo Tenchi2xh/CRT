@@ -26,8 +26,8 @@ import net.team2xh.crt.raytracer.entities.Entity;
  */
 public class Scene {
 
-    private List<Entity> entities = new ArrayList<>();
-    private List<Light> lights = new ArrayList<>();
+    private final List<Entity> entities = new ArrayList<>();
+    private final List<Light> lights = new ArrayList<>();
     private Settings settings;
     private Background background = new Background();
     private Camera camera;

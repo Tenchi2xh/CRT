@@ -27,8 +27,8 @@ import net.team2xh.crt.raytracer.math.Vector3;
  */
 public class Box extends Entity {
 
-    private Vector3 cornerA;
-    private Vector3 cornerB;
+    private final Vector3 cornerA;
+    private final Vector3 cornerB;
 
     public Box(Vector3 cornerA, Vector3 cornerB, Material material) {
         super(material);
@@ -59,7 +59,7 @@ public class Box extends Entity {
         Vector3 point = Vector3.O;
         double entry = 0;
         double exit = 0;
-        Vector3 normal = Vector3.O;
+        Vector3 normal;
 
         double tmin, tmax, tymin, tymax, tzmin, tzmax;
 

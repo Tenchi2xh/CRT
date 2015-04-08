@@ -29,7 +29,7 @@ import net.team2xh.crt.raytracer.entities.Entity;
 public class Intersection extends Entity {
 
     // A ^ B
-    private Entity a, b;
+    private final Entity a, b;
 
     public Intersection(Entity a, Entity b) {
         super(a.material);

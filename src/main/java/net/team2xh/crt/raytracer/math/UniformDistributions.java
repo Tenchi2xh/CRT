@@ -16,15 +16,7 @@
  */
 package net.team2xh.crt.raytracer.math;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.util.Random;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import net.team2xh.crt.gui.util.GUIToolkit;
 
 /**
  * Static methods for generating uniform distributions of points
@@ -40,6 +32,8 @@ final public class UniformDistributions {
      * Returns the coordinates of a random point in the unit circle.
      *
      * Source: http://stackoverflow.com/a/5838991
+     *
+     * @return Random point in a unit circle
      */
     public static double[] randomCirclePoint() {
 
@@ -112,41 +106,6 @@ final public class UniformDistributions {
         // Rotate and skew the point to fit the triangle
         // P = a (p0x, p0y) + b (p1x, p1y)
         return new double[] {a*p0[0] + b*p1[0], a*p0[1] + b*p1[1]};
-    }
-
-    public static void main(String[] args) {
-        JFrame f = new JFrame("Bokeh tester");
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        GUIToolkit.centerFrame(f);
-
-        JPanel t = new JPanel() {
-            @Override
-            public Dimension getPreferredSize() { return new Dimension(450, 450); }
-            @Override
-            public void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                int w = Math.min(getWidth(), getHeight());
-                int o = (getWidth() / 2) - (w / 2);
-                ((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g.setColor(Color.WHITE);
-                g.fillRect(o, 0, w, w);
-                g.setColor(Color.GRAY);
-                g.drawOval(o, 0, w, w);
-                g.setColor(Color.BLACK);
-                long start = System.currentTimeMillis();
-                for (int i = 0; i < 8000; ++i) {
-                    double[] p = randomPolygonPoint(6);
-                    // double[] p = randomCirclePoint();
-                    g.fillOval(o+(int)(p[0]*(w/2) - 2 + (w/2)), (int)(p[1]*(w/2) - 2 + (w/2)), 4, 4);
-                }
-                long time = System.currentTimeMillis() - start;
-                g.drawString(time + "ms", 0, 10);
-            }
-        };
-
-        f.add(t);
-        f.pack();
-        f.setVisible(true);
     }
 
 }

@@ -27,8 +27,8 @@ import net.team2xh.crt.raytracer.math.Vector3;
  */
 public class Sphere extends Entity {
 
-    private Vector3 center;
-    private double radius;
+    private final Vector3 center;
+    private final double radius;
 
     public Sphere(Vector3 center, double radius, Material material) {
         super(material);
