@@ -16,7 +16,6 @@
  */
 package net.team2xh.crt.raytracer.entities.csg;
 
-import java.util.List;
 import net.team2xh.crt.raytracer.Hit;
 import net.team2xh.crt.raytracer.Ray;
 import net.team2xh.crt.raytracer.entities.Entity;
@@ -25,7 +24,7 @@ import net.team2xh.crt.raytracer.entities.Entity;
  *
  * @author Hamza Haiken (hamza.haiken@heig-vd.ch)
  */
-public class Difference extends Entity {
+public class Difference extends CSG {
 
     // A - B
     private final Entity a, b;
@@ -68,19 +67,6 @@ public class Difference extends Entity {
         }
 
         return hitA;
-    }
-
-    public static Difference subtract(List<Entity> entities) {
-        if (entities.size() < 2)
-            throw new RuntimeException("List too small");
-
-        Entity accu = entities.get(0);
-
-        for (int i = 1; i < entities.size(); ++i) {
-            accu = new Difference(accu, entities.get(i));
-        }
-
-        return (Difference) accu;
     }
 
 }

@@ -1,0 +1,33 @@
+@startuml
+
+' TODO: separate Entity into its own diagram
+
+set namespaceSeparator none
+hide empty members
+
+abstract class Entity {
+    - Material material
+    + {abstract} Hit intersect(Ray r)
+}
+
+hide Entity attributes
+
+abstract class CSG
+class Box
+abstract class "..."
+
+class Union
+class Difference
+class Intersection
+
+CSG "1" *-up- "2, n "  Entity
+
+Entity <|-- CSG
+Entity <|-- Box
+Entity <|-- "..."
+
+CSG <|-- Union
+CSG <|-- Difference
+CSG <|-- Intersection
+
+@enduml

@@ -16,7 +16,6 @@
  */
 package net.team2xh.crt.raytracer.entities.csg;
 
-import java.util.List;
 import net.team2xh.crt.raytracer.Hit;
 import net.team2xh.crt.raytracer.Ray;
 import net.team2xh.crt.raytracer.entities.Entity;
@@ -26,7 +25,7 @@ import net.team2xh.crt.raytracer.entities.Entity;
  *
  * @author Hamza Haiken (hamza.haiken@heig-vd.ch)
  */
-public class Intersection extends Entity {
+public class Intersection extends CSG {
 
     // A ^ B
     private final Entity a, b;
@@ -65,19 +64,6 @@ public class Intersection extends Entity {
         }
 
         return new Hit(null, false, null, 0, 0, null);
-    }
-
-    public static Intersection intersect(List<Entity> entities) {
-        if (entities.size() < 2)
-            throw new RuntimeException("List too small");
-
-        Entity accu = entities.get(0);
-
-        for (int i = 1; i < entities.size(); ++i) {
-            accu = new Intersection(accu, entities.get(i));
-        }
-
-        return (Intersection) accu;
     }
 
 }

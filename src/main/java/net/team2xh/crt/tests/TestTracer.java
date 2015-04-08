@@ -91,16 +91,16 @@ public class TestTracer {
 
         scene.add(new Plane(new Vector3(0, 1, 0), new Vector3(0.0, -0.3, 0.0), new Material(new Pigment(1.0))));
 
-        scene.add(new Box(new Vector3(0.4, -.25, 1.0), new Vector3(0.6, 0.4, -0.1), sphereMat));
+        //scene.add(new Box(new Vector3(0.4, -.25, 1.0), new Vector3(0.6, 0.4, -0.1), sphereMat));
 
         for (int i = 0; i < 15; ++i) {
-            scene.add(new Sphere(new Vector3(-0.5, -0.125, 0.0 + 0.3*i), 0.125, sphereMat));
+            //scene.add(new Sphere(new Vector3(-0.5, -0.125, 0.0 + 0.3*i), 0.125, sphereMat));
         }
 
         Box box = new Box(new Vector3(-0.2, -0.2, -0.2), new Vector3(0.2, 0.2, 0.2), dieMat);
-        Sphere sphere = new Sphere(new Vector3(-0.2, 0.2, -0.2), 0.275, sphereMat);
+        Sphere sphere = new Sphere(new Vector3(0.0, 0.0, 0.0), 0.275, sphereMat);
 
-        Entity test = new Difference(box, sphere);
+        Entity test = new Union(box, sphere);
 
 
         List<Entity> dice = new LinkedList<>();
@@ -118,7 +118,7 @@ public class TestTracer {
             dice.add(new Sphere(new Vector3((1./2.5)*-0.2, 0.2, (1./2)*-0.2 + i*(1.)*0.2), 0.03, sphereMat));
         }
 
-        //test = Difference.subtract(dice);
+        //test = CSG.subtract(dice);
 
         scene.add(test);
 //        scene.add(sphere3);
