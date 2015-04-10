@@ -18,21 +18,17 @@
 grammar CRT;
 
 script
-    : statement* EOF
+    : statement*
     ;
 
 statement
-    : expression
-    | config
+    : config
     | scene
+    | expression
     ;
 
 config
-    : 'Config' '{' attribute* '}'
-    ;
-
-attribute
-    : IDENTIFIER '->' expression
+    : 'Config' '{' '}'
     ;
 
 scene
@@ -40,23 +36,26 @@ scene
     ;
 
 expression
-    : primary
-    | object
-    | '[' expression (',' expression)* ']'
-    | expression '[' expression ']'
-    | expression '(' expression (',' expression)* ')'
-    | expression LCHEVR modifier (',' modifier)* RCHEVR
-    | ('+' | '-') expression
-    | '!' expression
-    | expression ('*' | '/' | '%') expression
-    | expression ('+' | '-' | '^') expression
-    | expression ('<=' | '>=' | GREATER | LESS) expression
-    | expression ('==' | '!=') expression
-    | expression '^' expression
-    | expression '&&' expression
-    | expression '||' expression
-    | expression '?' expression ':' expression
-    | expression '=' expression
+    : primary                                                               # primaryExpr
+    | object                                                                # objectExpr
+    | macro                                                                 # macroExpr
+    | '[' expressionList? ']'                                               # list
+    | expression '[' expression ']'                                         # listAccess
+    | expression '(' expressionList? ')'                                    # call
+    | expression LCHEVR modifier (',' modifier)* RCHEVR                     # modifiers
+    | ('+' | '-') expression                                                # unarySign
+    | '!' expression                                                        # unaryNot
+    | expression ('*' | '/' | '%') expression                               # multiplication
+    | expression ('+' | '-' | '^') expression                               # addition
+    | expression ('<=' | '>=' | GREATER | LESS | '==' | '!=') expression    # comparison
+    | expression '&&' expression                                            # binaryAnd
+    | expression '||' expression                                            # binaryOr
+    | expression '?' expression ':' expression                              # ternary
+    | <assoc=right> expression '=' expression                               # assignment
+    ;
+
+expressionList
+    : expression (',' expression)*
     ;
 
 primary
@@ -69,12 +68,19 @@ object
     : NAME '{' attribute* '}'
     ;
 
+macro
+    : 'Macro' '(' IDENTIFIER* ')' '{' expression* '}'
+    ;
+
 literal
     : INTEGER
     | FLOAT
     | STRING
-    | IDENTIFIER
     | BOOLEAN
+    ;
+
+attribute
+    : IDENTIFIER '->' expression
     ;
 
 modifier
@@ -83,7 +89,15 @@ modifier
     | 'rotate' expression
     ;
 
-// Tokens
+// Reserved names
+
+CONFIG          : 'Config';
+SCENE           : 'Scene';
+SCALE           : 'scale';
+TRANSLATE       : 'translate';
+ROTATE          : 'rotate';
+
+// Types
 
 IDENTIFIER
     : LOWER (LOWER | UPPER | NUMBER)*
@@ -149,14 +163,6 @@ OR              : '||';
 QUESTION        : '?';
 COLON           : ':';
 
-// Reserved names
-
-CONFIG          : 'Config';
-SCENE           : 'Scene';
-SCALE           : 'scale';
-TRANSLATE       : 'translate';
-ROTATE          : 'rotate';
-
 // Fragments
 
 fragment DIGITS
@@ -172,7 +178,7 @@ fragment COMMENT
     ;
 
 fragment LINE_JOINING
-    : '\\' SPACES? ( '\r'? '\n' | '\r' )
+    : [\n\r]
     ;
 
 fragment LOWER
@@ -187,6 +193,6 @@ fragment NUMBER
     : '0'..'9'
     ;
 
-fragment ESCAPED_QUOTE 
+fragment ESCAPED_QUOTE
     : '\\"'
     ;
