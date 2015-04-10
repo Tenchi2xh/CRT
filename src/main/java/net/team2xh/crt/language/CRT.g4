@@ -22,13 +22,9 @@ script
     ;
 
 statement
-    : definition
+    : expression
     | config
     | scene
-    ;
-
-definition
-    : IDENTIFIER '=' expression
     ;
 
 config
@@ -40,26 +36,37 @@ attribute
     ;
 
 scene
-    : 'Scene' '{' (definition | expression)* '}'
+    : 'Scene' '{' expression* '}'
     ;
 
 expression
     : primary
+    | object
+    | '[' expression (',' expression)* ']'
     | expression '[' expression ']'
     | expression '(' expression (',' expression)* ')'
     | expression LCHEVR modifier (',' modifier)* RCHEVR
     | ('+' | '-') expression
     | '!' expression
     | expression ('*' | '/' | '%') expression
-    | expression ('+' | '-') expression
-    | expression ('<=' | '>=' | GT | LT) expression
+    | expression ('+' | '-' | '^') expression
+    | expression ('<=' | '>=' | GREATER | LESS) expression
     | expression ('==' | '!=') expression
+    | expression '^' expression
+    | expression '&&' expression
+    | expression '||' expression
+    | expression '?' expression ':' expression
+    | expression '=' expression
     ;
 
 primary
     : '(' expression ')'
     | literal
     | IDENTIFIER
+    ;
+
+object
+    : NAME '{' attribute* '}'
     ;
 
 literal
@@ -70,10 +77,20 @@ literal
     | BOOLEAN
     ;
 
+modifier
+    : 'scale' expression
+    | 'translate' expression
+    | 'rotate' expression
+    ;
+
 // Tokens
 
 IDENTIFIER
     : LOWER (LOWER | UPPER | NUMBER)*
+    ;
+
+NAME
+    : UPPER (LOWER | UPPER | NUMBER)*
     ;
 
 STRING
@@ -100,37 +117,45 @@ BOOLEAN
 
 // Separators
 
-LPAREN      : '(';
-RPAREN      : ')';
-LBRACE      : '{';
-RBRACE      : '}';
-LBRACK      : '[';
-RBRACK      : ']';
-LCHEVR      : '<';
-RCHEVR      : '>';
-COMMA       : ',';
+LPAREN          : '(';
+RPAREN          : ')';
+LBRACE          : '{';
+RBRACE          : '}';
+LBRACK          : '[';
+RBRACK          : ']';
+LCHEVR          : '<';
+RCHEVR          : '>';
+COMMA           : ',';
 
 // Operators
 
-ASSIGN      : '=';
-ATTRIBUTE   : '->';
-ADD         : '+';
-SUBTRACT    : '-';
-MULTIPLY    : '*';
-DIVIDE      : '/';
-MODULO      : '%';
-NOT         : '!';
-LESS        : '<';
-GT          : '>';
-LE          : '<=';
-GE          : '>=';
-EQ          : '==';
-NOTEQUAL    : '!=';
+ASSIGN          : '=';
+ATTRIBUTE       : '->';
+ADD             : '+';
+SUBTRACT        : '-';
+INTERSECTION    : '^';
+MULTIPLY        : '*';
+DIVIDE          : '/';
+MODULO          : '%';
+NOT             : '!';
+LESS            : '<';
+GREATER         : '>';
+LESS_EQUAL      : '<=';
+GREATER_EQUAL   : '>=';
+EQUAL           : '==';
+NOT_EQUAL       : '!=';
+AND             : '&&';
+OR              : '||';
+QUESTION        : '?';
+COLON           : ':';
 
-// Block names
+// Reserved names
 
-CONFIG      : 'Config';
-SCENE       : 'Scene';
+CONFIG          : 'Config';
+SCENE           : 'Scene';
+SCALE           : 'scale';
+TRANSLATE       : 'translate';
+ROTATE          : 'rotate';
 
 // Fragments
 
