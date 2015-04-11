@@ -1,3 +1,5 @@
+package net.team2xh.crt.language.parser;
+
 // Generated from CRT.g4 by ANTLR 4.3
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -159,6 +161,19 @@ public class CRTBaseListener implements CRTListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterSettings(@NotNull CRTParser.SettingsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSettings(@NotNull CRTParser.SettingsContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterMacro(@NotNull CRTParser.MacroContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -296,19 +311,6 @@ public class CRTBaseListener implements CRTListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitExpressionList(@NotNull CRTParser.ExpressionListContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterConfig(@NotNull CRTParser.ConfigContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitConfig(@NotNull CRTParser.ConfigContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

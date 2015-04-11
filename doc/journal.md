@@ -44,3 +44,9 @@
 - Corrections to Sphere primitive intersection and normals
 - Rendering classes refactoring
 - Rendering UML diagram split in two, added cardinalities and fixed a few aspects
+
+# 08.04.2015 - 15.04.2015
+
+- Wrote the grammar from scratch
+- Wrote a test case
+- Began work on compiler

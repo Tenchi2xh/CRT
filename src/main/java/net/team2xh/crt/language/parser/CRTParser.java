@@ -1,3 +1,5 @@
+package net.team2xh.crt.language.parser;
+
 // Generated from CRT.g4 by ANTLR 4.3
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -16,27 +18,27 @@ public class CRTParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__0=1, CONFIG=2, SCENE=3, SCALE=4, TRANSLATE=5, ROTATE=6, IDENTIFIER=7, 
-		NAME=8, STRING=9, SKIP=10, INTEGER=11, FLOAT=12, BOOLEAN=13, LPAREN=14, 
-		RPAREN=15, LBRACE=16, RBRACE=17, LBRACK=18, RBRACK=19, LCHEVR=20, RCHEVR=21, 
-		COMMA=22, ASSIGN=23, ATTRIBUTE=24, ADD=25, SUBTRACT=26, INTERSECTION=27, 
-		MULTIPLY=28, DIVIDE=29, MODULO=30, NOT=31, LESS=32, GREATER=33, LESS_EQUAL=34, 
-		GREATER_EQUAL=35, EQUAL=36, NOT_EQUAL=37, AND=38, OR=39, QUESTION=40, 
+		T__0=1, SETTINGS=2, SCENE=3, SCALE=4, TRANSLATE=5, ROTATE=6, IDENTIFIER=7,
+		NAME=8, STRING=9, SKIP=10, INTEGER=11, FLOAT=12, BOOLEAN=13, LPAREN=14,
+		RPAREN=15, LBRACE=16, RBRACE=17, LBRACK=18, RBRACK=19, LCHEVR=20, RCHEVR=21,
+		COMMA=22, ASSIGN=23, ATTRIBUTE=24, ADD=25, SUBTRACT=26, INTERSECTION=27,
+		MULTIPLY=28, DIVIDE=29, MODULO=30, NOT=31, LESS=32, GREATER=33, LESS_EQUAL=34,
+		GREATER_EQUAL=35, EQUAL=36, NOT_EQUAL=37, AND=38, OR=39, QUESTION=40,
 		COLON=41;
 	public static final String[] tokenNames = {
-		"<INVALID>", "'Macro'", "'Config'", "'Scene'", "'scale'", "'translate'", 
-		"'rotate'", "IDENTIFIER", "NAME", "STRING", "SKIP", "INTEGER", "FLOAT", 
-		"BOOLEAN", "'('", "')'", "'{'", "'}'", "'['", "']'", "LCHEVR", "RCHEVR", 
-		"','", "'='", "'->'", "'+'", "'-'", "'^'", "'*'", "'/'", "'%'", "'!'", 
-		"LESS", "GREATER", "'<='", "'>='", "'=='", "'!='", "'&&'", "'||'", "'?'", 
+		"<INVALID>", "'Macro'", "'Settings'", "'Scene'", "'scale'", "'translate'",
+		"'rotate'", "IDENTIFIER", "NAME", "STRING", "SKIP", "INTEGER", "FLOAT",
+		"BOOLEAN", "'('", "')'", "'{'", "'}'", "'['", "']'", "LCHEVR", "RCHEVR",
+		"','", "'='", "'->'", "'+'", "'-'", "'^'", "'*'", "'/'", "'%'", "'!'",
+		"LESS", "GREATER", "'<='", "'>='", "'=='", "'!='", "'&&'", "'||'", "'?'",
 		"':'"
 	};
 	public static final int
-		RULE_script = 0, RULE_statement = 1, RULE_config = 2, RULE_scene = 3, 
-		RULE_expression = 4, RULE_expressionList = 5, RULE_primary = 6, RULE_object = 7, 
+		RULE_script = 0, RULE_statement = 1, RULE_settings = 2, RULE_scene = 3,
+		RULE_expression = 4, RULE_expressionList = 5, RULE_primary = 6, RULE_object = 7,
 		RULE_macro = 8, RULE_literal = 9, RULE_attribute = 10, RULE_modifier = 11;
 	public static final String[] ruleNames = {
-		"script", "statement", "config", "scene", "expression", "expressionList", 
+		"script", "statement", "settings", "scene", "expression", "expressionList",
 		"primary", "object", "macro", "literal", "attribute", "modifier"
 	};
 
@@ -90,7 +92,7 @@ public class CRTParser extends Parser {
 			setState(27);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__0) | (1L << CONFIG) | (1L << SCENE) | (1L << IDENTIFIER) | (1L << NAME) | (1L << STRING) | (1L << INTEGER) | (1L << FLOAT) | (1L << BOOLEAN) | (1L << LPAREN) | (1L << LBRACK) | (1L << ADD) | (1L << SUBTRACT) | (1L << NOT))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__0) | (1L << SETTINGS) | (1L << SCENE) | (1L << IDENTIFIER) | (1L << NAME) | (1L << STRING) | (1L << INTEGER) | (1L << FLOAT) | (1L << BOOLEAN) | (1L << LPAREN) | (1L << LBRACK) | (1L << ADD) | (1L << SUBTRACT) | (1L << NOT))) != 0)) {
 				{
 				{
 				setState(24); statement();
@@ -114,14 +116,14 @@ public class CRTParser extends Parser {
 	}
 
 	public static class StatementContext extends ParserRuleContext {
+		public SettingsContext settings() {
+			return getRuleContext(SettingsContext.class,0);
+		}
 		public SceneContext scene() {
 			return getRuleContext(SceneContext.class,0);
 		}
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
-		}
-		public ConfigContext config() {
-			return getRuleContext(ConfigContext.class,0);
 		}
 		public StatementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -143,10 +145,10 @@ public class CRTParser extends Parser {
 		try {
 			setState(33);
 			switch (_input.LA(1)) {
-			case CONFIG:
+			case SETTINGS:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(30); config();
+				setState(30); settings();
 				}
 				break;
 			case SCENE:
@@ -187,28 +189,28 @@ public class CRTParser extends Parser {
 		return _localctx;
 	}
 
-	public static class ConfigContext extends ParserRuleContext {
-		public ConfigContext(ParserRuleContext parent, int invokingState) {
+	public static class SettingsContext extends ParserRuleContext {
+		public SettingsContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_config; }
+		@Override public int getRuleIndex() { return RULE_settings; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof CRTListener ) ((CRTListener)listener).enterConfig(this);
+			if ( listener instanceof CRTListener ) ((CRTListener)listener).enterSettings(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof CRTListener ) ((CRTListener)listener).exitConfig(this);
+			if ( listener instanceof CRTListener ) ((CRTListener)listener).exitSettings(this);
 		}
 	}
 
-	public final ConfigContext config() throws RecognitionException {
-		ConfigContext _localctx = new ConfigContext(_ctx, getState());
-		enterRule(_localctx, 4, RULE_config);
+	public final SettingsContext settings() throws RecognitionException {
+		SettingsContext _localctx = new SettingsContext(_ctx, getState());
+		enterRule(_localctx, 4, RULE_settings);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(35); match(CONFIG);
+			setState(35); match(SETTINGS);
 			setState(36); match(LBRACE);
 			setState(37); match(RBRACE);
 			}
@@ -286,7 +288,7 @@ public class CRTParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_expression; }
-	 
+
 		public ExpressionContext() { }
 		public void copyFrom(ExpressionContext ctx) {
 			super.copyFrom(ctx);
@@ -808,7 +810,7 @@ public class CRTParser extends Parser {
 						}
 						break;
 					}
-					} 
+					}
 				}
 				setState(115);
 				_errHandler.sync(this);

@@ -1,3 +1,5 @@
+package net.team2xh.crt.language.parser;
+
 // Generated from CRT.g4 by ANTLR 4.3
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
@@ -141,6 +143,17 @@ public interface CRTListener extends ParseTreeListener {
 	void exitAddition(@NotNull CRTParser.AdditionContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link CRTParser#settings}.
+	 * @param ctx the parse tree
+	 */
+	void enterSettings(@NotNull CRTParser.SettingsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CRTParser#settings}.
+	 * @param ctx the parse tree
+	 */
+	void exitSettings(@NotNull CRTParser.SettingsContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link CRTParser#macro}.
 	 * @param ctx the parse tree
 	 */
@@ -276,17 +289,6 @@ public interface CRTListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitExpressionList(@NotNull CRTParser.ExpressionListContext ctx);
-
-	/**
-	 * Enter a parse tree produced by {@link CRTParser#config}.
-	 * @param ctx the parse tree
-	 */
-	void enterConfig(@NotNull CRTParser.ConfigContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CRTParser#config}.
-	 * @param ctx the parse tree
-	 */
-	void exitConfig(@NotNull CRTParser.ConfigContext ctx);
 
 	/**
 	 * Enter a parse tree produced by the {@code ternary}
