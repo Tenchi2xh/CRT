@@ -1,6 +1,5 @@
-package net.team2xh.crt.language.parser;
-
 // Generated from CRT.g4 by ANTLR 4.3
+package net.team2xh.crt.language.parser;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -21,6 +20,17 @@ public interface CRTListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitObjectExpr(@NotNull CRTParser.ObjectExprContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link CRTParser#bool}.
+	 * @param ctx the parse tree
+	 */
+	void enterBool(@NotNull CRTParser.BoolContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CRTParser#bool}.
+	 * @param ctx the parse tree
+	 */
+	void exitBool(@NotNull CRTParser.BoolContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link CRTParser#modifier}.

@@ -14,24 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.team2xh.crt.tests;
-
-import net.team2xh.crt.language.compiler.Compiler;
+package net.team2xh.crt.language.compiler;
 
 /**
  *
  * @author Hamza Haiken (hamza.haiken@heig-vd.ch)
  */
-public class TestParsing {
+public class CompilerException extends RuntimeException {
 
-    public static void main(String[] args) {
-        String code =
-                  "foo = \"bar\"\n"
-                + "foo = \"baz\"\n"
-                + "int = 42\n"
-                + "flt = 13.37\n"
-                + "boo = true\n"
-                + "test = identifier";
-        Compiler.compile(code);
+    public CompilerException(String s) {
+        super("Compiler error: " + s + ".");
     }
+
 }

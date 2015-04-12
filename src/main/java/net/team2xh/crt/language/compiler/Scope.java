@@ -25,17 +25,42 @@ import java.util.List;
  */
 public class Scope {
 
-    private List<Object> variables;
+    private final List<Variable> variables;
+    private Scope parent = null;
+    private List<Scope> subscopes;
+
+    public Scope(Scope parent) {
+        this();
+        this.parent = parent;
+    }
 
     public Scope() {
         variables = new ArrayList<>();
+        subscopes = new ArrayList<>();
     }
 
-    public void putVariable(Object o) {
-        variables.add(o);
+    public void add(Variable v) {
+        for (int i = 0; i < variables.size(); ++i) {
+            if (variables.get(i).getName().equals(v.getName())) {
+                variables.set(i, v);
+                return;
+            }
+        }
+        variables.add(v);
     }
 
-    public List<Object> getVariables() {
+    public Variable get(String name) {
+        Variable v0 = null;
+        for (Variable v1: variables) {
+            if (v1.getName().equals(name))
+                return v1;
+        }
+        if (parent != null)
+            return parent.get(name);
+        return v0;
+    }
+
+    public List<Variable> getVariables() {
         return variables;
     }
 

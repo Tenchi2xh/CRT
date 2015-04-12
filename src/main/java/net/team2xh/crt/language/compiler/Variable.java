@@ -14,24 +14,41 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.team2xh.crt.tests;
-
-import net.team2xh.crt.language.compiler.Compiler;
+package net.team2xh.crt.language.compiler;
 
 /**
  *
  * @author Hamza Haiken (hamza.haiken@heig-vd.ch)
  */
-public class TestParsing {
+public class Variable {
 
-    public static void main(String[] args) {
-        String code =
-                  "foo = \"bar\"\n"
-                + "foo = \"baz\"\n"
-                + "int = 42\n"
-                + "flt = 13.37\n"
-                + "boo = true\n"
-                + "test = identifier";
-        Compiler.compile(code);
+    private String name;
+    private Object value;
+
+    public Variable(String name, Object value) {
+        this.name = name;
+        this.value = value;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Object getValue() {
+        return value;
+    }
+
+    public void setValue(Object value) {
+        this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return name + " = " + value + " (" + value.getClass().getSimpleName() + ")";
+    }
+
 }

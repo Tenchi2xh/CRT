@@ -1,6 +1,5 @@
-package net.team2xh.crt.language.parser;
-
 // Generated from CRT.g4 by ANTLR 4.3
+package net.team2xh.crt.language.parser;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.NotNull;
@@ -25,6 +24,19 @@ public class CRTBaseListener implements CRTListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitObjectExpr(@NotNull CRTParser.ObjectExprContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBool(@NotNull CRTParser.BoolContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBool(@NotNull CRTParser.BoolContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
