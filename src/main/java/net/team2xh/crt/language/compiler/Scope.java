@@ -23,7 +23,7 @@ import java.util.List;
  * Class representing a variable scope.
  *
  * When assigning an identifier to a variable,
- * dynamic binding tries to resolve the value
+ * dynamic pointing tries to resolve the value
  * bound to the identifier.
  *
  * When trying to get the value bound to an identifier,
@@ -49,7 +49,7 @@ public class Scope {
     /**
      * Adds a variable to the scope.
      *
-     * Applies dynamic binding if the value of the variable
+     * Applies dynamic pointing if the value of the variable
      * is an identifier. If the variable name already exists,
      * the value bound to the name gets updated.
      *
@@ -59,23 +59,23 @@ public class Scope {
         for (int i = 0; i < variables.size(); ++i) {
             if (variables.get(i).getName().equals(v.getName())) {
                 variables.get(i).setValue(v.getValue());
-                bind(v);
+                point(v);
                 return;
             }
         }
         variables.add(v);
-        bind(v);
+        point(v);
     }
 
     /**
-     * Applies dynamic binding to a variable.
+     * Applies dynamic pointing to a variable.
      *
      * When a variable name is assigned to an identifier,
      * it should point to the variable bound to that identifier.
      *
-     * @param v Variable to apply dynamic binding to
+     * @param v Variable to apply dynamic pointing to
      */
-    private void bind(Variable v) {
+    private void point(Variable v) {
         if (v.getValue().getClass() == Identifier.class)
             v.setValue(get((Identifier) v.getValue()));
     }
