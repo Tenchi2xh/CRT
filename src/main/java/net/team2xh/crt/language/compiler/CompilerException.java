@@ -16,6 +16,9 @@
  */
 package net.team2xh.crt.language.compiler;
 
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
+
 /**
  *
  * @author Hamza Haiken (hamza.haiken@heig-vd.ch)
@@ -23,7 +26,19 @@ package net.team2xh.crt.language.compiler;
 public class CompilerException extends RuntimeException {
 
     public CompilerException(String s) {
-        super("Compiler error: " + s + ".");
+        super(s);
+        System.err.println("Compiler error: " + s + ".");
+    }
+
+    public CompilerException(ParserRuleContext ctx, String s) {
+        super(s);
+
+        Token firstToken = ctx.getStart();
+        int line = firstToken.getLine();
+
+        System.err.println("Compiler error: " + s + ".");
+        System.err.println("(Line " + line + ": " + ctx.getText() + ")");
+        System.err.println();
     }
 
 }

@@ -25,7 +25,7 @@ import net.team2xh.crt.language.compiler.Compiler;
 public class TestParsing {
 
     public static void main(String[] args) {
-        String code =
+        String code1 =
                   "foo = \"bar\"\n"
                 + "foo = \"baz\"\n"
                 + "int = 42\n"
@@ -33,6 +33,14 @@ public class TestParsing {
                 + "boo = true\n"
                 + "test = foo\n"
                 + "foo = \"barbar\"";
+
+        String code =
+                  "foo = [1, 2.0, \"trois\"]\n"
+                + "bar = []\n"
+                + "ll = [[1,2,3], [4,5,6], [7,8,9]]\n"
+                + "baz = foo[2]\n"
+                + "f00 = ll[0][1]";
+
         Compiler.compile(code);
     }
 }

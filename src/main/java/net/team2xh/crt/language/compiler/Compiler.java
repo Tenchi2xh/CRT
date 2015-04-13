@@ -16,14 +16,19 @@
  */
 package net.team2xh.crt.language.compiler;
 
+import java.util.LinkedList;
+import java.util.List;
 import net.team2xh.crt.language.parser.CRTBaseVisitor;
 import net.team2xh.crt.language.parser.CRTLexer;
 import net.team2xh.crt.language.parser.CRTParser;
 import net.team2xh.crt.language.parser.CRTParser.AssignmentContext;
 import net.team2xh.crt.language.parser.CRTParser.BooleanLiteralContext;
+import net.team2xh.crt.language.parser.CRTParser.ExpressionContext;
 import net.team2xh.crt.language.parser.CRTParser.FloatLiteralContext;
 import net.team2xh.crt.language.parser.CRTParser.IdentifierPrimaryContext;
 import net.team2xh.crt.language.parser.CRTParser.IntegerLiteralContext;
+import net.team2xh.crt.language.parser.CRTParser.ListAccessContext;
+import net.team2xh.crt.language.parser.CRTParser.ListContext;
 import net.team2xh.crt.language.parser.CRTParser.ScriptContext;
 import net.team2xh.crt.language.parser.CRTParser.StringLiteralContext;
 import net.team2xh.crt.raytracer.Scene;
@@ -31,8 +36,6 @@ import net.team2xh.crt.raytracer.Settings;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.TerminalNode;
-import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
 /**
  *
@@ -78,15 +81,15 @@ final public class Compiler extends CRTBaseVisitor {
                 hasScene = true;
                 script.setScene((Scene) o);
             } else {
-                throw new CompilerException("Top-level statements must be either an assignment or settings/scene block");
+                throw new CompilerException(ctx, "Top-level statements must be either an assignment or settings/scene block");
             }
 
         }
 
 //        if (!hasSettings)
-//            throw new CompilerException("Script must define settings block");
+//            throw new CompilerException(ctx, "Script must define settings block");
 //        if (!hasScene)
-//            throw new CompilerException("Script must define a scene");
+//            throw new CompilerException(ctx, "Script must define a scene");
 
         System.out.println(scope.getVariables());
 
@@ -99,7 +102,7 @@ final public class Compiler extends CRTBaseVisitor {
         Object right = ctx.expression(1).accept(this);
 
         if (left.getClass() != Identifier.class) {
-            throw new CompilerException("Left-hand side of assignment must be an identifier");
+            throw new CompilerException(ctx, "Left-hand side of assignment must be an identifier");
         }
 
         Identifier name = (Identifier) left;
@@ -133,6 +136,55 @@ final public class Compiler extends CRTBaseVisitor {
     @Override
     public Boolean visitBooleanLiteral(BooleanLiteralContext ctx) {
         return Boolean.parseBoolean(ctx.getText());
+    }
+
+    @Override
+    public List<Object> visitList(ListContext ctx) {
+        List<ExpressionContext> exprs = new LinkedList<>();
+        if (ctx.expressionList() != null)
+            exprs = ctx.expressionList().expression();
+        List<Object> result = new LinkedList<>();
+        for (int i = 0; i < exprs.size(); ++i) {
+            result.add(exprs.get(i).accept(this));
+        }
+        return result;
+    }
+
+    @Override
+    public Object visitListAccess(ListAccessContext ctx) {
+        Object left = ctx.expression(0).accept(this);
+        Object right = ctx.expression(1).accept(this);
+
+        Object listObject = resolve(left);
+        Object indexObject = resolve(right);
+
+        if (listObject.getClass() != LinkedList.class)
+            throw new CompilerException(ctx, "\"" + left + "\" is not a list");
+
+        if (indexObject.getClass() != Integer.class)
+            throw new CompilerException(ctx, "List index must be an integer");
+
+        List<Object> list = (LinkedList) listObject;
+        Integer index = (Integer) indexObject;
+
+        if (index >= list.size())
+            throw new CompilerException(ctx, "List index out of range");
+
+        return list.get(index);
+    }
+
+    /**
+     * Returns a value if "thing" is a variable identifier, else the thing itself.
+     *
+     * @param thing Object to resolve
+     * @return Value of variable "thing" or "thing" itself
+     */
+    private Object resolve(Object thing) {
+        Object result = thing;
+        if (thing.getClass() == Identifier.class) {
+            result = scope.get((Identifier) thing).getValue();
+        }
+        return result;
     }
 
 }
