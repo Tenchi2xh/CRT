@@ -22,13 +22,13 @@ script
     ;
 
 statement
-    : config
+    : settings
     | scene
     | expression
     ;
 
-config
-    : 'Config' '{' '}'
+settings
+    : 'Settings' '{' '}'
     ;
 
 scene
@@ -36,8 +36,8 @@ scene
     ;
 
 expression
-    : primary                                                               # primaryExpr
-    | object                                                                # objectExpr
+    : primary                                                               # primaryExpr                      
+    | entity                                                                # entityExpr
     | macro                                                                 # macroExpr
     | '[' expressionList? ']'                                               # list
     | expression '[' expression ']'                                         # listAccess
@@ -61,22 +61,30 @@ expressionList
 primary
     : '(' expression ')'
     | literal
-    | IDENTIFIER
+    | identifierPrimary
     ;
 
-object
+entity
     : NAME '{' attribute* '}'
     ;
 
 macro
-    : 'Macro' '(' IDENTIFIER* ')' '{' expression* '}'
+    : 'Macro' '(' paramList? ')' '{' expression* '}'
+    ;
+
+paramList
+    : IDENTIFIER (',' IDENTIFIER)*
+    ;
+
+identifierPrimary
+    : IDENTIFIER
     ;
 
 literal
-    : INTEGER
-    | FLOAT
-    | STRING
-    | BOOLEAN
+    : integerLiteral
+    | floatLiteral
+    | stringLiteral
+    | booleanLiteral
     ;
 
 attribute
@@ -89,9 +97,26 @@ modifier
     | 'rotate' expression
     ;
 
+integerLiteral
+    : INTEGER
+    ;
+    
+floatLiteral
+    : FLOAT
+    ;
+
+stringLiteral
+    : STRING
+    ;
+
+booleanLiteral
+    : 'true'
+    | 'false'
+    ;
+
 // Reserved names
 
-CONFIG          : 'Config';
+SETTINGS        : 'Settings';
 SCENE           : 'Scene';
 SCALE           : 'scale';
 TRANSLATE       : 'translate';
@@ -122,11 +147,6 @@ INTEGER
 FLOAT
     : DIGITS '.' DIGITS?
     | '.' DIGITS
-    ;
-
-BOOLEAN
-    : 'true'
-    | 'false'
     ;
 
 // Separators
@@ -193,6 +213,6 @@ fragment NUMBER
     : '0'..'9'
     ;
 
-fragment ESCAPED_QUOTE
+fragment ESCAPED_QUOTE 
     : '\\"'
     ;

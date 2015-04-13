@@ -57,3 +57,4 @@
     - Literal variable assignments
     - List variable assignments
     - List access
+    - Function calls for color and vector types

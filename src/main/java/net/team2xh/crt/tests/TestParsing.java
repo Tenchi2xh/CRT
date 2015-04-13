@@ -41,10 +41,21 @@ public class TestParsing {
                 + "baz = foo[2]\n"
                 + "f00 = ll[0][1]";
 
-        String code =
-                  "col1 = rgb(1.0, 0.3, 0.2)\n"
+        String code3 =
+                  "n = 3.5\n"
+                + "col1 = rgb(1.0, 0.3, 0.2)\n"
                 + "col2 = rgba(0.2, 0.2, 0.2, 0.5)\n"
-                + "x = vec3(1.0, 0.0, 0.0)\n";
+                + "x = vec3(n, 0.0, 0.0)\n";
+
+        String code =
+                  "a = +1\n"
+                + "b = -1\n"
+                + "c = -a\n"
+                + "d = false\n"
+                + "e = !d\n"
+                + "f = \"bla\" * 5\n"
+                + "g = 1.91 * 6 + 1.91\n"
+                + "h = (19 + 923) % 60";
 
         Compiler.compile(code);
     }

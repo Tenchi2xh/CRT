@@ -17,19 +17,6 @@ public class CRTBaseListener implements CRTListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterObjectExpr(@NotNull CRTParser.ObjectExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitObjectExpr(@NotNull CRTParser.ObjectExprContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterModifier(@NotNull CRTParser.ModifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -290,6 +277,19 @@ public class CRTBaseListener implements CRTListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterEntityExpr(@NotNull CRTParser.EntityExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEntityExpr(@NotNull CRTParser.EntityExprContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterList(@NotNull CRTParser.ListContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -407,6 +407,19 @@ public class CRTBaseListener implements CRTListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterEntity(@NotNull CRTParser.EntityContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEntity(@NotNull CRTParser.EntityContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterUnaryNot(@NotNull CRTParser.UnaryNotContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -427,19 +440,6 @@ public class CRTBaseListener implements CRTListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPrimary(@NotNull CRTParser.PrimaryContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterObject(@NotNull CRTParser.ObjectContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitObject(@NotNull CRTParser.ObjectContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

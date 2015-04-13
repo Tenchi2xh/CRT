@@ -21,6 +21,7 @@ import java.util.List;
 import net.team2xh.crt.language.parser.CRTBaseVisitor;
 import net.team2xh.crt.language.parser.CRTLexer;
 import net.team2xh.crt.language.parser.CRTParser;
+import net.team2xh.crt.language.parser.CRTParser.AdditionContext;
 import net.team2xh.crt.language.parser.CRTParser.AssignmentContext;
 import net.team2xh.crt.language.parser.CRTParser.BooleanLiteralContext;
 import net.team2xh.crt.language.parser.CRTParser.CallContext;
@@ -31,16 +32,25 @@ import net.team2xh.crt.language.parser.CRTParser.IdentifierPrimaryContext;
 import net.team2xh.crt.language.parser.CRTParser.IntegerLiteralContext;
 import net.team2xh.crt.language.parser.CRTParser.ListAccessContext;
 import net.team2xh.crt.language.parser.CRTParser.ListContext;
+import net.team2xh.crt.language.parser.CRTParser.MultiplicationContext;
+import net.team2xh.crt.language.parser.CRTParser.PrimaryContext;
 import net.team2xh.crt.language.parser.CRTParser.ScriptContext;
 import net.team2xh.crt.language.parser.CRTParser.StringLiteralContext;
+import net.team2xh.crt.language.parser.CRTParser.UnaryNotContext;
+import net.team2xh.crt.language.parser.CRTParser.UnarySignContext;
 import net.team2xh.crt.raytracer.Pigment;
 import net.team2xh.crt.raytracer.Scene;
 import net.team2xh.crt.raytracer.Settings;
+import net.team2xh.crt.raytracer.entities.Entity;
+import net.team2xh.crt.raytracer.entities.csg.Difference;
+import net.team2xh.crt.raytracer.entities.csg.Intersection;
+import net.team2xh.crt.raytracer.entities.csg.Union;
 import net.team2xh.crt.raytracer.math.Vector3;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -159,7 +169,7 @@ final public class Compiler extends CRTBaseVisitor {
             exprs = ctx.expression();
         List<Object> result = new LinkedList<>();
         for (int i = 0; i < exprs.size(); ++i) {
-            result.add(exprs.get(i).accept(this));
+            result.add(resolve(exprs.get(i)));
         }
         return result;
     }
@@ -170,7 +180,7 @@ final public class Compiler extends CRTBaseVisitor {
         List<Object> arguments = visitExpressionList(ctx.expressionList());
 
         if (left.getClass() != Identifier.class)
-            throw new CompilerException(ctx, "\"" + left + "\" muts be an identifier");
+            throw new CompilerException(ctx, "'" + left + "' muts be an identifier");
 
         Identifier name = (Identifier) left;
         double[] args;
@@ -185,13 +195,13 @@ final public class Compiler extends CRTBaseVisitor {
                 args = checkArguments(arguments, VEC3, 3, ctx);
                 return new Vector3(args[0], args[1], args[2]);
             default:
-                // macro call
+                // TODO: macro call
                 return null;
         }
     }
 
     private double[] checkArguments(List<Object> arguments, String name, int n, ParserRuleContext ctx) {
-        String ex = "\"" + name + "\" takes " + n + " float arguments";
+        String ex = "'" + name + "' takes " + n + " float arguments";
         if (arguments.size() != n)
             throw new CompilerException(ctx, ex);
 
@@ -207,20 +217,17 @@ final public class Compiler extends CRTBaseVisitor {
 
     @Override
     public Object visitListAccess(ListAccessContext ctx) {
-        Object left = ctx.expression(0).accept(this);
-        Object right = ctx.expression(1).accept(this);
+        Object left = resolve(ctx.expression(0));
+        Object right = resolve(ctx.expression(1));
 
-        Object listObject = resolve(left);
-        Object indexObject = resolve(right);
+        if (left.getClass() != LinkedList.class)
+            throw new CompilerException(ctx, "'" + left + "' is not a list");
 
-        if (listObject.getClass() != LinkedList.class)
-            throw new CompilerException(ctx, "\"" + left + "\" is not a list");
-
-        if (indexObject.getClass() != Integer.class)
+        if (right.getClass() != Integer.class)
             throw new CompilerException(ctx, "List index must be an integer");
 
-        List<Object> list = (LinkedList) listObject;
-        Integer index = (Integer) indexObject;
+        List<Object> list = (LinkedList) left;
+        Integer index = (Integer) right;
 
         if (index >= list.size())
             throw new CompilerException(ctx, "List index out of range");
@@ -228,16 +235,192 @@ final public class Compiler extends CRTBaseVisitor {
         return list.get(index);
     }
 
+    @Override
+    public Object visitUnarySign(UnarySignContext ctx) {
+        Object operand = resolve(ctx.expression());
+        String sign = ctx.getChild(0).getText();
+
+        if (operand.getClass() == Double.class) {
+            switch (sign) {
+                case "+":
+                    return ((Double) operand);
+                case "-":
+                    return -((Double) operand);
+            }
+        }
+
+        if (operand.getClass() == Integer.class) {
+            switch (sign) {
+                case "+":
+                    return ((Integer) operand);
+                case "-":
+                    return -((Integer) operand);
+            }
+        }
+
+        throw new CompilerException(ctx, "Unsupported type for unary operator '" + sign + "': " + operand.getClass().getSimpleName());
+    }
+
+    @Override
+    public Boolean visitUnaryNot(UnaryNotContext ctx) {
+        Object operand = resolve(ctx.expression());
+
+        if (operand.getClass() == Boolean.class) {
+            return !((Boolean) operand);
+        }
+
+        throw new CompilerException(ctx, "Unsupported type for unary operator '!': " + operand.getClass().getSimpleName());
+    }
+
+    @Override
+    public Object visitMultiplication(MultiplicationContext ctx) {
+        Object left = resolve(ctx.expression(0));
+        Object right = resolve(ctx.expression(1));
+        String operator = ctx.getChild(1).getText();
+
+        Class l = left.getClass();
+        Class r = right.getClass();
+        Class d = Double.class;
+        Class i = Integer.class;
+        Class s = String.class;
+
+        // Integer multiplication
+        if (l == i && r == i) {
+            Integer x = (Integer) left, y = (Integer) right;
+            switch (operator) {
+                case "*":
+                    return x * y;
+                case "/":
+                    return x / y;
+                case "%":
+                    return x % y;
+            }
+        }
+
+        // Double multiplication
+        if ((l == i || l == d) && (r == i || r == d)) {
+            Double x = (l == i) ? ((Integer) left).doubleValue() : (Double) left;
+            Double y = (r == i) ? ((Integer) right).doubleValue() : (Double) right;
+            switch (operator) {
+                case "*":
+                    return x * y;
+                case "/":
+                    return x / y;
+                case "%":
+                    return x % y;
+            }
+        }
+
+        // String repetition
+        if (l == s && r == i || l == i && r == s) {
+            if (operator.equals("*")) {
+                if (l == s)
+                    return StringUtils.repeat((String) left, (Integer) right);
+
+                return StringUtils.repeat((String) right, (Integer) left);
+            }
+        }
+
+        throw new CompilerException(ctx, "Unsupported types for binary operator '" + operator + "': " + l.getSimpleName() + ", " + r.getSimpleName());
+
+    }
+
+    @Override
+    public Object visitAddition(AdditionContext ctx) {
+        Object left = resolve(ctx.expression(0));
+        Object right = resolve(ctx.expression(1));
+        String operator = ctx.getChild(1).getText();
+
+        Class l = left.getClass();
+        Class r = right.getClass();
+        Class d = Double.class;
+        Class i = Integer.class;
+        Class s = String.class;
+        Class b = Boolean.class;
+
+        // Integer addition
+        if (l == i && r == i) {
+            Integer x = (Integer) left, y = (Integer) right;
+            switch (operator) {
+                case "+":
+                    return x + y;
+                case "-":
+                    return x - y;
+            }
+        }
+
+        // Double addition
+        if ((l == i || l == d) && (r == i || r == d)) {
+            Double x = (l == i) ? ((Integer) left).doubleValue() : (Double) left;
+            Double y = (r == i) ? ((Integer) right).doubleValue() : (Double) right;
+            switch (operator) {
+                case "+":
+                    return x + y;
+                case "-":
+                    return x - y;
+            }
+        }
+
+        // String concatenation
+        if (l == s) {
+            if (operator.equals("+")) {
+                if (r == i)
+                    return (String) left + (Integer) right;
+                if (r == d)
+                    return (String) left + (Double) right;
+                if (r == b)
+                    return (String) left + (Boolean) right;
+                if (r == s)
+                    return (String) left + (String) right;
+            }
+        }
+        if (r == s) {
+            if (operator.equals("+")) {
+                if (l == i)
+                    return (Integer) left + (String) right;
+                if (l == d)
+                    return (Double) left + (String) right;
+                if (l == b)
+                    return (Boolean) left + (String) right;
+            }
+        }
+
+        // Entity CSG
+        if (left instanceof Entity && right instanceof Entity) {
+            Entity x = (Entity) left, y = (Entity) right;
+            switch (operator) {
+                case "+":
+                    return new Union(x, y);
+                case "-":
+                    return new Difference(x, y);
+                case "^":
+                    return new Intersection(x, y);
+            }
+        }
+
+        throw new CompilerException(ctx, "Unsupported types for binary operator '" + operator + "': " + l.getSimpleName() + ", " + r.getSimpleName());
+
+    }
+
+    @Override
+    public Object visitPrimary(PrimaryContext ctx) {
+        if (ctx.getChildCount() == 3)
+            return ctx.getChild(1).accept(this);
+
+        return ctx.getChild(0).accept(this);
+    }
+
     /**
-     * Returns a value if "thing" is a variable identifier, else the thing itself.
+     * Returns the value of an expression,
+     * and if it is an identifier, fetches its value from the scope.
      *
-     * @param thing Object to resolve
-     * @return Value of variable "thing" or "thing" itself
+     * @param expr Expression to resolve
+     * @return Value of variable or evaluated expression
      */
-    private Object resolve(Object thing) {
-        Object result = thing;
-        if (thing.getClass() == Identifier.class) {
-            result = scope.get((Identifier) thing).getValue();
+    private Object resolve(ExpressionContext expr) {
+        Object result = expr.accept(this);
+        if (result.getClass() == Identifier.class) {
+            result = scope.get((Identifier) result).getValue();
         }
         return result;
     }

@@ -18,14 +18,6 @@ public class CRTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements CR
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitObjectExpr(@NotNull CRTParser.ObjectExprContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
 	@Override public T visitModifier(@NotNull CRTParser.ModifierContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -186,6 +178,14 @@ public class CRTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements CR
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitEntityExpr(@NotNull CRTParser.EntityExprContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitList(@NotNull CRTParser.ListContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -258,6 +258,14 @@ public class CRTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements CR
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitEntity(@NotNull CRTParser.EntityContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitUnaryNot(@NotNull CRTParser.UnaryNotContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -267,12 +275,4 @@ public class CRTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements CR
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitPrimary(@NotNull CRTParser.PrimaryContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitObject(@NotNull CRTParser.ObjectContext ctx) { return visitChildren(ctx); }
 }

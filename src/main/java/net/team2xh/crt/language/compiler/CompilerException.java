@@ -18,6 +18,7 @@ package net.team2xh.crt.language.compiler;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.Interval;
 
 /**
  *
@@ -27,7 +28,9 @@ public class CompilerException extends RuntimeException {
 
     public CompilerException(String s) {
         super(s);
-        System.err.println("Compiler error: " + s + ".");
+        System.err.println();
+        System.err.println("Compiler error:\n    " + s + ".");
+        System.err.println();
     }
 
     public CompilerException(ParserRuleContext ctx, String s) {
@@ -36,8 +39,15 @@ public class CompilerException extends RuntimeException {
         Token firstToken = ctx.getStart();
         int line = firstToken.getLine();
 
-        System.err.println("Compiler error: " + s + ".");
-        System.err.println("(Line " + line + ": " + ctx.getText() + ")");
+        int a = ctx.start.getStartIndex();
+        int b = ctx.stop.getStopIndex();
+        Interval interval = new Interval(a, b);
+        String code = ctx.start.getInputStream().getText(interval);
+
+        System.err.println();
+        System.err.println("Compiler error:");
+        System.err.println("    " + s + ".");
+        System.err.println("    At line " + line + ": '" + code + "'");
         System.err.println();
     }
 

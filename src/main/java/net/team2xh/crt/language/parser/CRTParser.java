@@ -34,13 +34,13 @@ public class CRTParser extends Parser {
 	};
 	public static final int
 		RULE_script = 0, RULE_statement = 1, RULE_settings = 2, RULE_scene = 3, 
-		RULE_expression = 4, RULE_expressionList = 5, RULE_primary = 6, RULE_object = 7, 
+		RULE_expression = 4, RULE_expressionList = 5, RULE_primary = 6, RULE_entity = 7, 
 		RULE_macro = 8, RULE_paramList = 9, RULE_identifierPrimary = 10, RULE_literal = 11, 
 		RULE_attribute = 12, RULE_modifier = 13, RULE_integerLiteral = 14, RULE_floatLiteral = 15, 
 		RULE_stringLiteral = 16, RULE_booleanLiteral = 17;
 	public static final String[] ruleNames = {
 		"script", "statement", "settings", "scene", "expression", "expressionList", 
-		"primary", "object", "macro", "paramList", "identifierPrimary", "literal", 
+		"primary", "entity", "macro", "paramList", "identifierPrimary", "literal", 
 		"attribute", "modifier", "integerLiteral", "floatLiteral", "stringLiteral", 
 		"booleanLiteral"
 	};
@@ -156,16 +156,16 @@ public class CRTParser extends Parser {
 		StatementContext _localctx = new StatementContext(_ctx, getState());
 		enterRule(_localctx, 2, RULE_statement);
 		try {
+			enterOuterAlt(_localctx, 1);
+			{
 			setState(45);
 			switch (_input.LA(1)) {
 			case SETTINGS:
-				enterOuterAlt(_localctx, 1);
 				{
 				setState(42); settings();
 				}
 				break;
 			case SCENE:
-				enterOuterAlt(_localctx, 2);
 				{
 				setState(43); scene();
 				}
@@ -183,13 +183,13 @@ public class CRTParser extends Parser {
 			case ADD:
 			case SUBTRACT:
 			case NOT:
-				enterOuterAlt(_localctx, 3);
 				{
 				setState(44); expression(0);
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -342,25 +342,6 @@ public class CRTParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class ObjectExprContext extends ExpressionContext {
-		public ObjectContext object() {
-			return getRuleContext(ObjectContext.class,0);
-		}
-		public ObjectExprContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof CRTListener ) ((CRTListener)listener).enterObjectExpr(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof CRTListener ) ((CRTListener)listener).exitObjectExpr(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof CRTVisitor ) return ((CRTVisitor<? extends T>)visitor).visitObjectExpr(this);
-			else return visitor.visitChildren(this);
-		}
-	}
 	public static class MacroExprContext extends ExpressionContext {
 		public MacroContext macro() {
 			return getRuleContext(MacroContext.class,0);
@@ -443,6 +424,25 @@ public class CRTParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof CRTVisitor ) return ((CRTVisitor<? extends T>)visitor).visitBinaryAnd(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class EntityExprContext extends ExpressionContext {
+		public EntityContext entity() {
+			return getRuleContext(EntityContext.class,0);
+		}
+		public EntityExprContext(ExpressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof CRTListener ) ((CRTListener)listener).enterEntityExpr(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof CRTListener ) ((CRTListener)listener).exitEntityExpr(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CRTVisitor ) return ((CRTVisitor<? extends T>)visitor).visitEntityExpr(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -719,10 +719,10 @@ public class CRTParser extends Parser {
 				break;
 			case NAME:
 				{
-				_localctx = new ObjectExprContext(_localctx);
+				_localctx = new EntityExprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(67); object();
+				setState(67); entity();
 				}
 				break;
 			case T__0:
@@ -1069,7 +1069,7 @@ public class CRTParser extends Parser {
 		return _localctx;
 	}
 
-	public static class ObjectContext extends ParserRuleContext {
+	public static class EntityContext extends ParserRuleContext {
 		public List<AttributeContext> attribute() {
 			return getRuleContexts(AttributeContext.class);
 		}
@@ -1077,28 +1077,28 @@ public class CRTParser extends Parser {
 		public AttributeContext attribute(int i) {
 			return getRuleContext(AttributeContext.class,i);
 		}
-		public ObjectContext(ParserRuleContext parent, int invokingState) {
+		public EntityContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_object; }
+		@Override public int getRuleIndex() { return RULE_entity; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof CRTListener ) ((CRTListener)listener).enterObject(this);
+			if ( listener instanceof CRTListener ) ((CRTListener)listener).enterEntity(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof CRTListener ) ((CRTListener)listener).exitObject(this);
+			if ( listener instanceof CRTListener ) ((CRTListener)listener).exitEntity(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof CRTVisitor ) return ((CRTVisitor<? extends T>)visitor).visitObject(this);
+			if ( visitor instanceof CRTVisitor ) return ((CRTVisitor<? extends T>)visitor).visitEntity(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final ObjectContext object() throws RecognitionException {
-		ObjectContext _localctx = new ObjectContext(_ctx, getState());
-		enterRule(_localctx, 14, RULE_object);
+	public final EntityContext entity() throws RecognitionException {
+		EntityContext _localctx = new EntityContext(_ctx, getState());
+		enterRule(_localctx, 14, RULE_entity);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);

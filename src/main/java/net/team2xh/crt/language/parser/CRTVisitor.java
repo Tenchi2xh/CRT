@@ -12,14 +12,6 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface CRTVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by the {@code objectExpr}
-	 * labeled alternative in {@link CRTParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitObjectExpr(@NotNull CRTParser.ObjectExprContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link CRTParser#modifier}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -170,6 +162,14 @@ public interface CRTVisitor<T> extends ParseTreeVisitor<T> {
 	T visitBinaryAnd(@NotNull CRTParser.BinaryAndContext ctx);
 
 	/**
+	 * Visit a parse tree produced by the {@code entityExpr}
+	 * labeled alternative in {@link CRTParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEntityExpr(@NotNull CRTParser.EntityExprContext ctx);
+
+	/**
 	 * Visit a parse tree produced by the {@code list}
 	 * labeled alternative in {@link CRTParser#expression}.
 	 * @param ctx the parse tree
@@ -237,6 +237,13 @@ public interface CRTVisitor<T> extends ParseTreeVisitor<T> {
 	T visitTernary(@NotNull CRTParser.TernaryContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link CRTParser#entity}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEntity(@NotNull CRTParser.EntityContext ctx);
+
+	/**
 	 * Visit a parse tree produced by the {@code unaryNot}
 	 * labeled alternative in {@link CRTParser#expression}.
 	 * @param ctx the parse tree
@@ -250,11 +257,4 @@ public interface CRTVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitPrimary(@NotNull CRTParser.PrimaryContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link CRTParser#object}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitObject(@NotNull CRTParser.ObjectContext ctx);
 }
