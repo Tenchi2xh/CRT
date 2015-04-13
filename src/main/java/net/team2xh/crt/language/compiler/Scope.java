@@ -20,6 +20,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Class representing a variable scope.
+ *
+ * When assigning an identifier to a variable,
+ * dynamic binding tries to resolve the value
+ * bound to the identifier.
+ *
+ * When trying to get the value bound to an identifier,
+ * dynamic scoping tries to resolve the value
+ * by recursively looking up parent scopes.
  *
  * @author Hamza Haiken (hamza.haiken@heig-vd.ch)
  */
@@ -27,7 +36,6 @@ public class Scope {
 
     private final List<Variable> variables;
     private Scope parent = null;
-    private List<Scope> subscopes;
 
     public Scope(Scope parent) {
         this();
@@ -36,13 +44,21 @@ public class Scope {
 
     public Scope() {
         variables = new ArrayList<>();
-        subscopes = new ArrayList<>();
     }
 
+    /**
+     * Adds a variable to the scope.
+     *
+     * Applies dynamic binding if the value of the variable
+     * is an identifier. If the variable name already exists,
+     * the value bound to the name gets updated.
+     *
+     * @param v Variable to add to the scope
+     */
     public void add(Variable v) {
         for (int i = 0; i < variables.size(); ++i) {
             if (variables.get(i).getName().equals(v.getName())) {
-                variables.set(i, v);
+                variables.get(i).setValue(v.getValue());
                 bind(v);
                 return;
             }
@@ -51,17 +67,32 @@ public class Scope {
         bind(v);
     }
 
+    /**
+     * Applies dynamic binding to a variable.
+     *
+     * When a variable name is assigned to an identifier,
+     * it should point to the variable bound to that identifier.
+     *
+     * @param v Variable to apply dynamic binding to
+     */
     private void bind(Variable v) {
-        if (v.getValue().getClass() == Identifier.class) {
-            v.setValue(get((Identifier) v.getValue()).getValue());
-        }
+        if (v.getValue().getClass() == Identifier.class)
+            v.setValue(get((Identifier) v.getValue()));
     }
 
+    /**
+     * Gets a variable from the current scope hierarchy.
+     *
+     * Tries to fetch the variable from the current scope,
+     * and if it fails, calls recursively on the parents.
+     *
+     * @param name Name of the variable to get
+     * @return Requested variable
+     */
     public Variable get(Identifier name) {
-        Variable v0 = null;
-        for (Variable v1: variables) {
-            if (v1.getName().equals(name))
-                return v1;
+        for (Variable v: variables) {
+            if (v.getName().equals(name))
+                return v;
         }
         if (parent != null)
             return parent.get(name);
@@ -69,6 +100,11 @@ public class Scope {
         throw new CompilerException("Variable \"" + name + "\" is not defined");
     }
 
+    /**
+     * Returns a list of all current variables.
+     *
+     * @return List of variables
+     */
     public List<Variable> getVariables() {
         return variables;
     }

@@ -17,6 +17,7 @@
 package net.team2xh.crt.language.compiler;
 
 /**
+ * Scope variables which can point to other variables.
  *
  * @author Hamza Haiken (hamza.haiken@heig-vd.ch)
  */
@@ -30,25 +31,44 @@ public class Variable {
         this.value = value;
     }
 
+    /**
+     * Returns the name associated with the variable.
+     *
+     * @return Variable name
+     */
     public Identifier getName() {
         return name;
     }
 
-    public void setName(Identifier name) {
-        this.name = name;
-    }
-
+    /**
+     * Returns the value bound to the variable.
+     *
+     * If the stored value is another variable,
+     * recursively call to return a non-variable value.
+     *
+     * @return Bound value
+     */
     public Object getValue() {
+        if (value instanceof Variable) {
+            return ((Variable) value).getValue();
+        }
         return value;
     }
 
+    /**
+     * Sets the value bound to the variable.
+     *
+     * @param value New value
+     */
     public void setValue(Object value) {
         this.value = value;
     }
 
     @Override
     public String toString() {
-        return name + " = " + value + " (" + value.getClass().getSimpleName() + ")";
+        String sep = (value instanceof Variable) ? " -> " : " = ";
+        String type = (value instanceof Variable) ? "" : " (" + value.getClass().getSimpleName() + ")";
+        return name + sep + value + type;
     }
 
 }

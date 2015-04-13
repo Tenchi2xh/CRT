@@ -31,7 +31,8 @@ public class TestParsing {
                 + "int = 42\n"
                 + "flt = 13.37\n"
                 + "boo = true\n"
-                + "test = foo";
+                + "test = foo\n"
+                + "foo = \"barbar\"";
         Compiler.compile(code);
     }
 }
