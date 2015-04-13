@@ -23,7 +23,9 @@ import net.team2xh.crt.language.parser.CRTLexer;
 import net.team2xh.crt.language.parser.CRTParser;
 import net.team2xh.crt.language.parser.CRTParser.AssignmentContext;
 import net.team2xh.crt.language.parser.CRTParser.BooleanLiteralContext;
+import net.team2xh.crt.language.parser.CRTParser.CallContext;
 import net.team2xh.crt.language.parser.CRTParser.ExpressionContext;
+import net.team2xh.crt.language.parser.CRTParser.ExpressionListContext;
 import net.team2xh.crt.language.parser.CRTParser.FloatLiteralContext;
 import net.team2xh.crt.language.parser.CRTParser.IdentifierPrimaryContext;
 import net.team2xh.crt.language.parser.CRTParser.IntegerLiteralContext;
@@ -31,10 +33,13 @@ import net.team2xh.crt.language.parser.CRTParser.ListAccessContext;
 import net.team2xh.crt.language.parser.CRTParser.ListContext;
 import net.team2xh.crt.language.parser.CRTParser.ScriptContext;
 import net.team2xh.crt.language.parser.CRTParser.StringLiteralContext;
+import net.team2xh.crt.raytracer.Pigment;
 import net.team2xh.crt.raytracer.Scene;
 import net.team2xh.crt.raytracer.Settings;
+import net.team2xh.crt.raytracer.math.Vector3;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 /**
@@ -45,6 +50,10 @@ final public class Compiler extends CRTBaseVisitor {
 
     private Script script;
     private Scope scope;
+
+    private final static String RGB  = "rgb";
+    private final static String RGBA = "rgba";
+    private final static String VEC3 = "vec3";
 
     private Compiler() {
         script = new Script();
@@ -140,14 +149,60 @@ final public class Compiler extends CRTBaseVisitor {
 
     @Override
     public List<Object> visitList(ListContext ctx) {
+        return visitExpressionList(ctx.expressionList());
+    }
+
+    @Override
+    public List<Object> visitExpressionList(ExpressionListContext ctx) {
         List<ExpressionContext> exprs = new LinkedList<>();
-        if (ctx.expressionList() != null)
-            exprs = ctx.expressionList().expression();
+        if (ctx != null)
+            exprs = ctx.expression();
         List<Object> result = new LinkedList<>();
         for (int i = 0; i < exprs.size(); ++i) {
             result.add(exprs.get(i).accept(this));
         }
         return result;
+    }
+
+    @Override
+    public Object visitCall(CallContext ctx) {
+        Object left = ctx.expression().accept(this);
+        List<Object> arguments = visitExpressionList(ctx.expressionList());
+
+        if (left.getClass() != Identifier.class)
+            throw new CompilerException(ctx, "\"" + left + "\" muts be an identifier");
+
+        Identifier name = (Identifier) left;
+        double[] args;
+        switch (name.getName()) {
+            case RGB:
+                args = checkArguments(arguments, RGB, 3, ctx);
+                return new Pigment(args[0], args[1], args[2]);
+            case RGBA:
+                args = checkArguments(arguments, RGBA, 4, ctx);
+                return new Pigment(args[0], args[1], args[2], args[3]);
+            case VEC3:
+                args = checkArguments(arguments, VEC3, 3, ctx);
+                return new Vector3(args[0], args[1], args[2]);
+            default:
+                // macro call
+                return null;
+        }
+    }
+
+    private double[] checkArguments(List<Object> arguments, String name, int n, ParserRuleContext ctx) {
+        String ex = "\"" + name + "\" takes " + n + " float arguments";
+        if (arguments.size() != n)
+            throw new CompilerException(ctx, ex);
+
+        double[] args = new double[n];
+        for (int i = 0; i < arguments.size(); ++i) {
+            if (arguments.get(i).getClass() != Double.class)
+                throw new CompilerException(ctx, ex);
+            args[i] = (Double) arguments.get(i);
+        }
+
+        return args;
     }
 
     @Override

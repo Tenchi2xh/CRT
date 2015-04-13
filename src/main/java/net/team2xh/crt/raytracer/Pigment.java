@@ -241,7 +241,7 @@ public class Pigment {
      * @return Color
      */
     public Color getColor() {
-        return new Color(rgb(false));
+        return new Color((float) r, (float) g, (float) b, (float) a);
     }
 
     /**
@@ -251,6 +251,11 @@ public class Pigment {
      */
     public float getHue() {
         return Color.RGBtoHSB((int)(r*255), (int)(g*255),(int)(b*255), null)[0];
+    }
+
+    @Override
+    public String toString() {
+        return String.format("#%02x%02x%02x %d%%", (int)(r*255), (int)(g*255), (int)(b*255), (int)(a*100));
     }
 
 }

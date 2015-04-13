@@ -34,12 +34,17 @@ public class TestParsing {
                 + "test = foo\n"
                 + "foo = \"barbar\"";
 
-        String code =
+        String code2 =
                   "foo = [1, 2.0, \"trois\"]\n"
                 + "bar = []\n"
                 + "ll = [[1,2,3], [4,5,6], [7,8,9]]\n"
                 + "baz = foo[2]\n"
                 + "f00 = ll[0][1]";
+
+        String code =
+                  "col1 = rgb(1.0, 0.3, 0.2)\n"
+                + "col2 = rgba(0.2, 0.2, 0.2, 0.5)\n"
+                + "x = vec3(1.0, 0.0, 0.0)\n";
 
         Compiler.compile(code);
     }
