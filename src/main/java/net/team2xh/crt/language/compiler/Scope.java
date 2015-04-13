@@ -43,13 +43,21 @@ public class Scope {
         for (int i = 0; i < variables.size(); ++i) {
             if (variables.get(i).getName().equals(v.getName())) {
                 variables.set(i, v);
+                bind(v);
                 return;
             }
         }
         variables.add(v);
+        bind(v);
     }
 
-    public Variable get(String name) {
+    private void bind(Variable v) {
+        if (v.getValue().getClass() == Identifier.class) {
+            v.setValue(get((Identifier) v.getValue()).getValue());
+        }
+    }
+
+    public Variable get(Identifier name) {
         Variable v0 = null;
         for (Variable v1: variables) {
             if (v1.getName().equals(name))
@@ -57,7 +65,8 @@ public class Scope {
         }
         if (parent != null)
             return parent.get(name);
-        return v0;
+
+        throw new CompilerException("Variable \"" + name + "\" is not defined");
     }
 
     public List<Variable> getVariables() {

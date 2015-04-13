@@ -22,17 +22,6 @@ public interface CRTListener extends ParseTreeListener {
 	void exitObjectExpr(@NotNull CRTParser.ObjectExprContext ctx);
 
 	/**
-	 * Enter a parse tree produced by {@link CRTParser#bool}.
-	 * @param ctx the parse tree
-	 */
-	void enterBool(@NotNull CRTParser.BoolContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CRTParser#bool}.
-	 * @param ctx the parse tree
-	 */
-	void exitBool(@NotNull CRTParser.BoolContext ctx);
-
-	/**
 	 * Enter a parse tree produced by {@link CRTParser#modifier}.
 	 * @param ctx the parse tree
 	 */
@@ -116,6 +105,17 @@ public interface CRTListener extends ParseTreeListener {
 	void exitStatement(@NotNull CRTParser.StatementContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link CRTParser#floatLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void enterFloatLiteral(@NotNull CRTParser.FloatLiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CRTParser#floatLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void exitFloatLiteral(@NotNull CRTParser.FloatLiteralContext ctx);
+
+	/**
 	 * Enter a parse tree produced by the {@code multiplication}
 	 * labeled alternative in {@link CRTParser#expression}.
 	 * @param ctx the parse tree
@@ -138,6 +138,17 @@ public interface CRTListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAttribute(@NotNull CRTParser.AttributeContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link CRTParser#booleanLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void enterBooleanLiteral(@NotNull CRTParser.BooleanLiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CRTParser#booleanLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void exitBooleanLiteral(@NotNull CRTParser.BooleanLiteralContext ctx);
 
 	/**
 	 * Enter a parse tree produced by the {@code addition}
@@ -186,6 +197,17 @@ public interface CRTListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitComparison(@NotNull CRTParser.ComparisonContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link CRTParser#identifierPrimary}.
+	 * @param ctx the parse tree
+	 */
+	void enterIdentifierPrimary(@NotNull CRTParser.IdentifierPrimaryContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CRTParser#identifierPrimary}.
+	 * @param ctx the parse tree
+	 */
+	void exitIdentifierPrimary(@NotNull CRTParser.IdentifierPrimaryContext ctx);
 
 	/**
 	 * Enter a parse tree produced by the {@code macroExpr}
@@ -299,6 +321,39 @@ public interface CRTListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitExpressionList(@NotNull CRTParser.ExpressionListContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link CRTParser#stringLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void enterStringLiteral(@NotNull CRTParser.StringLiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CRTParser#stringLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void exitStringLiteral(@NotNull CRTParser.StringLiteralContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link CRTParser#paramList}.
+	 * @param ctx the parse tree
+	 */
+	void enterParamList(@NotNull CRTParser.ParamListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CRTParser#paramList}.
+	 * @param ctx the parse tree
+	 */
+	void exitParamList(@NotNull CRTParser.ParamListContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link CRTParser#integerLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void enterIntegerLiteral(@NotNull CRTParser.IntegerLiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CRTParser#integerLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void exitIntegerLiteral(@NotNull CRTParser.IntegerLiteralContext ctx);
 
 	/**
 	 * Enter a parse tree produced by the {@code ternary}

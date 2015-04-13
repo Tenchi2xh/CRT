@@ -26,14 +26,6 @@ public class CRTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements CR
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitBool(@NotNull CRTParser.BoolContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
 	@Override public T visitModifier(@NotNull CRTParser.ModifierContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -90,6 +82,14 @@ public class CRTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements CR
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitFloatLiteral(@NotNull CRTParser.FloatLiteralContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitMultiplication(@NotNull CRTParser.MultiplicationContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -99,6 +99,14 @@ public class CRTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements CR
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitAttribute(@NotNull CRTParser.AttributeContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitBooleanLiteral(@NotNull CRTParser.BooleanLiteralContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -131,6 +139,14 @@ public class CRTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements CR
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitComparison(@NotNull CRTParser.ComparisonContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitIdentifierPrimary(@NotNull CRTParser.IdentifierPrimaryContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -203,6 +219,30 @@ public class CRTBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements CR
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitExpressionList(@NotNull CRTParser.ExpressionListContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitStringLiteral(@NotNull CRTParser.StringLiteralContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitParamList(@NotNull CRTParser.ParamListContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitIntegerLiteral(@NotNull CRTParser.IntegerLiteralContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}

@@ -16,39 +16,38 @@
  */
 package net.team2xh.crt.language.compiler;
 
+import java.util.Objects;
+
 /**
  *
  * @author Hamza Haiken (hamza.haiken@heig-vd.ch)
  */
-public class Variable {
+public class Identifier {
 
-    private Identifier name;
-    private Object value;
+    private String name;
 
-    public Variable(Identifier name, Object value) {
+    public Identifier(String name) {
         this.name = name;
-        this.value = value;
     }
 
-    public Identifier getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(Identifier name) {
+    public void setName(String name) {
         this.name = name;
-    }
-
-    public Object getValue() {
-        return value;
-    }
-
-    public void setValue(Object value) {
-        this.value = value;
     }
 
     @Override
     public String toString() {
-        return name + " = " + value + " (" + value.getClass().getSimpleName() + ")";
+        return name;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof Identifier))
+            return false;
+        return name.equals(((Identifier)other).name);
     }
 
 }

@@ -20,13 +20,6 @@ public interface CRTVisitor<T> extends ParseTreeVisitor<T> {
 	T visitObjectExpr(@NotNull CRTParser.ObjectExprContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link CRTParser#bool}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBool(@NotNull CRTParser.BoolContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link CRTParser#modifier}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -79,6 +72,13 @@ public interface CRTVisitor<T> extends ParseTreeVisitor<T> {
 	T visitStatement(@NotNull CRTParser.StatementContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link CRTParser#floatLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFloatLiteral(@NotNull CRTParser.FloatLiteralContext ctx);
+
+	/**
 	 * Visit a parse tree produced by the {@code multiplication}
 	 * labeled alternative in {@link CRTParser#expression}.
 	 * @param ctx the parse tree
@@ -92,6 +92,13 @@ public interface CRTVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAttribute(@NotNull CRTParser.AttributeContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link CRTParser#booleanLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBooleanLiteral(@NotNull CRTParser.BooleanLiteralContext ctx);
 
 	/**
 	 * Visit a parse tree produced by the {@code addition}
@@ -122,6 +129,13 @@ public interface CRTVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitComparison(@NotNull CRTParser.ComparisonContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link CRTParser#identifierPrimary}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIdentifierPrimary(@NotNull CRTParser.IdentifierPrimaryContext ctx);
 
 	/**
 	 * Visit a parse tree produced by the {@code macroExpr}
@@ -192,6 +206,27 @@ public interface CRTVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitExpressionList(@NotNull CRTParser.ExpressionListContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link CRTParser#stringLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStringLiteral(@NotNull CRTParser.StringLiteralContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link CRTParser#paramList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParamList(@NotNull CRTParser.ParamListContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link CRTParser#integerLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIntegerLiteral(@NotNull CRTParser.IntegerLiteralContext ctx);
 
 	/**
 	 * Visit a parse tree produced by the {@code ternary}

@@ -20,9 +20,12 @@ import net.team2xh.crt.language.parser.CRTBaseVisitor;
 import net.team2xh.crt.language.parser.CRTLexer;
 import net.team2xh.crt.language.parser.CRTParser;
 import net.team2xh.crt.language.parser.CRTParser.AssignmentContext;
-import net.team2xh.crt.language.parser.CRTParser.LiteralContext;
-import net.team2xh.crt.language.parser.CRTParser.PrimaryContext;
+import net.team2xh.crt.language.parser.CRTParser.BooleanLiteralContext;
+import net.team2xh.crt.language.parser.CRTParser.FloatLiteralContext;
+import net.team2xh.crt.language.parser.CRTParser.IdentifierPrimaryContext;
+import net.team2xh.crt.language.parser.CRTParser.IntegerLiteralContext;
 import net.team2xh.crt.language.parser.CRTParser.ScriptContext;
+import net.team2xh.crt.language.parser.CRTParser.StringLiteralContext;
 import net.team2xh.crt.raytracer.Scene;
 import net.team2xh.crt.raytracer.Settings;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -95,54 +98,41 @@ final public class Compiler extends CRTBaseVisitor {
         Object left = ctx.expression(0).accept(this);
         Object right = ctx.expression(1).accept(this);
 
-        String name = "";
-        Object value = right;
-
-        if (left.getClass() != TerminalNodeImpl.class) {
+        if (left.getClass() != Identifier.class) {
             throw new CompilerException("Left-hand side of assignment must be an identifier");
         }
 
-        TerminalNode tn = (TerminalNode) left;
+        Identifier name = (Identifier) left;
 
-        if (tn.getSymbol().getType() != CRTLexer.IDENTIFIER) {
-            throw new CompilerException("Left-hand side of assignment must be an identifier");
-        }
-
-        name = tn.getText();
-
-        System.out.println(name);
-        System.out.println(name.getClass());
-        System.out.println(value);
-        System.out.println(value.getClass());
-
-        return new Variable(name, value);
+        return new Variable(name, right);
     }
 
     @Override
-    public Object visitPrimary(PrimaryContext ctx) {
-        if (ctx.IDENTIFIER() != null) {
-            return ctx.IDENTIFIER();
-        } else return visitChildren(ctx);
+    public Identifier visitIdentifierPrimary(IdentifierPrimaryContext ctx) {
+        return new Identifier(ctx.getText());
     }
 
     @Override
-    public Object visitLiteral(LiteralContext ctx) {
-        ParseTree node = ctx.getChild(0);
-        if (node.getClass()!= TerminalNodeImpl.class) {
-            return Boolean.parseBoolean(node.getText());
-        }
-        TerminalNode lit = (TerminalNode) node;
-        switch (lit.getSymbol().getType()) {
-            case CRTLexer.INTEGER:
-                return Integer.parseInt(lit.getText());
-            case CRTLexer.FLOAT:
-                return Double.parseDouble(lit.getText());
-            case CRTLexer.STRING:
-                // TODO: parse better
-                String str = lit.getText();
-                return str.subSequence(1, str.length() - 1);
-            default:
-                return null;
-        }
+    public Integer visitIntegerLiteral(IntegerLiteralContext ctx) {
+        return Integer.parseInt(ctx.getText());
     }
+
+    @Override
+    public Double visitFloatLiteral(FloatLiteralContext ctx) {
+        return Double.parseDouble(ctx.getText());
+
+    }
+
+    @Override
+    public String visitStringLiteral(StringLiteralContext ctx) {
+        // TODO: parse escaped characters
+        String str = ctx.getText();
+        return str.substring(1, str.length() - 1);
+    }
+
+    @Override
+    public Boolean visitBooleanLiteral(BooleanLiteralContext ctx) {
+        return Boolean.parseBoolean(ctx.getText());
+    }
+
 }

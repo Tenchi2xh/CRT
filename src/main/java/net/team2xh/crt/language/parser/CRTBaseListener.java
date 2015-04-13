@@ -30,19 +30,6 @@ public class CRTBaseListener implements CRTListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBool(@NotNull CRTParser.BoolContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBool(@NotNull CRTParser.BoolContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterModifier(@NotNull CRTParser.ModifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -134,6 +121,19 @@ public class CRTBaseListener implements CRTListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterFloatLiteral(@NotNull CRTParser.FloatLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFloatLiteral(@NotNull CRTParser.FloatLiteralContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterMultiplication(@NotNull CRTParser.MultiplicationContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -154,6 +154,19 @@ public class CRTBaseListener implements CRTListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAttribute(@NotNull CRTParser.AttributeContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBooleanLiteral(@NotNull CRTParser.BooleanLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBooleanLiteral(@NotNull CRTParser.BooleanLiteralContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
@@ -206,6 +219,19 @@ public class CRTBaseListener implements CRTListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitComparison(@NotNull CRTParser.ComparisonContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIdentifierPrimary(@NotNull CRTParser.IdentifierPrimaryContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIdentifierPrimary(@NotNull CRTParser.IdentifierPrimaryContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
@@ -323,6 +349,45 @@ public class CRTBaseListener implements CRTListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitExpressionList(@NotNull CRTParser.ExpressionListContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStringLiteral(@NotNull CRTParser.StringLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStringLiteral(@NotNull CRTParser.StringLiteralContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterParamList(@NotNull CRTParser.ParamListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParamList(@NotNull CRTParser.ParamListContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIntegerLiteral(@NotNull CRTParser.IntegerLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIntegerLiteral(@NotNull CRTParser.IntegerLiteralContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
