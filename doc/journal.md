@@ -48,5 +48,12 @@
 # 08.04.2015 - 15.04.2015
 
 - Wrote the grammar from scratch
-- Wrote a test case
-- Began work on compiler
+- Wrote test cases
+- Started work on compiler:
+    - General framework
+    - Scope and variables
+    - Scoped variable resolution
+    - Variable reference pointers
+    - Literal variable assignments
+    - List variable assignments
+    - List access
