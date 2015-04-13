@@ -42,12 +42,12 @@ expression
     | '[' expressionList? ']'                                               # list
     | expression '[' expression ']'                                         # listAccess
     | expression '(' expressionList? ')'                                    # call
-    | expression LCHEVR modifier (',' modifier)* RCHEVR                     # modifiers
+    | expression '<' modifier (',' modifier)* '>'                     # modifiers
     | ('+' | '-') expression                                                # unarySign
     | '!' expression                                                        # unaryNot
     | expression ('*' | '/' | '%') expression                               # multiplication
     | expression ('+' | '-' | '^') expression                               # addition
-    | expression ('<=' | '>=' | GREATER | LESS | '==' | '!=') expression    # comparison
+    | expression ('<=' | '>=' | '<' | '>'| '==' | '!=') expression    # comparison
     | expression '&&' expression                                            # binaryAnd
     | expression '||' expression                                            # binaryOr
     | expression '?' expression ':' expression                              # ternary
@@ -157,8 +157,6 @@ LBRACE          : '{';
 RBRACE          : '}';
 LBRACK          : '[';
 RBRACK          : ']';
-LCHEVR          : '<';
-RCHEVR          : '>';
 COMMA           : ',';
 
 // Operators

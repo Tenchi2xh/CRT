@@ -25,6 +25,7 @@ import net.team2xh.crt.language.parser.CRTParser.AdditionContext;
 import net.team2xh.crt.language.parser.CRTParser.AssignmentContext;
 import net.team2xh.crt.language.parser.CRTParser.BooleanLiteralContext;
 import net.team2xh.crt.language.parser.CRTParser.CallContext;
+import net.team2xh.crt.language.parser.CRTParser.ComparisonContext;
 import net.team2xh.crt.language.parser.CRTParser.ExpressionContext;
 import net.team2xh.crt.language.parser.CRTParser.ExpressionListContext;
 import net.team2xh.crt.language.parser.CRTParser.FloatLiteralContext;
@@ -322,7 +323,6 @@ final public class Compiler extends CRTBaseVisitor {
         }
 
         throw new CompilerException(ctx, "Unsupported types for binary operator '" + operator + "': " + l.getSimpleName() + ", " + r.getSimpleName());
-
     }
 
     @Override
@@ -399,14 +399,68 @@ final public class Compiler extends CRTBaseVisitor {
         }
 
         throw new CompilerException(ctx, "Unsupported types for binary operator '" + operator + "': " + l.getSimpleName() + ", " + r.getSimpleName());
+    }
 
+    @Override
+    public Boolean visitComparison(ComparisonContext ctx) {
+        Object left = resolve(ctx.expression(0));
+        Object right = resolve(ctx.expression(1));
+        String operator = ctx.getChild(1).getText();
+
+        Class l = left.getClass();
+        Class r = right.getClass();
+        Class d = Double.class;
+        Class i = Integer.class;
+        Class s = String.class;
+
+        // Integer comparison
+        if (l == i && r == i) {
+            Integer x = (Integer) left, y = (Integer) right;
+            switch (operator) {
+                case "<=":
+                    return x <= y;
+                case ">=":
+                    return x >= y;
+                case "<":
+                    return x < y;
+                case ">":
+                    return x > y;
+            }
+        }
+
+        // Double comparison
+        if ((l == i || l == d) && (r == i || r == d)) {
+            Double x = (l == i) ? ((Integer) left).doubleValue() : (Double) left;
+            Double y = (r == i) ? ((Integer) right).doubleValue() : (Double) right;
+            switch (operator) {
+                case "<=":
+                    return x <= y;
+                case ">=":
+                    return x >= y;
+                case "<":
+                    return x < y;
+                case ">":
+                    return x > y;
+            }
+        }
+
+        // Other
+        if (operator.equals("==")) {
+            return left.equals(right);
+        }
+        if (operator.equals("!=")) {
+            return !(left.equals(right));
+        }
+
+        throw new CompilerException(ctx, "Unsupported types for binary operator '" + operator + "': " + l.getSimpleName() + ", " + r.getSimpleName());
     }
 
     @Override
     public Object visitPrimary(PrimaryContext ctx) {
+        // ( expr )
         if (ctx.getChildCount() == 3)
             return ctx.getChild(1).accept(this);
-
+        // literal or identifier
         return ctx.getChild(0).accept(this);
     }
 

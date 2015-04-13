@@ -47,7 +47,7 @@ public class TestParsing {
                 + "col2 = rgba(0.2, 0.2, 0.2, 0.5)\n"
                 + "x = vec3(n, 0.0, 0.0)\n";
 
-        String code =
+        String code4 =
                   "a = +1\n"
                 + "b = -1\n"
                 + "c = -a\n"
@@ -56,6 +56,14 @@ public class TestParsing {
                 + "f = \"bla\" * 5\n"
                 + "g = 1.91 * 6 + 1.91\n"
                 + "h = (19 + 923) % 60";
+
+        String code =
+                  "a = true == true\n"
+                + "b = true == false\n"
+                + "c = true != false\n"
+                + "d = 3 >= 2\n"
+                + "e = 2.1 < 4\n"
+                + "f = \"test\" == \"test\"\n";
 
         Compiler.compile(code);
     }
