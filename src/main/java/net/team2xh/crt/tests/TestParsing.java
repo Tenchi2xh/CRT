@@ -58,7 +58,7 @@ public class TestParsing {
                 + "g = 1.91 * 6 + 1.91\n"
                 + "h = (19 + 923) % 60";
 
-        String code =
+        String code5 =
                   "a = true == true\n"
                 + "b = true == false\n"
                 + "c = true != false\n"
@@ -68,12 +68,21 @@ public class TestParsing {
                 + "g = true || false\n"
                 + "h = (3 < 5) || (5 <= 3.8)\n"
                 + "i = true && false\n"
-                + "j = (3 < \"o\") ? \"smaller\" : \"bigger\"";
+                + "j = (3 < 5) ? \"smaller\" : \"bigger\"";
+
+        String code =
+                  "Settings {\n" +
+                  "    title      -> \"Example 01\"\n" +
+                  "    author     -> \"Tenchi (tenchi@team2xh.net)\"\n" +
+                  "    date       -> \"08.06.2014\"\n" +
+                  "    notes      -> \"Sample CRT scene in TRC language\"\n" +
+                  "    gamma      -> 1.0\n" +
+                  "}";
 
         try {
             Compiler.compile(code);
         } catch (CompilerException ex) {
-            
+
         }
     }
 }

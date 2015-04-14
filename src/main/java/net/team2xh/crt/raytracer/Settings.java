@@ -34,6 +34,11 @@ public final class Settings {
     boolean showClip = false;
     Projection projection = Projection.PINHOLE;
 
+    private String title;
+    private String author;
+    private String date;
+    private String notes;
+
     private Settings(Scene parent, int width, int height) {
         this.parent = parent;
         setResolution(width, height);
@@ -42,6 +47,9 @@ public final class Settings {
     public static Settings createSettings(Scene parent, int width, int height) {
         return new Settings(parent, width, height);
     }
+
+    // Must manually set parent, then call setResolution
+    public Settings() { }
 
     public void setResolution(int width, int height) {
         this.width = width;
@@ -76,6 +84,42 @@ public final class Settings {
 
     public void setProjection(Projection projection) {
         this.projection = projection;
+    }
+
+    public void setParent(Scene scene) {
+        this.parent = scene;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     // TODO: own class with methods

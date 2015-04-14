@@ -28,6 +28,11 @@ public class Script {
     private Settings settings;
     private Scene scene;
 
+    public Script() {
+        settings = new Settings();
+        scene = new Scene();
+    }
+
     public Settings getSettings() {
         return settings;
     }

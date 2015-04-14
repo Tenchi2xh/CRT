@@ -9,6 +9,19 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface CRTListener extends ParseTreeListener {
 	/**
+	 * Enter a parse tree produced by the {@code objectExpr}
+	 * labeled alternative in {@link CRTParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterObjectExpr(@NotNull CRTParser.ObjectExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code objectExpr}
+	 * labeled alternative in {@link CRTParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitObjectExpr(@NotNull CRTParser.ObjectExprContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link CRTParser#modifier}.
 	 * @param ctx the parse tree
 	 */
@@ -249,19 +262,6 @@ public interface CRTListener extends ParseTreeListener {
 	void exitBinaryAnd(@NotNull CRTParser.BinaryAndContext ctx);
 
 	/**
-	 * Enter a parse tree produced by the {@code entityExpr}
-	 * labeled alternative in {@link CRTParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterEntityExpr(@NotNull CRTParser.EntityExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code entityExpr}
-	 * labeled alternative in {@link CRTParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitEntityExpr(@NotNull CRTParser.EntityExprContext ctx);
-
-	/**
 	 * Enter a parse tree produced by the {@code list}
 	 * labeled alternative in {@link CRTParser#expression}.
 	 * @param ctx the parse tree
@@ -369,17 +369,6 @@ public interface CRTListener extends ParseTreeListener {
 	void exitTernary(@NotNull CRTParser.TernaryContext ctx);
 
 	/**
-	 * Enter a parse tree produced by {@link CRTParser#entity}.
-	 * @param ctx the parse tree
-	 */
-	void enterEntity(@NotNull CRTParser.EntityContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CRTParser#entity}.
-	 * @param ctx the parse tree
-	 */
-	void exitEntity(@NotNull CRTParser.EntityContext ctx);
-
-	/**
 	 * Enter a parse tree produced by the {@code unaryNot}
 	 * labeled alternative in {@link CRTParser#expression}.
 	 * @param ctx the parse tree
@@ -402,4 +391,15 @@ public interface CRTListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitPrimary(@NotNull CRTParser.PrimaryContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link CRTParser#object}.
+	 * @param ctx the parse tree
+	 */
+	void enterObject(@NotNull CRTParser.ObjectContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CRTParser#object}.
+	 * @param ctx the parse tree
+	 */
+	void exitObject(@NotNull CRTParser.ObjectContext ctx);
 }

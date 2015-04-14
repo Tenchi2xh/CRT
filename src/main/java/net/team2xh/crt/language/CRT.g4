@@ -28,7 +28,7 @@ statement
     ;
 
 settings
-    : 'Settings' '{' '}'
+    : 'Settings' '{' attribute* '}'
     ;
 
 scene
@@ -37,17 +37,17 @@ scene
 
 expression
     : primary                                                               # primaryExpr                      
-    | entity                                                                # entityExpr
+    | object                                                                # objectExpr
     | macro                                                                 # macroExpr
     | '[' expressionList? ']'                                               # list
     | expression '[' expression ']'                                         # listAccess
     | expression '(' expressionList? ')'                                    # call
-    | expression '<' modifier (',' modifier)* '>'                     # modifiers
+    | expression '<' modifier (',' modifier)* '>'                           # modifiers
     | ('+' | '-') expression                                                # unarySign
     | '!' expression                                                        # unaryNot
     | expression ('*' | '/' | '%') expression                               # multiplication
     | expression ('+' | '-' | '^') expression                               # addition
-    | expression ('<=' | '>=' | '<' | '>'| '==' | '!=') expression    # comparison
+    | expression ('<=' | '>=' | '<' | '>'| '==' | '!=') expression          # comparison
     | expression '&&' expression                                            # binaryAnd
     | expression '||' expression                                            # binaryOr
     | expression '?' expression ':' expression                              # ternary
@@ -64,7 +64,7 @@ primary
     | identifierPrimary
     ;
 
-entity
+object
     : NAME '{' attribute* '}'
     ;
 

@@ -22,6 +22,9 @@ import net.team2xh.crt.language.parser.CRTBaseVisitor;
 import net.team2xh.crt.language.parser.CRTLexer;
 import net.team2xh.crt.language.parser.CRTParser;
 import net.team2xh.crt.language.parser.CRTParser.*;
+import net.team2xh.crt.raytracer.Background;
+import net.team2xh.crt.raytracer.Camera;
+import net.team2xh.crt.raytracer.Light;
 import net.team2xh.crt.raytracer.Pigment;
 import net.team2xh.crt.raytracer.Scene;
 import net.team2xh.crt.raytracer.Settings;
@@ -73,9 +76,12 @@ final public class Compiler extends CRTBaseVisitor {
     public Script visitScript(ScriptContext ctx) {
         boolean hasSettings = false;
         boolean hasScene = false;
-        for (ParseTree t: ctx.children) {
-            Object o = t.accept(this);
+        for (StatementContext s: ctx.statement()) {
+            Object o = s.accept(this);
             Class c = o.getClass();
+
+            if (hasScene)
+                throw new CompilerException(ctx, code, "Scene block must at the end of the script");
 
             if (c == Variable.class) {
                 scope.add((Variable) o);
@@ -92,14 +98,74 @@ final public class Compiler extends CRTBaseVisitor {
 
         }
 
-//        if (!hasSettings)
-//            throw new CompilerException(ctx, "Script must define settings block");
+        if (!hasSettings)
+            throw new CompilerException("Script must define settings block");
 //        if (!hasScene)
-//            throw new CompilerException(ctx, "Script must define a scene");
+//            throw new CompilerException("Script must define a scene");
+
+        script.getSettings().setParent(script.getScene());
 
         System.out.println(scope.getVariables());
 
         return script;
+    }
+
+    @Override
+    public Settings visitSettings(SettingsContext ctx) {
+
+        Settings settings = script.getSettings();
+        Scene scene = script.getScene();
+
+        for (AttributeContext a: ctx.attribute()) {
+            ExpressionContext expr = a.expression();
+            Object value = resolve(expr);
+            switch (a.IDENTIFIER().getText()) {
+                case "title":
+                    assertAttributeType(value, "title", expr, String.class);
+                    System.out.println(value);
+                    settings.setTitle((String) value);
+                    break;
+                case "author":
+                    assertAttributeType(value, "author", expr, String.class);
+                    settings.setAuthor((String) value);
+                    break;
+                case "date":
+                    assertAttributeType(value, "date", expr, String.class);
+                    settings.setTitle((String) value);
+                    break;
+                case "notes":
+                    assertAttributeType(value, "notes", expr, String.class);
+                    settings.setAuthor((String) value);
+                    break;
+                case "gamma":
+                    assertAttributeType(value, "gamma", expr, Double.class);
+                    settings.setGamma((Double) value);
+                    break;
+                case "background":
+                    assertAttributeType(value, "background", expr, Background.class);
+                    scene.setBackground((Background) value);
+                    break;
+                case "camera":
+                    assertAttributeType(value, "camera", expr, Camera.class);
+                    scene.setCamera((Camera) value);
+                    break;
+                case "lights":
+                    assertAttributeType(value, "lights", expr, LinkedList.class);
+                    LinkedList<Object> lights = (LinkedList) value;
+                    for (Object o : lights) {
+                        assertAttributeType(o, "light", expr, Light.class);
+                        scene.addLight((Light) o);
+                    }
+                break;
+            }
+        }
+
+        return settings;
+    }
+
+    private void assertAttributeType(Object object, String name, ParserRuleContext ctx, Class expected) {
+        if (object.getClass() != expected)
+            throw new CompilerException(ctx, code, "Attribute '" + name + "' must be of type " + expected.getSimpleName());
     }
 
     @Override

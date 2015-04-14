@@ -32,7 +32,8 @@ public class Scene {
     private Background background = new Background();
     private Camera camera;
 
-    private Scene() { }
+    // Must set settings correctly, and assign a camera
+    public Scene() { }
 
     public static Scene createScene(int width, int height, Camera camera) {
         Scene s = new Scene();
