@@ -17,6 +17,7 @@
 package net.team2xh.crt.tests;
 
 import net.team2xh.crt.language.compiler.Compiler;
+import net.team2xh.crt.language.compiler.CompilerException;
 
 /**
  *
@@ -63,8 +64,16 @@ public class TestParsing {
                 + "c = true != false\n"
                 + "d = 3 >= 2\n"
                 + "e = 2.1 < 4\n"
-                + "f = \"test\" == \"test\"\n";
+                + "f = \"test\" == \"test\"\n"
+                + "g = true || false\n"
+                + "h = (3 < 5) || (5 <= 3.8)\n"
+                + "i = true && false\n"
+                + "j = (3 < \"o\") ? \"smaller\" : \"bigger\"";
 
-        Compiler.compile(code);
+        try {
+            Compiler.compile(code);
+        } catch (CompilerException ex) {
+            
+        }
     }
 }

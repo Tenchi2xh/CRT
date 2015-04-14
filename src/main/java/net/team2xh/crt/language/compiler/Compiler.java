@@ -21,24 +21,7 @@ import java.util.List;
 import net.team2xh.crt.language.parser.CRTBaseVisitor;
 import net.team2xh.crt.language.parser.CRTLexer;
 import net.team2xh.crt.language.parser.CRTParser;
-import net.team2xh.crt.language.parser.CRTParser.AdditionContext;
-import net.team2xh.crt.language.parser.CRTParser.AssignmentContext;
-import net.team2xh.crt.language.parser.CRTParser.BooleanLiteralContext;
-import net.team2xh.crt.language.parser.CRTParser.CallContext;
-import net.team2xh.crt.language.parser.CRTParser.ComparisonContext;
-import net.team2xh.crt.language.parser.CRTParser.ExpressionContext;
-import net.team2xh.crt.language.parser.CRTParser.ExpressionListContext;
-import net.team2xh.crt.language.parser.CRTParser.FloatLiteralContext;
-import net.team2xh.crt.language.parser.CRTParser.IdentifierPrimaryContext;
-import net.team2xh.crt.language.parser.CRTParser.IntegerLiteralContext;
-import net.team2xh.crt.language.parser.CRTParser.ListAccessContext;
-import net.team2xh.crt.language.parser.CRTParser.ListContext;
-import net.team2xh.crt.language.parser.CRTParser.MultiplicationContext;
-import net.team2xh.crt.language.parser.CRTParser.PrimaryContext;
-import net.team2xh.crt.language.parser.CRTParser.ScriptContext;
-import net.team2xh.crt.language.parser.CRTParser.StringLiteralContext;
-import net.team2xh.crt.language.parser.CRTParser.UnaryNotContext;
-import net.team2xh.crt.language.parser.CRTParser.UnarySignContext;
+import net.team2xh.crt.language.parser.CRTParser.*;
 import net.team2xh.crt.raytracer.Pigment;
 import net.team2xh.crt.raytracer.Scene;
 import net.team2xh.crt.raytracer.Settings;
@@ -59,14 +42,16 @@ import org.apache.commons.lang3.StringUtils;
  */
 final public class Compiler extends CRTBaseVisitor {
 
-    private Script script;
-    private Scope scope;
+    private final Script script;
+    private final Scope scope;
+    private final String code;
 
     private final static String RGB  = "rgb";
     private final static String RGBA = "rgba";
     private final static String VEC3 = "vec3";
 
-    private Compiler() {
+    private Compiler(String code) {
+        this.code = code;
         script = new Script();
         scope = new Scope();
     }
@@ -78,7 +63,7 @@ final public class Compiler extends CRTBaseVisitor {
         CRTParser parser = new CRTParser(tokens);
         ParseTree tree = parser.script();
 
-        Compiler compiler = new Compiler();
+        Compiler compiler = new Compiler(code);
         compiler.visit(tree);
 
         return compiler.script;
@@ -101,7 +86,8 @@ final public class Compiler extends CRTBaseVisitor {
                 hasScene = true;
                 script.setScene((Scene) o);
             } else {
-                throw new CompilerException(ctx, "Top-level statements must be either an assignment or settings/scene block");
+                throw new CompilerException(ctx, code,
+                        "Top-level statements must be either an assignment or settings/scene block");
             }
 
         }
@@ -122,7 +108,8 @@ final public class Compiler extends CRTBaseVisitor {
         Object right = ctx.expression(1).accept(this);
 
         if (left.getClass() != Identifier.class) {
-            throw new CompilerException(ctx, "Left-hand side of assignment must be an identifier");
+            throw new CompilerException(ctx, code,
+                    "Left-hand side of assignment must be an identifier");
         }
 
         Identifier name = (Identifier) left;
@@ -181,7 +168,8 @@ final public class Compiler extends CRTBaseVisitor {
         List<Object> arguments = visitExpressionList(ctx.expressionList());
 
         if (left.getClass() != Identifier.class)
-            throw new CompilerException(ctx, "'" + left + "' muts be an identifier");
+            throw new CompilerException(ctx, code,
+                    "'" + left + "' muts be an identifier");
 
         Identifier name = (Identifier) left;
         double[] args;
@@ -204,12 +192,12 @@ final public class Compiler extends CRTBaseVisitor {
     private double[] checkArguments(List<Object> arguments, String name, int n, ParserRuleContext ctx) {
         String ex = "'" + name + "' takes " + n + " float arguments";
         if (arguments.size() != n)
-            throw new CompilerException(ctx, ex);
+            throw new CompilerException(ctx, code, ex);
 
         double[] args = new double[n];
         for (int i = 0; i < arguments.size(); ++i) {
             if (arguments.get(i).getClass() != Double.class)
-                throw new CompilerException(ctx, ex);
+                throw new CompilerException(ctx, code, ex);
             args[i] = (Double) arguments.get(i);
         }
 
@@ -222,16 +210,16 @@ final public class Compiler extends CRTBaseVisitor {
         Object right = resolve(ctx.expression(1));
 
         if (left.getClass() != LinkedList.class)
-            throw new CompilerException(ctx, "'" + left + "' is not a list");
+            throw new CompilerException(ctx, code, "'" + left + "' is not a list");
 
         if (right.getClass() != Integer.class)
-            throw new CompilerException(ctx, "List index must be an integer");
+            throw new CompilerException(ctx, code, "List index must be an integer");
 
         List<Object> list = (LinkedList) left;
         Integer index = (Integer) right;
 
         if (index >= list.size())
-            throw new CompilerException(ctx, "List index out of range");
+            throw new CompilerException(ctx, code, "List index out of range");
 
         return list.get(index);
     }
@@ -259,7 +247,8 @@ final public class Compiler extends CRTBaseVisitor {
             }
         }
 
-        throw new CompilerException(ctx, "Unsupported type for unary operator '" + sign + "': " + operand.getClass().getSimpleName());
+        throw new CompilerException(ctx, code,
+                "Unsupported type for unary operator '" + sign + "': " + operand.getClass().getSimpleName());
     }
 
     @Override
@@ -270,7 +259,8 @@ final public class Compiler extends CRTBaseVisitor {
             return !((Boolean) operand);
         }
 
-        throw new CompilerException(ctx, "Unsupported type for unary operator '!': " + operand.getClass().getSimpleName());
+        throw new CompilerException(ctx, code,
+                "Unsupported type for unary operator '!': " + operand.getClass().getSimpleName());
     }
 
     @Override
@@ -322,7 +312,8 @@ final public class Compiler extends CRTBaseVisitor {
             }
         }
 
-        throw new CompilerException(ctx, "Unsupported types for binary operator '" + operator + "': " + l.getSimpleName() + ", " + r.getSimpleName());
+        throw new CompilerException(ctx, code,
+                "Unsupported types for binary operator '" + operator + "': " + l.getSimpleName() + ", " + r.getSimpleName());
     }
 
     @Override
@@ -398,7 +389,8 @@ final public class Compiler extends CRTBaseVisitor {
             }
         }
 
-        throw new CompilerException(ctx, "Unsupported types for binary operator '" + operator + "': " + l.getSimpleName() + ", " + r.getSimpleName());
+        throw new CompilerException(ctx, code,
+                "Unsupported types for binary operator '" + operator + "': " + l.getSimpleName() + ", " + r.getSimpleName());
     }
 
     @Override
@@ -411,7 +403,6 @@ final public class Compiler extends CRTBaseVisitor {
         Class r = right.getClass();
         Class d = Double.class;
         Class i = Integer.class;
-        Class s = String.class;
 
         // Integer comparison
         if (l == i && r == i) {
@@ -452,8 +443,71 @@ final public class Compiler extends CRTBaseVisitor {
             return !(left.equals(right));
         }
 
-        throw new CompilerException(ctx, "Unsupported types for binary operator '" + operator + "': " + l.getSimpleName() + ", " + r.getSimpleName());
+        throw new CompilerException(ctx, code,
+                "Unsupported types for binary operator '" + operator + "': " + l.getSimpleName() + ", " + r.getSimpleName());
     }
+
+
+    @Override
+    public Boolean visitBinaryAnd(BinaryAndContext ctx) {
+        Object left = resolve(ctx.expression(0));
+        Object right = resolve(ctx.expression(1));
+        String operator = ctx.getChild(1).getText();
+
+        Class l = left.getClass();
+        Class r = right.getClass();
+        Class b = Boolean.class;
+
+        if (l == b && r == b) {
+            Boolean x = (Boolean) left, y = (Boolean) right;
+            return x && y;
+        }
+
+        throw new CompilerException(ctx, code,
+                "Unsupported types for binary operator '" + operator + "': " + l.getSimpleName() + ", " + r.getSimpleName());
+    }
+
+    @Override
+    public Boolean visitBinaryOr(BinaryOrContext ctx) {
+        Object left = resolve(ctx.expression(0));
+        Object right = resolve(ctx.expression(1));
+        String operator = ctx.getChild(1).getText();
+
+        Class l = left.getClass();
+        Class r = right.getClass();
+        Class b = Boolean.class;
+
+        if (l == b && r == b) {
+            Boolean x = (Boolean) left, y = (Boolean) right;
+            return x || y;
+        }
+
+        throw new CompilerException(ctx, code,
+                "Unsupported types for binary operator '" + operator + "': " + l.getSimpleName() + ", " + r.getSimpleName());
+    }
+
+    @Override
+    public Object visitTernary(TernaryContext ctx) {
+        Object condition = resolve(ctx.expression(0));
+        Object left = resolve(ctx.expression(1));
+        Object right = resolve(ctx.expression(2));
+
+        Class c = condition.getClass();
+        Class l = left.getClass();
+        Class r = right.getClass();
+        Class b = Boolean.class;
+
+        if (c != b)
+            throw new CompilerException(ctx, code, "Ternary condition must be a Boolean");
+
+        if (l == r) {
+            return (Boolean) condition ? left : right;
+        }
+
+        throw new CompilerException(ctx, code,
+                "Ternary results must be of the same type: " + l.getSimpleName() + ", " + r.getSimpleName());
+    }
+
 
     @Override
     public Object visitPrimary(PrimaryContext ctx) {

@@ -19,6 +19,7 @@ package net.team2xh.crt.language.compiler;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
+import static org.apache.commons.lang3.StringUtils.repeat;
 
 /**
  *
@@ -33,22 +34,32 @@ public class CompilerException extends RuntimeException {
         System.err.println();
     }
 
-    public CompilerException(ParserRuleContext ctx, String s) {
+    public CompilerException(ParserRuleContext ctx, String code, String s) {
         super(s);
 
         Token firstToken = ctx.getStart();
-        int line = firstToken.getLine();
+        Integer line = firstToken.getLine();
+        Integer column = firstToken.getCharPositionInLine();
+        String codeLine = code.split("\n")[line-1];
 
         int a = ctx.start.getStartIndex();
         int b = ctx.stop.getStopIndex();
         Interval interval = new Interval(a, b);
-        String code = ctx.start.getInputStream().getText(interval);
+        String codePart = ctx.start.getInputStream().getText(interval);
+
+        int length = codePart.length();
+        int offset = 4 + column;
+        String underline = repeat(' ', offset) + repeat('¯', length);
 
         System.err.println();
         System.err.println("Compiler error:");
         System.err.println("    " + s + ".");
-        System.err.println("    At line " + line + ": '" + code + "'");
+        System.err.println("    At line " + line + ", column " + column + ":");
         System.err.println();
+        System.err.println("    " + codeLine);
+        System.err.println(underline);
+        System.err.println();
+
     }
 
 }
