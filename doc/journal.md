@@ -3,7 +3,7 @@
   Prof. Pier Donini (pier.donini@heig-vd.ch)
 % B.A. Thesis, HEIG-VD 2014-2015
 
-\newline
+\newpage
 
 # 09.03.2015 - 15.03.2015
 
