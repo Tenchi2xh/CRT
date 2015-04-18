@@ -368,17 +368,19 @@ $endfor$
 \renewcommand\listoftables{%
     \section*{\listtablename}%
     \@mkboth{\MakeUppercase\listtablename}%
-        {\MakeUppercase\listtablename}%
+        {\listtablename}%
     \@starttoc{lot}%
 }
 \renewcommand\listoffigures{%
     \section*{\listfigurename}%
-    \@mkboth{\MakeUppercase\listfigurename}%
-        {\MakeUppercase\listfigurename}%
+    \@mkboth{\listfigurename}%
+        {\listfigurename}%
     \@starttoc{lof}%
 }
-\renewcommand\lstlistingname{Code Listing}
-\renewcommand\lstlistlistingname{List of Code Listings}
+\renewcommand\listfigurename{List of figures}
+\renewcommand\listtablename{List of tables}
+\renewcommand\lstlistingname{Code listing}
+\renewcommand\lstlistlistingname{List of code listings}
 \makeatother
 
 
@@ -387,21 +389,18 @@ $if(toc)$
 \hypersetup{linkcolor=black}
 \setcounter{tocdepth}{5}
 \onecolumn
-\renewcommand{\contentsname}{Table of Contents}
+\renewcommand{\contentsname}{Table of contents}
 \pagenumbering{roman}
 % add toc to pdf bookmarks
 \pdfbookmark{\contentsname}{toc}
 \tableofcontents
 % \addcontentsline{toc}{chapter}{Table of Contents}
-\newpage
 \listoffigures
-\addcontentsline{toc}{chapter}{List of Figures}
-\newpage
+\addcontentsline{toc}{chapter}{List of figures}
 \listoftables
-\addcontentsline{toc}{chapter}{List of Tables}
-\newpage
+\addcontentsline{toc}{chapter}{List of tables}
 \lstlistoflistings
-\addcontentsline{toc}{chapter}{List of Code Listings}
+\addcontentsline{toc}{chapter}{List of code listings}
 \newpage
 \twocolumn
 }
