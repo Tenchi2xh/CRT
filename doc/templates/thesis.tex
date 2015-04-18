@@ -230,6 +230,10 @@ $endif$
 % \end{figure}}
 % \makeatother
 
+% for tables
+\usepackage{multirow}
+\usepackage{booktabs}
+
 % for grammar
 \usepackage[nounderscore]{syntax}
 \setlength{\grammarindent}{7em} % increase separation between LHS/RHS 
@@ -282,7 +286,6 @@ $endif$
 
 % Font setup
 \usepackage[black, scale=0.9]{PlayfairDisplay}
-
 % \usepackage[nf, p, scale=0.9]{ebgaramond}
 % \usepackage[black]{Alegreya}
 % \usepackage[light, black]{merriweather}
@@ -386,6 +389,8 @@ $if(toc)$
 \onecolumn
 \renewcommand{\contentsname}{Table of Contents}
 \pagenumbering{roman}
+% add toc to pdf bookmarks
+\pdfbookmark{\contentsname}{toc}
 \tableofcontents
 % \addcontentsline{toc}{chapter}{Table of Contents}
 \newpage

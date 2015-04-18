@@ -226,13 +226,15 @@ The designed grammar is non-ambiguous (context-free), but uses **left-recursion*
 
 Some parts were inspired from example grammars provided by the ANTLR team on GitHub, in particular the Java grammar^[http://github.com/antlr/grammars-v4/blob/master/java/Java.g4], from which much was learned about left-recursion and operator precedence. 
 
-The "ANTLR 4 IDE" Eclipse plug-in^[http://github.com/jknack/antlr4ide] proved to be very useful during the development of the grammar. It provides useful tools for debugging such as syntax diagrams and live parse tree visualisation --- just choose a grammar rule, type in code and a corresponding parse tree is updated at every keystroke. <!-- Figure \ref{fig:parsetree} shows such a generated parse tree.
+Furthermore, the "ANTLR 4 IDE" *Eclipse* plug-in^[http://github.com/jknack/antlr4ide] proved to be very useful during the development of the grammar. It provides useful tools for debugging such as syntax diagrams and live parse tree visualisation --- just choose a grammar rule, type in code and a corresponding parse tree is updated at every keystroke.<!-- Figure \ref{fig:parsetree} shows such a generated parse tree.
 
 \customfig{img/parse-tree.png}{ANTLR 4 IDE's live parse tree}{, displaying a macro assignment}{parsetree} -->
 
-The grammar contains no special verifications, which happen at compile time. This makes the grammar *much* more readable and easy to understand.
+A similar (and official) plug-in also exists for *Netbeans*, the main IDE used during the development of this project, however it was not compatible with the latest versions of Netbeans.
 
-Also, ANTLR provides a feature for labelling the alternatives of a rule, which it will use for code generation where it will generate one visitor method per label (e.g. instead of having to implement a very extensive `visitExpression()` method, it will be broken down to all its alternatives `visitAddition()`, `visitMultiplication()` etc.).
+Because it is important to make a separation between parsing and compiling, the grammar contains no special verifications; they are done at compile time. This makes the grammar *much* more readable and easy to understand.
+
+Also, ANTLR provides a feature for **labelling** the *alternatives* of a rule, which it will use for code generation where it will generate one visitor method per label (e.g. instead of having to implement a very extensive `visitExpression()` method, it will be broken down to all its alternatives `visitAddition()`, `visitMultiplication()` etc.).
 
 ### Rules
 
@@ -294,7 +296,7 @@ A **script**\ (1) is a set of **statements**\ (2), which can either be settings 
 An **expression** is either a primary type\ (5), an object\ (6), a macro\ (7), or one of the following:
 
 (8)  List of *heterogeneous* expressions\ (21)
-(9)  List access
+(9)  Access list element
 (10) Macro call, which takes an optional list of expressions\ (21) as formal parameters
 (11) Entity modified with an affine transformation
 (12) Sign unary operators
@@ -328,9 +330,41 @@ Without ANTLR's compatibility with left-recursion, most of the rules referencing
 
 ### Operators
 
-Priority of operations table
+Because we used *left-recursion* to write the grammar, the operator precedence is visually clear at first sight --- however, for the sake of completeness, table \ref{tab:operators} shows all operators, their level of precedence (lower level is higher precedence), and a short description.
 
+\begin{table}[h]
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{rclc}
+\toprule
+Level              & Operator                       & Description                  & Associativity                  \\
+1                  & \texttt{{[}{]}}                & List access                  & left-to-right                  \\
+2                  & \texttt{()}                    & Macro call                   & left-to-right                  \\
+3                  & \texttt{\textless\textgreater} & Entity modifier              & left-to-right                  \\\midrule
+\multirow{2}{*}{4} & \texttt{+}                     & Unary plus                   & \multirow{2}{*}{right-to-left} \\
+                   & \texttt{-}                     & Unary minus                  &                                \\\midrule
+5                  & \texttt{!}                     & Boolean NOT                  & left-to-right                  \\\midrule
+\multirow{3}{*}{6} & \texttt{*}                     & Multiplication               & \multirow{3}{*}{left-to-right} \\
+                   & \texttt{/}                     & Division                     &                                \\
+                   & \texttt{\%}                    & Modulo                       &                                \\\midrule
+\multirow{3}{*}{7} & \texttt{+}                     & Addition / CSG union         & \multirow{3}{*}{left-to-right} \\
+                   & \texttt{-}                     & Subtraction / CSG difference &                                \\
+                   & \texttt{\textasciicircum }     & CSG intersection             &                                \\\midrule
+\multirow{6}{*}{8} & \texttt{\textless=}            & Less than or equal           & \multirow{6}{*}{left-to-right} \\
+                   & \texttt{\textgreater=}         & More than or equal           &                                \\
+                   & \texttt{\textless}             & Less than                    &                                \\
+                   & \texttt{\textgreater}          & More than                    &                                \\
+                   & \texttt{==}                    & Equals                       &                                \\
+                   & \texttt{!=}                    & Not equal                    &                                \\\midrule
+9                  & \texttt{\&\&}                    & Boolean AND                  & left-to-right                \\
+10                 & \texttt{||}                    & Boolean OR                   & left-to-right                  \\
+11                 & \texttt{?:}                    & Ternary operator             & right-to-left                  \\
+12                 & \texttt{=}                     & Assignment                   & right-to-left                  \\
 
+\bottomrule
+\end{tabular}
+\caption{List of CRT operators}
+\label{tab:operators}
+\end{table}
 
 ## Compiling process
 

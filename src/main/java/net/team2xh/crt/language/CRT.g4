@@ -43,14 +43,14 @@ expression
     | expression '[' expression ']'                                         # listAccess
     | expression '(' expressionList? ')'                                    # call
     | expression '<' modifier (',' modifier)* '>'                           # modifiers
-    | ('+' | '-') expression                                                # unarySign
+    | <assoc=right> ('+' | '-') expression                                                # unarySign
     | '!' expression                                                        # unaryNot
     | expression ('*' | '/' | '%') expression                               # multiplication
     | expression ('+' | '-' | '^') expression                               # addition
     | expression ('<=' | '>=' | '<' | '>'| '==' | '!=') expression          # comparison
     | expression '&&' expression                                            # binaryAnd
     | expression '||' expression                                            # binaryOr
-    | expression '?' expression ':' expression                              # ternary
+    | <assoc=right> expression '?' expression ':' expression                # ternary
     | <assoc=right> expression '=' expression                               # assignment
     ;
 
