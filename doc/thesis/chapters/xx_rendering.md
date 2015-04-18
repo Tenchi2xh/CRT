@@ -15,7 +15,7 @@ We call "scene" the composition of *elements* and *parameters* that, after the r
 - A camera
 - Other settings, stored in a `Settings` object
 
-### Entities
+### Entities \label{subsec:entities}
 
 Entities are **primitive volumes** that can easily be described with *mathematical equations*, such as boxes (*parallelepipeds*), spheres, cones, planes and half-planes, tori, etc. 
 
@@ -33,17 +33,21 @@ Entities also contain a `Material` property, which defines what material the ent
 
 Thinking about ability to compose creative scenes, one can ask: "Isn't only having *cubes and spheres* a bit limited?" To remedy this, users can compose groups of entities using the result of a *CSG*^[Constructive solid geometry] *operation*, which can be either a union, a difference or an intersection.
 
-All of these operations will be explained in further details in the section on ray tracing.
+All of these operations will be explained in further details in section \ref{sec:raytracing} about ray tracing.
 
-\customfig{uml/entity.eps}{The \texttt{\footnotesize Entity} class diagram}{}
+\customfig{uml/entity.eps}{The \texttt{\footnotesize Entity} class diagram}{}{entityclass}
 
 We can notice that the `CSG` operators follow the *composite* design pattern, being an entity type composed of other entities.
 
 ### Light sources
 
-Light sources illuminate a scene and give entities a component of their colors. When ray tracing, they are the targets of all the rays we *back-trace* from the camera lens and bounce off entities. A light source is defined by the `Light` class and has the following properties:
+Light sources illuminate a scene and give entities a component of their colors. When ray tracing, they are the targets of all the rays we *back-trace* from the camera lens and bounce off entities.
 
-- A point of origin, defining from where the light is shining.
+Several light source types exist: spotlight (cone), cylinder, parallel, and point. For now, only point light sources are implemented.
+
+A light source is defined by the `Light` class and has the following properties:
+
+- An origin, defining from where the light is shining.
 - A *falloff* factor: describes the natural effect observable in nature, where light follows an inverse square law: the intensity of light from a point source is inversely proportional to the square of the distance from the source. We receive only a fourth of the photons from a light source twice as far away.
 - A color, given by the `Pigment` class
 - An ambient light factor: because simulating global illumination is mathematically difficult and takes a lot of processing, we can simulate ambient light (accumulation of light that bounces of many surfaces) by setting an ambient factor, which will basically add a fraction of the value of its color and intensity. 
@@ -57,10 +61,10 @@ A lit and populated scene still needs a window through which we will observe it:
 It has a position, a direction vector, and a focal length (field of view angle). To further add to the user's creative possibilities, we implemented several features which aim to mimic real-life cameras:
 
 - Depth of field (DOF), effect that creates a plane in which objects are sharp, and blurry outside, akin to a tilt-shift effect in photography.
-- An aperture shape, which will be used to physically simulate the shape that *bokeh* will have (see figure below).
+- An aperture shape, which will be used to physically simulate the shape that *bokeh* will have (see figure \ref{fig:bokeh}).
 - A focal distance, defining at which distance objects are sharp.
 
-\customfig{img/bokeh.jpg}{Real-life \emph{bokeh}}{: the blurriness of out-of-focus objects will take the shape of the camera's aperture (pinhole). Here, the \emph{bokeh} is pentagonal.}
+\customfig{img/bokeh.jpg}{Real-life \emph{bokeh}}{: the blurriness of out-of-focus objects will take the shape of the camera's aperture (pinhole). Here, the \emph{bokeh} is pentagonal.}{bokeh}
 
 #### Field of view
 
@@ -82,9 +86,9 @@ The meaning of these settings will further be explained in the section regarding
 
 In the following class diagram are all the main classes involved in the rendering of a scene. The `Tracer` class contains the static methods responsible for the actual ray tracing. They are invoked with a `Scene` object as a parameter, which contains references to all of the other classes.
 
-\customfig{uml/rendering.eps}{Rendering process class diagram}{}
+\customfig{uml/rendering.eps}{Rendering process class diagram}{}{renderclass}
 
-## Ray tracing
+## Ray tracing \label{sec:raytracing}
 
 - Reverse path of a light ray
 - Accumulate all colors along the way
@@ -110,11 +114,11 @@ Ray-sphere intersection:
     - Compute color
     - Bounce if reflective, recurse
 
-\customfig{uml/rendering_activity.eps}{Rendering process activity diagram}{}
+\customfig{uml/rendering_activity.eps}{Rendering process activity diagram}{}{renderprocess}
 
 ### Constructive solid geometry
 
-\customfig{img/csg.png}{A piano foot obtained from CSG operations}{}
+\customfig{img/csg.png}{A piano foot obtained from CSG operations}{}{csgexample}
 
 #### Union
 #### Difference

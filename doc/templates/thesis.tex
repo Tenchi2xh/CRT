@@ -57,16 +57,17 @@
 %     \newpage}
 
 % for custom figures
-\newcommand{\customfig}[3] {
+\newcommand{\customfig}[4] {
   \begin{figure}[!htbp]
       \centering
       \includegraphics[width=\columnwidth,keepaspectratio]{#1}
       \caption[#2]{#2#3}
+      \label{fig:#4}
   \end{figure}
 }
 
 % for gantt
-\usepackage{pgfgantt}
+% \usepackage{pgfgantt}
 
 % for rotating text
 \usepackage{rotating}
@@ -229,12 +230,64 @@ $endif$
 % \end{figure}}
 % \makeatother
 
+% for grammar
+\usepackage[nounderscore]{syntax}
+\setlength{\grammarindent}{7em} % increase separation between LHS/RHS 
+\newcommand{\sv}[1]{{\ttfamily\bfseries#1}}
+% rewrite the grammar environment for numbered rules
+\usepackage{etoolbox} % for patching
+\makeatletter
+% define the main command on the model of the original one
+% we add stepping the counter and typesetting the number
+\def\gr@implnumbereditem<#1> #2 {%
+  \stepcounter{grammarline}%
+  \sbox\z@{\hskip\labelsep\grammarlabel{#1}{#2}}
+  \strut\@@par%
+  \vskip-\parskip%
+  \vskip-\baselineskip%
+  \hrule\@height\z@\@depth\z@\relax%
+  \item[%
+    \rlap{\hskip\dimexpr\linewidth+\grammarindent\relax %% add the number
+          \llap{(\thegrammarline)}}%
+    \unhbox\z@]%
+  \catcode`\<\active%
+}
+% copy the grammar environment under a new name
+\let\numberedgrammar\grammar
+\let\endnumberedgrammar\endgrammar
+% now patch the new environment
+\pretocmd\numberedgrammar{\setcounter{grammarline}{0}}{}{}
+\patchcmd\numberedgrammar
+  {\gr@implitem}
+  {\gr@implnumbereditem}
+  {}{}
+\patchcmd\numberedgrammar
+  {\def\alt{\\\llap{\textbar\quad}}}
+  {\let\alt\alt@num}
+  {}{}
+
+% the command for numbering the \alt lines
+\def\alt@num{\\\relax
+  \stepcounter{grammarline}%
+  \rlap{\hskip\dimexpr\linewidth-\labelwidth+\grammarindent-\labelsep\relax
+        \llap{(\thegrammarline)}}% add the number
+  \llap{\textbar\quad}}
+
+\newcounter{grammarline}
+\makeatother
+
+% Continuous footnote counting
+\usepackage{chngcntr}
+\counterwithout{footnote}{chapter}
+
+% Font setup
+\usepackage[black, scale=0.9]{PlayfairDisplay}
+
 % \usepackage[nf, p, scale=0.9]{ebgaramond}
-\usepackage[black, scale=0.8]{PlayfairDisplay}
 % \usepackage[black]{Alegreya}
 % \usepackage[light, black]{merriweather}
 % \usepackage{librecaslon} % no SC
- 
+
 \begin{document}
 
 % title
