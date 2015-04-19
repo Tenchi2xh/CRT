@@ -115,19 +115,19 @@ An ideal ray tracer simulating real life would instead send rays *from* the ligh
 
 In real life, our human eyes still manage to see photons because there is just *too many* of them. Let's count how many photons per second are emitted by a typical \SI{100}{\watt} (\SI{100}{\joule\per\second}) lightbulb with an average wavelength of \SI{600}{\nano\meter}:
 
-$$ E_{\textrm{photon}} = hf = \frac{hc}{\lambda} \approx \SI{3e-19}{\joule} $$
+\begin{equation} E_{\textrm{photon}} = hf = \frac{hc}{\lambda} \approx \SI{3e-19}{\joule} \end{equation}
 
-$$ \frac{P_{\textrm{lightbulb}}}{E_{\textrm{photon}}} = \frac{\SI{100}{\joule\per\second}}{\SI{3e-19}{\joule}} \approx \SI{3e20}{\per\second} $$
+\begin{equation} \frac{P_{\textrm{lightbulb}}}{E_{\textrm{photon}}} = \frac{\SI{100}{\joule\per\second}}{\SI{3e-19}{\joule}} \approx \SI{3e20}{\per\second} \end{equation}
 
-So, just for a normal lightbulb, approximately **300 billion billion** photons are emitted *every second*.
+So, just for a normal lightbulb, approximately **300 billion billion** photons are emitted *every second*. In *all possible* directions. And then hit objects, bounce in *all possible* directions again, hit other objects etc., and finally hit the observer's eye. Add to this the fact that because of the *inverse square law*, the further the observer is from a light source, the less photons per square metre he receives, in a quadratic fashion. This makes this model *very* impractical to use.
 
-In comparison, a good computer has a power on the order of 10\ GFLOPS, that is 10\ billion operations per second. To come close to computing as many operations per seconds as photons emitted per second by a light bulb, a good computer would have to be 10 *orders of magnitude* faster.
+Just for comparison, a good computer has a power on the order of 10\ GFLOPS, that is 10\ billion operations per second. To come close to computing as many operations per seconds as photons emitted per second by a light bulb, a good computer would have to be $10^{10}$ times faster.
 
 ### Backward tracing
 
-This computational problem lead computer graphics developers to invent **backward tracing**, where light rays are traced *from* the camera back to the light source. In a best-case scenario, only *one* ray projection is needed per pixel.
+This computational problem has lead computer graphics developers to invent **backward tracing**, where light rays are traced *from* the camera back to the light source. In a best-case scenario, only *one* ray projection is needed per pixel.
 
-The basic idea, explained visually in figure \ref{fig:raytracing}, is as follows:
+The basic idea, demonstrated visually in figure \ref{fig:raytracing}, is as follows:
 
 - For each pixel of the screen, send a light ray from an imaginary point (the camera position) into the middle of that pixel
 - If the ray hits an object, send a new ray (called *shadow* ray) in the direction of all light sources:
