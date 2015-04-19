@@ -113,13 +113,13 @@ But why this way? In real life, light sources send protons in all directions at 
 
 An ideal ray tracer simulating real life would instead send rays *from* the light sources *onto* the subjected surfaces, but this is in reality not practical and one would have to wait a very long time for an image to render; the probability of a light ray coming out of a source in a *random* direction, hitting an object, bouncing off that object in another *random* direction, and finally hitting the camera is *very* small. 
 
-In real life, our human eyes still manage to see photons because there is just *too many* of them. Let's count how many photons per second are emitted by a typical \SI{100}{\watt} (\SI{100}{\joule\per\second}) light bulb with an average wavelength of \SI{600}{\nano\meter}:
+In real life, our human eyes still manage to see photons because there is just *too many* of them. Let's count how many photons per second are emitted by a typical \SI{100}{\watt} (\SI{100}{\joule\per\second}) lightbulb with an average wavelength of \SI{600}{\nano\meter}:
 
-$$ E_{\textrm{photon}} = hf = \frac{hc}{\lambda} $$
+$$ E_{\textrm{photon}} = hf = \frac{hc}{\lambda} \approx \SI{3e-19}{\joule} $$
 
-$$ \frac{\SI{100}{\joule}}{E_{\textrm{photon}}} = \frac{\SI{100}{\joule}}{hc / \lambda} \approx \SI{3e20}{\per\second} $$
+$$ \frac{P_{\textrm{lightbulb}}}{E_{\textrm{photon}}} = \frac{\SI{100}{\joule\per\second}}{\SI{3e-19}{\joule}} \approx \SI{3e20}{\per\second} $$
 
-So, just for a normal light bulb, approximately **300 billion billion** photons are emitted *every second*.
+So, just for a normal lightbulb, approximately **300 billion billion** photons are emitted *every second*.
 
 In comparison, a good computer has a power on the order of 10\ GFLOPS, that is 10\ billion operations per second. To come close to computing as many operations per seconds as photons emitted per second by a light bulb, a good computer would have to be 10 *orders of magnitude* faster.
 
