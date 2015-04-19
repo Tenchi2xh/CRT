@@ -43,7 +43,7 @@ expression
     | expression '[' expression ']'                                         # listAccess
     | expression '(' expressionList? ')'                                    # call
     | expression '<' modifier (',' modifier)* '>'                           # modifiers
-    | <assoc=right> ('+' | '-') expression                                                # unarySign
+    | <assoc=right> ('+' | '-') expression                                  # unarySign
     | '!' expression                                                        # unaryNot
     | expression ('*' | '/' | '%') expression                               # multiplication
     | expression ('+' | '-' | '^') expression                               # addition

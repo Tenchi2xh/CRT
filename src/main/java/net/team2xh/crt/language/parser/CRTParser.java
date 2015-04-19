@@ -857,7 +857,7 @@ public class CRTParser extends Parser {
 						setState(98); match(QUESTION);
 						setState(99); expression(0);
 						setState(100); match(COLON);
-						setState(101); expression(3);
+						setState(101); expression(2);
 						}
 						break;
 
@@ -1744,7 +1744,7 @@ public class CRTParser extends Parser {
 		"\t\2\2UV\t\3\2\2V\u0084\5\n\6\nWX\f\b\2\2XY\t\4\2\2Y\u0084\5\n\6\tZ[\f"+
 		"\7\2\2[\\\t\5\2\2\\\u0084\5\n\6\b]^\f\6\2\2^_\7\'\2\2_\u0084\5\n\6\7`"+
 		"a\f\5\2\2ab\7(\2\2b\u0084\5\n\6\6cd\f\4\2\2de\7)\2\2ef\5\n\6\2fg\7*\2"+
-		"\2gh\5\n\6\5h\u0084\3\2\2\2ij\f\3\2\2jk\7\30\2\2k\u0084\5\n\6\3lm\f\16"+
+		"\2gh\5\n\6\4h\u0084\3\2\2\2ij\f\3\2\2jk\7\30\2\2k\u0084\5\n\6\3lm\f\16"+
 		"\2\2mn\7\25\2\2no\5\n\6\2op\7\26\2\2p\u0084\3\2\2\2qr\f\r\2\2rt\7\21\2"+
 		"\2su\5\f\7\2ts\3\2\2\2tu\3\2\2\2uv\3\2\2\2v\u0084\7\22\2\2wx\f\f\2\2x"+
 		"y\7!\2\2y~\5\34\17\2z{\7\27\2\2{}\5\34\17\2|z\3\2\2\2}\u0080\3\2\2\2~"+
