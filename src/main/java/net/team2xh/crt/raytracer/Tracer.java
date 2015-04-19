@@ -234,15 +234,17 @@ public class Tracer {
         Camera camera = scene.getCamera();
         double vfov = camera.getVerticalFov();
         double focalDistance = camera.getFocalDistance();
+        Vector3 direction = camera.getDirection();
+        Vector3 origin = camera.getPosition();
 
         double camX = 0, camY = 0, camZ = 0;
-
+        
         switch (settings.projection) {
             case PINHOLE:
                 // Normal pinhole
-                camX = nX * settings.fovFactor * settings.ratio;
+                camX = nX * settings.fovFactor;
                 camY = nY * settings.fovFactor;
-                camZ = -1;
+                camZ = 1;
                 break;
             case SPHERICAL:
                 // Spherical mapping
@@ -256,35 +258,10 @@ public class Tracer {
                 camZ = Math.sin((vfov/2) * settings.ratio * nX - 0.5*Math.PI);
                 break;
         }
-
-        Vector3 direction = new Vector3(camX, camY, camZ).multiply(focalDistance);
-        Vector3 origin = camera.getPosition();
-        direction = camera.getMatrix().rotate(direction);
-        // Vector3 originCam = settings.camera.getMatrix().multiply(origin);
-        // if (x == (settings.width/2) && y == (settings.height/2)) {
-        //     System.out.println("cam O: " + pos);
-        // }
-
-        // pos = settings.camera.getMatrix().multiply(pos);
-        // if (x == (settings.width/2) && y == (settings.height/2)) {
-        //     System.out.println("cam N: " + pos);
-        //     settings.camera.getMatrix().print();
-        // }
-
-
-        // Fisheye #1 from http://paulbourke.net/dome/fisheye
-            // double r = Math.atan2(Math.sqrt(nX*nX+nY*nY), 1) / Math.PI;
-            // double phi = Math.atan2(nY, nX);
-            // double camX = r * Math.cos(phi) * 2 * settings.ratio;
-            // double camY = r * Math.sin(phi) * 2;
-            // Vector3 pos = new Vector3(camX, camY, -1);
-
-        // Fisheye #2 from Stack Overflow
-            // double z = Math.sqrt(1.0 - nX*nX - nY*nY);
-            // double a = 10. / (z * Math.tan(Math.PI * 0.5 * 0.5));
-            // double camX = nX * a;
-            // double camY = nY * a;
-            // Vector3 pos = new Vector3(camX, camY, z);
+        
+        Vector3 rightComponent = camera.getRight().multiply(camX);
+        Vector3 upComponent = camera.getUp().multiply(camY);
+        direction = direction.add(rightComponent).add(upComponent);
 
         Pigment pigment;
 
@@ -321,11 +298,13 @@ public class Tracer {
                 double focX = p[0] * camera.getAperture() * (1.0 / settings.width);
                 double focY = p[1] * camera.getAperture() * (1.0 / settings.height);
 
-                Vector3 aperturePoint = camera.getMatrix().rotate(new Vector3(focX, focY, 0));
-                Vector3 newDirection = direction.add(aperturePoint);
-                Vector3 newOrigin = origin.subtract(aperturePoint);
-
-                samples[i] = trace(new Ray(newDirection, newOrigin), settings.recurDepth, 0, scene);
+                // TODO: Find new point position with direction from camera (rotate)
+                
+//                Vector3 aperturePoint = camera.getMatrix().rotate(new Vector3(focX, focY, 0));
+//                Vector3 newDirection = direction.add(aperturePoint);
+//                Vector3 newOrigin = origin.subtract(aperturePoint);
+//
+//                samples[i] = trace(new Ray(newDirection, newOrigin), settings.recurDepth, 0, scene);
             }
             pigment = Pigment.getAverage(samples);
         }

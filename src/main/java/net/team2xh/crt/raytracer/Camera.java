@@ -16,7 +16,6 @@
  */
 package net.team2xh.crt.raytracer;
 
-import net.team2xh.crt.raytracer.math.Matrix4;
 import net.team2xh.crt.raytracer.math.Vector3;
 
 /**
@@ -26,16 +25,14 @@ import net.team2xh.crt.raytracer.math.Vector3;
  */
 public class Camera {
 
-    private Vector3 position, direction;
+    private Vector3 position, direction, up, right;
 
-    private double roll = 0.0;
-
+    private double roll = 0;
+    
     private double verticalFov;
     private double focalDistance = 0.5;
     private double aperture = 3;
     private ApertureShape shape = ApertureShape.UNIFORM;
-
-    private Matrix4 viewMatrix;
 
     public Camera() {
         this(new Vector3(0.0, 0.0, 0.0), new Vector3(0.0, 0.0, -1.0), 70);
@@ -45,30 +42,28 @@ public class Camera {
         this.position = position;
         setVerticalFov(verticalFov);
 
-        /**
-         * Adapted from http://www.cubic.org/docs/camera.htm until it worked
-         */
-        Vector3 d = new Vector3(-pointing.x, -pointing.y, pointing.z);
+        direction = pointing.subtract(position).normalize();
+        up        = new Vector3(Math.sin(roll), -Math.cos(roll), 0.0);
+        right     = up.cross(direction).normalize();
+        up        = right.cross(up);
 
-        Vector3 up    = new Vector3(Math.sin(roll), Math.cos(roll), 0.0);
-        Vector3 back  = position.subtract(pointing).normalize();
-        Vector3 right = up.cross(back).normalize();
-        up = back.cross(right);
-
-        Matrix4 rotation = new Matrix4(right, up, back);
-        Matrix4 translation = new Matrix4().setColumn(3, position.invert());
-
-        viewMatrix = rotation.multiply(translation);
     }
 
     public Vector3 getPosition() {
         return position;
     }
 
-    public Matrix4 getMatrix() {
-        return viewMatrix;
+    public Vector3 getDirection() {
+        return direction;
     }
 
+    public Vector3 getUp() {
+        return up;
+    }
+
+    public Vector3 getRight() {
+        return right;
+    }
 
     public double getVerticalFov() {
         return verticalFov;
@@ -101,15 +96,6 @@ public class Camera {
     public void setShape(ApertureShape shape) {
         this.shape = shape;
     }
-
-    public static void main(String[] args) {
-        // Camera cam = new Camera(new Vector3(5, -5, 8), new Vector3(3, 4, 0));
-        Camera cam = new Camera(new Vector3(0, 0, 1), new Vector3(0, 0, 0), 70.0);
-        // cam.viewMatrix.print();
-        System.out.println(cam.viewMatrix.rotate(new Vector3(-0.001, 0.001, -1))); // Dir
-        System.out.println(cam.viewMatrix.translate(new Vector3(0, 0, 1))); // Pos
-    }
-
 
     public enum ApertureShape {
         CIRCLE("Circle"),

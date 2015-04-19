@@ -52,7 +52,7 @@ public class TestTracer {
 
     public TestTracer() {
 
-        Camera camera = new Camera(new Vector3(0, 0.5, -1), new Vector3(0.0, 0.0, 0.0), 50);
+        Camera camera = new Camera(new Vector3(0, 0.6, -1), new Vector3(0.0, 0.0, 0.0), 100);
         Scene scene = Scene.createScene(1280, 720, camera);
 
         Light lightR = new Light(new Vector3(0.3, 0.3, 0), new Pigment(0.75, 0.2, 0.2));
@@ -91,10 +91,10 @@ public class TestTracer {
 
         scene.add(new Plane(new Vector3(0, 1, 0), new Vector3(0.0, -0.3, 0.0), new Material(new Pigment(1.0))));
 
-        //scene.add(new Box(new Vector3(0.4, -.25, 1.0), new Vector3(0.6, 0.4, -0.1), sphereMat));
+        scene.add(new Box(new Vector3(0.4, -.25, 1.0), new Vector3(0.6, 0.4, -0.1), sphereMat));
 
         for (int i = 0; i < 15; ++i) {
-            //scene.add(new Sphere(new Vector3(-0.5, -0.125, 0.0 + 0.3*i), 0.125, sphereMat));
+            scene.add(new Sphere(new Vector3(-0.5, -0.125, 0.0 + 0.3*i), 0.125, sphereMat));
         }
 
         Box box = new Box(new Vector3(-0.2, -0.2, -0.2), new Vector3(0.2, 0.2, 0.2), dieMat);
