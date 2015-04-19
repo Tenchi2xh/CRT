@@ -67,17 +67,17 @@ One has to keep in mind that each additional light source adds up to the amount 
 
 A lit and populated scene still needs a window through which we will observe it: the `Camera` class defines the point of view of our rendered scene.
 
-It has a position, a direction vector, and a focal length (field of view angle). To further add to the user's creative possibilities, we implemented several features which aim to mimic real-life cameras:
+It has a **position** and a **direction** vector, as well as a **field of view** angle.
+
+The **field of view** of a camera *how much* it sees from left to right, or from top to bottom of the image (in photography, this would represent the focal length of the objective). In CRT, the field of view is defined vertically, as an angle in radians. Varying this parameter has a *zoom* effect when lowered, while a big value makes more things visible on the screen.
+
+To further add to the user's creative possibilities, several artistic features which aim to mimic real-life cameras were implemented:
 
 - Depth of field (DOF), effect that creates a plane in which objects are sharp, and blurry outside, akin to a tilt-shift effect in photography.
 - An aperture shape, which will be used to physically simulate the shape that *bokeh* will have (see figure \ref{fig:bokeh}).
 - A focal distance, defining at which distance objects are sharp.
 
 \customfig{img/bokeh.jpg}{Real-life \emph{bokeh}}{: the blurriness of out-of-focus objects will take the shape of the camera's aperture (pinhole). Here, the \emph{bokeh} is pentagonal.}{bokeh}
-
-(Field of view)
-
-(Camera matrix)
 
 ### Settings
 
@@ -99,7 +99,7 @@ In the following class diagram are all the main classes involved in the renderin
 
 ## Ray tracing \label{sec:raytracing}
 
-A lot of elements were defined thus far --- but what *is* ray tracing?
+A lot of elements were defined thus far --- but just what *is* ray tracing? First, a bit of history of computer graphics.
 
 Traditionally, 3D computer graphics are rendered using a technique called **rasterisation**. Compared to ray tracing, rasterisation is extremely fast and is more suited for real-time applications, and takes advantage of years of hardware development dedicated to accelerating it.
 
@@ -114,27 +114,39 @@ However, the very nature of rasterisation makes it hard to implement other very 
 - To reproduce shadows, complicated stencil buffers must be used, along with a depth buffer computed by rendering a sub-scene from the point of view of the light source. This not only is complex but the results look very pixelated
 - Refraction is very hard to reproduce. For a long time, raster application went without refraction effects and just have less opaque models. Nowadays, advanced pixel shaders use techniques similar to ray tracing
 
-**Ray tracing** solves this, at the cost of being slower. Instead of projecting things *from* the scene on the screen, it *sends* rays *to* the various elements of the scene. 
+Ray tracing solves these issues, at the cost of being slower. 
 
-But why this way? In real life, light sources send protons in all directions at random. Some of them hit objects, which *absorb* some of the energy from the photons (thus changing the perceived colour). The photons are then reflected, bouncing *off* the object with a mirrored angle of incidence^[Note that is angle is generally not exactly the mirrored incident angle and is in fact mostly random. Perfect surfaces like mirrors will indeed bounce off photons with a perfect angle (*specular* reflection), but most surfaces will scatter the protons in all directions (*diffuse* reflection --- that is why stones are not reflective like a mirror, their surface is *rough* and scatters the bouncing photons)].
+Instead of projecting things *from* the scene on the screen like with rasterisation, ray tracing is about *sending* rays *towards* the various elements of the scene. 
 
-An ideal ray tracer simulating real life would send rays *from* the light sources.
+But why this way? In real life, light sources send protons in all directions at random. Some of them hit objects, which *absorb* some of the energy from the photons (thus changing the perceived colour). The photons are then reflected, bouncing *off* the object with a mirrored angle of incidence^[Note that is angle is generally not exactly the mirrored incident angle and is in fact mostly random. Perfect surfaces like mirrors will indeed bounce off photons with a perfect angle (**specular** reflection), but most surfaces will scatter the protons in all directions (**diffuse** reflection --- that is why stones are not reflective like a mirror, their surface is *rough* all incoming photons are dispersed)].
 
-- Reverse path of a light ray
-- Accumulate all colours along the way
-- Recursion
-- 3d diagram with virtual screen and pixels
+An ideal ray tracer simulating real life would instead send rays *from* the light sources *onto* the subjected surfaces, but this is in reality not practical and one would have to wait a very long time for an image to render; the probability of a light ray coming out of a source in a *random* direction, hitting an object, bouncing off that object in another *random* direction, and finally hitting the camera is *very* small. 
 
-Ray:
+In real life, our human eyes still manage to see photons because there is just *too many* of them. Let's count how many photons per second are emitted by a typical \SI{100}{\watt} (\SI{100}{\joule\per\second}) light bulb with an average wavelength of \SI{600}{\nano\meter}:
 
-$$ \vec{o} + t\vec{r} $$
+$$ E_{\textrm{photon}} = hf = \frac{hc}{\lambda} $$
 
-Sphere:
-Ray-sphere intersection:
+$$ \frac{\SI{100}{\joule}}{E_{\textrm{photon}}} = \frac{\SI{100}{\joule}}{hc / \lambda} \approx \SI{3e20}{\per\second} $$
 
-- Diagram
+So, just for a normal light bulb, approximately **300 billion billion** photons are emitted *every second*.
 
-### Process
+In comparison, a good computer has a power on the order of 10\ GFLOPS, that is 10\ billion operations per second. To come close to computing as many operations per seconds as photons emitted per second by a light bulb, a good computer would have to be 10 *orders of magnitude* faster.
+
+### Backward tracing
+
+This computational problem lead computer graphics developers to invent **backward tracing**, where light rays are traced *from* the camera back to the light source. In a best-case scenario, only *one* ray projection is needed per pixel.
+
+The basic idea, explained visually in figure \ref{fig:raytracing}, is as follows:
+
+- For each pixel of the screen, send a light ray from an imaginary point (the camera position) into the middle of that pixel
+- If the ray hits an object, send a new ray (called *shadow* ray) in the direction of all light sources:
+    + If the shadow ray hits no object in its way to the light source, then the object is lit by it. The light source's colour and the object's are mixed together and returned to the pixel
+    + If the shadow ray hits another object, then the first object must be in shadow (the light source hits the other object first), so no colour is added
+- If the hit object is reflective and the recursion limit is not reached, recursively trace a mirrored ray (the mirrored angle is 2 times the dot product between the original ray and the surface normal)
+
+\customfig{img/ray-tracing.eps}{Backtracing light rays}{}{raytracing}
+
+### Implemented algorithm
 
 - Parallel via Java 8
 - Find closest
@@ -145,6 +157,22 @@ Ray-sphere intersection:
     - Bounce if reflective, recurse
 
 \customfig{uml/rendering_activity.eps}{Rendering process activity diagram}{}{renderprocess}
+
+### Bonus features
+
+- Supersampling
+
+### Primitives
+
+Ray:
+
+$$ \vec{o} + t\vec{r} $$
+
+Sphere:
+Ray-sphere intersection:
+
+- Diagram
+
 
 ### Constructive solid geometry
 
