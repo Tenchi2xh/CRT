@@ -60,7 +60,15 @@
 \newcommand{\customfig}[4] {
   \begin{figure}[!htbp]
       \centering
-      \includegraphics[width=\columnwidth,keepaspectratio]{#1}
+      \includegraphics[width=0.9\columnwidth,keepaspectratio]{#1}
+      \caption[#2]{#2#3}
+      \label{fig:#4}
+  \end{figure}
+}
+\newcommand{\customfigB}[4] {
+  \begin{figure}[!htbp]
+      \centering
+      \includegraphics[width=0.4\columnwidth,keepaspectratio]{#1}
       \caption[#2]{#2#3}
       \label{fig:#4}
   \end{figure}

@@ -23,7 +23,7 @@ Every entity has a position in space and must provide an `intersect()` method to
 
 Entities also contain a `Material` property, which defines what material the entity is made out of. Materials possess several attributes that describe how light interacts with it:
 
-- A color, provided by the `Pigment` class
+- A colour, provided by the `Pigment` class
 - Reflectivity, for shiny surfaces
 - Transparency, defining how many photons can go through.
 - Refractive index, defining how much light is slowed down when passing through the material.
@@ -49,8 +49,8 @@ A light source is defined by the `Light` class and has the following properties:
 
 - An origin, defining from where the light is shining.
 - A *falloff* factor: describes the natural effect observable in nature, where light follows an inverse square law: the intensity of light from a point source is inversely proportional to the square of the distance from the source. We receive only a fourth of the photons from a light source twice as far away.
-- A color, given by the `Pigment` class
-- An ambient light factor: because simulating global illumination is mathematically difficult and takes a lot of processing, we can simulate ambient light (accumulation of light that bounces of many surfaces) by setting an ambient factor, which will basically add a fraction of the value of its color and intensity. 
+- A colour, given by the `Pigment` class
+- An ambient light factor: because simulating global illumination is mathematically difficult and takes a lot of processing, we can simulate ambient light (accumulation of light that bounces of many surfaces) by setting an ambient factor, which will basically add a fraction of the value of its colour and intensity. 
 
 One has to keep in mind that each additional light source adds up to the amount of rays to bounce and thus linearly increase computation time.
 
@@ -58,7 +58,11 @@ One has to keep in mind that each additional light source adds up to the amount 
 
 A lit and populated scene still needs a window through which we will observe it: the `Camera` class defines the point of view of our rendered scene.
 
-It has a position, a direction vector, and a focal length (field of view angle). To further add to the user's creative possibilities, we implemented several features which aim to mimic real-life cameras:
+It has a **position** and a **direction** vector, as well as a **field of view** angle.
+
+The **field of view** of a camera *how much* it sees from left to right, or from top to bottom of the image (in photography, this would represent the focal length of the objective). In CRT, the field of view is defined vertically, as an angle in radians. Varying this parameter has a *zoom* effect when lowered, while a big value makes more things visible on the screen.
+
+To further add to the user's creative possibilities, we implemented several features which aim to mimic real-life cameras:
 
 - Depth of field (DOF), effect that creates a plane in which objects are sharp, and blurry outside, akin to a tilt-shift effect in photography.
 - An aperture shape, which will be used to physically simulate the shape that *bokeh* will have (see figure \ref{fig:bokeh}).
@@ -66,9 +70,8 @@ It has a position, a direction vector, and a focal length (field of view angle).
 
 \customfig{img/bokeh.jpg}{Real-life \emph{bokeh}}{: the blurriness of out-of-focus objects will take the shape of the camera's aperture (pinhole). Here, the \emph{bokeh} is pentagonal.}{bokeh}
 
-#### Field of view
 
-#### Camera matrix
+(Camera matrix)
 
 ### Settings
 
@@ -90,8 +93,28 @@ In the following class diagram are all the main classes involved in the renderin
 
 ## Ray tracing \label{sec:raytracing}
 
+A lot of elements were defined thus far --- but what *is* ray tracing?
+
+Traditionally, 3D computer graphics are rendered using a technique called **rasterisation**. Compared to ray tracing, rasterisation is extremely fast and is more suited for real-time applications, and takes advantage of years of hardware development dedicated to accelerating it.
+
+In the rasterisation world, a 3D scene is described by a collection of **polygons**, usually triangles, defined by 3 three-dimensional vertices. A rasteriser will take a stream of such vertices, transform them into corresponding two-dimensional points on the viewer's monitor, and fill in the transformed two-dimensional triangles (with either lines, or colours). 
+
+\customfigB{img/rasterisation.png}{Rasterisation of a triangle}{: once the vertices have been projected on the screen, a discrete pixel is ``lit'' if its continuous centre is contained within the projected triangle's boundaries}{}
+
+Some effects of *light* observed in real life can be reproduce (or at least *mimicked*) on top of rasterisation. For example, if a polygon is not directly facing the camera (i.e. its *normal vector* is not parallel with the camera's direction), the resulting colour of the rasterised triangle will be darker.
+
+However, the very nature of rasterisation makes it hard to implement other very common effects:
+
+- To reproduce shadows, complicated stencil buffers must be used, along with a depth buffer computed by rendering a sub-scene from the point of view of the light source. This not only is complex but the results look very pixelated
+- Refraction is very hard to reproduce. For a long time, raster application went without refraction effects and just have less opaque models. Nowadays, advanced pixel shaders use techniques similar to ray tracing
+
+**Ray tracing** solves this, at the cost of being slower. Instead of projecting things *from* the scene on the screen, it *sends* rays *to* the various elements of the scene. 
+
+But why this way? In real life, light sources send protons in all directions at random. Some of them hit objects, which *absorb* some of the energy from the photons (thus changing the perceived colour). The photons are then reflected, bouncing *off* the object with a mirrored angle of incidence^[Note that is angle is generally not exactly the mirrored incident angle and is in fact mostly random. Perfect surfaces like mirrors will indeed bounce off photons with a perfect angle (**specular** reflection), but most surfaces will scatter the protons in all directions (**diffuse** reflection --- that is why stones are not reflective like a mirror, their surface is *rough* and scatters the bouncing photons)].
+An ideal ray tracer simulating real life would send rays *from* the light sources.
+
 - Reverse path of a light ray
-- Accumulate all colors along the way
+- Accumulate all colours along the way
 - Recursion
 - 3d diagram with virtual screen and pixels
 
@@ -120,9 +143,11 @@ Ray-sphere intersection:
 
 \customfig{img/csg.png}{A piano foot obtained from CSG operations}{}{csgexample}
 
-#### Union
-#### Difference
-#### Intersection
+(Union)
+
+(Difference)
+
+(Intersection)
 
 ### Background projections
 

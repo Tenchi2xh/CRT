@@ -11,7 +11,7 @@ fork
         :Find closest\nintersecting entity;
         :Add all light\ncolor components;
     }
-    repeat while (Reflective?) is (new ray)
+    repeat while (Reflective?)
 fork again
     :.../
 fork again
