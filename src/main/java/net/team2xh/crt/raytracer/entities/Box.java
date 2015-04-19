@@ -70,11 +70,11 @@ public class Box extends Entity {
         if (dx >= 0) {
             tmin = (min(0) - ray.origin.x) * dx;
             tmax = (max(0) - ray.origin.x) * dx;
-            normal = Vector3.Xm;
+            normal = Vector3.X;
         } else {
             tmin = (max(0) - ray.origin.x) * dx;
             tmax = (min(0) - ray.origin.x) * dx;
-            normal = Vector3.X;
+            normal = Vector3.Xm;
         }
 
         if (dy >= 0) {

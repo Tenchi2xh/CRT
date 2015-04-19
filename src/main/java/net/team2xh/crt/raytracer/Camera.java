@@ -35,7 +35,7 @@ public class Camera {
     private ApertureShape shape = ApertureShape.UNIFORM;
 
     public Camera() {
-        this(new Vector3(0.0, 0.0, 0.0), new Vector3(0.0, 0.0, -1.0), 70);
+        this(new Vector3(0.0, 0.0, -1.0), new Vector3(0.0, 0.0, 0.0), 60);
     }
 
     public Camera(Vector3 position, Vector3 pointing, double verticalFov) {
@@ -43,10 +43,10 @@ public class Camera {
         setVerticalFov(verticalFov);
 
         direction = pointing.subtract(position).normalize();
-        up        = new Vector3(Math.sin(roll), -Math.cos(roll), 0.0);
-        right     = up.cross(direction).normalize();
-        up        = right.cross(up);
-
+        up        = new Vector3(Math.sin(roll), Math.cos(roll), 0.0);
+        // TODO: if looking straight down, up fails
+        right     = direction.cross(up).normalize().invert();
+        up        = direction.cross(right);
     }
 
     public Vector3 getPosition() {

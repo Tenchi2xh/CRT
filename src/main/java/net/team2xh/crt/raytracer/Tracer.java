@@ -233,35 +233,31 @@ public class Tracer {
 
         Camera camera = scene.getCamera();
         double vfov = camera.getVerticalFov();
+        double hfov = 2 * Math.atan(settings.ratio * Math.tan(vfov / 2));
         double focalDistance = camera.getFocalDistance();
         Vector3 direction = camera.getDirection();
         Vector3 origin = camera.getPosition();
 
-        double camX = 0, camY = 0, camZ = 0;
+        double camX = 0, camY = 0;
         
         switch (settings.projection) {
             case PINHOLE:
-                // Normal pinhole
-                camX = nX * settings.fovFactor;
+                camX = nX * settings.fovFactor * settings.ratio;
                 camY = nY * settings.fovFactor;
-                camZ = 1;
                 break;
             case SPHERICAL:
-                // Spherical mapping
-                camX = Math.cos((vfov/2) * settings.ratio * nX - 0.5*Math.PI);
+                camX = Math.cos((vfov/2) * nX * settings.ratio - 0.5*Math.PI);
                 camY = Math.sin((vfov/2) * nY);
-                camZ = Math.sin((vfov/2) * settings.ratio * nX - 0.5*Math.PI);
                 break;
             case CYLINDRICAL:
-                camX = Math.cos((vfov/2) * settings.ratio * nX - 0.5*Math.PI);
+                camX = Math.cos((vfov/2) * nX * settings.ratio - 0.5*Math.PI);
                 camY = nY * settings.fovFactor;
-                camZ = Math.sin((vfov/2) * settings.ratio * nX - 0.5*Math.PI);
                 break;
         }
         
         Vector3 rightComponent = camera.getRight().multiply(camX);
         Vector3 upComponent = camera.getUp().multiply(camY);
-        direction = direction.add(rightComponent).add(upComponent);
+        direction = direction.add(rightComponent).add(upComponent).normalize();
 
         Pigment pigment;
 

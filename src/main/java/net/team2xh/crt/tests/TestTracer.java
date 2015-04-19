@@ -32,6 +32,7 @@ import net.team2xh.crt.raytracer.Light;
 import net.team2xh.crt.raytracer.Material;
 import net.team2xh.crt.raytracer.Pigment;
 import net.team2xh.crt.raytracer.Scene;
+import net.team2xh.crt.raytracer.Settings;
 import net.team2xh.crt.raytracer.Tracer;
 import net.team2xh.crt.raytracer.entities.Box;
 import net.team2xh.crt.raytracer.entities.Entity;
@@ -52,7 +53,7 @@ public class TestTracer {
 
     public TestTracer() {
 
-        Camera camera = new Camera(new Vector3(0, 0.6, -1), new Vector3(0.0, 0.0, 0.0), 100);
+        Camera camera = new Camera(new Vector3(100, 50, -100), new Vector3(0.0, 0.0, 0.0), 0.6);
         Scene scene = Scene.createScene(1280, 720, camera);
 
         Light lightR = new Light(new Vector3(0.3, 0.3, 0), new Pigment(0.75, 0.2, 0.2));
@@ -80,7 +81,19 @@ public class TestTracer {
         scene.setBackground(new Background(new Pigment(0,0,1), new Pigment(0,1,1)));
 
         scene.getSettings().setRecursionDepth(2);
+        scene.getSettings().setProjection(Settings.Projection.PINHOLE);
 
+        Material gridMat = new Material(new Pigment(1, 0, 0), 0);
+        for (int x = -10; x <= 10; ++x) {
+            scene.add(new Box(new Vector3(x - 0.01, -0.01, -10), new Vector3(x + 0.01, 0.01, 10), gridMat));
+            scene.add(new Box(new Vector3(-10, -0.01, x - 0.01), new Vector3(10, 0.01, x + 0.01), gridMat));
+        }
+        for (int x = -10; x <= 10; ++x) {
+            scene.add(new Box(new Vector3(x - 0.01, -10, 0 - 0.01), new Vector3(x + 0.01, 10, 0.01), gridMat));
+            scene.add(new Box(new Vector3(-10, x - 0.01, 0 - 0.01), new Vector3(10, x + 0.01, 0.01), gridMat));
+        }
+        
+        
         Material sphereMat = new Material(new Pigment(0.2), 0.3);
         sphereMat.setSpecular(1.0);
         sphereMat.setShininess(50.0);
