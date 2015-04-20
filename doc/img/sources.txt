@@ -1,1 +1,1 @@
-- bokeh.jpg: https://www.flickr.com/photos/elpadawan/6555576867/
+- bokeh.jpg : https://www.flickr.com/photos/raypainter/15211592090

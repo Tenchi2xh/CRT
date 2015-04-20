@@ -35,7 +35,7 @@ Thinking about ability to compose creative scenes, one can ask: "Isn't only havi
 
 All of these operations will be explained in further details in section \ref{sec:raytracing} about ray tracing.
 
-\customfig{uml/entity.eps}{The \texttt{\footnotesize Entity} class diagram}{}{entityclass}
+\customfig{uml/entity.eps}{The \texttt{\footnotesize Entity} class diagram}{}{entityclass}{}
 
 We can notice that the `CSG` operators follow the *composite* design pattern, being an entity type composed of other entities.
 
@@ -68,7 +68,7 @@ To further add to the user's creative possibilities, several artistic features w
 - An aperture shape, which will be used to physically simulate the shape that *bokeh* will have (see figure \ref{fig:bokeh}).
 - A focal distance, defining at which distance objects are sharp.
 
-\customfig{img/bokeh.jpg}{Real-life \emph{bokeh}}{: the blurriness of out-of-focus objects will take the shape of the camera's aperture (pinhole). Here, the \emph{bokeh} is pentagonal.}{bokeh}
+\customfig{img/bokeh.jpg}{Real-life \emph{bokeh}}{: the blurriness of out-of-focus objects will take the shape of the camera's aperture (pinhole). Here, the \emph{bokeh} is octogonal.}{bokeh}{Scott Tucker on Flickr}
 
 ### Settings
 
@@ -86,7 +86,7 @@ The meaning of these settings will further be explained in the section regarding
 
 In the following class diagram are all the main classes involved in the rendering of a scene. The `Tracer` class contains the static methods responsible for the actual ray tracing. They are invoked with a `Scene` object as a parameter, which contains references to all of the other classes.
 
-\customfig{uml/rendering.eps}{Rendering process class diagram}{}{renderclass}
+\customfig{uml/rendering.eps}{Rendering process class diagram}{}{renderclass}{}
 
 ## Ray tracing \label{sec:raytracing}
 
@@ -96,9 +96,9 @@ Traditionally, 3D computer graphics are rendered using a technique called **rast
 
 In the rasterisation world, a 3D scene is described by a collection of **polygons**, usually triangles, defined by 3 three-dimensional vertices. A rasteriser will take a stream of such vertices, transform them into corresponding two-dimensional points on the viewer's monitor, and fill in the transformed two-dimensional triangles (with either lines, or colours). 
 
-\customfigB{img/rasterisation.png}{Rasterisation of a triangle}{: once the vertices have been projected on the screen, a discrete pixel is ``lit'' if its continuous centre is contained within the projected triangle's boundaries}{}
+\customfigB{img/rasterisation.png}{Rasterisation of a triangle}{: once the vertices have been projected on the screen, a discrete pixel is ``lit'' if its continuous centre is contained within the projected triangle's boundaries.}{}{Wikipedia}
 
-Some effects of *light* observed in real life can be reproduce (or at least *mimicked*) on top of rasterisation. For example, if a polygon is not directly facing the camera (i.e. its *normal vector* is not parallel with the camera's direction), the resulting colour of the rasterised triangle will be darker.
+Some effects of light observed in real life can be reproduce (or at least *mimicked*) on top of rasterisation. For example, if a polygon is not directly facing the camera (i.e. its *normal vector* is not parallel with the camera's direction), the resulting colour of the rasterised triangle will be darker.
 
 However, the very nature of rasterisation makes it hard to implement other very common effects:
 
@@ -107,9 +107,9 @@ However, the very nature of rasterisation makes it hard to implement other very 
 
 Ray tracing solves these issues, at the cost of being slower. 
 
-Instead of projecting things *from* the scene on the screen like with rasterisation, ray tracing is about *sending* rays *towards* the various elements of the scene. 
+Instead of projecting things *from* the scene on the screen like with rasterisation, ray tracing is about sending rays *from* the screen *towards* the various elements of the scene. 
 
-But why this way? In real life, light sources send protons in all directions at random. Some of them hit objects, which *absorb* some of the energy from the photons (thus changing the perceived colour). The photons are then reflected, bouncing *off* the object with a mirrored angle of incidence^[Note that is angle is generally not exactly the mirrored incident angle and is in fact mostly random. Perfect surfaces like mirrors will indeed bounce off photons with a perfect angle (**specular** reflection), but most surfaces will scatter the protons in all directions (**diffuse** reflection --- that is why stones are not reflective like a mirror, their surface is *rough* all incoming photons are dispersed)].
+But why this way? In real life, light sources send protons in all directions at random. Some of them hit objects, which *absorb* some of the energy from the photons (thus changing the perceived colour). The photons are then reflected, bouncing *off* the object with a mirrored angle of incidence^[Note that is angle is generally not exactly the mirrored incident angle and is in fact mostly random. Perfect surfaces like mirrors will indeed bounce off photons with a perfect angle (**specular** reflection), but most surfaces will scatter the protons in all directions (**diffuse** reflection --- that is why stones are not reflective like a mirror, their surface is *rough* so all incoming photons are dispersed)].
 
 An ideal ray tracer simulating real life would instead send rays *from* the light sources *onto* the subjected surfaces, but this is in reality not practical and one would have to wait a very long time for an image to render; the probability of a light ray coming out of a source in a *random* direction, hitting an object, bouncing off that object in another *random* direction, and finally hitting the camera is *very* small. 
 
@@ -135,7 +135,9 @@ The basic idea, demonstrated visually in figure \ref{fig:raytracing}, is as foll
     + If the shadow ray hits another object, then the first object must be in shadow (the light source hits the other object first), so no colour is added
 - If the hit object is reflective and the recursion limit is not reached, recursively trace a mirrored ray (the mirrored angle is 2 times the dot product between the original ray and the surface normal)
 
-\customfig{img/ray-tracing.eps}{Backtracing light rays}{}{raytracing}
+\customfig{img/ray-tracing.eps}{Backtracing light rays}{.}{raytracing}{Wikipedia}
+
+Finally, how does ray tracing solve the difficulties of rasterisation mentioned previously? The very fact of tracing rays makes it possible to apply the same formulas used in physics: the law of reflection, Snell-Descartes law of refraction, Beer-Lambert law, the inverse square law, and so on.
 
 ### Implemented algorithm
 
@@ -147,17 +149,17 @@ The basic idea, demonstrated visually in figure \ref{fig:raytracing}, is as foll
     - Compute color
     - Bounce if reflective, recurse
 
-\customfig{uml/rendering_activity.eps}{Rendering process activity diagram}{}{renderprocess}
+\customfig{uml/rendering_activity.eps}{Rendering process activity diagram}{}{renderprocess}{}
 
-### Bonus features
+### Coordinate system
 
-- Supersampling
-
-### Primitives
+### Ray generation
 
 Ray:
 
 $$ \vec{o} + t\vec{r} $$
+
+### Primitives
 
 Sphere:
 Ray-sphere intersection:
@@ -167,7 +169,7 @@ Ray-sphere intersection:
 
 ### Constructive solid geometry
 
-\customfig{img/csg.png}{A piano foot obtained from CSG operations}{}{csgexample}
+\customfig{img/csg.png}{A piano foot obtained from CSG operations}{}{csgexample}{}
 
 (Union)
 

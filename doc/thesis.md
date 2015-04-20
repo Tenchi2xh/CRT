@@ -44,7 +44,7 @@ Thinking about ability to compose creative scenes, one can ask: "Isn't only havi
 
 All of these operations will be explained in further details in section \ref{sec:raytracing} about ray tracing.
 
-\customfig{uml/entity.eps}{The \texttt{\footnotesize Entity} class diagram}{}{entityclass}
+\customfig{uml/entity.eps}{The \texttt{\footnotesize Entity} class diagram}{}{entityclass}{}
 
 We can notice that the `CSG` operators follow the *composite* design pattern, being an entity type composed of other entities.
 
@@ -77,7 +77,7 @@ To further add to the user's creative possibilities, several artistic features w
 - An aperture shape, which will be used to physically simulate the shape that *bokeh* will have (see figure \ref{fig:bokeh}).
 - A focal distance, defining at which distance objects are sharp.
 
-\customfig{img/bokeh.jpg}{Real-life \emph{bokeh}}{: the blurriness of out-of-focus objects will take the shape of the camera's aperture (pinhole). Here, the \emph{bokeh} is pentagonal.}{bokeh}
+\customfig{img/bokeh.jpg}{Real-life \emph{bokeh}}{: the blurriness of out-of-focus objects will take the shape of the camera's aperture (pinhole). Here, the \emph{bokeh} is octogonal.}{bokeh}{Scott Tucker on Flickr}
 
 ### Settings
 
@@ -95,7 +95,7 @@ The meaning of these settings will further be explained in the section regarding
 
 In the following class diagram are all the main classes involved in the rendering of a scene. The `Tracer` class contains the static methods responsible for the actual ray tracing. They are invoked with a `Scene` object as a parameter, which contains references to all of the other classes.
 
-\customfig{uml/rendering.eps}{Rendering process class diagram}{}{renderclass}
+\customfig{uml/rendering.eps}{Rendering process class diagram}{}{renderclass}{}
 
 ## Ray tracing \label{sec:raytracing}
 
@@ -105,9 +105,9 @@ Traditionally, 3D computer graphics are rendered using a technique called **rast
 
 In the rasterisation world, a 3D scene is described by a collection of **polygons**, usually triangles, defined by 3 three-dimensional vertices. A rasteriser will take a stream of such vertices, transform them into corresponding two-dimensional points on the viewer's monitor, and fill in the transformed two-dimensional triangles (with either lines, or colours). 
 
-\customfigB{img/rasterisation.png}{Rasterisation of a triangle}{: once the vertices have been projected on the screen, a discrete pixel is ``lit'' if its continuous centre is contained within the projected triangle's boundaries}{}
+\customfigB{img/rasterisation.png}{Rasterisation of a triangle}{: once the vertices have been projected on the screen, a discrete pixel is ``lit'' if its continuous centre is contained within the projected triangle's boundaries.}{}{Wikipedia}
 
-Some effects of *light* observed in real life can be reproduce (or at least *mimicked*) on top of rasterisation. For example, if a polygon is not directly facing the camera (i.e. its *normal vector* is not parallel with the camera's direction), the resulting colour of the rasterised triangle will be darker.
+Some effects of light observed in real life can be reproduce (or at least *mimicked*) on top of rasterisation. For example, if a polygon is not directly facing the camera (i.e. its *normal vector* is not parallel with the camera's direction), the resulting colour of the rasterised triangle will be darker.
 
 However, the very nature of rasterisation makes it hard to implement other very common effects:
 
@@ -116,9 +116,9 @@ However, the very nature of rasterisation makes it hard to implement other very 
 
 Ray tracing solves these issues, at the cost of being slower. 
 
-Instead of projecting things *from* the scene on the screen like with rasterisation, ray tracing is about *sending* rays *towards* the various elements of the scene. 
+Instead of projecting things *from* the scene on the screen like with rasterisation, ray tracing is about sending rays *from* the screen *towards* the various elements of the scene. 
 
-But why this way? In real life, light sources send protons in all directions at random. Some of them hit objects, which *absorb* some of the energy from the photons (thus changing the perceived colour). The photons are then reflected, bouncing *off* the object with a mirrored angle of incidence^[Note that is angle is generally not exactly the mirrored incident angle and is in fact mostly random. Perfect surfaces like mirrors will indeed bounce off photons with a perfect angle (**specular** reflection), but most surfaces will scatter the protons in all directions (**diffuse** reflection --- that is why stones are not reflective like a mirror, their surface is *rough* all incoming photons are dispersed)].
+But why this way? In real life, light sources send protons in all directions at random. Some of them hit objects, which *absorb* some of the energy from the photons (thus changing the perceived colour). The photons are then reflected, bouncing *off* the object with a mirrored angle of incidence^[Note that is angle is generally not exactly the mirrored incident angle and is in fact mostly random. Perfect surfaces like mirrors will indeed bounce off photons with a perfect angle (**specular** reflection), but most surfaces will scatter the protons in all directions (**diffuse** reflection --- that is why stones are not reflective like a mirror, their surface is *rough* so all incoming photons are dispersed)].
 
 An ideal ray tracer simulating real life would instead send rays *from* the light sources *onto* the subjected surfaces, but this is in reality not practical and one would have to wait a very long time for an image to render; the probability of a light ray coming out of a source in a *random* direction, hitting an object, bouncing off that object in another *random* direction, and finally hitting the camera is *very* small. 
 
@@ -144,7 +144,9 @@ The basic idea, demonstrated visually in figure \ref{fig:raytracing}, is as foll
     + If the shadow ray hits another object, then the first object must be in shadow (the light source hits the other object first), so no colour is added
 - If the hit object is reflective and the recursion limit is not reached, recursively trace a mirrored ray (the mirrored angle is 2 times the dot product between the original ray and the surface normal)
 
-\customfig{img/ray-tracing.eps}{Backtracing light rays}{}{raytracing}
+\customfig{img/ray-tracing.eps}{Backtracing light rays}{.}{raytracing}{Wikipedia}
+
+Finally, how does ray tracing solve the difficulties of rasterisation mentioned previously? The very fact of tracing rays makes it possible to apply the same formulas used in physics: the law of reflection, Snell-Descartes law of refraction, Beer-Lambert law, the inverse square law, and so on.
 
 ### Implemented algorithm
 
@@ -156,17 +158,17 @@ The basic idea, demonstrated visually in figure \ref{fig:raytracing}, is as foll
     - Compute color
     - Bounce if reflective, recurse
 
-\customfig{uml/rendering_activity.eps}{Rendering process activity diagram}{}{renderprocess}
+\customfig{uml/rendering_activity.eps}{Rendering process activity diagram}{}{renderprocess}{}
 
-### Bonus features
+### Coordinate system
 
-- Supersampling
-
-### Primitives
+### Ray generation
 
 Ray:
 
 $$ \vec{o} + t\vec{r} $$
+
+### Primitives
 
 Sphere:
 Ray-sphere intersection:
@@ -176,7 +178,7 @@ Ray-sphere intersection:
 
 ### Constructive solid geometry
 
-\customfig{img/csg.png}{A piano foot obtained from CSG operations}{}{csgexample}
+\customfig{img/csg.png}{A piano foot obtained from CSG operations}{}{csgexample}{}
 
 (Union)
 
@@ -213,7 +215,7 @@ Ray-sphere intersection:
 
 # Language
 
-So far, we can compose and render scenes directly by writing them in Java, instantiating `Scene` and `Entity` objects. But for the user to be able to *compose* his own scenes inside a design environment, we need to define a language: the **CRT scripting language**.
+So far, we can compose and render scenes directly by writing them in Java by instantiating `Scene` and `Entity` objects. But for the user to be able to *compose* his own scenes inside a design environment, we need to define a language: the **CRT scripting language**.
 
 The CRT scripting language follows an *imperative* paradigm and aims to be simple yet permissive enough to enable creativity.
 
@@ -222,22 +224,22 @@ It features two block types for describing a scene and its settings, variables t
 Visually as well as syntactically, the language tries to be simple on the eyes, with no end-of-statement terminator. Here is a sample of what it looks like:
 
 ```{.haskell caption="Sample CRT script"}
---Example--------------------------------------------------
-
-myObject = Object {
-    attribute1    -> vec3(0.0, 0.5*3, -0.5)
-    attribute2    -> "foobar"
-    attributeList -> [true,  true, false]
+--Entities-------------------------------------------------
+sphere1 = Sphere {
+    center -> vec3(0, 0.5, 0)
+    radius -> 0.5
 }
 
+--Constants------------------------------------------------
 n = 18
 max = (3 * n) / 4 + 5
 
+--Macros---------------------------------------------------
 myMacro = Macro (arg1) {
     i = 0
-    -- Draw myObject "max" times
+    -- Draw sphere1 "max" times on the x axis
     while (i < max) {
-        myObject <translate vec3(i*5.0, 0.0, 0.0)>
+        sphere1 <translate vec3(i*1.0, 0.0, 0.0)>
         i = i - 1
     }
 }
@@ -249,13 +251,13 @@ The language's grammar will be designed in a EBNF variant, the G4 syntax from **
 
 ANTLR will use that grammar specification to automatically generate the code of a lexer, a parser, and base classes useful for implementing tree traversal using design patterns such as *listeners* and *visitors*.
 
-\customfig{uml/antlr.eps}{Family of classes generated by ANTLR4}{}{antlrclass}
+\customfig{uml/antlr.eps}{Family of classes generated by ANTLR4}{}{antlrclass}{}
 
 ANTLR works by first lexing the code into *tokens*, defined by their types in the grammar (e.g. names, identifiers, symbols, etc.) then parsing those tokens using the grammar *rules*, producing a parse tree where all the leaf nodes are tokens. 
 
-\customfig{img/antlr-process.png}{ANTLR's language recognition process}{}{antlrprocess}
+\customfig{img/antlr-process.png}{Language recognition process}{.}{antlrprocess}{ANTLR}
 
-For our compiler, we will use the *visitor* pattern, which allows more control over the tree traversal; the listener provided by antler automatically traverses the tree whereas the visitor forces manual traversal implementation.
+For our compiler, we will use the *visitor* pattern, which allows for more control over the tree traversal; the listener provided by ANTLR automatically traverses the tree whereas the visitor forces manual traversal implementation.
 
 Using the generated lexer and parser, we can produce a parse tree (lines 3-6). Then, using custom-made visitors, we can visit each node of the tree to compile the code to a `Script` object (line 8):
 
@@ -273,15 +275,15 @@ Script script = compiler.visit(tree);
 
 ## Grammar
 
-The designed grammar is non-ambiguous (context-free), but uses **left-recursion**^[http://en.wikipedia.org/wiki/Left_recursion] for ease of writing *and* reading, which ANTLR allows since version 4.2.
+The designed grammar is non-ambiguous (context-free), but uses **left-recursion**^[http://en.wikipedia.org/wiki/Left_recursion] for ease of writing *and* reading, which ANTLR supports since version 4.2.
 
 Some parts were inspired from example grammars provided by the ANTLR team on GitHub, in particular the Java grammar^[http://github.com/antlr/grammars-v4/blob/master/java/Java.g4], from which much was learned about left-recursion and operator precedence. 
 
-Furthermore, the "ANTLR 4 IDE" *Eclipse* plug-in^[http://github.com/jknack/antlr4ide] proved to be very useful during the development of the grammar. It provides useful tools for debugging such as syntax diagrams and live parse tree visualisation --- just choose a grammar rule, type in code and a corresponding parse tree is updated at every keystroke.<!-- Figure \ref{fig:parsetree} shows such a generated parse tree.
+Furthermore, the "ANTLR 4 IDE" *Eclipse* plug-in^[http://github.com/jknack/antlr4ide] proved to be very useful during the development of the grammar. It provides useful tools for debugging such as syntax diagrams and a live parse tree visualisation --- just by selecting a grammar rule and typing in code, a corresponding parse tree is updated at every keystroke.<!-- Figure \ref{fig:parsetree} shows such a generated parse tree.
 
-\customfig{img/parse-tree.png}{ANTLR 4 IDE's live parse tree}{, displaying a macro assignment}{parsetree} -->
+\customfig{img/parse-tree.png}{ANTLR 4 IDE's live parse tree}{, displaying a macro assignment}{parsetree}{} -->
 
-A similar (and official) plug-in also exists for *Netbeans*, the main IDE used during the development of this project, however it was not compatible with the latest versions of Netbeans.
+A similar (and official) plug-in also exists for *NetBeans*, the main IDE used during the development of this project, however it was not compatible with the latest versions of NetBeans.
 
 Because it is important to make a separation between parsing and compiling, the grammar contains no special verifications; they are done at compile time. This makes the grammar *much* more readable and easy to understand.
 
@@ -397,9 +399,9 @@ Level              & Operator                       & Description               
 \multirow{3}{*}{6} & \texttt{*}                     & Multiplication               & \multirow{3}{*}{left-to-right} \\
                    & \texttt{/}                     & Division                     &                                \\
                    & \texttt{\%}                    & Modulo                       &                                \\\midrule
-\multirow{3}{*}{7} & \texttt{+}                     & Addition / CSG union         & \multirow{3}{*}{left-to-right} \\
-                   & \texttt{-}                     & Subtraction / CSG difference &                                \\
-                   & \texttt{\textasciicircum }     & CSG intersection             &                                \\\midrule
+\multirow{3}{*}{7} & \texttt{+}                     & Addition / union         & \multirow{3}{*}{left-to-right} \\
+                   & \texttt{-}                     & Subtraction / difference &                                \\
+                   & \texttt{\textasciicircum }     & Intersection             &                                \\\midrule
 \multirow{6}{*}{8} & \texttt{\textless=}            & Less than or equal           & \multirow{6}{*}{left-to-right} \\
                    & \texttt{\textgreater=}         & More than or equal           &                                \\
                    & \texttt{\textless}             & Less than                    &                                \\
