@@ -105,7 +105,7 @@ Traditionally, 3D computer graphics are rendered using a technique called **rast
 
 In the rasterisation world, a 3D scene is described by a collection of **polygons**, usually triangles, defined by 3 three-dimensional vertices. A rasteriser will take a stream of such vertices, transform them into corresponding two-dimensional points on the viewer's monitor, and fill in the transformed two-dimensional triangles (with either lines, or colours). 
 
-\customfigB{img/rasterisation.png}{Rasterisation of a triangle}{: once the vertices have been projected on the screen, a discrete pixel is ``lit'' if its continuous centre is contained within the projected triangle's boundaries.}{}{Wikipedia}
+\customfigB{img/rasterisation.png}{rasterisation of a triangle}{: once the vertices have been projected on the screen, a discrete pixel is ``lit'' if its continuous centre is contained within the projected triangle's boundaries.}{}{Wikipedia}
 
 Some effects of light observed in real life can be reproduce (or at least *mimicked*) on top of rasterisation. For example, if a polygon is not directly facing the camera (i.e. its *normal vector* is not parallel with the camera's direction), the resulting colour of the rasterised triangle will be darker.
 
@@ -132,33 +132,35 @@ So, just for a normal lightbulb, approximately **300 billion billion** photons a
 
 Just for comparison, a good computer has a power on the order of 10\ GFLOPS, that is 10\ billion operations per second. To come close to computing as many operations per seconds as photons emitted per second by a light bulb, a good computer would have to be $10^{10}$ times faster.
 
-### Backward tracing
-
 This computational problem has lead computer graphics developers to invent **backward tracing**, where light rays are traced *from* the camera back to the light source. In a best-case scenario, only *one* ray projection is needed per pixel.
 
-The basic idea, demonstrated visually in figure \ref{fig:raytracing}, is as follows:
+This solve the difficulties of rasterisation previously mentioned in that the very nature of tracing rays makes it possible to apply the exact same formulas used in physics: the law of reflection, the Snell-Descartes law of refraction, Beer-Lambert law, the inverse square law, and so on. Also, shadows don't have to be drawn, they just exist --- light just "naturally" never reaches shadowed spots in a scene, so no light comes from it.
 
-- For each pixel of the screen, send a light ray from an imaginary point (the camera position) into the middle of that pixel
-- If the ray hits an object, send a new ray (called *shadow* ray) in the direction of all light sources:
-    + If the shadow ray hits no object in its way to the light source, then the object is lit by it. The light source's colour and the object's are mixed together and returned to the pixel
-    + If the shadow ray hits another object, then the first object must be in shadow (the light source hits the other object first), so no colour is added
-- If the hit object is reflective and the recursion limit is not reached, recursively trace a mirrored ray (the mirrored angle is 2 times the dot product between the original ray and the surface normal)
+The basic idea of backward tracing, explained in details in the next section, is demonstrated visually in figure \ref{fig:raytracing}
 
 \customfig{img/ray-tracing.eps}{Backtracing light rays}{.}{raytracing}{Wikipedia}
 
-Finally, how does ray tracing solve the difficulties of rasterisation mentioned previously? The very fact of tracing rays makes it possible to apply the same formulas used in physics: the law of reflection, Snell-Descartes law of refraction, Beer-Lambert law, the inverse square law, and so on.
+### Backward tracing implementation
 
-### Implemented algorithm
+For every pixel on the screen, a ray is generated, then traced. Because each pixel's tracing is **independent** from one another, the process can be parallelized. This is easily done thanks to the new Java 8 API and its *streams*: after splitting the screen into blocks in a Java list `coords`, all we have to do is call:
 
-- Parallel via Java 8
-- Find closest
-- Keep distance in memory for falloff
-- For each light
-    - Find if intersection point is hit by light
-    - Compute color
-    - Bounce if reflective, recurse
+```{.java caption="Java 8's easy parallelization"}
+coords.parallelStream().forEach(
+    (int[] c) -> processPixel(c, image, scene));
+```
 
-\customfig{uml/rendering_activity.eps}{Rendering process activity diagram}{}{renderprocess}{}
+The process of tracing a ray takes the following steps:
+
+1. Start with a black colour
+2. Search for the entity closest to the ray's origin that intersects with the ray
+3. For every light in the scene, send a **shadow ray** originated on the intersection point towards the light
+    - Add the *ambient* factor of the light
+    - If it hits nothing before reaching the light, add a mix of the light's colour and the object's to the current colour. The light's colour contribution is attenuated by two factors:
+        * The less parallel the surface normal is with the incoming ray, the darker
+        * The further the light had to travel, the darker (inverse square law) 
+    + If the shadow ray hits an object, it is in its shadow: no colour is added
+4. If the surface's material has a reflective component, recursively trace a **reflection ray** in an angle symmetrical to the angle of incidence, and add the resulting colour 
+5. If the surface's material has a refractive component, recursively trace a **refraction ray** in an angle obtained with the Snell-Descartes law, and add the resulting colour
 
 ### Coordinate system
 
@@ -203,7 +205,7 @@ Ray-sphere intersection:
 
 ### Constructive solid geometry
 
-\customfig{img/csg.png}{A piano foot obtained from CSG operations}{}{csgexample}{}
+\customfigC{img/csg.png}{A piano foot obtained from CSG operations}{}{csgexample}{}
 
 (Union)
 

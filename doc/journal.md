@@ -64,7 +64,7 @@
 - Corrections
 - Typography improvements
 - Section about ANTLR, the grammar, BNF listing and operators table
-- Section about ray tracing history and workings
+- Section about ray tracing history, workings, process
 - Citing image sources
 - Rewrote how the camera system works
     + Removed awkward $4 \times 4$ matrix system (more appropriate for rasterisation)

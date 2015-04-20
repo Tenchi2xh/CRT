@@ -83,6 +83,14 @@
       \label{fig:#4}
   \end{figure}
 }
+\newcommand{\customfigC}[5] {
+  \begin{figure}[!htbp]
+      \centering
+      \includegraphics[width=0.7\columnwidth,keepaspectratio]{#1}
+      \caption[#2]{#2#3 \if\relax\detokenize{#5}\relax\else{\footnotesize Image~source:~#5}\fi}
+      \label{fig:#4}
+  \end{figure}
+}
 
 % for gantt
 % \usepackage{pgfgantt}
@@ -247,6 +255,10 @@ $endif$
 % \twocolumn
 % \end{figure}}
 % \makeatother
+
+% for pretty bullets
+\def\labelitemii{--}
+\def\labelitemiii{\circ}
 
 % for tables
 \usepackage{multirow}

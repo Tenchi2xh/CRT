@@ -147,7 +147,7 @@ public class TestTracer {
 //            scene.add(new Sphere(new Vector3(x, y, z), 0.01, sphereMat));
 //        }
 
-        scene.getSettings().setSupersampling(2);
+        scene.getSettings().setSupersampling(1);
         Tracer tracer = Tracer.getInstance();
 
         w = 1280;
@@ -175,7 +175,7 @@ public class TestTracer {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
 
-        ForkJoinPool pool = new ForkJoinPool(4);
+        ForkJoinPool pool = new ForkJoinPool(6);
         pool.execute(() -> tracer.render(3, (int[][] p, Integer i) -> draw(p, i, w, h), scene));
 
     }
