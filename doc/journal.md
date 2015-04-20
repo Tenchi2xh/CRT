@@ -58,3 +58,16 @@
     - List variable assignments
     - List access
     - Function calls for color and vector types
+
+# 16.04.2015 - 22.04.2015
+
+- Corrections
+- Typography improvements
+- Section about ANTLR, the grammar, BNF listing and operators table
+- Section about ray tracing history and workings
+- Citing image sources
+- Rewrote how the camera system works
+    + Removed awkward $4 \times 4$ matrix system (more appropriate for rasterisation)
+    + System with up and right vectors
+    + Left-handed coordinate system
+    + Corrected camera projections

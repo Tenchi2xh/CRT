@@ -162,6 +162,31 @@ Finally, how does ray tracing solve the difficulties of rasterisation mentioned 
 
 ### Coordinate system
 
+\begin{figure}
+\centering
+
+\begin{tikzpicture}[]
+
+  \draw[thin, dashed] (-1, 0, -2) -- (-1, 0, 2);
+  \draw[thin, dashed] ( 1, 0, -2) -- ( 1, 0, 2);
+  \draw[thin, dashed] ( 1, 0, -2) -- ( 1, 0, 2);
+  \draw[thin, dashed] (-2, 0, -1) -- (2, 0, -1);
+  \draw[thin, dashed] (-2, 0,  1) -- (2, 0,  1);
+  \draw[thin, dashed] (-2, 0,  1) -- (2, 0,  1);
+
+  \draw[->, thick] (0,0,0) -- (2,0,0) node[right]{$x$}; 
+  \draw[->, thick] (0,0,0) -- (0,2,0) node[above]{$y$}; 
+  \draw[->, thick] (0,0,0) -- (0,0,-3) node[above right]{$z$};
+  
+  \draw[dashed, thin] (0,0,0) -- (-2,0,0); 
+  \draw[dashed, thin] (0,0,0) -- (0,0,2);
+  
+\end{tikzpicture}
+
+\caption{Left-handed coordinate system}
+\label{fig:coords}
+\end{figure}
+
 ### Ray generation
 
 Ray:
@@ -389,7 +414,7 @@ Because we used *left-recursion* to write the grammar, the operator precedence i
 \renewcommand{\arraystretch}{1.2}
 \begin{tabular}{rclc}
 \toprule
-Level              & Operator                       & Description                  & Associativity                  \\
+Level              & Operator                       & Description                  & Associativity                  \\\midrule
 1                  & \texttt{{[}{]}}                & List access                  & left-to-right                  \\
 2                  & \texttt{()}                    & Macro call                   & left-to-right                  \\
 3                  & \texttt{\textless\textgreater} & Entity modifier              & left-to-right                  \\\midrule
@@ -399,16 +424,18 @@ Level              & Operator                       & Description               
 \multirow{3}{*}{6} & \texttt{*}                     & Multiplication               & \multirow{3}{*}{left-to-right} \\
                    & \texttt{/}                     & Division                     &                                \\
                    & \texttt{\%}                    & Modulo                       &                                \\\midrule
-\multirow{3}{*}{7} & \texttt{+}                     & Addition / union         & \multirow{3}{*}{left-to-right} \\
-                   & \texttt{-}                     & Subtraction / difference &                                \\
-                   & \texttt{\textasciicircum }     & Intersection             &                                \\\midrule
+\multirow{5}{*}{7} & \texttt{+}                     & Addition                     & \multirow{3}{*}{left-to-right} \\
+                   &                                & (CSG Union)                  &                                \\
+                   & \texttt{-}                     & Subtraction                  &                                \\
+                   &                                & (CSG Difference)             &                                \\
+                   & \texttt{\textasciicircum }     & CSG Intersection             &                                \\\midrule
 \multirow{6}{*}{8} & \texttt{\textless=}            & Less than or equal           & \multirow{6}{*}{left-to-right} \\
                    & \texttt{\textgreater=}         & More than or equal           &                                \\
                    & \texttt{\textless}             & Less than                    &                                \\
                    & \texttt{\textgreater}          & More than                    &                                \\
                    & \texttt{==}                    & Equals                       &                                \\
                    & \texttt{!=}                    & Not equal                    &                                \\\midrule
-9                  & \texttt{\&\&}                    & Boolean AND                  & left-to-right                \\
+9                  & \texttt{\&\&}                  & Boolean AND                  & left-to-right                  \\
 10                 & \texttt{||}                    & Boolean OR                   & left-to-right                  \\
 11                 & \texttt{?:}                    & Ternary operator             & right-to-left                  \\
 12                 & \texttt{=}                     & Assignment                   & right-to-left                  \\

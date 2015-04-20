@@ -177,26 +177,24 @@ Because we used *left-recursion* to write the grammar, the operator precedence i
 Level              & Operator                       & Description                  & Associativity                  \\\midrule
 1                  & \texttt{{[}{]}}                & List access                  & left-to-right                  \\
 2                  & \texttt{()}                    & Macro call                   & left-to-right                  \\
-3                  & \texttt{\textless\textgreater} & Entity modifier              & left-to-right                  \\
-\rowcolor{lightgray}
+3                  & \texttt{\textless\textgreater} & Entity modifier              & left-to-right                  \\\midrule
 \multirow{2}{*}{4} & \texttt{+}                     & Unary plus                   & \multirow{2}{*}{right-to-left} \\
-                   & \texttt{-}                     & Unary minus                  &                                \\
-5                  & \texttt{!}                     & Boolean NOT                  & left-to-right                  \\
-\rowcolor{lightgray}
+                   & \texttt{-}                     & Unary minus                  &                                \\\midrule
+5                  & \texttt{!}                     & Boolean NOT                  & left-to-right                  \\\midrule
 \multirow{3}{*}{6} & \texttt{*}                     & Multiplication               & \multirow{3}{*}{left-to-right} \\
                    & \texttt{/}                     & Division                     &                                \\
-                   & \texttt{\%}                    & Modulo                       &                                \\
-\rowcolor{lightgray}
-\multirow{3}{*}{7} & \texttt{+}                     & Addition / CSG union         & \multirow{3}{*}{left-to-right} \\
-                   & \texttt{-}                     & Subtraction / difference     &                                \\
-                   & \texttt{\textasciicircum }     & Intersection                 &                                \\
-\rowcolor{lightgray}
+                   & \texttt{\%}                    & Modulo                       &                                \\\midrule
+\multirow{5}{*}{7} & \texttt{+}                     & Addition                     & \multirow{3}{*}{left-to-right} \\
+                   &                                & (CSG Union)                  &                                \\
+                   & \texttt{-}                     & Subtraction                  &                                \\
+                   &                                & (CSG Difference)             &                                \\
+                   & \texttt{\textasciicircum }     & CSG Intersection             &                                \\\midrule
 \multirow{6}{*}{8} & \texttt{\textless=}            & Less than or equal           & \multirow{6}{*}{left-to-right} \\
                    & \texttt{\textgreater=}         & More than or equal           &                                \\
                    & \texttt{\textless}             & Less than                    &                                \\
                    & \texttt{\textgreater}          & More than                    &                                \\
                    & \texttt{==}                    & Equals                       &                                \\
-                   & \texttt{!=}                    & Not equal                    &                                \\
+                   & \texttt{!=}                    & Not equal                    &                                \\\midrule
 9                  & \texttt{\&\&}                  & Boolean AND                  & left-to-right                  \\
 10                 & \texttt{||}                    & Boolean OR                   & left-to-right                  \\
 11                 & \texttt{?:}                    & Ternary operator             & right-to-left                  \\

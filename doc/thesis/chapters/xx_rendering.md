@@ -153,6 +153,31 @@ Finally, how does ray tracing solve the difficulties of rasterisation mentioned 
 
 ### Coordinate system
 
+\begin{figure}
+\centering
+
+\begin{tikzpicture}[]
+
+  \draw[thin, dashed] (-1, 0, -2) -- (-1, 0, 2);
+  \draw[thin, dashed] ( 1, 0, -2) -- ( 1, 0, 2);
+  \draw[thin, dashed] ( 1, 0, -2) -- ( 1, 0, 2);
+  \draw[thin, dashed] (-2, 0, -1) -- (2, 0, -1);
+  \draw[thin, dashed] (-2, 0,  1) -- (2, 0,  1);
+  \draw[thin, dashed] (-2, 0,  1) -- (2, 0,  1);
+
+  \draw[->, thick] (0,0,0) -- (2,0,0) node[right]{$x$}; 
+  \draw[->, thick] (0,0,0) -- (0,2,0) node[above]{$y$}; 
+  \draw[->, thick] (0,0,0) -- (0,0,-3) node[above right]{$z$};
+  
+  \draw[dashed, thin] (0,0,0) -- (-2,0,0); 
+  \draw[dashed, thin] (0,0,0) -- (0,0,2);
+  
+\end{tikzpicture}
+
+\caption{Left-handed coordinate system}
+\label{fig:coords}
+\end{figure}
+
 ### Ray generation
 
 Ray:
