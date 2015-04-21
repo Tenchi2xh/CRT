@@ -19,6 +19,7 @@ package net.team2xh.crt.raytracer.entities;
 import net.team2xh.crt.raytracer.Hit;
 import net.team2xh.crt.raytracer.Material;
 import net.team2xh.crt.raytracer.Ray;
+import net.team2xh.crt.raytracer.Tracer;
 import net.team2xh.crt.raytracer.math.Vector3;
 
 /**
@@ -59,7 +60,9 @@ public class Box extends Entity {
         Vector3 point = Vector3.O;
         double entry = 0;
         double exit = 0;
-        Vector3 normal;
+        Vector3 normal = null;
+        String planeNear = "x";
+        String planeFar = "x";
 
         double tmin, tmax, tymin, tymax, tzmin, tzmax;
 
@@ -70,11 +73,9 @@ public class Box extends Entity {
         if (dx >= 0) {
             tmin = (min(0) - ray.origin.x) * dx;
             tmax = (max(0) - ray.origin.x) * dx;
-            normal = Vector3.Xm;
         } else {
             tmin = (max(0) - ray.origin.x) * dx;
             tmax = (min(0) - ray.origin.x) * dx;
-            normal = Vector3.X;
         }
 
         if (dy >= 0) {
@@ -89,10 +90,11 @@ public class Box extends Entity {
 
             if (tymin > tmin) {
                 tmin = tymin;
-                normal = (dy >= 0) ? Vector3.Ym : Vector3.Y;
+                planeNear = "y";
             }
             if (tymax < tmax) {
                 tmax = tymax;
+                planeFar = "y";
             }
             if (dz >= 0) {
                 tzmin = (min(2) - ray.origin.z) * dz;
@@ -104,15 +106,37 @@ public class Box extends Entity {
             if (!((tmin > tzmax) || (tzmin > tmax))) {
                 if (tzmin > tmin) {
                     tmin = tzmin;
-                    normal = (dz >= 0) ? Vector3.Zm : Vector3.Z;
+                    planeNear = "z";
                 }
                 if (tzmax < tmax) {
                     tmax = tzmax;
+                    planeFar = "z";
                 }
-                if (tmax > 0.0001) {
+                if (tmax > Tracer.E) {
                     entry = tmin;
                     exit = tmax;
                     hits = true;
+                    
+                    String plane = planeNear;
+                    
+                    if (contains(ray.origin)) {
+                        plane = planeFar;
+                        entry = tmax;
+                        exit = tmin;
+                    }
+                    
+                    switch (plane) {
+                        case "x":
+                            normal = new Vector3(-ray.direction.x, 0, 0).normalize();
+                            break;
+                        case "y":
+                            normal = new Vector3(0, -ray.direction.y, 0).normalize();
+                            break;
+                        case "z":
+                            normal = new Vector3(0, 0, -ray.direction.z).normalize();
+                            break;
+                    }
+                    
                     point = ray.origin.add(ray.direction.multiply(entry));
                 }
             }

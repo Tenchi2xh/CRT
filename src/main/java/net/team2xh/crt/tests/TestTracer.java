@@ -54,7 +54,7 @@ public class TestTracer {
     public TestTracer() {
 
         double d = 1;
-        Camera camera = new Camera(new Vector3(d*0, d*0.5, d*-1), new Vector3(0.0, 0.0, 0.0), 60/d);
+        Camera camera = new Camera(new Vector3(d*-0, d*0.5, d*-1), new Vector3(0.0, 0.0, 0.0), 60/d);
         Scene scene = Scene.createScene(1280, 720, camera);
 
         Light lightR = new Light(new Vector3(0.3, 0.3, 0), new Pigment(0.75, 0.2, 0.2));
@@ -111,55 +111,34 @@ public class TestTracer {
             scene.add(new Sphere(new Vector3(-0.5, -0.125, 0.0 + 0.3*i), 0.125, sphereMat));
         }
 
-//        Box box = new Box(new Vector3(-0.2, -0.2, -0.2), new Vector3(0.2, 0.2, 0.2), dieMat);
-//        Sphere sphere = new Sphere(new Vector3(0.0, 0.0, 0.0), 0.275, dieMat);
-//        Sphere sphere2 = new Sphere(new Vector3(0.1, 0.05, -0.2), 0.2, sphereMat);
-//
-//        Entity test = new Intersection(box, sphere);
-//
-//
-//        List<Entity> dice = new LinkedList<>();
-//        dice.add(test);
-//        for (int i = 0; i < 3; ++i) {
-//            dice.add(new Sphere(new Vector3((1./2.5)*-0.2, (1./2)*-0.2 + i*(1./2)*0.2, -0.2), 0.03, sphereMat));
-//        }
-//        for (int i = 0; i < 3; ++i) {
-//            dice.add(new Sphere(new Vector3((1./2.5)*0.2, (1./2)*-0.2 + i*(1./2)*0.2, -0.2), 0.03, sphereMat));
-//        }
-//        for (int i = 0; i < 2; ++i) {
-//            dice.add(new Sphere(new Vector3((1./2.5)*0.2, 0.2, (1./2)*-0.2 + i*(1.)*0.2), 0.03, sphereMat));
-//        }
-//        for (int i = 0; i < 2; ++i) {
-//            dice.add(new Sphere(new Vector3((1./2.5)*-0.2, 0.2, (1./2)*-0.2 + i*(1.)*0.2), 0.03, sphereMat));
-//        }
-//
-//        test = CSG.subtract(dice);
-        
-        
-        double r1 = 0.2;
-        double r2 = r1/2;
-        double r3 = r1 + r2/2;
-        int n = 5;
-        double a = 2*Math.PI / n;
-        
-        Sphere sphere = new Sphere(new Vector3(0.0, 0.0, 0.0), r1, dieMat);
+        Box box = new Box(new Vector3(-0.2, -0.2, -0.2), new Vector3(0.2, 0.2, 0.2), dieMat);
+        Sphere sphere = new Sphere(new Vector3(0.0, 0.0, 0.0), 0.275, dieMat);
 
-        List<Entity> things = new LinkedList<>();
-        things.add(sphere);
-        for (int i = 0; i < n; ++i) {
-            things.add(new Sphere(new Vector3(0, r3 * Math.sin(i*a), r3 * Math.cos(i * a)), r2, dieMat));
-            things.add(new Sphere(new Vector3(r3 * Math.sin(i*a), 0, r3 * Math.cos(i * a)), r2, dieMat));
+        Entity diceBody = new Intersection(box, sphere);
+
+
+        List<Entity> diceElements = new LinkedList<>();
+        diceElements.add(diceBody);
+        for (int i = 0; i < 3; ++i) {
+            diceElements.add(new Sphere(new Vector3((1./2.5)*-0.2, (1./2)*-0.2 + i*(1./2)*0.2, -0.2), 0.03, sphereMat));
         }
+        for (int i = 0; i < 3; ++i) {
+            diceElements.add(new Sphere(new Vector3((1./2.5)*0.2, (1./2)*-0.2 + i*(1./2)*0.2, -0.2), 0.03, sphereMat));
+        }
+        for (int i = 0; i < 2; ++i) {
+            diceElements.add(new Sphere(new Vector3((1./2.5)*0.2, 0.2, (1./2)*-0.2 + i*(1.)*0.2), 0.03, sphereMat));
+        }
+        for (int i = 0; i < 2; ++i) {
+            diceElements.add(new Sphere(new Vector3((1./2.5)*-0.2, 0.2, (1./2)*-0.2 + i*(1.)*0.2), 0.03, sphereMat));
+        }
+
+        Entity dice = CSG.subtract(diceElements);
+        scene.add(dice);
         
-        Entity test = CSG.subtract(things);
 
-        scene.add(test);
-//        scene.add(sphere3);
-
-        //scene.add(new Plane(new Vector3(-1, 0, 0), new Vector3(0.25, 0, 0.0), new Material(new Pigment(1.0))));
 //        scene.add(new Sphere(new Vector3(0.0,  0.125, -0.3), 0.065, sphereMat));
 //        scene.add(new Sphere(new Vector3(0.0, -0.125, -0.3), 0.065, sphereMat));
-        // Spiral
+//
 //        for (int i = 0; i < 50; ++i) {
 //            double x = Math.cos(i / 3.0) * 0.2;
 //            double y = 0.125 - (i * 0.005);
