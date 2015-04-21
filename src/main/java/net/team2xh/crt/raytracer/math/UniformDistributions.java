@@ -70,6 +70,24 @@ final public class UniformDistributions {
         
         return new Vector3(x, y, Math.sqrt(Math.max(0, 1 - u1)));
     }
+    
+    public static Vector3 orientedRandomVectorInHemisphere(Vector3 direction) {
+        
+        Vector3 vec = randomVectorInHemisphere();
+        // http://stackoverflow.com/a/20925348
+        if (direction.x == 0 && direction.z == 0) {
+            if (direction.y < 0) { // rotate 180 degrees
+                vec = new Vector3(-vec.x, -vec.y, vec.z);
+            }
+        } else {
+            Vector3 new_y = direction;
+            Vector3 new_z = new_y.cross(Vector3.Y);
+            Vector3 new_x = new_y.cross(new_z);
+            Matrix3 basisChange = new Matrix3(new_x, new_y, new_z);
+            vec = basisChange.multiply(vec);
+        }
+        return vec;
+    }
 
     public static double[] randomPolygonPoint2(int degree) {
         double x, y;

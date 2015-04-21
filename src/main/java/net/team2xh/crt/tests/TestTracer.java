@@ -63,11 +63,15 @@ public class TestTracer {
     final private Object sync = new Object();
 
     public TestTracer() {
+        
+        w = 1280;
+        h = 720;
+        
 //        for (int t = 0; t < 60; ++t) {
 //            double d = 0.9 + 0.001*t*t;
         double d = 1;
         Camera camera = new Camera(new Vector3(d * -0.4, d * 0.45, d * -0.9), new Vector3(0.0, 0.0, 0.0), 60 / d);
-        Scene scene = Scene.createScene(1280, 720, camera);
+        Scene scene = Scene.createScene(w, h, camera);
 
         Light lightR = new PointLight(new Vector3(0.3, 0.3, 0), new Pigment(0.75, 0.2, 0.2));
         Light lightB = new PointLight(new Vector3(-0.3, 0.3, 0), new Pigment(0.2, 0.2, 0.75));
@@ -118,9 +122,17 @@ public class TestTracer {
             }
         }
 
-        Material sphereMat = new Material(new Pigment(0.2), 0.6);
-        sphereMat.setSpecular(4.0);
-        sphereMat.setShininess(50.0);
+        Material sphereMat1 = new Material(new Pigment(0.2, 0.2, 0.2), 0.3);
+        sphereMat1.setSpecular(4.0);
+        sphereMat1.setShininess(50.0);
+        Material sphereMat2 = new Material(new Pigment(0.2, 0.9, 0.2), 0.3);
+        sphereMat2.setSpecular(4.0);
+        sphereMat2.setShininess(50.0);
+        Material sphereMat3 = new Material(new Pigment(0.2, 0.2, 0.9), 0.3);
+        sphereMat3.setSpecular(4.0);
+        sphereMat3.setShininess(50.0);
+        
+        Material[] sphereMats = new Material[] { sphereMat1, sphereMat2, sphereMat3 };
 
         Material dieMat = new Material(new Pigment(0.9), 0.1);
         dieMat.setSpecular(0.3);
@@ -128,10 +140,10 @@ public class TestTracer {
 
         scene.add(new Plane(new Vector3(0, 1, 0), new Vector3(0.0, -0.3, 0.0), new Material(new Pigment(1.0))));
 
-        scene.add(new Box(new Vector3(0.4, -.25, 1.0), new Vector3(0.6, 0.4, -0.1), sphereMat));
+        scene.add(new Box(new Vector3(0.4, -.25, 1.0), new Vector3(0.6, 0.4, -0.1), sphereMat1));
 
         for (int i = 0; i < 15; ++i) {
-            scene.add(new Sphere(new Vector3(-0.5, -0.125, 0.0 + 0.3 * i), 0.125, sphereMat));
+            scene.add(new Sphere(new Vector3(-0.5, -0.125, 0.0 + 0.3 * i), 0.125, sphereMats[i % 3]));
         }
 
         Box box = new Box(new Vector3(-0.2, -0.2, -0.2), new Vector3(0.2, 0.2, 0.2), dieMat);
@@ -168,9 +180,6 @@ public class TestTracer {
 //        }
         scene.getSettings().setSupersampling(2);
         Tracer tracer = Tracer.getInstance();
-
-        w = 1280;
-        h = 720;
 
         bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
 

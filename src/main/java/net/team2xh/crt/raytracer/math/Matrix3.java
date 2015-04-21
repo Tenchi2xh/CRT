@@ -20,71 +20,62 @@ package net.team2xh.crt.raytracer.math;
  *
  * @author Hamza Haiken (hamza.haiken@heig-vd.ch)
  */
-public class Matrix4 {
+public class Matrix3 {
 
-    double matrix[][] = new double[4][4];
+    double matrix[][] = new double[3][3];
 
-    public Matrix4(double[][] matrix) {
-        if (matrix.length != 4)
-            throw new RuntimeException("Matrix size is not 4x4");
+    public Matrix3(double[][] matrix) {
+        if (matrix.length != 3)
+            throw new RuntimeException("Matrix size is not 3x3");
         for (double[] line : matrix)
-            if (line.length != 4)
-                throw new RuntimeException("Matrix size is not 4x4");
+            if (line.length != 3)
+                throw new RuntimeException("Matrix size is not 3x3");
         this.matrix = matrix;
     }
 
-    public Matrix4() {
-        for (int i = 0; i < 4; ++i)
+    public Matrix3() {
+        for (int i = 0; i < 3; ++i)
             matrix[i][i] = 1.0;
     }
 
-    public Matrix4(Vector3 u, Vector3 v, Vector3 w) {
+    public Matrix3(Vector3 u, Vector3 v, Vector3 w) {
         matrix = new double[][] {
-            { u.x, v.x, w.x, 0.0 },
-            { u.y, v.y, w.y, 0.0 },
-            { u.z, v.z, w.z, 0.0 },
-            { 0.0, 0.0, 0.0, 1.0 }
+            { u.x, v.x, w.x },
+            { u.y, v.y, w.y },
+            { u.z, v.z, w.z }
         };
     }
 
-    public Matrix4 setRow(int row, Vector3 data) {
+    public Matrix3 setRow(int row, Vector3 data) {
         matrix[row][0] = data.x;
         matrix[row][1] = data.y;
         matrix[row][2] = data.z;
         return this;
     }
 
-    public Matrix4 setColumn(int column, Vector3 data) {
+    public Matrix3 setColumn(int column, Vector3 data) {
         matrix[0][column] = data.x;
         matrix[1][column] = data.y;
         matrix[2][column] = data.z;
         return this;
     }
 
-    public Matrix4 multiply(Matrix4 other) {
-        double[][] result = new double[4][4];
-        for (int i = 0; i < 4; ++i)
-            for (int j = 0; j < 4; ++j)
-                for (int k = 0; k < 4; ++k)
+    public Matrix3 multiply(Matrix3 other) {
+        double[][] result = new double[3][3];
+        for (int i = 0; i < 3; ++i)
+            for (int j = 0; j < 3; ++j)
+                for (int k = 0; k < 3; ++k)
                     result[i][j] += matrix[i][k] * other.matrix[k][j];
-        return new Matrix4(result);
+        return new Matrix3(result);
     }
 
-    private Vector3 multiply(Vector3 other, double lastValue) {
-        double[] vector = new double[] { other.x, other.y, other.z, lastValue };
-        double[] result = new double[4];
-        for (int i = 0; i < 4; ++i)
-            for (int j = 0; j < 4; ++j)
-                result[i] += (matrix[i][j] * vector[j]);
+    public Vector3 multiply(Vector3 vec) {
+        double[] comps = vec.components();
+        double[] result = new double[3];
+        for (int i = 0; i < 3; ++i)
+            for (int j = 0; j < 3; ++j)
+                result[i] += matrix[i][j] * comps[j];
         return new Vector3(result[0], result[1], result[2]);
-    }
-
-    public Vector3 rotate(Vector3 other) {
-        return multiply(other, 0.0);
-    }
-
-    public Vector3 translate(Vector3 other) {
-        return multiply(other, 1.0);
     }
 
     public void print() {

@@ -77,3 +77,4 @@
 - Much work on CSG
 - Animation test
 - Drew diagrams with TikZ for light explanations
+- Experimented with global illumination

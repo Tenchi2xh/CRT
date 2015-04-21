@@ -125,6 +125,7 @@ public class Tracer {
                         Pigment lightContr = light.mul(att * isl);
                         Pigment materialContr = color.mul(m.diffuse);
                         pigment.addSelf(materialContr.mul(lightContr));
+                        
                     }
 
                     // Add specular component
@@ -136,6 +137,31 @@ public class Tracer {
                     }
                 }
             }
+            
+//            int k = scene.getSettings().aoSamples;
+//            Pigment[] ambientOcclusion = new Pigment[k];
+//            for (int i = 0; i < k; ++i) {
+//                ambientOcclusion[i] = tracePath(ray, 2, scene);
+//            }
+//            pigment = pigment.mul(Pigment.getAverage(ambientOcclusion));
+            
+//            int k = scene.getSettings().aoSamples;
+//            if (k > 0 && depth > 0) {
+//                Pigment[] ambientOcclusion = new Pigment[k];
+//                for (int i = 0; i < k; ++i) {
+//
+//                    Vector3 r = UniformDistributions.orientedRandomVectorInHemisphere(n);
+//                    Ray newRay = new Ray(r, point);
+//                    // BRDF
+//                    double cos_theta = r.dot(n);
+//                    Pigment brdf = m.color.mul(2 * cos_theta);
+//                    Pigment reflected = trace(newRay, depth - 1, totalDist, scene);
+//                    ambientOcclusion[i] = (m.color.add(brdf.mul(reflected)));
+//
+//                }
+//                pigment = pigment.mul(Pigment.getAverage(ambientOcclusion));
+//            }
+            
             // Add reflection component
             if (m.reflectivity > 0 && depth > 0) {
                 Vector3 reflection = ray.direction.reflect(n);
@@ -150,6 +176,50 @@ public class Tracer {
         return pigment;
     }
 
+    private Pigment tracePath(Ray ray, int depth, Scene scene) {
+        // Global illumination experiment
+        if (depth > 0) {
+            
+            double minDist = -1;
+            Hit closest = null;
+
+            // Search for closest intersecting entity on the ray
+            for (Entity e : scene.getEntities()) {
+                Hit h = e.intersect(ray);
+                if (h.intersects()) {
+                    double dist = h.entry();
+                    if (minDist == -1 || dist < minDist) {
+                        minDist = dist;
+                        closest = h;
+                    }
+                }
+            }
+            
+            if (closest == null) {
+                return new Pigment(0);
+            }
+            
+            // Point should not be exactly on the intersection surface but just a bit before
+            double distance = ray.origin.distanceTo(closest.point()) - E;
+            Vector3 point = ray.origin.add(ray.direction.multiply(distance));
+            Vector3 n = closest.normal();
+            Material m = closest.entity().material;
+            
+            // http://en.wikipedia.org/wiki/Path_tracing except it IS cosine weighted
+            Vector3 r = UniformDistributions.orientedRandomVectorInHemisphere(n);
+            Ray newRay = new Ray(r, point);
+            // BRDF
+            double cos_theta = r.dot(n);
+            Pigment brdf = m.color.mul(2 * cos_theta);
+            Pigment reflected = tracePath(newRay, depth - 1, scene);
+            return m.color.add(brdf.mul(reflected));
+
+        } else {
+            return new Pigment(0);
+        }
+
+    }
+    
     public void setProgressBar(JProgressBar pb) {
         this.pb = pb;
     }
