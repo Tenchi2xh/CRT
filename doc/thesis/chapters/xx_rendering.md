@@ -155,7 +155,7 @@ The process of tracing a ray takes the following steps:
 
 ### Coordinate system
 
-\begin{figure}
+\begin{figure}[h]
 \centering
 
 \begin{tikzpicture}[]
@@ -193,6 +193,104 @@ Ray-sphere intersection:
 
 - Diagram
 
+### Light calculations
+
+\usetikzlibrary{arrows}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{patterns}
+
+\begin{figure}[h]
+\centering
+
+\subfloat[Parallel light]{%
+\centering
+\begin{tikzpicture}[rotate=-45, scale=0.7]
+
+  \draw[dashed] (0.0, 0.0) -- (1.5, 0.0);
+  \draw[dashed] (0.0, 0.5) -- (1.5, 0.5);
+  \draw[dashed] (0.0, 1.0) -- (1.5, 1.0);
+  \draw[dashed] (0.0, 1.5) -- (1.5, 1.5);
+  \draw[dashed] (0.0, 2.0) -- (1.5, 2.0);
+
+  \draw[->, >=latex] (1.5, 0.0) -- (3.0, 0.0);
+  \draw[->, >=latex] (1.5, 0.5) -- (3.0, 0.5);
+  \draw[->, >=latex] (1.5, 1.0) -- (3.0, 1.0);
+  \draw[->, >=latex] (1.5, 1.5) -- (3.0, 1.5);
+  \draw[->, >=latex] (1.5, 2.0) -- (3.0, 2.0);
+
+  \draw[very thick] (3.0, -0.5) -- (3.0, 2.5);
+  \fill[pattern=vertical lines] (3.0, -0.5) rectangle (3.2, 2.5); 
+\end{tikzpicture}}%
+\hspace{0.1\linewidth}%
+\subfloat[Point light]{%
+\centering
+\begin{tikzpicture}[rotate=-45, scale=0.7]
+
+  \coordinate (x) at (1.0, 1.0);
+  \draw[fill] (x) circle (2pt) node[above right]{$\vec{o}$};
+  \draw[->, >=latex] (x) -- ++( 30:2.3cm);
+  \draw[->, >=latex] (x) -- ++(  0:2cm);
+  \draw[->, >=latex] (x) -- ++(-30:2.3cm);
+  \draw[->, >=latex, dashed] (x) -- ++(-60:1cm);
+  \draw[->, >=latex, dashed] (x) -- ++(-90:1cm);
+  \draw[->, >=latex, dashed] (x) -- ++(-120:1cm);
+  \draw[->, >=latex, dashed] (x) -- ++(-150:1cm);
+  \draw[->, >=latex, dashed] (x) -- ++(-180:1cm);
+  \draw[->, >=latex, dashed] (x) -- ++(-210:1cm);
+
+  \draw[very thick] (3.0, -0.5) -- (3.0, 2.5);
+  \fill[pattern=vertical lines] (3.0, -0.5) rectangle (3.2, 2.5); 
+  
+\end{tikzpicture}}
+\caption{Light source types}
+\label{fig:lighttypes}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+
+\subfloat[Rays parallel with normal]{%
+\centering
+\makebox[.45\linewidth]{
+\begin{tikzpicture}[rotate=-45, scale=0.7]
+
+  \draw[dashed] (0.0, 0.0) -- (1.5, 0.0);
+  \draw[dashed] (0.0, 1.0) -- (1.5, 1.0);
+  \draw[dashed] (0.0, 2.0) -- (1.5, 2.0);
+
+  \draw[->, >=latex] (1.5, 0.0) -- (3.0, 0.0);
+  \draw[->, >=latex] (1.5, 1.0) -- (3.0, 1.0);
+  \draw[->, >=latex] (1.5, 2.0) -- (3.0, 2.0);
+
+  \draw[<->] (0.5, 1.0) -- node[midway, below right]{$1$} (0.5, 0.0);
+
+  \draw[very thick] (3.0, -0.5) -- (3.0, 2.5);
+  \fill[pattern=vertical lines] (3.0, -0.5) rectangle (3.2, 2.5); 
+\end{tikzpicture}}}%
+\subfloat[Rays at \SI{45}{\degree} with normal]{%
+\centering
+\makebox[.45\linewidth]{
+\begin{tikzpicture}[rotate=-45, scale=0.7]
+
+  \draw[->, >=latex, thick] (3.0, 1.0) -- ++(-2, 2) node[above]{$\vec{n}$};
+
+  \draw[dashed] (0.0, 0.0) -- (1.5, 0.0);
+  \draw[dashed] (0.0, 1.0) -- (1.5, 1.0);
+  \draw[dashed] (0.0, 2.0) -- (1.5, 2.0);
+
+  \draw[->, >=latex] (1.5, 0.0) -- (2.0, 0.0);
+  \draw[->, >=latex] (1.5, 1.0) -- (3.0, 1.0);
+  \draw[->, >=latex] (1.5, 2.0) -- (4.0, 2.0);
+
+  \draw[<->] (0.5, 0.0) -- node[midway, above, fill=white, inner sep=1.1pt]{$\sqrt{2}$} ++(1.0, 1.0);
+
+  \draw[very thick] (1.5, -0.5) -- (4.3, 2.3);
+  \fill[pattern=north east lines, rotate=-45] (1.4, 0.7) rectangle ++(0.3, 4.0); 
+  \fill[fill=white] (2.5, -1) rectangle ++(0.1, 0);
+\end{tikzpicture}}}%
+\caption{Surface angle with incoming rays}
+\label{fig:lightangle}
+\end{figure}
 
 ### Constructive solid geometry
 
