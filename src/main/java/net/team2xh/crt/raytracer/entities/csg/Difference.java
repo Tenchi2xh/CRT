@@ -41,9 +41,7 @@ public class Difference extends CSG {
 
         Hit hitA = a.intersect(ray);
         Hit hitB = b.intersect(ray);
-        hitA.setEntity(this);
-        hitB.setEntity(this);
-
+        
         if (hitA.intersects() && hitB.intersects()) {
             double a0 = hitA.entry();
             double a1 = hitA.exit();
@@ -52,8 +50,9 @@ public class Difference extends CSG {
 
             // if both exits are behind the ray's direction, we're in void
             if (a1 < a0 && b1 < b0) {
-                if (a0 < b0)
+                if (a0 < b0) {
                     return Hit.miss;
+                }
             }
             
             // else, must determine better
@@ -68,7 +67,7 @@ public class Difference extends CSG {
                 newHit.setPoint(ray.origin.add(ray.direction.multiply(b0 + newHit.entry() - Tracer.E)));
                 newHit.setEntry(b0 + newHit.entry() - Tracer.E);
                 newHit.setExit(b0 + newHit.exit() - Tracer.E);
-                newHit.setEntity(this);
+                newHit.setEntity(b);
                 if (b1 < a1 && newHit.intersects())
                     return newHit;
                 else

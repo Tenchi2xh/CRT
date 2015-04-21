@@ -112,9 +112,9 @@ public class TestTracer {
         }
 
         Box box = new Box(new Vector3(-0.2, -0.2, -0.2), new Vector3(0.2, 0.2, 0.2), dieMat);
-        Sphere sphere = new Sphere(new Vector3(0.0, 0.0, 0.0), 0.275, dieMat);
+        Sphere sphere = new Sphere(new Vector3(0.0, 0.0, 0.0), 0.275, sphereMat);
 
-        Entity diceBody = new Intersection(box, sphere);
+        Entity diceBody = new Difference(box, sphere);
 
 
         List<Entity> diceElements = new LinkedList<>();
