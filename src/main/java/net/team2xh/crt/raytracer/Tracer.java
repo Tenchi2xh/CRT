@@ -39,6 +39,8 @@ import net.team2xh.crt.raytracer.math.Vector3;
  */
 public class Tracer {
 
+    public final static double E = 0.000000001;
+    
     private JProgressBar pb = null;
     private int counter = 0;
     private double total = 0;

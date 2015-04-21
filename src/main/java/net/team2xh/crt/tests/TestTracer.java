@@ -53,7 +53,8 @@ public class TestTracer {
 
     public TestTracer() {
 
-        Camera camera = new Camera(new Vector3(100, 50, -100), new Vector3(0.0, 0.0, 0.0), 0.6);
+        double d = 1;
+        Camera camera = new Camera(new Vector3(d*0, d*0.5, d*-1), new Vector3(0.0, 0.0, 0.0), 60/d);
         Scene scene = Scene.createScene(1280, 720, camera);
 
         Light lightR = new Light(new Vector3(0.3, 0.3, 0), new Pigment(0.75, 0.2, 0.2));
@@ -70,7 +71,7 @@ public class TestTracer {
         lightF1.setFalloff(0.5);
         lightF2.setFalloff(0.5);
         center.setFalloff(10.5);
-        sun.setAmbient(0.1);
+        sun.setAmbient(0.2);
 
 //        scene.addLight(lightR);
 //        scene.addLight(lightB);
@@ -84,14 +85,14 @@ public class TestTracer {
         scene.getSettings().setProjection(Settings.Projection.PINHOLE);
 
         Material gridMat = new Material(new Pigment(1, 0, 0), 0);
-        for (int x = -10; x <= 10; ++x) {
-            scene.add(new Box(new Vector3(x - 0.01, -0.01, -10), new Vector3(x + 0.01, 0.01, 10), gridMat));
-            scene.add(new Box(new Vector3(-10, -0.01, x - 0.01), new Vector3(10, 0.01, x + 0.01), gridMat));
-        }
-        for (int x = -10; x <= 10; ++x) {
-            scene.add(new Box(new Vector3(x - 0.01, -10, 0 - 0.01), new Vector3(x + 0.01, 10, 0.01), gridMat));
-            scene.add(new Box(new Vector3(-10, x - 0.01, 0 - 0.01), new Vector3(10, x + 0.01, 0.01), gridMat));
-        }
+//        for (int x = -10; x <= 10; ++x) {
+//            scene.add(new Box(new Vector3(x - 0.01, -0.01, -10), new Vector3(x + 0.01, 0.01, 10), gridMat));
+//            scene.add(new Box(new Vector3(-10, -0.01, x - 0.01), new Vector3(10, 0.01, x + 0.01), gridMat));
+//        }
+//        for (int x = -10; x <= 10; ++x) {
+//            scene.add(new Box(new Vector3(x - 0.01, -10, 0 - 0.01), new Vector3(x + 0.01, 10, 0.01), gridMat));
+//            scene.add(new Box(new Vector3(-10, x - 0.01, 0 - 0.01), new Vector3(10, x + 0.01, 0.01), gridMat));
+//        }
         
         
         Material sphereMat = new Material(new Pigment(0.2), 0.3);
@@ -110,28 +111,47 @@ public class TestTracer {
             scene.add(new Sphere(new Vector3(-0.5, -0.125, 0.0 + 0.3*i), 0.125, sphereMat));
         }
 
-        Box box = new Box(new Vector3(-0.2, -0.2, -0.2), new Vector3(0.2, 0.2, 0.2), dieMat);
-        Sphere sphere = new Sphere(new Vector3(0.0, 0.0, 0.0), 0.275, sphereMat);
+//        Box box = new Box(new Vector3(-0.2, -0.2, -0.2), new Vector3(0.2, 0.2, 0.2), dieMat);
+//        Sphere sphere = new Sphere(new Vector3(0.0, 0.0, 0.0), 0.275, dieMat);
+//        Sphere sphere2 = new Sphere(new Vector3(0.1, 0.05, -0.2), 0.2, sphereMat);
+//
+//        Entity test = new Intersection(box, sphere);
+//
+//
+//        List<Entity> dice = new LinkedList<>();
+//        dice.add(test);
+//        for (int i = 0; i < 3; ++i) {
+//            dice.add(new Sphere(new Vector3((1./2.5)*-0.2, (1./2)*-0.2 + i*(1./2)*0.2, -0.2), 0.03, sphereMat));
+//        }
+//        for (int i = 0; i < 3; ++i) {
+//            dice.add(new Sphere(new Vector3((1./2.5)*0.2, (1./2)*-0.2 + i*(1./2)*0.2, -0.2), 0.03, sphereMat));
+//        }
+//        for (int i = 0; i < 2; ++i) {
+//            dice.add(new Sphere(new Vector3((1./2.5)*0.2, 0.2, (1./2)*-0.2 + i*(1.)*0.2), 0.03, sphereMat));
+//        }
+//        for (int i = 0; i < 2; ++i) {
+//            dice.add(new Sphere(new Vector3((1./2.5)*-0.2, 0.2, (1./2)*-0.2 + i*(1.)*0.2), 0.03, sphereMat));
+//        }
+//
+//        test = CSG.subtract(dice);
+        
+        
+        double r1 = 0.2;
+        double r2 = r1/2;
+        double r3 = r1 + r2/2;
+        int n = 5;
+        double a = 2*Math.PI / n;
+        
+        Sphere sphere = new Sphere(new Vector3(0.0, 0.0, 0.0), r1, dieMat);
 
-        Entity test = new Intersection(box, sphere);
-
-
-        List<Entity> dice = new LinkedList<>();
-        dice.add(test);
-        for (int i = 0; i < 3; ++i) {
-            dice.add(new Sphere(new Vector3((1./2.5)*-0.2, (1./2)*-0.2 + i*(1./2)*0.2, -0.2), 0.03, sphereMat));
+        List<Entity> things = new LinkedList<>();
+        things.add(sphere);
+        for (int i = 0; i < n; ++i) {
+            things.add(new Sphere(new Vector3(0, r3 * Math.sin(i*a), r3 * Math.cos(i * a)), r2, dieMat));
+            things.add(new Sphere(new Vector3(r3 * Math.sin(i*a), 0, r3 * Math.cos(i * a)), r2, dieMat));
         }
-        for (int i = 0; i < 3; ++i) {
-            dice.add(new Sphere(new Vector3((1./2.5)*0.2, (1./2)*-0.2 + i*(1./2)*0.2, -0.2), 0.03, sphereMat));
-        }
-        for (int i = 0; i < 2; ++i) {
-            dice.add(new Sphere(new Vector3((1./2.5)*0.2, 0.2, (1./2)*-0.2 + i*(1.)*0.2), 0.03, sphereMat));
-        }
-        for (int i = 0; i < 2; ++i) {
-            dice.add(new Sphere(new Vector3((1./2.5)*-0.2, 0.2, (1./2)*-0.2 + i*(1.)*0.2), 0.03, sphereMat));
-        }
-
-        test = CSG.subtract(dice);
+        
+        Entity test = CSG.subtract(things);
 
         scene.add(test);
 //        scene.add(sphere3);
@@ -147,7 +167,7 @@ public class TestTracer {
 //            scene.add(new Sphere(new Vector3(x, y, z), 0.01, sphereMat));
 //        }
 
-        scene.getSettings().setSupersampling(1);
+        scene.getSettings().setSupersampling(2);
         Tracer tracer = Tracer.getInstance();
 
         w = 1280;

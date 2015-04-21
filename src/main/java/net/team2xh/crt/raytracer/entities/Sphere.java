@@ -19,6 +19,7 @@ package net.team2xh.crt.raytracer.entities;
 import net.team2xh.crt.raytracer.Hit;
 import net.team2xh.crt.raytracer.Material;
 import net.team2xh.crt.raytracer.Ray;
+import net.team2xh.crt.raytracer.Tracer;
 import net.team2xh.crt.raytracer.math.Vector3;
 
 /**
@@ -38,50 +39,66 @@ public class Sphere extends Entity {
 
     @Override
     public Hit intersect(Ray ray) {
-        boolean intersects = true;
-        Vector3 point = null;
+        // http://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection
+        
+        // sphere: | x - c |^2 = r^2
+        // ray: x = o + dl
+        
+        // inject: | o + dl - c |^2 = r^2
+        // (o + dl - c) . (o + dl - c) = r^2
+        
+        //      a            b                   c
+        // d^2(l.l) + 2d(l.(o - c)) + (o - c).(o - c) - r^2 = 0
+        // a = l.l
+        // b = 2(l.(o - c))
+        // c = (o - c).(o - c) - r^2
+        Vector3 co = ray.origin.subtract(center);
+        double a = ray.direction.dot(ray.direction);
+        double b = 2 * (ray.direction.dot(co));
+        double c = co.dot(co) - radius*radius;
+        double delta = b*b - 4*a*c;
+        
+        // No solution
+        if (delta < 0)
+            return Hit.miss;
+        
+        double d1 = (-b + Math.sqrt(delta)) / (2*a);
+        double d2 = (-b - Math.sqrt(delta)) / (2*a);
+        
+        // They're both behind
+        if (d1 < 0.00001 && d2 < Tracer.E)
+            return Hit.miss;
+        
         double entry = 0;
-        double exit = 0;
-        Vector3 normal = null;
-        Vector3 l = center.subtract(ray.origin);
-        double tca = l.dot(ray.direction);
-        if (tca < 0)
-            intersects = false;
-        else {
-            double d2 = l.dot(l) - tca*tca;
-            if (d2 > radius*radius)
-                intersects = false;
-            else {
-                // System.out.println("OKDAOKDSAOKSODK");
-                double thc = Math.sqrt(radius*radius - d2);
-
-                // Have to figure out which way is in the ray's direction
-
-                double t0 = tca - thc;
-                double t1 = tca + thc;
-
-                // http://www.scratchapixel.com/old/assets/Uploads/Lesson007/l007-rayspherecases.png
-                if (t0 >= 0 && t1 > 0) {
-                    entry = t0;
-                    exit = t1;
-                } else if (t0 == t1) {
-                    entry = t0;
-                    exit = t0;
-                } else if (t0 < 0 && t1 > 0) {
-                    entry = t1;
-                    exit = t0;
-                }
-
-                point = ray.origin.add(ray.direction.multiply(entry));
-                normal = point.subtract(center).normalize();
-
-//                if (t0 < 0 && t1 > 0) {
-//                    normal = normal.invert();
-//                }
-
-            }
+        double exit  = 0;
+        boolean inside = true;
+        
+        // If one is negative, we are inside
+        if (d2 < 0 && d1 > 0) {
+            entry = d1;
+            exit  = d2;
         }
-        return new Hit(this, intersects, point, entry, exit, normal);
+        else if (d1 < 0 && d2 > 0) {
+            entry = d2;
+            exit  = d1;
+        }
+        else {
+            entry = Math.min(d1, d2);
+            exit  = Math.max(d1, d2);
+            inside = false;
+        }
+        
+        Vector3 point = ray.origin.add(ray.direction.multiply(entry));
+        Vector3 normal = inside ? center.subtract(point) : point.subtract(center);
+        normal = normal.normalize();
+        
+        Entity test = this;
+        
+        if (inside) {
+//            point = ray.origin.add(ray.direction.multiply(entry));
+        }
+                
+        return new Hit(test, true, point, entry, exit, normal); 
     }
 
     // @Override

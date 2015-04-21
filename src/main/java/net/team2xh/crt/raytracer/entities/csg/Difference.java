@@ -18,6 +18,7 @@ package net.team2xh.crt.raytracer.entities.csg;
 
 import net.team2xh.crt.raytracer.Hit;
 import net.team2xh.crt.raytracer.Ray;
+import net.team2xh.crt.raytracer.Tracer;
 import net.team2xh.crt.raytracer.entities.Entity;
 
 /**
@@ -49,18 +50,27 @@ public class Difference extends CSG {
             double b0 = hitB.entry();
             double b1 = hitB.exit();
 
+            // if both exits are behind the ray's direction, we're in void
+            if (a1 < a0 && b1 < b0) {
+                if (a0 < b0)
+                    return Hit.miss;
+            }
+            
+            // else, must determine better
             if (a1 >= b0 && a1 <= b1 || b1 >= a0 && b1 <= a1) {
                 if (b0 > a0)
                     return hitA;
-                // We are in intersection, that should be void
-                Ray newRay = new Ray(ray.direction, ray.origin.add(ray.direction.multiply(b0 + 0.0001)));
+                // We are in intersection, that could be void
+                // send a new ray from *JUST* after b0, so we are inside of B
+                Ray newRay = new Ray(ray.direction, ray.origin.add(ray.direction.multiply(b0 + Tracer.E)));
                 Hit newHit = b.intersect(newRay);
-                newHit.setPoint(ray.origin.add(ray.direction.multiply(b0 + newHit.entry() - 0.0001)));
-//                System.out.println(b0 + "\t" + newHit.entry() + "\t" + b1 + "\t" + (b0 + newHit.entry()));
-                newHit.setEntry(b0 + newHit.entry() - 0.0001);
+                // Everything should be relative to initial ray, not inside ray
+                newHit.setPoint(ray.origin.add(ray.direction.multiply(b0 + newHit.entry() - Tracer.E)));
+                newHit.setEntry(b0 + newHit.entry() - Tracer.E);
+                newHit.setExit(b0 + newHit.exit() - Tracer.E);
                 newHit.setEntity(this);
                 if (b1 < a1 && newHit.intersects())
-                    return new Hit(this, true, ray.origin.add(ray.direction.multiply(b1)), b1, a1, newHit.normal());
+                    return newHit;
                 else
                     return Hit.miss;
             }

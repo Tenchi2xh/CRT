@@ -73,6 +73,10 @@ public class Hit {
         this.entry = entry;
     }
 
+    public void setExit(double exit) {
+        this.exit = exit;
+    }
+
     public double exit() {
         if (!intersects)
             throw new RuntimeException("Ray does not intersect.");
