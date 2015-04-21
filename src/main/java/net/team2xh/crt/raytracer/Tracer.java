@@ -132,7 +132,7 @@ public class Tracer {
                         Vector3 refl = shadowRay.direction.reflect(n);
                         double angle = Math.max(refl.dot(ray.direction), 0);
                         double factor = Math.pow(angle, m.shininess);
-                        pigment.addSelf(light.mul(color).mul(factor*isl));
+                        pigment.addSelf(light.mul(color).mul(factor*isl*m.specular));
                     }
                 }
             }

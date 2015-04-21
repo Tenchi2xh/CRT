@@ -119,11 +119,11 @@ public class TestTracer {
         }
 
         Material sphereMat = new Material(new Pigment(0.2), 0.6);
-        sphereMat.setSpecular(1.0);
+        sphereMat.setSpecular(4.0);
         sphereMat.setShininess(50.0);
 
         Material dieMat = new Material(new Pigment(0.9), 0.1);
-        dieMat.setSpecular(1.0);
+        dieMat.setSpecular(0.3);
         dieMat.setShininess(50.0);
 
         scene.add(new Plane(new Vector3(0, 1, 0), new Vector3(0.0, -0.3, 0.0), new Material(new Pigment(1.0))));

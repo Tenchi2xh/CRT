@@ -262,7 +262,7 @@ Ray-sphere intersection:
   \draw[->, >=latex] (1.5, 1.0) -- (3.0, 1.0);
   \draw[->, >=latex] (1.5, 2.0) -- (3.0, 2.0);
 
-  \draw[<->] (0.5, 1.0) -- node[midway, below right]{$1$} (0.5, 0.0);
+  \draw[<->] (0.5, 1.0) -- node[midway, below right]{$x$} (0.5, 0.0);
 
   \draw[very thick] (3.0, -0.5) -- (3.0, 2.5);
   \fill[pattern=vertical lines] (3.0, -0.5) rectangle (3.2, 2.5); 
@@ -282,7 +282,7 @@ Ray-sphere intersection:
   \draw[->, >=latex] (1.5, 1.0) -- (3.0, 1.0);
   \draw[->, >=latex] (1.5, 2.0) -- (4.0, 2.0);
 
-  \draw[<->] (0.5, 0.0) -- node[midway, above, fill=white, inner sep=1.1pt]{$\sqrt{2}$} ++(1.0, 1.0);
+  \draw[<->] (0.5, 0.0) -- node[midway, above, fill=white, inner sep=1.1pt]{$\sqrt{x}$} ++(1.0, 1.0);
 
   \draw[very thick] (1.5, -0.5) -- (4.3, 2.3);
   \fill[pattern=north east lines, rotate=-45] (1.4, 0.7) rectangle ++(0.3, 4.0); 
