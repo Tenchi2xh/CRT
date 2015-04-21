@@ -152,7 +152,7 @@ coords.parallelStream().forEach(
 The process of tracing a ray takes the following steps:
 
 1. Start with a black colour
-2. Search for the entity closest to the ray's origin that intersects with the ray
+2. Search for the entity closest to the ray's origin that intersects with the ray. If nothing is hit, return the background colour
 3. For every light in the scene, send a **shadow ray** originated on the intersection point towards the light
     - Add the *ambient* factor of the light
     - If it hits nothing before reaching the light, add a mix of the light's colour and the object's to the current colour. The light's colour contribution is attenuated by two factors:
