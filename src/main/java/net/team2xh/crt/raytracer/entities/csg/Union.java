@@ -42,8 +42,6 @@ public class Union extends CSG {
 
         Hit hitA = a.intersect(ray);
         Hit hitB = b.intersect(ray);
-        hitA.setEntity(this);
-        hitB.setEntity(this);
 
         if (hitA.intersects()) {
             if (hitB.intersects())

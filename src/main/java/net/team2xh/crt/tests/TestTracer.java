@@ -61,7 +61,7 @@ public class TestTracer {
         Light lightB = new Light(new Vector3(-0.3, 0.3, 0), new Pigment(0.2, 0.2, 0.75));
         Light lightF1 = new Light(new Vector3(-0.3, 0.3, -0.8), new Pigment(0.75, 0.0, 0.75));
         Light lightF2 = new Light(new Vector3(0.3, 0.3, -0.8), new Pigment(0.75, 0.75, 0.0));
-        Light sun = new Light(new Vector3(-600, 1000, -400), new Pigment(0.8));
+        Light sun = new Light(new Vector3(-300, 1000, -400), new Pigment(0.8));
         Light center = new Light(Vector3.O, new Pigment(0.75, 0.2, 0.2));
 
         lightR.setAmbient(0.1);
@@ -114,22 +114,21 @@ public class TestTracer {
         Box box = new Box(new Vector3(-0.2, -0.2, -0.2), new Vector3(0.2, 0.2, 0.2), dieMat);
         Sphere sphere = new Sphere(new Vector3(0.0, 0.0, 0.0), 0.275, sphereMat);
 
-        Entity diceBody = new Difference(box, sphere);
-
+        Entity diceBody = new Intersection(sphere, box);
 
         List<Entity> diceElements = new LinkedList<>();
         diceElements.add(diceBody);
         for (int i = 0; i < 3; ++i) {
-            diceElements.add(new Sphere(new Vector3((1./2.5)*-0.2, (1./2)*-0.2 + i*(1./2)*0.2, -0.2), 0.03, sphereMat));
+            diceElements.add(new Sphere(new Vector3((1./2.5)*-0.2, (1./2)*-0.2 + i*(1./2)*0.2, -0.2), 0.03, gridMat));
         }
         for (int i = 0; i < 3; ++i) {
-            diceElements.add(new Sphere(new Vector3((1./2.5)*0.2, (1./2)*-0.2 + i*(1./2)*0.2, -0.2), 0.03, sphereMat));
+            diceElements.add(new Sphere(new Vector3((1./2.5)*0.2, (1./2)*-0.2 + i*(1./2)*0.2, -0.2), 0.03, gridMat));
         }
         for (int i = 0; i < 2; ++i) {
-            diceElements.add(new Sphere(new Vector3((1./2.5)*0.2, 0.2, (1./2)*-0.2 + i*(1.)*0.2), 0.03, sphereMat));
+            diceElements.add(new Sphere(new Vector3((1./2.5)*0.2, 0.2, (1./2)*-0.2 + i*(1.)*0.2), 0.03, gridMat));
         }
         for (int i = 0; i < 2; ++i) {
-            diceElements.add(new Sphere(new Vector3((1./2.5)*-0.2, 0.2, (1./2)*-0.2 + i*(1.)*0.2), 0.03, sphereMat));
+            diceElements.add(new Sphere(new Vector3((1./2.5)*-0.2, 0.2, (1./2)*-0.2 + i*(1.)*0.2), 0.03, gridMat));
         }
 
         Entity dice = CSG.subtract(diceElements);

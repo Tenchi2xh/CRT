@@ -41,26 +41,36 @@ public class Intersection extends CSG {
 
         Hit hitA = a.intersect(ray);
         Hit hitB = b.intersect(ray);
-        hitA.setEntity(this);
-        hitB.setEntity(this);
 
         if (hitA.intersects() && hitB.intersects()) {
             double a0 = hitA.entry();
             double a1 = hitA.exit();
             double b0 = hitB.entry();
             double b1 = hitB.exit();
-            // Both are hit, but are they spacially sharing the same space..
+            
+            if (a0 > a1) {
+                double temp = a1;
+                a1 = a0;
+                a0 = temp;
+            }
+            if (b0 > b1) {
+                double temp = b1;
+                b1 = b0;
+                b0 = temp;
+            }
+            
+            // Both are hit, but are they spacially sharing the same space?
             // Entry and exit points must overlap
-            // A: -----a0=====a1--------
-            // B: --------b0=====b1-----
-            //             or
-            // A: --------a0=====a1-----
-            // B: -----b0=====b1--------
-            if (a1 >= b0 && a1 <= b1 || b1 >= a0 && b1 <= a1) {
-                if (a0 > b0)
+            if (a0 <= b1 && b0 <= a1) {
+                if (a0 > b0) {
+                    hitA.setExit(hitB.exit());
                     return hitA;
+                }
+                hitB.setExit(hitA.exit());
                 return hitB;
             }
+            
+            
         }
 
         return new Hit(null, false, null, 0, 0, null);
