@@ -49,6 +49,27 @@ final public class UniformDistributions {
         double c = 2*Math.PI*a/b;
         return new double[] {b*Math.cos(c), b*Math.sin(c)};
     }
+    
+    /**
+     * Generates a cosine weighted random vector in a unit hemisphere.
+     * 
+     * Source: http://www.rorydriscoll.com/2009/01/07/better-sampling/
+     * 
+     * @return 
+     */
+    public static Vector3 randomVectorInHemisphere() {
+        
+        double u1 = rand.nextDouble();
+        double u2 = rand.nextDouble();
+        
+        double r = Math.sqrt(u1);
+        double theta = 2 * Math.PI * u2;
+        
+        double x = r * Math.cos(theta);
+        double y = r * Math.sin(theta);
+        
+        return new Vector3(x, y, Math.sqrt(Math.max(0, 1 - u1)));
+    }
 
     public static double[] randomPolygonPoint2(int degree) {
         double x, y;

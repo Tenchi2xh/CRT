@@ -30,6 +30,7 @@ public final class Settings {
     double fovFactor;
     int supersampling = 1;
     int dofSamples = 1;
+    int aoSamples = 16;
     int recurDepth = 3;
     boolean showClip = false;
     Projection projection = Projection.PINHOLE;
