@@ -38,7 +38,7 @@ public class ParallelLight extends Light {
     }
 
     private void init(Vector3 from, Vector3 pointingTo) {
-        direction = pointingTo.subtract(from).normalize();
+        direction = from.subtract(pointingTo).normalize();
     }
     
     @Override
@@ -53,7 +53,7 @@ public class ParallelLight extends Light {
 
     @Override
     public double getDistance(Vector3 from) {
-        return 0.0;
+        return 10000.0;
     }
     
 }
