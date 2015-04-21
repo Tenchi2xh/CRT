@@ -55,10 +55,20 @@ public class Difference extends CSG {
                 }
             }
             
+            if (a0 > a1) {
+                double temp = a1;
+                a1 = a0;
+                a0 = temp;
+            }
+            if (b0 > b1) {
+                double temp = b1;
+                b1 = b0;
+                b0 = temp;
+            }
+            
             // else, must determine better
-            if (a1 >= b0 && a1 <= b1 || b1 >= a0 && b1 <= a1) {
-                if (b0 > a0)
-                    return hitA;
+            if (a0 <= b1 && b0 <= a1) {
+
                 // We are in intersection, that could be void
                 // send a new ray from *JUST* after b0, so we are inside of B
                 Ray newRay = new Ray(ray.direction, ray.origin.add(ray.direction.multiply(b0 + Tracer.E)));
@@ -68,10 +78,14 @@ public class Difference extends CSG {
                 newHit.setEntry(b0 + newHit.entry() - Tracer.E);
                 newHit.setExit(b0 + newHit.exit() - Tracer.E);
                 newHit.setEntity(b);
+                if (b0 > a0) {
+                    hitA.setExit(newHit.entry());
+                    return hitA;
+                }
                 if (b1 < a1 && newHit.intersects())
                     return newHit;
-                else
-                    return Hit.miss;
+                
+                return Hit.miss;
             }
         }
 
