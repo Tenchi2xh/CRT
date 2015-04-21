@@ -16,6 +16,7 @@
  */
 package net.team2xh.crt.raytracer;
 
+import net.team2xh.crt.raytracer.lights.Light;
 import java.util.ArrayList;
 import java.util.List;
 import net.team2xh.crt.raytracer.entities.Entity;

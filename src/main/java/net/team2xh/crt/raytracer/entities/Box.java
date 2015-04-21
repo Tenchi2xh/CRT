@@ -119,6 +119,7 @@ public class Box extends Entity {
                     
                     String plane = planeNear;
                     
+                    
                     if (contains(ray.origin)) {
                         plane = planeFar;
                         entry = tmax;

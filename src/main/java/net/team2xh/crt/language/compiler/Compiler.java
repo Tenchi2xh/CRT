@@ -24,7 +24,7 @@ import net.team2xh.crt.language.parser.CRTParser;
 import net.team2xh.crt.language.parser.CRTParser.*;
 import net.team2xh.crt.raytracer.Background;
 import net.team2xh.crt.raytracer.Camera;
-import net.team2xh.crt.raytracer.Light;
+import net.team2xh.crt.raytracer.lights.Light;
 import net.team2xh.crt.raytracer.Pigment;
 import net.team2xh.crt.raytracer.Scene;
 import net.team2xh.crt.raytracer.Settings;

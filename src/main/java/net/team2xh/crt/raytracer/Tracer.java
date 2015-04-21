@@ -16,6 +16,7 @@
  */
 package net.team2xh.crt.raytracer;
 
+import net.team2xh.crt.raytracer.lights.Light;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.function.BiConsumer;
@@ -76,38 +77,42 @@ public class Tracer {
         }
         totalDist += minDist;
         if (closest != null) {
-            Entity c = closest.entity();
-            Material m = c.material;
+            
+            // Point should not be exactly on the intersection surface but just a bit before
+            double distance = ray.origin.distanceTo(closest.point()) - E;
+            Vector3 point = ray.origin.add(ray.direction.multiply(distance));
+            
+            Material m = closest.entity().material;
             Vector3 n = closest.normal();
 
             for (Light l : scene.getLights()) {
 
                 boolean isInShadow = false;
 
-                Ray shadowRay = Ray.between(closest.point(), l.origin);
-                double lightDist = closest.point().distanceTo(l.origin);
+                Ray shadowRay = new Ray(l.getDirection(point), point);
+                double lightDist = l.getDistance(point);
 
                 // Find out if point is in shadow
                 for (Entity e : scene.getEntities()) {
                     Hit h2 = e.intersect(shadowRay);
-                    if (h2.intersects() && closest.point().distanceTo(h2.point()) < lightDist) {
+                    if (h2.intersects() && point.distanceTo(h2.point()) < lightDist) {
                         isInShadow = true;
                         break;
                     }
                 }
 
                 Pigment  color    = m.color;
-                Pigment  light    = l.color;
+                Pigment  light    = l.getColor();
 
                 // Inverse square law
                 double isl = 1.0;
-                if (l.falloff > 0)
-                    isl = l.falloff / ((lightDist+totalDist)*(lightDist+totalDist));
+                if (l.getFalloff() > 0)
+                    isl = l.getFalloff() / ((lightDist+totalDist)*(lightDist+totalDist));
 
                 // Add ambient component
-                if (l.ambient > 0)
+                if (l.getAmbient() > 0)
                     pigment.addSelf(
-                        light.mul(l.ambient).mul(1.0 - m.reflectivity)
+                        light.mul(l.getAmbient()).mul(1.0 - m.reflectivity)
                     );
 
 
@@ -134,7 +139,7 @@ public class Tracer {
             // Add reflection component
             if (m.reflectivity > 0 && depth > 0) {
                 Vector3 reflection = ray.direction.reflect(n);
-                Ray reflectionRay = new Ray(reflection, closest.point());
+                Ray reflectionRay = new Ray(reflection, point);
                 Pigment reflectionColor = trace(reflectionRay, depth - 1, totalDist, scene);
                 pigment.addSelf(reflectionColor.mul(m.reflectivity));
             }

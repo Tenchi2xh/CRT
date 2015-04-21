@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Hamza Haiken (hamza.haiken@heig-vd.ch)
+ * Copyright (C) 2015 Tenchi
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,38 +14,41 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.team2xh.crt.raytracer;
+package net.team2xh.crt.raytracer.lights;
 
+import net.team2xh.crt.raytracer.Pigment;
 import net.team2xh.crt.raytracer.math.Vector3;
 
 /**
  *
- * @author Hamza Haiken (hamza.haiken@heig-vd.ch)
+ * @author Tenchi
  */
-public class Light {
+public class PointLight extends Light {
 
-    public Vector3 origin;
-    public double falloff = -1;
-    public double ambient = 0.0;
-    public Pigment color;
-
-    public Light(Vector3 origin, Pigment pigment) {
-        this.color  = pigment;
+    private Vector3 origin;
+    
+    public PointLight(Vector3 origin, Pigment pigment) {
+        super(pigment);
+        init(origin);
+    }
+    
+    public PointLight(Vector3 origin, Pigment pigment, double ambient) {
+        super(pigment, ambient);
+        init(origin);
+    }
+    
+    private void init(Vector3 origin) {
         this.origin = origin;
     }
 
-    public Light(Vector3 origin, Pigment pigment, double ambient) {
-        this.origin  = origin;
-        this.color   = pigment;
-        this.ambient = ambient;
+    @Override
+    public Vector3 getDirection(Vector3 from) {
+        return origin.subtract(from).normalize();
     }
 
-    public void setAmbient(double ambient) {
-        this.ambient = ambient;
+    @Override
+    public double getDistance(Vector3 from) {
+        return from.distanceTo(origin);
     }
-
-    public void setFalloff(double falloff) {
-        this.falloff = falloff;
-    }
-
+    
 }

@@ -71,3 +71,5 @@
     + System with up and right vectors
     + Left-handed coordinate system
     + Corrected camera projections
+- Rewrote how lights work. Now each light type has to give its own direction vector and distance. This lead to correct a bug where a light source is inside a primitive, because the ray intersection point is exactly on the surface, it tries to go through anyway instead of stopping
+- Much work on CSG
