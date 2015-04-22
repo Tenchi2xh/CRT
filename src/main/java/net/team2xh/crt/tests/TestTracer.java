@@ -179,6 +179,9 @@ public class TestTracer {
 //            scene.add(new Sphere(new Vector3(x, y, z), 0.01, sphereMat));
 //        }
         scene.getSettings().setSupersampling(2);
+        scene.getSettings().setDOFSamples(40);
+        camera.setAperture(15);
+        camera.setFocalDistance(0.9);
         Tracer tracer = Tracer.getInstance();
 
         bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);

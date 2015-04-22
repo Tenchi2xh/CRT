@@ -376,8 +376,15 @@ public class Tracer {
 //                Vector3 aperturePoint = camera.getMatrix().rotate(new Vector3(focX, focY, 0));
 //                Vector3 newDirection = direction.add(aperturePoint);
 //                Vector3 newOrigin = origin.subtract(aperturePoint);
-//
-//                samples[i] = trace(new Ray(newDirection, newOrigin), settings.recurDepth, 0, scene);
+
+                // TODO diagrams
+                rightComponent = camera.getRight().multiply(focX);
+                upComponent = camera.getUp().multiply(focY);
+                Vector3 aperturePoint = rightComponent.add(upComponent);
+                Vector3 newOrigin = origin.subtract(aperturePoint);
+                Vector3 newDirection = direction.multiply(focalDistance).add(aperturePoint).normalize();
+
+                samples[i] = trace(new Ray(newDirection, newOrigin), settings.recurDepth, 0, scene);
             }
             pigment = Pigment.getAverage(samples);
         }
