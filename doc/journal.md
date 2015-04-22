@@ -7,7 +7,7 @@
 
 # 09.03.2015 - 15.03.2015
 
-- GitHub repository[^https://github.com/Tenchi2xh/CRT] created
+- GitHub repository^[https://github.com/Tenchi2xh/CRT] created
     - `.gitignore` file tailored for project
 - Specifications document
 - Maven project created via NetBeans
