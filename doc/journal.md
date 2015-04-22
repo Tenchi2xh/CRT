@@ -78,3 +78,4 @@
 - Animation test
 - Drew diagrams with TikZ for light explanations
 - Experimented with global illumination
+- Adapted depth-of-field calculations to new camera system
