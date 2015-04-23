@@ -87,3 +87,5 @@
     + JVM arguments
 - Set up base test for jPCT loop
 - Basic Scene to jPCT converter
+- Ported lighting system
+- Basic shadow mapping for first parallel light only
