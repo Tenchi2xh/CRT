@@ -186,6 +186,68 @@ Ray:
 
 $$ \vec{o} + t\vec{r} $$
 
+\usetikzlibrary{decorations.pathreplacing}
+\begin{figure}[h]
+\centering
+
+\begin{tikzpicture}[scale=0.9]
+\coordinate (o) at (-3, 0, 0);
+
+\draw[fill] (o) circle (1pt) node[left]{$\vec{o}$};
+\draw[thick] (o) -- (0.8, 0, 0);
+\draw[thick, dashed] (0.8, 0, 0) -- (2, 0, 0);
+\draw[->, thick, >=latex] (2, 0, 0) -- (4, 0, 0) node[right]{$\vec{d}$};
+
+\draw[very thin] (2, -3.0, -3.0) -- ++(0, 0, 6);
+\draw[very thin] (2, -1.0, -3.0) -- ++(0, 0, 6);
+\draw[very thin] (2, 1.0, -3.0) -- ++(0, 0, 6);
+\draw[very thin] (2, 3.0, -3.0) -- ++(0, 0, 6);
+
+\draw[very thin] (2, -3.0, -3.0) -- ++(0, 6, 0);
+\draw[very thin] (2, -3.0, -1.0) -- ++(0, 6, 0);
+\draw[very thin] (2, -3.0, 1.0) -- ++(0, 6, 0);
+\draw[very thin] (2, -3.0, 3.0) -- ++(0, 6, 0);
+
+%\draw[loosely dotted] (o) -- (2, -3, -3);
+%\draw[loosely dotted] (o) -- (2, 3, -3);
+%\draw[loosely dotted] (o) -- (2, -3, 3);
+%\draw[loosely dotted] (o) -- (2, 3, 3);
+
+\coordinate (p1) at (2, -2, -2);
+\coordinate (p2) at (2, -2, 0);
+\coordinate (p3) at (2, -2, 2);
+\coordinate (p4) at (2, 0, -2);
+\coordinate (p5) at (2, 0, 0);
+\coordinate (p6) at (2, 0, 2);
+\coordinate (p7) at (2, 2, -2);
+\coordinate (p8) at (2, 2, 0);
+\coordinate (p9) at (2, 2, 2);
+
+\draw[fill] (p1) circle (0.5pt);
+\draw[fill] (p2) circle (0.5pt);
+\draw[fill] (p3) circle (0.5pt);
+\draw[fill] (p4) circle (0.5pt);
+\draw[fill] (p5) circle (1pt);
+\draw[fill] (p6) circle (0.5pt);
+\draw[fill] (p7) circle (1pt) node[above]{$\vec{p}_{i,j}$};
+\draw[fill] (p8) circle (0.5pt);
+\draw[fill] (p9) circle (0.5pt);
+
+\draw[] (o) -- (2, 3, 3);
+\draw[->, >=latex, dashed] (2, 3, 3) -- (p7);
+\draw[dotted] (2, 0, 0) -- (2, 0, -2);
+\draw[dotted] (p7) -- (2, 0, -2);
+\draw[dotted] (o) -- (2, 0, -2);
+
+\draw[decorate, decoration={brace, amplitude=5pt}, xshift=2pt] ([xshift=2pt]p7) -- node[right, xshift=4pt, yshift=-2pt]{$n_y$} (2, 0, -2);
+
+\draw[decorate, decoration={brace, amplitude=5pt, mirror}, xshift=2pt] (2, 0, 0) -- node[below right, xshift=2pt]{$n_x$} (2, 0, -2);
+
+\end{tikzpicture}
+
+\caption{Primary ray}
+\end{figure}
+
 ### Primitives
 
 Sphere:

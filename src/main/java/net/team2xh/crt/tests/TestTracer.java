@@ -89,7 +89,7 @@ public class TestTracer {
         center.setFalloff(10.5);
         sun.setAmbient(0.35);
 
-        boolean day = true;
+        boolean day = false;
         double b = 1.0;
 
         if (day) {
