@@ -70,7 +70,9 @@ public class TestTracer {
 //        for (int t = 0; t < 60; ++t) {
 //            double d = 0.9 + 0.001*t*t;
         double d = 1;
-        Camera camera = new Camera(new Vector3(d * -0.4, d * 0.45, d * -0.9), new Vector3(0.0, 0.0, 0.0), 60 / d);
+//        Camera camera = new Camera(new Vector3(d * -0.4, d * 0.45, d * -0.9), new Vector3(0.0, 0.0, 0.0), 60 / d);
+        Camera camera = new Camera(new Vector3(d * 1.4, d * 1.45, d * -1.9), new Vector3(0.0, 0.0, 0.0), 40 / d);
+
         Scene scene = Scene.createScene(w, h, camera);
 
         Light lightR = new PointLight(new Vector3(0.3, 0.3, 0), new Pigment(0.75, 0.2, 0.2));
@@ -89,7 +91,7 @@ public class TestTracer {
         center.setFalloff(10.5);
         sun.setAmbient(0.35);
 
-        boolean day = false;
+        boolean day = true;
         double b = 1.0;
 
         if (day) {
@@ -167,7 +169,7 @@ public class TestTracer {
         }
 
         Entity dice = CSG.subtract(diceElements);
-        scene.add(diceBody);
+        scene.add(box);
 
 //        scene.add(new Sphere(new Vector3(0.0,  0.125, -0.3), 0.065, sphereMat));
 //        scene.add(new Sphere(new Vector3(0.0, -0.125, -0.3), 0.065, sphereMat));
@@ -179,7 +181,7 @@ public class TestTracer {
 //            scene.add(new Sphere(new Vector3(x, y, z), 0.01, sphereMat));
 //        }
         scene.getSettings().setSupersampling(2);
-        scene.getSettings().setDOFSamples(40);
+//        scene.getSettings().setDOFSamples(40);
         camera.setAperture(15);
         camera.setFocalDistance(0.9);
         Tracer tracer = Tracer.getInstance();

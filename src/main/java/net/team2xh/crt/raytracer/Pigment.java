@@ -17,6 +17,7 @@
 package net.team2xh.crt.raytracer;
 
 import java.awt.Color;
+import net.team2xh.crt.raytracer.math.Vector3;
 
 /**
  * Class for representing colors. Supports several formats
@@ -253,6 +254,10 @@ public class Pigment {
         return Color.RGBtoHSB((int)(r*255), (int)(g*255),(int)(b*255), null)[0];
     }
 
+    public Vector3 getVector() {
+        return new Vector3(r, g, b);
+    }
+    
     @Override
     public String toString() {
         return String.format("#%02x%02x%02x %d%%", (int)(r*255), (int)(g*255), (int)(b*255), (int)(a*100));

@@ -57,6 +57,10 @@ public class Box extends Entity {
         return max(2) - min(2);
     }
 
+    public Vector3 getMinCorner() {
+        return new Vector3(min(0), min(1), min(2));
+    }
+    
     @Override
     public Vector3 getCenter() {
         return new Vector3((max(0) - min(0)) / 2, (max(1) - min(1)) / 2, (max(2) - min(2)) / 2);

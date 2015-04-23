@@ -183,6 +183,10 @@ public class Vector3 {
     public SimpleVector simpleVector() {
         return SimpleVector.create((float) x, (float) y, (float) z);
     }
+    
+    public Vector3 getRightHanded() {
+        return new Vector3(x, -y, z);
+    }
 
     @Override
     public String toString() {

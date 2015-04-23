@@ -51,4 +51,8 @@ public class PointLight extends Light {
         return from.distanceTo(origin);
     }
     
+    public Vector3 getOrigin() {
+        return origin;
+    }
+    
 }
