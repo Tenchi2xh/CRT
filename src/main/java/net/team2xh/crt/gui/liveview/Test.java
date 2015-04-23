@@ -16,9 +16,9 @@
  */
 package net.team2xh.crt.gui.liveview;
 
+import com.threed.jpct.Config;
 import com.threed.jpct.FrameBuffer;
 import com.threed.jpct.IRenderer;
-import com.threed.jpct.Matrix;
 import com.threed.jpct.Object3D;
 import com.threed.jpct.Primitives;
 import com.threed.jpct.Projector;
@@ -32,13 +32,13 @@ import com.threed.jpct.util.ShadowHelper;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
-import java.awt.event.ActionEvent;
 import java.io.InputStream;
 import java.util.logging.Level;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import net.team2xh.crt.gui.util.GUIToolkit;
+import net.team2xh.crt.raytracer.Material;
 import net.team2xh.crt.raytracer.Scene;
 import net.team2xh.crt.raytracer.entities.Box;
 import net.team2xh.crt.raytracer.entities.Entity;
@@ -65,10 +65,12 @@ public class Test {
     SimpleVector sun = null;
 
     private Scene scene = new TestScene();
+    private final JButton camLt;
+    private final JButton camRt;
 
     public Test() {
-        frame = new JFrame("Hello world");
-        buffer = new FrameBuffer(scene.getSettings().getWidth(), scene.getSettings().getHeight(), FrameBuffer.SAMPLINGMODE_NORMAL);
+        frame = new JFrame("CRT OpenGL Renderer");
+        buffer = new FrameBuffer(scene.getSettings().getWidth(), scene.getSettings().getHeight(), FrameBuffer.SAMPLINGMODE_GL_AA_4X);
 
         projector = new Projector();
         projector.setFOV(1.5f);
@@ -78,49 +80,73 @@ public class Test {
         buffer.disableRenderer(IRenderer.RENDERER_SOFTWARE);
         frame.getContentPane().add(canvas, BorderLayout.CENTER);
 
+        Config.lightMul = 5;
+        Config.specPow = 50;
+        Config.specTerm = 15;
+        Config.glShadowZBias = 0.03f;
+        Config.nearPlane = 0.03f;
+
         JPanel buttons = new JPanel();
-        JButton camUp = new JButton("^");
-        JButton camDn = new JButton("v");
-        JButton camLt = new JButton("<");
-        JButton camRt = new JButton(">");
-        camUp.addActionListener((ActionEvent e) -> {
-            moveCamera(0, 1);
-        });
-        camDn.addActionListener((ActionEvent e) -> {
-            moveCamera(0, -1);
-        });
-        camLt.addActionListener((ActionEvent e) -> {
-            moveCamera(-1, 0);
-        });
-        camRt.addActionListener((ActionEvent e) -> {
-            moveCamera(1, 0);
-        });
-        buttons.add(camUp);
-        buttons.add(camDn);
+        camLt = new JButton("<");
+        camRt = new JButton(">");
         buttons.add(camLt);
         buttons.add(camRt);
         frame.add(buttons, BorderLayout.PAGE_END);
-        
+
         frame.pack();
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         GUIToolkit.centerFrame(frame);
 
-
         world = new World();
+//        world.setAmbientLight(-100, -100, -100);
         world.setAmbientLight(0, 0, 0);
+
         InputStream unknown = getClass().getResourceAsStream("/resources/images/unknown.png");
         TextureManager.getInstance().addTexture("unknown", new Texture(unknown, true));
 
-        sh = new ShadowHelper(world, buffer, projector, 2048);
-        sh.setCullingMode(false);
-        sh.setAmbientLight(new Color(30, 30, 30));
-        sh.setLightMode(true);
-        sh.setBorder(1);
+        for (net.team2xh.crt.raytracer.lights.Light l0 : scene.getLights()) {
+            Light l1 = new Light(world);
+            Class type = l0.getClass();
+
+            if (type == PointLight.class) {
+                PointLight pl = (PointLight) l0;
+                l1.setPosition(pl.getOrigin().getRightHanded().simpleVector());
+
+            } else if (type == ParallelLight.class) {
+                ParallelLight pl = (ParallelLight) l0;
+                SimpleVector pos = pl.getDirection(Vector3.O).multiply(20).getRightHanded().simpleVector();
+                l1.setPosition(pos);
+                if (sun == null) {
+                    sun = pos;
+                    System.out.println(pos);
+                }
+            }
+
+            SimpleVector intensity = l0.getColor().getVector().simpleVector();
+            intensity.scalarMul(6f);
+            l1.setIntensity(intensity);
+            l1.setAttenuation((float) l0.getFalloff());
+
+            if (type == ParallelLight.class) {
+                intensity.scalarMul(6f);
+                l1.setIntensity(intensity);
+            }
+        }
+
+        if (sun != null) {
+            sh = new ShadowHelper(world, buffer, projector, 4096*2);
+            sh.setCullingMode(false);
+            sh.setAmbientLight(new Color(0, 0, 0));
+            sh.setLightMode(true);
+            sh.setBorder(1);
+        }
 
         for (Entity e : scene.getEntities()) {
             Object3D obj;
             Class type = e.getClass();
+
+            boolean sprite = false;
 
             if (type == Box.class) {
                 Box box = (Box) e;
@@ -134,85 +160,99 @@ public class Test {
                 Sphere sphere = (Sphere) e;
                 obj = Primitives.getSphere((float) sphere.getRadius());
             } else if (type == Plane.class) {
-                obj = ExtendedPrimitives.createPlane(100);
+                obj = ExtendedPrimitives.createPlane(0.5f, 100);
             } else {
                 obj = ExtendedPrimitives.createSprite(0.2f);
                 obj.setTexture("unknown");
                 obj.setTransparency(20);
+                sprite = true;
             }
 
-            sh.addCaster(obj);
-            sh.addReceiver(obj);
+            if (sun != null && !sprite) {
+                sh.addCaster(obj);
+                sh.addReceiver(obj);
+            }
 
             obj.translate(e.getCenter().getRightHanded().simpleVector());
 
-            obj.setAdditionalColor(e.getMaterial().color.getColor());
+            Material m = e.getMaterial();
+
+            obj.setSpecularLighting(true);
+            obj.setAdditionalColor(m.color.getColor().darker().darker().darker().darker());
             obj.build();
+
             world.addObject(obj);
         }
 
-        for (net.team2xh.crt.raytracer.lights.Light l0 : scene.getLights()) {
-            Light l1 = new Light(world);
-            Class type = l0.getClass();
+        if (sun != null) {
+            projector.setPosition(sun);
+            projector.lookAt(SimpleVector.ORIGIN);
 
-            if (type == PointLight.class) {
-                PointLight pl = (PointLight) l0;
-                l1.setPosition(pl.getOrigin().getRightHanded().invert().simpleVector());
-            } else if (type == ParallelLight.class) {
-                ParallelLight pl = (ParallelLight) l0;
-                SimpleVector pos = pl.getDirection(Vector3.O).multiply(20).getRightHanded().invert().simpleVector();
-                l1.setPosition(pos);
-                if (sun == null) {
-                    sun = pos;
-                    System.out.println(pos);
-                }
-            }
-
-            SimpleVector intensity = l0.getColor().getVector().simpleVector();
-            intensity.scalarMul(255f * (float) l0.getFalloff());
-            l1.setIntensity(intensity);
-//            l1.setAttenuation((float) l0.getFalloff());
+            sh.updateShadowMap();
         }
 
         float vfov = (float) scene.getCamera().getVerticalFov();
         float hfov = 2 * (float) Math.atan(Math.tan(vfov / 2) * scene.getSettings().getWidth() / scene.getSettings().getHeight());
 
         world.getCamera().setFovAngle(hfov);
-        world.getCamera().setPosition(scene.getCamera().getPosition().getRightHanded().simpleVector());
-        world.getCamera().lookAt(scene.getCamera().getPointing().getRightHanded().simpleVector());
+        camOrigPos = scene.getCamera().getPosition().getRightHanded().simpleVector();
+        camLookAt = scene.getCamera().getPointing().getRightHanded().simpleVector();
+        world.getCamera().setPosition(camOrigPos);
+        world.getCamera().lookAt(camLookAt);
 
     }
 
-    private void moveCamera(int x, int y) {
-        world.getCamera().rotateCameraY(x * 0.05f);
-//        Matrix rot = world.getCamera().getBack();
+    private SimpleVector camOrigPos;
+    private SimpleVector camLookAt;
 
-//        rot.rotateX(x * 0.1f);
-//        rot.rotateY(y * 0.1f);
+    private void moveCameraX(double a) {
 
-//        world.getCamera().setBack(rot.cloneMatrix());
+        SimpleVector camPos = world.getCamera().getPosition();
+
+        float s = (float) Math.sin(a);
+        float c = (float) Math.cos(a);
+
+        camPos.x -= camLookAt.x;
+        camPos.z -= camLookAt.z;
+
+        float cpx = camPos.x * c - camPos.z * s;
+        float cpz = camPos.x * s + camPos.z * c;
+
+        camPos.x = cpx + camLookAt.x;
+        camPos.z = cpz + camLookAt.z;
+
+        world.getCamera().setPosition(camPos);
+        world.getCamera().lookAt(camLookAt);
     }
 
     private void loop() throws InterruptedException {
 
         while (frame.isShowing()) {
 
-            if (sun != null) {
-                projector.setPosition(sun);
-                projector.lookAt(SimpleVector.ORIGIN);
-                sh.updateShadowMap();
+            double mdx = 0.0;
+            double mdy = 0.0;
+            if (camRt.getModel().isPressed()) {
+                mdx += 0.05;
+            }
+            if (camLt.getModel().isPressed()) {
+                mdx -= 0.05;
+            }
+            if (mdx != 0) {
+                moveCameraX(mdx);
             }
 
             buffer.clear(java.awt.Color.GRAY);
-            world.renderScene(buffer);
-            world.draw(buffer);
             if (sun != null) {
                 sh.drawScene();
+            } else {
+                world.renderScene(buffer);
+                world.draw(buffer);
             }
             buffer.update();
             buffer.displayGLOnly();
             canvas.repaint();
             Thread.sleep(10);
+
         }
         buffer.disableRenderer(IRenderer.RENDERER_OPENGL);
         buffer.dispose();

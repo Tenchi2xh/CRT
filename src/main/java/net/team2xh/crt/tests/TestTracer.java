@@ -101,7 +101,7 @@ public class TestTracer {
             scene.addLight(lightB);
             scene.addLight(lightF1);
             scene.addLight(lightF2);
-            scene.addLight(center);
+//            scene.addLight(center);
             b = 0.2;
         }
 
@@ -111,7 +111,7 @@ public class TestTracer {
         scene.getSettings().setProjection(Settings.Projection.PINHOLE);
 
         Material gridMat = new Material(new Pigment(1, 0, 0), 0);
-        boolean grid = false;
+        boolean grid = true;
 
         if (grid) {
             for (int x = -10; x <= 10; ++x) {
@@ -198,7 +198,7 @@ public class TestTracer {
         image.setPreferredSize(new Dimension(w, h));
 
         if (show) {
-            JFrame f = new JFrame("Tracer Test");
+            JFrame f = new JFrame("CRT");
             JPanel panel = new JPanel(new BorderLayout());
             panel.add(image, BorderLayout.CENTER);
             panel.add(new JLabel("OKADOKADS"), BorderLayout.PAGE_END);

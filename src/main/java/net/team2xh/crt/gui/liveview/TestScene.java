@@ -74,7 +74,7 @@ public class TestScene extends Scene {
             this.addLight(lightB);
             this.addLight(lightF1);
             this.addLight(lightF2);
-            this.addLight(center);
+//            this.addLight(center);
             b = 0.2;
         }
 
@@ -84,7 +84,7 @@ public class TestScene extends Scene {
         this.getSettings().setProjection(Settings.Projection.PINHOLE);
 
         Material gridMat = new Material(new Pigment(1, 0, 0), 0);
-        boolean grid = false;
+        boolean grid = true;
 
         if (grid) {
             for (int x = -10; x <= 10; ++x) {
