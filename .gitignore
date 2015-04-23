@@ -8,8 +8,6 @@ nbactions.xml
 # nb-configuration.xml
 .nb-gradle/
 
-!repo/**/*
-
 ### Java ###
 *.class
 
@@ -17,6 +15,7 @@ nbactions.xml
 *.jar
 *.war
 *.ear
+!repo/**/*.jar
 
 # virtual machine crash logs
 hs_err_pid*
