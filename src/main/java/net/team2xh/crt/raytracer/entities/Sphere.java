@@ -100,11 +100,20 @@ public class Sphere extends Entity {
                 
         return new Hit(test, true, point, entry, exit, normal); 
     }
-
+    
     // @Override
     // public Vector3 normal(Vector3 point) {
     //     if (point == null)
     //         return null;
     //     return point.subtract(center).normalize();
     // }
+
+    @Override
+    public Vector3 getCenter() {
+        return center;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
 }

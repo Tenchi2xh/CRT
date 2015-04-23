@@ -207,7 +207,7 @@ public class TestTracer {
         }
         
         ForkJoinPool pool = new ForkJoinPool(6);
-        pool.execute(() -> tracer.render(3, (int[][] p, Integer i) -> draw(p, i, w, h), scene));
+        pool.execute(() -> tracer.render(5, (int[][] p, Integer i) -> draw(p, i, w, h), scene));
         try {
             synchronized (sync) {
                 sync.wait();

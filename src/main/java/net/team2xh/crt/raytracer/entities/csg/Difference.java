@@ -20,6 +20,7 @@ import net.team2xh.crt.raytracer.Hit;
 import net.team2xh.crt.raytracer.Ray;
 import net.team2xh.crt.raytracer.Tracer;
 import net.team2xh.crt.raytracer.entities.Entity;
+import net.team2xh.crt.raytracer.math.Vector3;
 
 /**
  *
@@ -34,6 +35,11 @@ public class Difference extends CSG {
         super(a.material);
         this.a = a;
         this.b = b;
+    }
+    
+    @Override
+    public Vector3 getCenter() {
+        return a.getCenter().add(b.getCenter()).multiply(0.5);
     }
 
     @Override

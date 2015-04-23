@@ -20,6 +20,7 @@ import net.team2xh.crt.raytracer.Hit;
 import net.team2xh.crt.raytracer.Material;
 import net.team2xh.crt.raytracer.Pigment;
 import net.team2xh.crt.raytracer.Ray;
+import net.team2xh.crt.raytracer.math.Vector3;
 
 /**
  *
@@ -42,6 +43,16 @@ public abstract class Entity {
     }
 
     public abstract Hit intersect(Ray ray);
+    
+    public abstract Vector3 getCenter();
 
     // public abstract Vector3 normal(Vector3 point);
+
+    public Material getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(Material material) {
+        this.material = material;
+    }
 }

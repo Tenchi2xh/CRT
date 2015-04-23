@@ -140,4 +140,13 @@ public final class Settings {
             return definition;
         }
     }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+    
 }

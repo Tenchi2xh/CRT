@@ -25,7 +25,7 @@ import net.team2xh.crt.raytracer.math.Vector3;
  */
 public class Camera {
 
-    private Vector3 position, direction, up, right;
+    private Vector3 position, pointing, direction, up, right;
 
     private double roll = 0;
     
@@ -40,6 +40,7 @@ public class Camera {
 
     public Camera(Vector3 position, Vector3 pointing, double verticalFov) {
         this.position = position;
+        this.pointing = pointing;
         setVerticalFov(verticalFov);
 
         direction = pointing.subtract(position).normalize();
@@ -53,6 +54,10 @@ public class Camera {
         return position;
     }
 
+    public Vector3 getPointing() {
+        return pointing;
+    }
+    
     public Vector3 getDirection() {
         return direction;
     }

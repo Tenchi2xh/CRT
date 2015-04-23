@@ -44,6 +44,23 @@ public class Box extends Entity {
     private double max(int i) {
         return Math.max(cornerA.components()[i], cornerB.components()[i]);
     }
+    
+    public double getWidth() {
+        return max(0) - min(0);
+    }
+    
+    public double getHeight() {
+        return max(1) - min(1);
+    }
+    
+    public double getDepth() {
+        return max(2) - min(2);
+    }
+
+    @Override
+    public Vector3 getCenter() {
+        return new Vector3((max(0) - min(0)) / 2, (max(1) - min(1)) / 2, (max(2) - min(2)) / 2);
+    }
 
     private boolean contains(Vector3 point) {
         return point.x >= min(0) && point.x <= max(0)

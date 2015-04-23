@@ -79,3 +79,11 @@
 - Drew diagrams with TikZ for light explanations
 - Experimented with global illumination
 - Adapted depth-of-field calculations to new camera system
+
+# 23.04.2015 - 29.04.2015
+
+- Set up base environment for jPCT + LWJGL in Maven
+    + Local repository
+    + JVM arguments
+- Set up base test for jPCT loop
+- Basic Scene to jPCT converter

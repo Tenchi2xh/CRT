@@ -57,7 +57,7 @@ public class Scene {
 
     public void setCamera(Camera camera) {
         this.camera = camera;
-        settings.updateFov();
+        if (settings != null) settings.updateFov();
     }
 
     public void addLight(Light light) {
@@ -78,6 +78,10 @@ public class Scene {
 
     public Settings getSettings() {
         return settings;
+    }
+
+    public void setSettings(Settings settings) {
+        this.settings = settings;
     }
 
 }

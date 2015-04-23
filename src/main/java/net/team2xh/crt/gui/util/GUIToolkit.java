@@ -16,7 +16,6 @@
  */
 package net.team2xh.crt.gui.util;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
@@ -33,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -194,6 +194,22 @@ final public class GUIToolkit {
             Logger.getLogger(GUIToolkit.class.getName()).log(Level.SEVERE, null, ex);
         }
         return new ImageIcon(img);
+    }
+    
+    /**
+     * Provides a Image from a file name.
+     *
+     * @param path Picture file name
+     * @return     Image
+     */
+    public static Image getImage(String path) {
+        Image img = null;
+        try {
+            img = ImageIO.read(ClassLoader.getSystemResource(path));
+        } catch (IOException ex) {
+            Logger.getLogger(GUIToolkit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return img;
     }
 
     /**

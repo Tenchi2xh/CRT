@@ -39,6 +39,7 @@ public class Script {
 
     public void setSettings(Settings settings) {
         this.settings = settings;
+        scene.setSettings(settings);
     }
 
     public Scene getScene() {

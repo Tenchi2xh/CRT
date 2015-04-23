@@ -16,6 +16,8 @@
  */
 package net.team2xh.crt.raytracer.math;
 
+import com.threed.jpct.SimpleVector;
+
 /**
  * Class for representing three dimensional vectors, along with
  * commonly needed operators and factories.
@@ -176,6 +178,10 @@ public class Vector3 {
      */
     public double[] components() {
         return new double[] {x, y, z};
+    }
+    
+    public SimpleVector simpleVector() {
+        return SimpleVector.create((float) x, (float) y, (float) z);
     }
 
     @Override
