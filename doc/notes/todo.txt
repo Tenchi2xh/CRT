@@ -1,33 +1,43 @@
-# Thesis template
-
-[x] Try report class (try --chapters)
-[x] Acknowledgements, Appendix, Bibliography at the end with letter numbering
-[x] Foreword before Abstract instead of Acknowledgements
-[x] Thesis folder with source files, and separate chapters. Script will cat the abstract, and then the rest in alphabetical order
-[x] Desaturate default color scheme with script, keep publicity colors
-
-[-] Find out about tkz-euclide
-
 # Thesis sections
 
-[x] Scenes
-[~] Ray tracing
-[~] Language
-
-# UML diagrams
-
-[x] Rendering activity
-[x] Rendering class
-[~] ANTLR
+[-] Ray tracing
+    - Axis system choice
+    - Ray generation
+    - Shading pipeline
+    - Reflections
+    - Depth of field
+    - Supersampling
+    - etc. (look at source)
+[-] Language
+    - Examples with code and result scope
+    - Continue
+[-] GUI
+    - Live view: OpenGL
+    - jPCT, LWJGL
+    - Conversion from scene
+    - Sacrifices made
+    - Techniques used
+    - Hacks
 
 # Raytracer
 
 [-] Gamma for color blending ! https://www.youtube.com/watch?v=LKnqECcg6Gw
+[-] Continue investigating global illumination
+[-] More primitives
+[-] Rework CSG: make Hits have point lists and do basic Set operations from scratch, cleanly
+[-] Choice to make about ISL
+[-] Listener interface for tracer progress feedback
+[-] Clean tracer
+
+# Live view
+
+[-] Do a generic parametric shader for all surface types
+[-] Background
 
 # Refactoring
 
-[-] Settings, Lights and Camera all inside Scene
-[-] Aperture, FOV etc. in Camera
+[-] Clean up everything
+[-] Javadoc everything
 
 # Grammar changes
 
