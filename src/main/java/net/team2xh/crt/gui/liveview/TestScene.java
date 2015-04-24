@@ -143,7 +143,7 @@ public class TestScene extends Scene {
         }
 
         Entity dice = CSG.subtract(diceElements);
-        this.add(diceBody);
+        this.add(box);
 
 //        this.add(new Sphere(new Vector3(0.0,  0.125, -0.3), 0.065, sphereMat));
 //        this.add(new Sphere(new Vector3(0.0, -0.125, -0.3), 0.065, sphereMat));

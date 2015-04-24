@@ -69,9 +69,10 @@ public class TestTracer {
         
 //        for (int t = 0; t < 60; ++t) {
 //            double d = 0.9 + 0.001*t*t;
-        double d = 1;
-        Camera camera = new Camera(new Vector3(d * -0.4, d * 0.45, d * -0.9), new Vector3(0.0, 0.0, 0.0), 60 / d);
+        double d = 2;
+//        Camera camera = new Camera(new Vector3(d * -0.4, d * 0.45, d * -0.9), new Vector3(0.0, 0.0, 0.0), 60 / d);
 //        Camera camera = new Camera(new Vector3(d * -0.3, d * 0.55, d * -1), new Vector3(0.0, 0.0, 0.0), 40 / d);
+        Camera camera = new Camera(new Vector3(d * 1.4, d * 1.45, d * -1.9), new Vector3(0.0, 0.0, 0.0), 40 / d);
 
         Scene scene = Scene.createScene(w, h, camera);
 
@@ -91,7 +92,7 @@ public class TestTracer {
         center.setFalloff(10.5);
         sun.setAmbient(0.35);
 
-        boolean day = false;
+        boolean day = true;
         double b = 1.0;
 
         if (day) {
@@ -111,7 +112,7 @@ public class TestTracer {
         scene.getSettings().setProjection(Settings.Projection.PINHOLE);
 
         Material gridMat = new Material(new Pigment(1, 0, 0), 0);
-        boolean grid = false;
+        boolean grid = true;
 
         if (grid) {
             for (int x = -10; x <= 10; ++x) {
@@ -182,8 +183,8 @@ public class TestTracer {
 //        }
         scene.getSettings().setSupersampling(2);
         scene.getSettings().setDOFSamples(64);
-        camera.setAperture(25);
-        camera.setFocalDistance(0.85);
+        camera.setAperture(50);
+        camera.setFocalDistance(6.55);
         Tracer tracer = Tracer.getInstance();
 
         bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
