@@ -32,7 +32,16 @@
 # Live view
 
 [-] Do a generic parametric shader for all surface types
-[-] Background
+[-] Background via Skybox
+    - For 1 color, just change the clear parameter
+    - For 2 colors, generate images
+    - For panorama, find way to split it in 6 faces
+        - Maybe ray trace them!
+        - Set a square resolution, 90° FOV, and render all faces
+[-] Recursively go through CSG
+    - For union, just display everything
+    - For intersection, display both transparent
+    - For difference, display B transparent
 
 # Refactoring
 
