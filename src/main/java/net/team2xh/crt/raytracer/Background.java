@@ -80,7 +80,7 @@ public class Background {
         else {
             // Angle of the direction projected on the XZ plane
             // double a = Math.atan2(direction.x, direction.z) + Math.PI;
-            double a = (initialAngle + Math.atan2(direction.x, direction.z) + Math.PI) % (2*Math.PI);
+            double a = (initialAngle + Math.atan2(-direction.x, direction.z) + Math.PI) % (2*Math.PI);
             // Normalize angles
             double ax = (0.5*a/Math.PI);
             double ay = ((direction.y/2) + 0.5);

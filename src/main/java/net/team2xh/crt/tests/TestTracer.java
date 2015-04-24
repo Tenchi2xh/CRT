@@ -107,7 +107,7 @@ public class TestTracer {
         }
 
 //        scene.setBackground(new Background(new Pigment(b * 147 / 255., b * 195 / 255., b * 209 / 255.), new Pigment(0, b * 88 / 255., b * 151 / 255.)));
-        scene.setBackground(new Background("/resources/images/panorama/italy.jpg", 0.0));
+        scene.setBackground(new Background("/resources/images/panorama/sky3.jpg", 0.0));
 
         scene.getSettings().setRecursionDepth(2);
         scene.getSettings().setProjection(Settings.Projection.PINHOLE);
