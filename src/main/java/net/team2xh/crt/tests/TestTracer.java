@@ -70,8 +70,8 @@ public class TestTracer {
 //        for (int t = 0; t < 60; ++t) {
 //            double d = 0.9 + 0.001*t*t;
         double d = 1;
-//        Camera camera = new Camera(new Vector3(d * -0.4, d * 0.45, d * -0.9), new Vector3(0.0, 0.0, 0.0), 60 / d);
-        Camera camera = new Camera(new Vector3(d * 1.4, d * 1.45, d * -1.9), new Vector3(0.0, 0.0, 0.0), 40 / d);
+        Camera camera = new Camera(new Vector3(d * -0.4, d * 0.45, d * -0.9), new Vector3(0.0, 0.0, 0.0), 60 / d);
+//        Camera camera = new Camera(new Vector3(d * -0.3, d * 0.55, d * -1), new Vector3(0.0, 0.0, 0.0), 40 / d);
 
         Scene scene = Scene.createScene(w, h, camera);
 
@@ -91,7 +91,7 @@ public class TestTracer {
         center.setFalloff(10.5);
         sun.setAmbient(0.35);
 
-        boolean day = true;
+        boolean day = false;
         double b = 1.0;
 
         if (day) {
@@ -101,7 +101,7 @@ public class TestTracer {
             scene.addLight(lightB);
             scene.addLight(lightF1);
             scene.addLight(lightF2);
-//            scene.addLight(center);
+            scene.addLight(center);
             b = 0.2;
         }
 
@@ -111,7 +111,7 @@ public class TestTracer {
         scene.getSettings().setProjection(Settings.Projection.PINHOLE);
 
         Material gridMat = new Material(new Pigment(1, 0, 0), 0);
-        boolean grid = true;
+        boolean grid = false;
 
         if (grid) {
             for (int x = -10; x <= 10; ++x) {
@@ -144,8 +144,8 @@ public class TestTracer {
 
         scene.add(new Box(new Vector3(0.4, -.25, 1.0), new Vector3(0.6, 0.4, -0.1), sphereMat1));
 
-        for (int i = 0; i < 15; ++i) {
-            scene.add(new Sphere(new Vector3(-0.5, -0.125, 0.0 + 0.3 * i), 0.125, sphereMats[i % 3]));
+        for (int i = -8; i < 15; ++i) {
+            scene.add(new Sphere(new Vector3(-0.5, -0.125, 0.0 + 0.3 * i), 0.125, sphereMats[(i+30) % 3]));
         }
 
         Box box = new Box(new Vector3(-0.2, -0.2, -0.2), new Vector3(0.2, 0.2, 0.2), dieMat);
@@ -169,7 +169,7 @@ public class TestTracer {
         }
 
         Entity dice = CSG.subtract(diceElements);
-        scene.add(box);
+        scene.add(diceBody);
 
 //        scene.add(new Sphere(new Vector3(0.0,  0.125, -0.3), 0.065, sphereMat));
 //        scene.add(new Sphere(new Vector3(0.0, -0.125, -0.3), 0.065, sphereMat));
@@ -181,9 +181,9 @@ public class TestTracer {
 //            scene.add(new Sphere(new Vector3(x, y, z), 0.01, sphereMat));
 //        }
         scene.getSettings().setSupersampling(2);
-//        scene.getSettings().setDOFSamples(40);
-        camera.setAperture(15);
-        camera.setFocalDistance(0.9);
+        scene.getSettings().setDOFSamples(64);
+        camera.setAperture(25);
+        camera.setFocalDistance(0.85);
         Tracer tracer = Tracer.getInstance();
 
         bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);

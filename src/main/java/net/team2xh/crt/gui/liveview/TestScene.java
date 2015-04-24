@@ -42,7 +42,8 @@ import net.team2xh.crt.raytracer.math.Vector3;
 public class TestScene extends Scene {
     {
         double d = 1;
-        Camera camera = new Camera(new Vector3(d * 1.4, d * 1.45, d * -1.9), new Vector3(0.0, 0.0, 0.0), 40 / d);
+        Camera camera = new Camera(new Vector3(d * -0.4, d * 0.45, d * -0.9), new Vector3(0.0, 0.0, 0.0), 60.0 / d);
+//        Camera camera = new Camera(new Vector3(d * 1.4, d * 1.45, d * -1.9), new Vector3(0.0, 0.0, 0.0), 40 / d);
         
         setCamera(camera);
         setSettings(Settings.createSettings(this, 1280, 720));
@@ -64,7 +65,7 @@ public class TestScene extends Scene {
         center.setFalloff(10.5);
         sun.setAmbient(0.35);
 
-        boolean day = true;
+        boolean day = false;
         double b = 1.0;
 
         if (day) {
@@ -74,7 +75,7 @@ public class TestScene extends Scene {
             this.addLight(lightB);
             this.addLight(lightF1);
             this.addLight(lightF2);
-//            this.addLight(center);
+            this.addLight(center);
             b = 0.2;
         }
 
@@ -84,7 +85,7 @@ public class TestScene extends Scene {
         this.getSettings().setProjection(Settings.Projection.PINHOLE);
 
         Material gridMat = new Material(new Pigment(1, 0, 0), 0);
-        boolean grid = true;
+        boolean grid = false;
 
         if (grid) {
             for (int x = -10; x <= 10; ++x) {
@@ -117,8 +118,8 @@ public class TestScene extends Scene {
 
         this.add(new Box(new Vector3(0.4, -.25, 1.0), new Vector3(0.6, 0.4, -0.1), sphereMat1));
 
-        for (int i = 0; i < 15; ++i) {
-            this.add(new Sphere(new Vector3(-0.5, -0.125, 0.0 + 0.3 * i), 0.125, sphereMats[i % 3]));
+        for (int i = -8; i < 15; ++i) {
+            this.add(new Sphere(new Vector3(-0.5, -0.125, 0.0 + 0.3 * i), 0.125, sphereMats[(i+30) % 3]));
         }
 
         Box box = new Box(new Vector3(-0.2, -0.2, -0.2), new Vector3(0.2, 0.2, 0.2), dieMat);
@@ -142,7 +143,7 @@ public class TestScene extends Scene {
         }
 
         Entity dice = CSG.subtract(diceElements);
-        this.add(box);
+        this.add(diceBody);
 
 //        this.add(new Sphere(new Vector3(0.0,  0.125, -0.3), 0.065, sphereMat));
 //        this.add(new Sphere(new Vector3(0.0, -0.125, -0.3), 0.065, sphereMat));

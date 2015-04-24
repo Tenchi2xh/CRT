@@ -62,6 +62,8 @@ public class Test {
     private JFrame frame;
     private Canvas canvas;
 
+    private int distMult = 20;
+    
     SimpleVector sun = null;
 
     private Scene scene = new TestScene();
@@ -72,10 +74,6 @@ public class Test {
         frame = new JFrame("CRT OpenGL Renderer");
         buffer = new FrameBuffer(scene.getSettings().getWidth(), scene.getSettings().getHeight(), FrameBuffer.SAMPLINGMODE_GL_AA_4X);
 
-        projector = new Projector();
-        projector.setFOV(1.5f);
-        projector.setYFOV(1.5f);
-
         canvas = buffer.enableGLCanvasRenderer();
         buffer.disableRenderer(IRenderer.RENDERER_SOFTWARE);
         frame.getContentPane().add(canvas, BorderLayout.CENTER);
@@ -83,9 +81,8 @@ public class Test {
         Config.lightMul = 5;
         Config.specPow = 50;
         Config.specTerm = 15;
-        Config.glShadowZBias = 0.03f;
-        Config.nearPlane = 0.03f;
-
+        Config.glShadowZBias = 0.03f * distMult;
+        
         JPanel buttons = new JPanel();
         camLt = new JButton("<");
         camRt = new JButton(">");
@@ -111,11 +108,11 @@ public class Test {
 
             if (type == PointLight.class) {
                 PointLight pl = (PointLight) l0;
-                l1.setPosition(pl.getOrigin().getRightHanded().simpleVector());
+                l1.setPosition(pl.getOrigin().multiply(distMult).getRightHanded().simpleVector());
 
             } else if (type == ParallelLight.class) {
                 ParallelLight pl = (ParallelLight) l0;
-                SimpleVector pos = pl.getDirection(Vector3.O).multiply(20).getRightHanded().simpleVector();
+                SimpleVector pos = pl.getDirection(Vector3.O).multiply(20*distMult).getRightHanded().simpleVector();
                 l1.setPosition(pos);
                 if (sun == null) {
                     sun = pos;
@@ -124,17 +121,39 @@ public class Test {
             }
 
             SimpleVector intensity = l0.getColor().getVector().simpleVector();
-            intensity.scalarMul(6f);
+            intensity.scalarMul(15f);
             l1.setIntensity(intensity);
-            l1.setAttenuation((float) l0.getFalloff());
+            l1.setAttenuation((float) l0.getFalloff() * distMult);
 
             if (type == ParallelLight.class) {
-                intensity.scalarMul(6f);
+                intensity = l0.getColor().getVector().simpleVector();
+                intensity.scalarMul(36f);
                 l1.setIntensity(intensity);
             }
         }
 
+        float vfov = (float) scene.getCamera().getVerticalFov();
+        float hfov = 2 * (float) Math.atan(Math.tan(vfov / 2) * scene.getSettings().getWidth() / scene.getSettings().getHeight());
+        
+//        Config.glIgnoreNearPlane = false;
+//        Config.nearPlane = 1f;
+//        Config.farPlane = 100000f;
+        
+        world.getCamera().setFOVLimits(0, (float) (2*Math.PI));
+        world.getCamera().setFovAngle(hfov);
+//        world.getCamera().adjustFovToNearPlane();
+
+        camOrigPos = scene.getCamera().getPosition().multiply(distMult).getRightHanded().simpleVector();
+        camLookAt = scene.getCamera().getPointing().multiply(distMult).getRightHanded().simpleVector();
+        world.getCamera().setPosition(camOrigPos);
+        world.getCamera().lookAt(camLookAt);
+
         if (sun != null) {
+            
+            projector = new Projector();
+            projector.setFOV(1.5f);
+            projector.setYFOV(1.5f);
+
             sh = new ShadowHelper(world, buffer, projector, 4096*2);
             sh.setCullingMode(false);
             sh.setAmbientLight(new Color(0, 0, 0));
@@ -150,19 +169,19 @@ public class Test {
 
             if (type == Box.class) {
                 Box box = (Box) e;
-                SimpleVector dimensions = SimpleVector.create((float) box.getWidth(),
-                        (float) box.getHeight(),
-                        (float) box.getDepth());
+                SimpleVector dimensions = SimpleVector.create((float) box.getWidth() * distMult,
+                        (float) box.getHeight() * distMult,
+                        (float) box.getDepth() * distMult);
                 obj = ExtendedPrimitives.createBox(dimensions);
-                obj.translate(box.getMinCorner().getRightHanded().simpleVector());
+                obj.translate(box.getMinCorner().multiply(distMult).getRightHanded().simpleVector());
                 obj.setShadingMode(Object3D.SHADING_FAKED_FLAT);
             } else if (type == Sphere.class) {
                 Sphere sphere = (Sphere) e;
-                obj = Primitives.getSphere((float) sphere.getRadius());
+                obj = Primitives.getSphere((float) sphere.getRadius() * distMult);
             } else if (type == Plane.class) {
-                obj = ExtendedPrimitives.createPlane(0.5f, 100);
+                obj = ExtendedPrimitives.createPlane(distMult, 100);
             } else {
-                obj = ExtendedPrimitives.createSprite(0.2f);
+                obj = ExtendedPrimitives.createSprite(0.2f * distMult);
                 obj.setTexture("unknown");
                 obj.setTransparency(20);
                 sprite = true;
@@ -173,7 +192,7 @@ public class Test {
                 sh.addReceiver(obj);
             }
 
-            obj.translate(e.getCenter().getRightHanded().simpleVector());
+            obj.translate(e.getCenter().multiply(distMult).getRightHanded().simpleVector());
 
             Material m = e.getMaterial();
 
@@ -190,15 +209,6 @@ public class Test {
 
             sh.updateShadowMap();
         }
-
-        float vfov = (float) scene.getCamera().getVerticalFov();
-        float hfov = 2 * (float) Math.atan(Math.tan(vfov / 2) * scene.getSettings().getWidth() / scene.getSettings().getHeight());
-
-        world.getCamera().setFovAngle(hfov);
-        camOrigPos = scene.getCamera().getPosition().getRightHanded().simpleVector();
-        camLookAt = scene.getCamera().getPointing().getRightHanded().simpleVector();
-        world.getCamera().setPosition(camOrigPos);
-        world.getCamera().lookAt(camLookAt);
 
     }
 
