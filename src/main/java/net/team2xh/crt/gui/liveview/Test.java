@@ -73,6 +73,8 @@ public class Test {
     
     private final JButton camLt;
     private final JButton camRt;
+    private final JButton camUp;
+    private final JButton camDn;
 
     public Test() {
         frame = new JFrame("CRT OpenGL Renderer");
@@ -88,8 +90,12 @@ public class Test {
         Config.glShadowZBias = 0.03f * distMult;
         
         JPanel buttons = new JPanel();
+        camUp = new JButton("^");
+        camDn = new JButton("v");
         camLt = new JButton("<");
         camRt = new JButton(">");
+        buttons.add(camUp);
+        buttons.add(camDn);
         buttons.add(camLt);
         buttons.add(camRt);
         frame.add(buttons, BorderLayout.PAGE_END);
@@ -221,23 +227,20 @@ public class Test {
     private SimpleVector camOrigPos;
     private SimpleVector camLookAt;
 
-    private void moveCameraX(double a) {
-
-        SimpleVector camPos = world.getCamera().getPosition();
-
-        float s = (float) Math.sin(a);
-        float c = (float) Math.cos(a);
-
-        camPos.x -= camLookAt.x;
-        camPos.z -= camLookAt.z;
-
-        float cpx = camPos.x * c - camPos.z * s;
-        float cpz = camPos.x * s + camPos.z * c;
-
-        camPos.x = cpx + camLookAt.x;
-        camPos.z = cpz + camLookAt.z;
-
-        world.getCamera().setPosition(camPos);
+    private void moveCamera(double ax, double ay) {
+      
+        SimpleVector up = world.getCamera().getUpVector();
+        SimpleVector right = world.getCamera().getSideVector();
+        
+        SimpleVector pos = world.getCamera().getPosition();
+        
+        right.scalarMul((float) ax);
+        up.scalarMul((float) ay);
+        
+        pos.add(right);
+        pos.add(up);
+        
+        world.getCamera().setPosition(pos);
         world.getCamera().lookAt(camLookAt);
     }
 
@@ -248,13 +251,19 @@ public class Test {
             double mdx = 0.0;
             double mdy = 0.0;
             if (camRt.getModel().isPressed()) {
-                mdx += 0.05;
+                mdx += 0.5;
             }
             if (camLt.getModel().isPressed()) {
-                mdx -= 0.05;
+                mdx -= 0.5;
             }
-            if (mdx != 0) {
-                moveCameraX(mdx);
+            if (camUp.getModel().isPressed()) {
+                mdy += 0.5;
+            }
+            if (camDn.getModel().isPressed()) {
+                mdy -= 0.5;
+            }
+            if (mdx != 0 || mdy != 0) {
+                moveCamera(mdx, mdy);
             }
 
             buffer.clear(java.awt.Color.GRAY);

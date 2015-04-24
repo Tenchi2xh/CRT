@@ -28,6 +28,8 @@
 [-] Choice to make about ISL
 [-] Listener interface for tracer progress feedback
 [-] Clean tracer
+[-] Animations:
+    - List of cameras + list of times -> interpolation between cameras
 
 # Live view
 
