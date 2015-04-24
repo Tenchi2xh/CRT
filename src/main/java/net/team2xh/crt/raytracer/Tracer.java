@@ -19,6 +19,7 @@ package net.team2xh.crt.raytracer;
 import net.team2xh.crt.raytracer.lights.Light;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.ForkJoinPool;
 import java.util.function.BiConsumer;
 import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
@@ -255,6 +256,11 @@ public class Tracer {
 
     private synchronized void incrementProgressBar() {
         SwingUtilities.invokeLater(() -> pb.setValue((int)(++counter * 100 / total)));
+    }
+    
+    public void parallelRender(int passes, BiConsumer<int[][], Integer> drawer, Scene scene) {
+        ForkJoinPool pool = new ForkJoinPool(6);
+        pool.execute(() -> render(passes, drawer, scene));
     }
 
     public int[][] render(int passes, BiConsumer<int[][], Integer> drawer, Scene scene) {

@@ -29,6 +29,7 @@ import com.threed.jpct.World;
 import com.threed.jpct.util.ExtendedPrimitives;
 import com.threed.jpct.util.Light;
 import com.threed.jpct.util.ShadowHelper;
+import com.threed.jpct.util.SkyBox;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
@@ -37,6 +38,7 @@ import java.util.logging.Level;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import net.team2xh.crt.gui.liveview.converters.BackgroundConverter;
 import net.team2xh.crt.gui.util.GUIToolkit;
 import net.team2xh.crt.raytracer.Material;
 import net.team2xh.crt.raytracer.Scene;
@@ -55,6 +57,7 @@ import net.team2xh.crt.raytracer.math.Vector3;
 public class Test {
 
     private World world;
+    private SkyBox skybox;
     private FrameBuffer buffer;
     private ShadowHelper sh;
     private Projector projector;
@@ -67,6 +70,7 @@ public class Test {
     SimpleVector sun = null;
 
     private Scene scene = new TestScene();
+    
     private final JButton camLt;
     private final JButton camRt;
 
@@ -209,6 +213,8 @@ public class Test {
 
             sh.updateShadowMap();
         }
+        
+        skybox = BackgroundConverter.convertBackground(scene.getBackground());
 
     }
 
@@ -252,6 +258,7 @@ public class Test {
             }
 
             buffer.clear(java.awt.Color.GRAY);
+            skybox.render(world, buffer);
             if (sun != null) {
                 sh.drawScene();
             } else {

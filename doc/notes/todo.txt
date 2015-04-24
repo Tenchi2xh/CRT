@@ -32,7 +32,7 @@
 # Live view
 
 [-] Do a generic parametric shader for all surface types
-[-] Background via Skybox
+[x] Background via Skybox
     - For 1 color, just change the clear parameter
     - For 2 colors, generate images
     - For panorama, find way to split it in 6 faces

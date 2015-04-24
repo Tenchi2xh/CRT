@@ -69,10 +69,10 @@ public class TestTracer {
         
 //        for (int t = 0; t < 60; ++t) {
 //            double d = 0.9 + 0.001*t*t;
-        double d = 2;
-//        Camera camera = new Camera(new Vector3(d * -0.4, d * 0.45, d * -0.9), new Vector3(0.0, 0.0, 0.0), 60 / d);
+        double d = 1;
+        Camera camera = new Camera(new Vector3(d * 0.6, d * 0.05, d * -0.9), new Vector3(0.0, 0.0, 0.0), 70 / d);
 //        Camera camera = new Camera(new Vector3(d * -0.3, d * 0.55, d * -1), new Vector3(0.0, 0.0, 0.0), 40 / d);
-        Camera camera = new Camera(new Vector3(d * 1.4, d * 1.45, d * -1.9), new Vector3(0.0, 0.0, 0.0), 40 / d);
+//        Camera camera = new Camera(new Vector3(d * 1.4, d * 1.45, d * -1.9), new Vector3(0.0, 0.0, 0.0), 40 / d);
 
         Scene scene = Scene.createScene(w, h, camera);
 
@@ -106,13 +106,14 @@ public class TestTracer {
             b = 0.2;
         }
 
-        scene.setBackground(new Background(new Pigment(b * 147 / 255., b * 195 / 255., b * 209 / 255.), new Pigment(0, b * 88 / 255., b * 151 / 255.)));
+//        scene.setBackground(new Background(new Pigment(b * 147 / 255., b * 195 / 255., b * 209 / 255.), new Pigment(0, b * 88 / 255., b * 151 / 255.)));
+        scene.setBackground(new Background("/resources/images/panorama/italy.jpg", 0.0));
 
         scene.getSettings().setRecursionDepth(2);
         scene.getSettings().setProjection(Settings.Projection.PINHOLE);
 
         Material gridMat = new Material(new Pigment(1, 0, 0), 0);
-        boolean grid = true;
+        boolean grid = false;
 
         if (grid) {
             for (int x = -10; x <= 10; ++x) {
@@ -182,7 +183,7 @@ public class TestTracer {
 //            scene.add(new Sphere(new Vector3(x, y, z), 0.01, sphereMat));
 //        }
         scene.getSettings().setSupersampling(2);
-        scene.getSettings().setDOFSamples(64);
+//        scene.getSettings().setDOFSamples(64);
         camera.setAperture(50);
         camera.setFocalDistance(6.55);
         Tracer tracer = Tracer.getInstance();
@@ -209,8 +210,8 @@ public class TestTracer {
             f.setVisible(true);
         }
         
-        ForkJoinPool pool = new ForkJoinPool(6);
-        pool.execute(() -> tracer.render(5, (int[][] p, Integer i) -> draw(p, i, w, h), scene));
+        tracer.parallelRender(4, (int[][] p, Integer i) -> draw(p, i, w, h), scene);
+        
         try {
             synchronized (sync) {
                 sync.wait();
@@ -222,6 +223,7 @@ public class TestTracer {
     }
 
     public void draw(int[][] picture, int pass, int w, int h) {
+        // TODO: Compare with length of picture not w and h
         int x0 = w < image.getWidth() ? (image.getWidth() / 2) - (w / 2) : 0;
         int y0 = h < image.getHeight() ? (image.getHeight() / 2) - (h / 2) : 0;
         int step = (int) Math.pow(2, pass);

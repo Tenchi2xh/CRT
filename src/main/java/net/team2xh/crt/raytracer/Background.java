@@ -47,7 +47,7 @@ public class Background {
 
     public Background(String imagePath) {
         try {
-            image = ImageIO.read(new File(imagePath));
+            image = ImageIO.read(getClass().getResourceAsStream(imagePath));
             width  = image.getWidth();
             height = image.getHeight();
         } catch (IOException e) {

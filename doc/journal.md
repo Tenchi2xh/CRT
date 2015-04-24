@@ -90,3 +90,4 @@
 - Ported lighting system
 - Basic shadow mapping for first parallel light only
 - Many scenes from close up would clip --- re-setting the near plane would break shadows. So a hack where all distances and values like light falloff are multiplied by a constant when imported and everything is bigger, making the default nearPlane appear small in comparison
+- Project background on a cube via ray tracing to export to jPCT skybox
