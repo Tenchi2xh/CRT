@@ -22,14 +22,17 @@ import java.util.List;
 import net.team2xh.crt.raytracer.entities.Entity;
 
 /**
- *
+ * Represents a scene that can be traced.
+ * 
  * @author Hamza Haiken (hamza.haiken@heig-vd.ch)
  */
 public class Scene {
 
-    private final List<Entity> entities = new ArrayList<>();
-    private final List<Light> lights = new ArrayList<>();
+    private final List<Entity> entities = new ArrayList<>(); // List of entities in the scene
+    private final List<Light> lights = new ArrayList<>();    // List of lights lighting the scene
+    
     private Settings settings;
+    
     private Background background = new Background();
     private Camera camera;
 

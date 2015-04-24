@@ -254,6 +254,11 @@ public class Pigment {
         return Color.RGBtoHSB((int)(r*255), (int)(g*255),(int)(b*255), null)[0];
     }
 
+    /**
+     * Returns a vector represenation of the current pigment.
+     * 
+     * @return Vector represenation of the current pigment
+     */
     public Vector3 getVector() {
         return new Vector3(r, g, b);
     }
