@@ -1,5 +1,8 @@
 # Thesis sections
 
+[-] Add sections for:
+    - Poster design
+
 [-] Ray tracing
     - Axis system choice
     - Ray generation

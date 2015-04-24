@@ -7,6 +7,7 @@
     <packaging>jar</packaging>
     
     <repositories>
+        <!--Local repository contains jPCT, not available on Maven Central-->
         <repository>
             <id>repo</id>
             <releases>
@@ -62,6 +63,39 @@
 
     <build>
         <plugins>
+            <!--Set up the main class and classpath for the jar-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>net.team2xh.crt.Launcher</mainClass>
+                            <classpathPrefix>lib/</classpathPrefix>
+                        </manifest>
+                        <manifestEntries>
+                            <Class-Path>resources/</Class-Path>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            <!--Copy library dependencies in lib/-->
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--Copy natives in lib/natives - A hack in Launcher will set java.library.path-->
             <plugin>
                 <groupId>com.googlecode.mavennatives</groupId>
                 <artifactId>maven-nativedependencies-plugin</artifactId>
@@ -75,14 +109,41 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <nativesTargetDir>${project.build.directory}/lib/natives</nativesTargetDir>
+                    <separateDirs>false</separateDirs>
+                </configuration>
             </plugin>
+            <!--Package distributable file-->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.5.3</version>
+                <executions>
+                    <execution>
+                        <id>user_distribution</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>attached</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.basedir}/dist/</outputDirectory>
+                            <descriptors>
+                                <descriptor>dist.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin> 
         </plugins>
+        <!--Copy resources in resources/-->
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
-                <targetPath>${project.build.outputDirectory}/resources</targetPath>
+                <targetPath>${project.build.directory}/resources</targetPath>
             </resource>
         </resources>
+        <!--Renamce final jar to just CRT-->
+        <finalName>${artifactId}</finalName>
     </build>
     
     <properties>

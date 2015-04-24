@@ -109,7 +109,7 @@ public class Test {
 //        world.setAmbientLight(-100, -100, -100);
         world.setAmbientLight(0, 0, 0);
 
-        InputStream unknown = getClass().getResourceAsStream("/resources/images/unknown.png");
+        InputStream unknown = getClass().getResourceAsStream("/images/unknown.png");
         TextureManager.getInstance().addTexture("unknown", new Texture(unknown, true));
 
         for (net.team2xh.crt.raytracer.lights.Light l0 : scene.getLights()) {
@@ -164,7 +164,7 @@ public class Test {
             projector.setFOV(1.5f);
             projector.setYFOV(1.5f);
 
-            sh = new ShadowHelper(world, buffer, projector, 4096*2);
+            sh = new ShadowHelper(world, buffer, projector, 4096);
             sh.setCullingMode(false);
             sh.setAmbientLight(new Color(0, 0, 0));
             sh.setLightMode(true);

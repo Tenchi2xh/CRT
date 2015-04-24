@@ -80,7 +80,7 @@ public class TestScene extends Scene {
         }
 
 //        this.setBackground(new Background(new Pigment(b * 147 / 255., b * 195 / 255., b * 209 / 255.), new Pigment(0, b * 88 / 255., b * 151 / 255.)));
-        this.setBackground(new Background("/resources/images/panorama/sky3.jpg"));
+        this.setBackground(new Background("/images/panorama/sky3.jpg"));
 
         this.getSettings().setRecursionDepth(2);
         this.getSettings().setProjection(Settings.Projection.PINHOLE);

@@ -56,4 +56,7 @@ hs_err_pid*
 *.vrb
 *.xdy
 *.tdo
+
+# Maven
 /target/
+/dist/
