@@ -28,7 +28,7 @@ public class Camera {
     private Vector3 position, pointing, direction, up, right;
 
     private double roll = 0;
-    
+
     private double verticalFov;
     private double focalDistance = 0.5;
     private double aperture = 3;
@@ -45,6 +45,13 @@ public class Camera {
 
         direction = pointing.subtract(position).normalize();
         up        = new Vector3(Math.sin(roll), Math.cos(roll), 0.0);
+        if (direction.x == 0 && direction.z == 0) {
+            if (direction.y > 0) {
+                up = Vector3.X;
+            } else {
+                up = Vector3.Xm;
+            }
+        }
         // TODO: if looking straight down, up fails
         right     = direction.cross(up).normalize().invert();
         up        = direction.cross(right);
@@ -57,7 +64,7 @@ public class Camera {
     public Vector3 getPointing() {
         return pointing;
     }
-    
+
     public Vector3 getDirection() {
         return direction;
     }

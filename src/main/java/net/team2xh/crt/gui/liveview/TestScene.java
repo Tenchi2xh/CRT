@@ -44,7 +44,7 @@ public class TestScene extends Scene {
         double d = 1;
         Camera camera = new Camera(new Vector3(d * 0.6, d * 0.05, d * -0.9), new Vector3(0.0, 0.0, 0.0), 70 / d);
 //        Camera camera = new Camera(new Vector3(d * 1.4, d * 1.45, d * -1.9), new Vector3(0.0, 0.0, 0.0), 40 / d);
-        
+
         setCamera(camera);
         setSettings(Settings.createSettings(this, 1280, 720));
         setCamera(camera);
@@ -81,7 +81,7 @@ public class TestScene extends Scene {
 
 //        this.setBackground(new Background(new Pigment(b * 147 / 255., b * 195 / 255., b * 209 / 255.), new Pigment(0, b * 88 / 255., b * 151 / 255.)));
         this.setBackground(new Background("/resources/images/panorama/sky3.jpg"));
-        
+
         this.getSettings().setRecursionDepth(2);
         this.getSettings().setProjection(Settings.Projection.PINHOLE);
 
@@ -108,7 +108,7 @@ public class TestScene extends Scene {
         Material sphereMat3 = new Material(new Pigment(0.2, 0.2, 0.9), 0.3);
         sphereMat3.setSpecular(4.0);
         sphereMat3.setShininess(50.0);
-        
+
         Material[] sphereMats = new Material[] { sphereMat1, sphereMat2, sphereMat3 };
 
         Material dieMat = new Material(new Pigment(0.9), 0.1);
