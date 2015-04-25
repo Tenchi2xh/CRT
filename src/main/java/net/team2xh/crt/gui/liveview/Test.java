@@ -19,6 +19,7 @@ package net.team2xh.crt.gui.liveview;
 import com.threed.jpct.Config;
 import com.threed.jpct.FrameBuffer;
 import com.threed.jpct.IRenderer;
+import com.threed.jpct.Interact2D;
 import com.threed.jpct.Object3D;
 import com.threed.jpct.Primitives;
 import com.threed.jpct.Projector;
@@ -33,11 +34,13 @@ import com.threed.jpct.util.SkyBox;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.event.MouseEvent;
 import java.io.InputStream;
 import java.util.logging.Level;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.event.MouseInputAdapter;
 import net.team2xh.crt.gui.liveview.converters.BackgroundConverter;
 import net.team2xh.crt.gui.util.GUIToolkit;
 import net.team2xh.crt.raytracer.Material;
@@ -76,6 +79,11 @@ public class Test {
     private final JButton camUp;
     private final JButton camDn;
 
+    private int mouseX = 0;
+    private int mouseY = 0;
+    private Object3D lastHighlight = null;
+    private Color lastColor = null;
+    
     public Test() {
         frame = new JFrame("CRT OpenGL Renderer");
         buffer = new FrameBuffer(scene.getSettings().getWidth(), scene.getSettings().getHeight(), FrameBuffer.SAMPLINGMODE_GL_AA_4X);
@@ -84,6 +92,10 @@ public class Test {
         buffer.disableRenderer(IRenderer.RENDERER_SOFTWARE);
         frame.getContentPane().add(canvas, BorderLayout.CENTER);
 
+        MouseListener ml = new MouseListener();
+        canvas.addMouseListener(ml);
+        canvas.addMouseMotionListener(ml);
+        
         Config.lightMul = 5;
         Config.specPow = 50;
         Config.specTerm = 15;
@@ -203,6 +215,7 @@ public class Test {
             }
 
             obj.translate(e.getCenter().multiply(distMult).getRightHanded().simpleVector());
+            obj.setCollisionMode(Object3D.COLLISION_CHECK_OTHERS);
 
             Material m = e.getMaterial();
 
@@ -238,12 +251,35 @@ public class Test {
         up.scalarMul((float) ay);
         
         pos.add(right);
+        // TODO: add protection when maxed
         pos.add(up);
         
         world.getCamera().setPosition(pos);
         world.getCamera().lookAt(camLookAt);
     }
 
+    private Object[] getHoveredObject() {
+        SimpleVector dir = Interact2D.reproject2D3DWS(world.getCamera(), buffer, mouseX, mouseY).normalize();
+        return world.calcMinDistanceAndObject3D(world.getCamera().getPosition(), dir, 1000f);
+    }
+    
+    private void highlightHoveredObject() {
+        Object[] hit = getHoveredObject();
+        if ((float) hit[0] != Object3D.COLLISION_NONE) {
+            Object3D obj = (Object3D) hit[1];
+            if (lastHighlight != null) {
+                lastHighlight.setAdditionalColor(lastColor);
+            }
+            lastHighlight = obj;
+            lastColor = obj.getAdditionalColor();
+            obj.setAdditionalColor(Color.RED);
+        } else {
+            if (lastHighlight != null) {
+                lastHighlight.setAdditionalColor(lastColor);
+            }
+        }
+    }
+    
     private void loop() throws InterruptedException {
 
         while (frame.isShowing()) {
@@ -265,6 +301,8 @@ public class Test {
             if (mdx != 0 || mdy != 0) {
                 moveCamera(mdx, mdy);
             }
+            
+            highlightHoveredObject();
 
             buffer.clear(java.awt.Color.GRAY);
             skybox.render(world, buffer);
@@ -282,6 +320,42 @@ public class Test {
         }
         buffer.disableRenderer(IRenderer.RENDERER_OPENGL);
         buffer.dispose();
+    }
+    
+    private class MouseListener extends MouseInputAdapter {
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseMoved(MouseEvent e) {
+            mouseX = e.getX();
+            mouseY = e.getY();
+        }
+
+
+        
     }
 
     public static void main(String[] args) {

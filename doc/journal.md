@@ -85,12 +85,17 @@
 - Set up base environment for jPCT + LWJGL in Maven
     + Local repository
     + JVM arguments
+- Configured Maven's POM for producing distributable content
+- Corrected run classpath
+
+- Some documentation
+- Idea for poster
+
 - Set up base test for jPCT loop
 - Basic Scene to jPCT converter
-- Ported lighting system
-- Basic shadow mapping for first parallel light only
-- Many scenes from close up would clip --- re-setting the near plane would break shadows. So a hack where all distances and values like light falloff are multiplied by a constant when imported and everything is bigger, making the default nearPlane appear small in comparison
+- Ported lighting system with basic shadow mapping for first parallel light
+- Many scenes from close up would clip and setting a closer near plane would break shadows. So a hack where all distances and values like light falloff are multiplied by a constant when imported and everything is bigger, making the default nearPlane appear small in comparison
 - Project background on a cube via ray tracing to export to jPCT skybox
 - Corrected ray tracing camera for looking straight up or down
 - Live view camera control
-- Configured Maven's POM for producing distributable content
+- Implemented object picking in live view

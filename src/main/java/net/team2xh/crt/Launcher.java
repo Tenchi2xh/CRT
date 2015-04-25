@@ -16,6 +16,7 @@
  */
 package net.team2xh.crt;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,7 +30,7 @@ public class Launcher {
 
     public static void main(String[] args) {
         try {
-            
+
             // Instead of forcing user to launch jarfile with -Djava.library.path=..., set with hack
             System.setProperty("java.library.path", "lib/natives/");
             final Field sysPathsField = ClassLoader.class.getDeclaredField("sys_paths");
@@ -37,7 +38,6 @@ public class Launcher {
             sysPathsField.set(null, null);
             
             Test.main(args);
-            
         } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException ex) {
             Logger.getLogger(Launcher.class.getName()).log(Level.SEVERE, null, ex);
         }

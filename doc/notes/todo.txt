@@ -27,6 +27,10 @@
 [-] Gamma for color blending ! https://www.youtube.com/watch?v=LKnqECcg6Gw
 [-] Continue investigating global illumination
 [-] More primitives
+    - Height map
+    - Torus
+    - Cylinder
+    - Cone
 [-] Rework CSG: make Hits have point lists and do basic Set operations from scratch, cleanly
 [-] Choice to make about ISL
 [-] Listener interface for tracer progress feedback
@@ -37,6 +41,7 @@
 # Live view
 
 [-] Do a generic parametric shader for all surface types
+    - Boolean parameter for highlighted objects (do an outline + gray out)
 [x] Background via Skybox
     - For 1 color, just change the clear parameter
     - For 2 colors, generate images
@@ -47,6 +52,9 @@
     - For union, just display everything
     - For intersection, display both transparent
     - For difference, display B transparent
+[-] Camera roll
+[x] Camera movement
+[x] Mouse object picking
 
 # Refactoring
 
