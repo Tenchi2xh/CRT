@@ -172,6 +172,7 @@ public class Test {
         camLookAt = scene.getCamera().getPointing().multiply(distMult).getRightHanded().simpleVector();
         world.getCamera().setPosition(camOrigPos);
         world.getCamera().lookAt(camLookAt);
+        world.getCamera().rotateCameraAxis(world.getCamera().getDirection(), (float) -scene.getCamera().getRoll());
 
         if (sun != null) {
             
@@ -308,7 +309,7 @@ public class Test {
             if (mdx != 0 || mdy != 0) {
                 moveCamera(mdx, mdy);
             } else if (ml.dx != 0 || ml.dy != 0) {
-                moveCamera(-ml.dx*0.5f, ml.dy*0.5f);
+                moveCamera(-ml.dx, ml.dy);
                 ml.dx = 0;
                 ml.dy = 0;
             }

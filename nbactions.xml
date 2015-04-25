@@ -25,9 +25,9 @@
             <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
         </goals>
         <properties>
-                
-            <exec.args>-classpath %classpath ${packageClassName}</exec.args>
+            <exec.args>-Djava.library.path=lib/natives/ -classpath classes/;lib/*;resources/ ${packageClassName}</exec.args>
             <exec.executable>java</exec.executable>
+            <exec.workingdir>target</exec.workingdir>
             <exec.classpathScope>${classPathScope}</exec.classpathScope>
         </properties>
     </action>

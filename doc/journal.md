@@ -97,5 +97,5 @@
 - Many scenes from close up would clip and setting a closer near plane would break shadows. So a hack where all distances and values like light falloff are multiplied by a constant when imported and everything is bigger, making the default nearPlane appear small in comparison
 - Project background on a cube via ray tracing to export to jPCT skybox
 - Corrected ray tracing camera for looking straight up or down
-- Live view camera control
+- Live view camera control, + mouse
 - Implemented object picking in live view

@@ -24,7 +24,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ForkJoinPool;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -71,6 +70,7 @@ public class TestTracer {
 //            double d = 0.9 + 0.001*t*t;
         double d = 1;
         Camera camera = new Camera(new Vector3(d * 0.6, d * 0.05, d * -0.9), new Vector3(0.0, 0.0, 0.0), 70 / d);
+        camera.setRoll(0.5);
 //        Camera camera = new Camera(new Vector3(d * -0.3, d * 0.55, d * -1), new Vector3(0.0, 0.0, 0.0), 40 / d);
 //        Camera camera = new Camera(new Vector3(d * 1.4, d * 1.45, d * -1.9), new Vector3(0.0, 0.0, 0.0), 40 / d);
 
@@ -105,7 +105,7 @@ public class TestTracer {
             scene.addLight(center);
             b = 0.2;
         }
-
+        
 //        scene.setBackground(new Background(new Pigment(b * 147 / 255., b * 195 / 255., b * 209 / 255.), new Pigment(0, b * 88 / 255., b * 151 / 255.)));
         scene.setBackground(new Background("/images/panorama/sky3.jpg", 0.0));
 
@@ -183,7 +183,7 @@ public class TestTracer {
 //            scene.add(new Sphere(new Vector3(x, y, z), 0.01, sphereMat));
 //        }
         scene.getSettings().setSupersampling(2);
-        scene.getSettings().setDOFSamples(32);
+//        scene.getSettings().setDOFSamples(32);
         camera.setAperture(10);
         camera.setFocalDistance(0.9);
         Tracer tracer = Tracer.getInstance();

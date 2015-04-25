@@ -44,6 +44,7 @@ public class TestScene extends Scene {
         double d = 1;
         Camera camera = new Camera(new Vector3(d * 0.6, d * 0.05, d * -0.9), new Vector3(0.0, 0.0, 0.0), 70 / d);
 //        Camera camera = new Camera(new Vector3(d * 1.4, d * 1.45, d * -1.9), new Vector3(0.0, 0.0, 0.0), 40 / d);
+        camera.setRoll(0.5);
 
         setCamera(camera);
         setSettings(Settings.createSettings(this, 1280, 720));
