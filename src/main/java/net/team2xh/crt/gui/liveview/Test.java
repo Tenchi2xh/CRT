@@ -16,10 +16,12 @@
  */
 package net.team2xh.crt.gui.liveview;
 
+import com.threed.jpct.Camera;
 import com.threed.jpct.Config;
 import com.threed.jpct.FrameBuffer;
 import com.threed.jpct.IRenderer;
 import com.threed.jpct.Interact2D;
+import com.threed.jpct.Matrix;
 import com.threed.jpct.Object3D;
 import com.threed.jpct.Primitives;
 import com.threed.jpct.Projector;
@@ -34,6 +36,7 @@ import com.threed.jpct.util.SkyBox;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.io.InputStream;
 import java.util.logging.Level;
@@ -79,8 +82,8 @@ public class Test {
     private final JButton camUp;
     private final JButton camDn;
 
-    private int mouseX = 0;
-    private int mouseY = 0;
+    private MouseListener ml;
+    
     private Object3D lastHighlight = null;
     private Color lastColor = null;
     
@@ -92,7 +95,7 @@ public class Test {
         buffer.disableRenderer(IRenderer.RENDERER_SOFTWARE);
         frame.getContentPane().add(canvas, BorderLayout.CENTER);
 
-        MouseListener ml = new MouseListener();
+        ml = new MouseListener();
         canvas.addMouseListener(ml);
         canvas.addMouseMotionListener(ml);
         
@@ -240,26 +243,30 @@ public class Test {
     private SimpleVector camOrigPos;
     private SimpleVector camLookAt;
 
-    private void moveCamera(double ax, double ay) {
+    private void moveCamera(float ax, float ay) {
       
         SimpleVector up = world.getCamera().getUpVector();
         SimpleVector right = world.getCamera().getSideVector();
         
         SimpleVector pos = world.getCamera().getPosition();
-        
-        right.scalarMul((float) ax);
-        up.scalarMul((float) ay);
-        
+        float distance = camLookAt.distance(pos);
+   
+        right.scalarMul(ax);
+        up.scalarMul(ay);
+
         pos.add(right);
-        // TODO: add protection when maxed
         pos.add(up);
         
         world.getCamera().setPosition(pos);
         world.getCamera().lookAt(camLookAt);
+        
+        float newDistance = camLookAt.distance(pos);
+        world.getCamera().moveCamera(Camera.CAMERA_MOVEIN, newDistance - distance);
+        
     }
 
     private Object[] getHoveredObject() {
-        SimpleVector dir = Interact2D.reproject2D3DWS(world.getCamera(), buffer, mouseX, mouseY).normalize();
+        SimpleVector dir = Interact2D.reproject2D3DWS(world.getCamera(), buffer, ml.x, ml.y).normalize();
         return world.calcMinDistanceAndObject3D(world.getCamera().getPosition(), dir, 1000f);
     }
     
@@ -272,7 +279,7 @@ public class Test {
             }
             lastHighlight = obj;
             lastColor = obj.getAdditionalColor();
-            obj.setAdditionalColor(Color.RED);
+            obj.setAdditionalColor(Color.RED); // When shader is ready, do something like obj.RenderHook().setUniform("isHighlighted", true)
         } else {
             if (lastHighlight != null) {
                 lastHighlight.setAdditionalColor(lastColor);
@@ -284,8 +291,8 @@ public class Test {
 
         while (frame.isShowing()) {
 
-            double mdx = 0.0;
-            double mdy = 0.0;
+            float mdx = 0.0f;
+            float mdy = 0.0f;
             if (camRt.getModel().isPressed()) {
                 mdx += 0.5;
             }
@@ -300,9 +307,13 @@ public class Test {
             }
             if (mdx != 0 || mdy != 0) {
                 moveCamera(mdx, mdy);
+            } else if (ml.dx != 0 || ml.dy != 0) {
+                moveCamera(-ml.dx*0.5f, ml.dy*0.5f);
+                ml.dx = 0;
+                ml.dy = 0;
             }
             
-            highlightHoveredObject();
+            if (!ml.pressed) highlightHoveredObject();
 
             buffer.clear(java.awt.Color.GRAY);
             skybox.render(world, buffer);
@@ -323,17 +334,30 @@ public class Test {
     }
     
     private class MouseListener extends MouseInputAdapter {
-
+        
+        private int x = 0;
+        private int y = 0;
+        
+        private int dx = 0;
+        private int dy = 0;
+        
+        private Point p;
+        
+        private boolean pressed = false;
+        
         @Override
         public void mouseClicked(MouseEvent e) {
         }
 
         @Override
         public void mousePressed(MouseEvent e) {
+            p = e.getPoint();
+            pressed = true;
         }
 
         @Override
         public void mouseReleased(MouseEvent e) {
+            pressed = false;
         }
 
         @Override
@@ -346,12 +370,15 @@ public class Test {
 
         @Override
         public void mouseDragged(MouseEvent e) {
+            dx = e.getX() - p.x;
+            dy = e.getY() - p.y;
+            p = e.getPoint();
         }
 
         @Override
         public void mouseMoved(MouseEvent e) {
-            mouseX = e.getX();
-            mouseY = e.getY();
+            x = e.getX();
+            y = e.getY();
         }
 
 
