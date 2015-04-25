@@ -3,6 +3,7 @@ varying vec2 texCoord;
 varying float dist;
 
 uniform bool isHighlighted;
+uniform vec3 matColor;
 
 // uniform float specular;
 // uniform float diffuse;

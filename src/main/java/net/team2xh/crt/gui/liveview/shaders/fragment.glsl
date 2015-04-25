@@ -3,6 +3,7 @@ varying vec2 texCoord;
 varying float dist;
 
 uniform bool isHighlighted;
+uniform vec3 matColor;
 
 vec2 phong(float lightInt, float shininess) {
     vec3 s = normalize(lightDir);
@@ -23,7 +24,7 @@ vec3 rim(vec3 color, float start, float end, float coef) {
 
 vec3 stripes(vec3 color) {
     float a = sin((gl_FragCoord.x - gl_FragCoord.y) * 0.3);
-    float b = sign(a) / 2 + 1;
+    float b = float(sign(a)) / 2 + 1;
 
     return mix(vec3(0.6), color, b);
 }
@@ -39,8 +40,8 @@ vec3 stripes2(vec3 color) {
 void main (void) {
     //vec4 in_color = texture(tex, gl_FragCoord.xy / tex_size);
     vec2 bp = phong(1.0, 200.0);
-    vec3 matcolor = vec3(0.1, 0.3, 0.5);
-    vec3 color = matcolor * bp.x + matcolor * bp.y;
+    // bp.y should be multiplied with light color
+    vec3 color = matColor * bp.x + vec3(1.0) * bp.y;
 
     //float t = (100.0 / (dist*dist));
 

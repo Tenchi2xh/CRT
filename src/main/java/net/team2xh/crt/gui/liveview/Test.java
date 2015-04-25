@@ -38,13 +38,16 @@ import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.io.InputStream;
+import java.util.Enumeration;
 import java.util.logging.Level;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 import javax.swing.event.MouseInputAdapter;
 import net.team2xh.crt.gui.liveview.converters.BackgroundConverter;
 import net.team2xh.crt.gui.util.GUIToolkit;
@@ -83,11 +86,14 @@ public class Test {
     private final JButton camRt;
     private final JButton camUp;
     private final JButton camDn;
+    private final JToggleButton toggleShdr;
 
     private MouseListener ml;
     
     private Object3D lastHighlight = null;
     private Color lastColor = null;
+    
+    private boolean useShaders = false;
     
     public Test() {
         frame = new JFrame("CRT OpenGL Renderer");
@@ -102,7 +108,7 @@ public class Test {
         canvas.addMouseMotionListener(ml);
         
         Config.lightMul = 5;
-        Config.specPow = 50;
+        Config.specPow = 100;
         Config.specTerm = 15;
         Config.glShadowZBias = 0.03f * distMult;
         
@@ -111,10 +117,12 @@ public class Test {
         camDn = new JButton("v");
         camLt = new JButton("<");
         camRt = new JButton(">");
+        toggleShdr = new JToggleButton("Shaders");
         buttons.add(camUp);
         buttons.add(camDn);
         buttons.add(camLt);
         buttons.add(camRt);
+        buttons.add(toggleShdr);
         frame.add(buttons, BorderLayout.PAGE_END);
 
         frame.pack();
@@ -123,13 +131,11 @@ public class Test {
         GUIToolkit.centerFrame(frame);
 
         world = new World();
-//        world.setAmbientLight(-100, -100, -100);
         world.setAmbientLight(0, 0, 0);
 
         InputStream unknown = getClass().getResourceAsStream("/images/unknown.png");
         TextureManager.getInstance().addTexture("unknown", new Texture(unknown, true));
         
-        // Set up shader
         String vertex = Loader.loadTextFile(getClass().getResourceAsStream("shaders/vertex.glsl"));
         String fragment = Loader.loadTextFile(getClass().getResourceAsStream("shaders/fragment.glsl"));
         
@@ -152,13 +158,13 @@ public class Test {
             }
 
             SimpleVector intensity = l0.getColor().getVector().simpleVector();
-            intensity.scalarMul(15f);
+            intensity.scalarMul(255f);
             l1.setIntensity(intensity);
             l1.setAttenuation((float) l0.getFalloff() * distMult);
 
             if (type == ParallelLight.class) {
                 intensity = l0.getColor().getVector().simpleVector();
-                intensity.scalarMul(36f);
+                intensity.scalarMul(255f);
                 l1.setIntensity(intensity);
             }
         }
@@ -166,13 +172,8 @@ public class Test {
         float vfov = (float) scene.getCamera().getVerticalFov();
         float hfov = 2 * (float) Math.atan(Math.tan(vfov / 2) * scene.getSettings().getWidth() / scene.getSettings().getHeight());
         
-//        Config.glIgnoreNearPlane = false;
-//        Config.nearPlane = 1f;
-//        Config.farPlane = 100000f;
-        
         world.getCamera().setFOVLimits(0, (float) (2*Math.PI));
         world.getCamera().setFovAngle(hfov);
-//        world.getCamera().adjustFovToNearPlane();
 
         camOrigPos = scene.getCamera().getPosition().multiply(distMult).getRightHanded().simpleVector();
         camLookAt = scene.getCamera().getPointing().multiply(distMult).getRightHanded().simpleVector();
@@ -206,7 +207,7 @@ public class Test {
                         (float) box.getDepth() * distMult);
                 obj = ExtendedPrimitives.createBox(dimensions);
                 obj.translate(box.getMinCorner().multiply(distMult).getRightHanded().simpleVector());
-                obj.setShadingMode(Object3D.SHADING_FAKED_FLAT);
+//                obj.setShadingMode(Object3D.SHADING_FAKED_FLAT);
             } else if (type == Sphere.class) {
                 Sphere sphere = (Sphere) e;
                 obj = Primitives.getSphere((float) sphere.getRadius() * distMult);
@@ -230,15 +231,16 @@ public class Test {
             Material m = e.getMaterial();
 
             obj.setSpecularLighting(true);
-            obj.setAdditionalColor(m.color.getColor().darker().darker().darker().darker());
+            obj.setAdditionalColor(m.color.getColor().darker().darker().darker());
             
             GLSLShader shader = new GLSLShader(vertex, fragment);
-            {
+            shader.setUniform("isHighlighted", 0);
+            shader.setUniform("matColor", m.color.getColor().getColorComponents(null));
+            obj.setUserObject(shader);
+            if (useShaders) {
                 obj.setRenderHook(shader);
-                shader.setUniform("isHighlighted", 0);
-                obj.setUserObject(shader);
             }
-            
+
             obj.compileAndStrip();
             obj.build();
 
@@ -254,6 +256,28 @@ public class Test {
         
         skybox = BackgroundConverter.convertBackground(scene.getBackground());
 
+        
+        toggleShdr.addItemListener(new ItemListener() {
+
+            @Override
+            public void itemStateChanged(ItemEvent ev) {
+                if (ev.getStateChange() == ItemEvent.SELECTED) {
+                    for (Enumeration<Object3D> en = world.getObjects(); en.hasMoreElements();) {
+                        Object3D obj = en.nextElement();
+                        GLSLShader shader = (GLSLShader) obj.getUserObject();
+                        obj.setRenderHook(shader);
+                    }
+                    useShaders = true;
+                } else if (ev.getStateChange() == ItemEvent.DESELECTED) {
+                    for (Enumeration<Object3D> en = world.getObjects(); en.hasMoreElements();) {
+                        Object3D obj = en.nextElement();
+                        obj.setRenderHook(null);
+                    }
+                    useShaders = false;
+                }
+            }
+        });
+        
     }
 
     private SimpleVector camOrigPos;
@@ -291,19 +315,29 @@ public class Test {
         if ((float) hit[0] != Object3D.COLLISION_NONE) {
             Object3D obj = (Object3D) hit[1];
             if (lastHighlight != null) {
-                //lastHighlight.setAdditionalColor(lastColor);
-                GLSLShader shader = (GLSLShader) lastHighlight.getUserObject();
-                shader.setUniform("isHighlighted", 0);
+                if (useShaders) {
+                    GLSLShader shader = (GLSLShader) lastHighlight.getUserObject();
+                    shader.setUniform("isHighlighted", 0);
+                } else {
+                    lastHighlight.setAdditionalColor(lastColor);
+                }
             }
-            GLSLShader shader = (GLSLShader) obj.getUserObject();
-            shader.setUniform("isHighlighted", 1);
+            if (useShaders) {
+                GLSLShader shader = (GLSLShader) obj.getUserObject();
+                shader.setUniform("isHighlighted", 1);
+            } else {
+                lastColor = obj.getAdditionalColor();
+                obj.setAdditionalColor(Color.RED);
+            }
             lastHighlight = obj;
-//            lastColor = obj.getAdditionalColor();
-//            obj.setAdditionalColor(Color.RED);
         } else {
             if (lastHighlight != null) {
-                GLSLShader shader = (GLSLShader) lastHighlight.getUserObject();
-                shader.setUniform("isHighlighted", 0);
+                if (useShaders) {
+                    GLSLShader shader = (GLSLShader) lastHighlight.getUserObject();
+                    shader.setUniform("isHighlighted", 0);
+                } else {
+                    lastHighlight.setAdditionalColor(lastColor);
+                }
                 lastHighlight = null;
             }
         }
