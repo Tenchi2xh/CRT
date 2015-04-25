@@ -99,3 +99,5 @@
 - Corrected ray tracing camera for looking straight up or down
 - Live view camera control, + mouse
 - Implemented object picking in live view
+- Optimized rendering speed
+- Shader prototype

@@ -19,9 +19,10 @@ package net.team2xh.crt.gui.liveview;
 import com.threed.jpct.Camera;
 import com.threed.jpct.Config;
 import com.threed.jpct.FrameBuffer;
+import com.threed.jpct.GLSLShader;
 import com.threed.jpct.IRenderer;
 import com.threed.jpct.Interact2D;
-import com.threed.jpct.Matrix;
+import com.threed.jpct.Loader;
 import com.threed.jpct.Object3D;
 import com.threed.jpct.Primitives;
 import com.threed.jpct.Projector;
@@ -38,6 +39,7 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.InputStream;
 import java.util.logging.Level;
 import javax.swing.JButton;
@@ -126,7 +128,11 @@ public class Test {
 
         InputStream unknown = getClass().getResourceAsStream("/images/unknown.png");
         TextureManager.getInstance().addTexture("unknown", new Texture(unknown, true));
-
+        
+        // Set up shader
+        String vertex = Loader.loadTextFile(getClass().getResourceAsStream("shaders/vertex.glsl"));
+        String fragment = Loader.loadTextFile(getClass().getResourceAsStream("shaders/fragment.glsl"));
+        
         for (net.team2xh.crt.raytracer.lights.Light l0 : scene.getLights()) {
             Light l1 = new Light(world);
             Class type = l0.getClass();
@@ -225,6 +231,15 @@ public class Test {
 
             obj.setSpecularLighting(true);
             obj.setAdditionalColor(m.color.getColor().darker().darker().darker().darker());
+            
+            GLSLShader shader = new GLSLShader(vertex, fragment);
+            {
+                obj.setRenderHook(shader);
+                shader.setUniform("isHighlighted", 0);
+                obj.setUserObject(shader);
+            }
+            
+            obj.compileAndStrip();
             obj.build();
 
             world.addObject(obj);
@@ -276,14 +291,20 @@ public class Test {
         if ((float) hit[0] != Object3D.COLLISION_NONE) {
             Object3D obj = (Object3D) hit[1];
             if (lastHighlight != null) {
-                lastHighlight.setAdditionalColor(lastColor);
+                //lastHighlight.setAdditionalColor(lastColor);
+                GLSLShader shader = (GLSLShader) lastHighlight.getUserObject();
+                shader.setUniform("isHighlighted", 0);
             }
+            GLSLShader shader = (GLSLShader) obj.getUserObject();
+            shader.setUniform("isHighlighted", 1);
             lastHighlight = obj;
-            lastColor = obj.getAdditionalColor();
-            obj.setAdditionalColor(Color.RED); // When shader is ready, do something like obj.RenderHook().setUniform("isHighlighted", true)
+//            lastColor = obj.getAdditionalColor();
+//            obj.setAdditionalColor(Color.RED);
         } else {
             if (lastHighlight != null) {
-                lastHighlight.setAdditionalColor(lastColor);
+                GLSLShader shader = (GLSLShader) lastHighlight.getUserObject();
+                shader.setUniform("isHighlighted", 0);
+                lastHighlight = null;
             }
         }
     }
@@ -324,6 +345,7 @@ public class Test {
                 world.renderScene(buffer);
                 world.draw(buffer);
             }
+            
             buffer.update();
             buffer.displayGLOnly();
             canvas.repaint();
