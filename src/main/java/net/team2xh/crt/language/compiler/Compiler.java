@@ -37,6 +37,7 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -201,8 +202,10 @@ final public class Compiler extends CRTBaseVisitor {
 
     @Override
     public String visitStringLiteral(StringLiteralContext ctx) {
-        // TODO: parse escaped characters
         String str = ctx.getText();
+        // Unescape characters
+        // http://stackoverflow.com/a/7847310
+        str = StringEscapeUtils.unescapeJava(str);
         return str.substring(1, str.length() - 1);
     }
 
