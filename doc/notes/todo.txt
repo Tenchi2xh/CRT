@@ -37,6 +37,13 @@
 [-] Clean tracer
 [-] Animations:
     - List of cameras + list of times -> interpolation between cameras
+[-] Procedural texturing
+    - Bump mapping
+    - Perlin noise class for basis
+    - Material type that returns texture color for any point in space
+        - Woods
+        - Metals
+    - Try pictures?
 
 # Live view
 
@@ -52,9 +59,10 @@
     - For union, just display everything
     - For intersection, display both transparent
     - For difference, display B transparent
-[-] Camera roll
+[~] Camera roll
 [x] Camera movement
 [x] Mouse object picking
+[ ] Multiple viewports: top, side, free-view, quick-render
 
 # Refactoring
 
@@ -63,6 +71,15 @@
 
 # Grammar changes
 
-[-] Unify settings
-[-] Procedure notation
-[-] Review style
+[x] Unify settings
+[x] Procedure notation
+[x] Review style
+[-] Add loops
+
+# Next steps
+
+0. Basic features are OK
+1. Finish the compiler
+2. Start working on the GUI to set all basic features in place
+3. Polish features
+4. Animations
