@@ -75,6 +75,7 @@
 [x] Procedure notation
 [x] Review style
 [-] Add loops
+[-] Add conditions
 
 # Next steps
 
