@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Hamza Haiken (hamza.haiken@heig-vd.ch)
+ * Copyright (C) 2015 Hamza Haiken <tenchi@team2xh.net>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ import org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel;
 /**
  * Utility class for missing Swing features.
  *
- * @author Hamza Haiken (hamza.haiken@heig-vd.ch)
+ * @author Hamza Haiken <tenchi@team2xh.net>
  */
 final public class GUIToolkit {
 
@@ -76,11 +76,12 @@ final public class GUIToolkit {
      * After registering a font, its font family can be used normally as if
      * the font was installed on the OS.
      *
+     * @param caller Caller instance for resource aquisition
      * @param path Font file path
      */
-    public static void registerFont(String path) {
+    public static void registerFont(Object caller, String path) {
         try {
-            URI uri = ClassLoader.getSystemResource(path).toURI();
+            URI uri = caller.getClass().getResource(path).toURI();
             File fontFile = new File(uri);
             Font font = Font.createFont(Font.TRUETYPE_FONT, fontFile);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -139,14 +140,16 @@ final public class GUIToolkit {
      * Activeate Substance Look&Feel.
      *
      * Must be called before opening any window.
+     * 
+     * @param laf Desired Substance Look&Feel class
      */
-    public static void setSubstanceLAF() {
+    public static void setSubstanceLAF(String laf) {
         try {
-            LookAndFeel laf = new SubstanceGraphiteLookAndFeel();
+            //LookAndFeel laf = new SubstanceGraphiteLookAndFeel();
             UIManager.setLookAndFeel(laf);
             JFrame.setDefaultLookAndFeelDecorated(true);
             JDialog.setDefaultLookAndFeelDecorated(true);
-        } catch (UnsupportedLookAndFeelException ex) {
+        } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(GUIToolkit.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -214,18 +217,21 @@ final public class GUIToolkit {
 
     /**
      * Initialises default GUI parameters and fonts.
+     * 
+     * @param caller Caller instance for resource aquisition
+     * @param laf    Desired Substance LooK&Feel class
      */
-    public static void initGUI() {
+    public static void initGUI(Object caller, String laf) {
         try {
             // Import custom fonts
-            GUIToolkit.registerFont("res/fonts/SOURCESANSPRO-REGULAR.TTF");
-            GUIToolkit.registerFont("res/fonts/ENVYCODER.TTF");
-            GUIToolkit.registerFont("res/fonts/ENVYCODERITALIC.TTF");
-            GUIToolkit.registerFont("res/fonts/ENVYCODERBOLD.TTF");
+            GUIToolkit.registerFont(caller, "/fonts/SOURCESANSPRO-REGULAR.TTF");
+            GUIToolkit.registerFont(caller, "/fonts/ENVYCODER.TTF");
+            GUIToolkit.registerFont(caller, "/fonts/ENVYCODERITALIC.TTF");
+            GUIToolkit.registerFont(caller, "/fonts/ENVYCODERBOLD.TTF");
             // Set default dialog font
             GUIToolkit.setDefaultFont("Source Sans Pro", 16);
             // Enable Substance Look&Feel
-            GUIToolkit.setSubstanceLAF();
+            GUIToolkit.setSubstanceLAF(laf);
 
             // Substance forgot to put a border for JTextArea,
             // So we give it the same border that TextField has

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Tenchi
+ * Copyright (C) 2015 Hamza Haiken <tenchi@team2xh.net>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ import net.team2xh.crt.raytracer.math.Vector3;
 
 /**
  *
- * @author Tenchi
+ * @author Hamza Haiken <tenchi@team2xh.net>
  */
 final public class BackgroundConverter {
 

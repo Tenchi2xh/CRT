@@ -46,12 +46,12 @@ numberBoxes = 5
 
 --Macros----------------------------------------------------
 
---myMacro = Macro () {
---    i = 0
---    while (i < numberBoxes) {
---        box1 <translate vec3(i*5.0, 0.0, 0.0)>
---    }
---}
+myMacro = Macro () {
+    i = 0
+    --while (i < numberBoxes) {
+    --    box1 <translate vec3(i*5.0, 0.0, 0.0)>
+    --}
+}
 
 --Config----------------------------------------------------
 
@@ -84,12 +84,12 @@ Scene {
     -- Multiple modifiers
     tub <scale 2.0, translate vec3(1.0, 0.0, 1.0)>
     -- Block CSG
-    Intersection {
-        box1
-        tub
-        -- ...
-        sphere1
-    }
+    --Intersection {
+    --    box1
+    --    tub
+    --    -- ...
+    --    sphere1
+    --}
     -- Macro call
     myMacro()
 }

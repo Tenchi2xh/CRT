@@ -1,5 +1,5 @@
 % CRT - \LaTeX Test
-% Hamza Haiken (hamza.haiken@heig-vd.ch)
+% Hamza Haiken <tenchi@team2xh.net>
   Prof. Pier Donini (pier.donini@heig-vd.ch)
 % B.A. Thesis, HEIG-VD 2014-2015
 

@@ -14,40 +14,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.team2xh.crt.language.compiler;
-
-import net.team2xh.crt.raytracer.Scene;
-import net.team2xh.crt.raytracer.Settings;
+package net.team2xh.crt.gui.themes;
 
 /**
- *
+ * Dark theme
+ * 
  * @author Hamza Haiken <tenchi@team2xh.net>
  */
-public class Script {
-
-    private Settings settings;
-    private Scene scene;
-
-    public Script() {
-        settings = new Settings();
-        scene = new Scene();
+public class DarkTheme extends Theme {
+    
+    public DarkTheme() {
+        super("#1a1a1a", // 01 Black
+              "#222222", // 02 Light black
+              "#2a2a2a", // 03 Dark Gray
+              "#333333", // 04 Gray
+              "#969696", // 05 Light Gray
+              "#66d9ef", // 06 Blue
+              "#8fe22b", // 07 Green
+              "#fd971f", // 08 Orange
+              "#be84ff", // 09 Purple
+              "#f92672", // 10 Red
+              "#f8f8f2", // 11 White
+              "#e6db74", // 12 Yellow
+              "#5e3535", // 13 Error
+              "org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel"
+        );
     }
-
-    public Settings getSettings() {
-        return settings;
-    }
-
-    public void setSettings(Settings settings) {
-        this.settings = settings;
-        scene.setSettings(settings);
-    }
-
-    public Scene getScene() {
-        return scene;
-    }
-
-    public void setScene(Scene scene) {
-        this.scene = scene;
-    }
-
 }

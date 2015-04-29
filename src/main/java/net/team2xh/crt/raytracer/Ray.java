@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Hamza Haiken (hamza.haiken@heig-vd.ch)
+ * Copyright (C) 2015 Hamza Haiken <tenchi@team2xh.net>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ import net.team2xh.crt.raytracer.math.Vector3;
  * Class for representing a Ray.
  * A Ray is a Vector3 that has an origin point.
  *
- * @author Hamza Haiken (hamza.haiken@heig-vd.ch)
+ * @author Hamza Haiken <tenchi@team2xh.net>
  */
 public class Ray {
 

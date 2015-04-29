@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Tenchi
+ * Copyright (C) 2015 Hamza Haiken <tenchi@team2xh.net>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ import org.lwjgl.input.Mouse;
 /**
  * Taken from jPCT tutorial
  * 
- * @author Tenchi
+ * @author Hamza Haiken <tenchi@team2xh.net>
  */
 public class MouseMapper {
 

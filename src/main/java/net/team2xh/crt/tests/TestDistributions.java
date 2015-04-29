@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Hamza Haiken (hamza.haiken@heig-vd.ch)
+ * Copyright (C) 2015 Hamza Haiken <tenchi@team2xh.net>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ import static net.team2xh.crt.raytracer.math.UniformDistributions.randomPolygonP
 
 /**
  *
- * @author Hamza Haiken (hamza.haiken@heig-vd.ch)
+ * @author Hamza Haiken <tenchi@team2xh.net>
  */
 public class TestDistributions {
 

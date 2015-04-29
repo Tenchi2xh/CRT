@@ -79,6 +79,9 @@
 [x] Review style
 [-] Add loops
 [-] Add conditions
+[-] Invalid channel
+[-] Add missing tokens (true, false, Macro)
+[-] CSG Blocks don't have attributes
 
 # Next steps
 

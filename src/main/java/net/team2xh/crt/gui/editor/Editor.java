@@ -14,40 +14,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.team2xh.crt.language.compiler;
+package net.team2xh.crt.gui.editor;
 
-import net.team2xh.crt.raytracer.Scene;
-import net.team2xh.crt.raytracer.Settings;
+import java.awt.BorderLayout;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import net.team2xh.crt.gui.themes.Theme;
 
 /**
  *
  * @author Hamza Haiken <tenchi@team2xh.net>
  */
-public class Script {
+public class Editor extends JScrollPane {
 
-    private Settings settings;
-    private Scene scene;
+    private EditorTextPane textPane;
 
-    public Script() {
-        settings = new Settings();
-        scene = new Scene();
+    public Editor(Theme theme) {
+        
+        // Trick for no text wrap with JTextPane
+        JPanel nowrap = new JPanel(new BorderLayout());
+        textPane = new EditorTextPane(theme);
+        nowrap.add(textPane);
+        EditorLineNumber ln = new EditorLineNumber(textPane, theme);
+
+        // Faster scroll
+        getVerticalScrollBar().setUnitIncrement(16);
+
+        setViewportView(nowrap);
+        setRowHeaderView(ln);
+        setBorder(null);
     }
 
-    public Settings getSettings() {
-        return settings;
+    public EditorTextPane getEditor() {
+        return textPane;
     }
-
-    public void setSettings(Settings settings) {
-        this.settings = settings;
-        scene.setSettings(settings);
-    }
-
-    public Scene getScene() {
-        return scene;
-    }
-
-    public void setScene(Scene scene) {
-        this.scene = scene;
-    }
-
 }
