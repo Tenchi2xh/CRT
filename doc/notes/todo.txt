@@ -35,6 +35,9 @@
 [-] Choice to make about ISL
 [-] Listener interface for tracer progress feedback
 [-] Clean tracer
+[-] Add transform() method to Entity
+    - rotate(), translate() and scale() methods change a local matrix
+    - subclasses call transform() on their coord calcs
 [-] Animations:
     - List of cameras + list of times -> interpolation between cameras
 [-] Procedural texturing
