@@ -44,11 +44,11 @@ public class TestEntityProperties {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Entity properties test");
 
-            EntityProperties ep = new EntityProperties(theme);
+            EntityProperties ep = new EntityProperties();
             ep.viewProperties(new Sphere(Vector3.X, 0.15, new Material(new Pigment(0.1))));
             
             frame.getContentPane().add(ep, BorderLayout.CENTER);
-            frame.setPreferredSize(new Dimension(300, 500));
+            frame.setPreferredSize(new Dimension(400, 500));
             frame.pack();
 
             GUIToolkit.centerFrame(frame);

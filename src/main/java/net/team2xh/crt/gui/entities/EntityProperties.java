@@ -17,7 +17,6 @@
 package net.team2xh.crt.gui.entities;
 
 import java.beans.IntrospectionException;
-import net.team2xh.crt.gui.themes.Theme;
 import org.openide.explorer.propertysheet.PropertySheet;
 import org.openide.nodes.BeanNode;
 import org.openide.nodes.Node;
@@ -28,13 +27,13 @@ import org.openide.util.Exceptions;
  * @author Hamza Haiken <tenchi@team2xh.net>
  */
 public class EntityProperties extends PropertySheet {
-
-    private final Theme theme;
-
-    public EntityProperties(Theme theme) {
-        this.theme = theme;
+    
+    public EntityProperties() {
+        setDescriptionAreaVisible(false);
+        setPopupEnabled(false);
+        
     }
-
+    
     public void viewProperties(Object object) {
         try {
             setNodes(new Node[]{new BeanNode(object)});

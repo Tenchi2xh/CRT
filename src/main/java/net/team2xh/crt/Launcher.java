@@ -16,11 +16,12 @@
  */
 package net.team2xh.crt;
 
-import java.io.File;
+import java.beans.Introspector;
+import java.beans.PropertyEditorManager;
 import java.lang.reflect.Field;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.team2xh.crt.gui.liveview.Test;
+import net.team2xh.crt.tests.TestEntityProperties;
 
 /**
  *
@@ -30,6 +31,10 @@ public class Launcher {
 
     public static void main(String[] args) {
         try {
+            
+            // Set BeanInfo and Editors paths
+            Introspector.setBeanInfoSearchPath(new String[]{"net.team2xh.crt.gui.beans.infos"});
+            PropertyEditorManager.setEditorSearchPath(new String[]{"net.team2xh.crt.gui.beans.editors"});
 
             // Instead of forcing user to launch jarfile with -Djava.library.path=..., set with hack
             System.setProperty("java.library.path", "lib/natives/");
@@ -37,8 +42,8 @@ public class Launcher {
             sysPathsField.setAccessible(true);
             sysPathsField.set(null, null);
             
-            Test.main(args);
-        } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException ex) {
+            TestEntityProperties.main(args);
+        } catch (Exception ex) {
             Logger.getLogger(Launcher.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
