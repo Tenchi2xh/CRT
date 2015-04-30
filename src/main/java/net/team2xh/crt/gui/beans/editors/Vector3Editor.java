@@ -16,12 +16,12 @@
  */
 package net.team2xh.crt.gui.beans.editors;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorSupport;
-import java.util.Enumeration;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -62,11 +62,10 @@ public class Vector3Editor extends PropertyEditorSupport implements ExPropertyEd
         private final JSpinner z = new JSpinner(new SpinnerNumberModel((Double) 0.0, null, null, 0.01));
         
         {
-            panel.setOpaque(false);
-            panel.setBorder(null);
-            x.setPreferredSize(new Dimension(50, 15));
-            y.setPreferredSize(new Dimension(50, 15));
-            z.setPreferredSize(new Dimension(50, 15));
+            x.setBorder(null);
+            y.setBorder(null);
+            z.setBorder(null);
+            panel.setLayout(new GridLayout(1, 0));
             panel.add(x);
             panel.add(y);
             panel.add(z);
@@ -84,7 +83,6 @@ public class Vector3Editor extends PropertyEditorSupport implements ExPropertyEd
         @Override
         public void connect(PropertyEditor propertyEditor, PropertyEnv env) {
             editor = propertyEditor;
-            System.out.println(env);
             reset();
         }
 
