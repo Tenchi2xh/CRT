@@ -28,8 +28,8 @@ import net.team2xh.crt.raytracer.math.Vector3;
  */
 public class Sphere extends Entity {
 
-    private final Vector3 center;
-    private final double radius;
+    private Vector3 center;
+    private double radius;
 
     public Sphere(Vector3 center, double radius, Material material) {
         super(material);
@@ -115,5 +115,13 @@ public class Sphere extends Entity {
 
     public double getRadius() {
         return radius;
+    }
+
+    public void setCenter(Vector3 center) {
+        this.center = center;
+    }
+
+    public void setRadius(double radius) {
+        this.radius = radius;
     }
 }
