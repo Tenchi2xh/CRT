@@ -38,7 +38,7 @@ public class LightTheme extends Theme {
               "#f8f8f2", // 11 White
               "#e6db74", // 12 Yellow
               "#5e3535", // 13 Error
-              "org.pushingpixels.substance.api.skin.SubstanceCremeLookAndFeel"
+              "org.pushingpixels.substance.api.skin.SubstanceNebulaLookAndFeel"
         );
     }
 }

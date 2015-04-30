@@ -42,8 +42,8 @@ import org.openide.explorer.propertysheet.PropertyModel;
  */
 public class Vector3Editor extends PropertyEditorSupport implements ExPropertyEditor, InplaceEditor.Factory {
 
-    private final Editor editor = new Editor();
-    private final Renderer renderer = new Renderer();
+    private final Inplace ed = new Inplace();
+    private final Renderer re = new Renderer();
     
     @Override
     public void attachEnv(PropertyEnv env) {
@@ -58,18 +58,18 @@ public class Vector3Editor extends PropertyEditorSupport implements ExPropertyEd
     @Override
     public void paintValue(Graphics g, Rectangle box) {
         
-        renderer.setVector((Vector3) getValue());
-        renderer.setPreferredSize(new Dimension(box.width + 2, box.height));
-        renderer.doLayout();
+        re.setVector((Vector3) getValue());
+        re.setPreferredSize(new Dimension(box.width + 2, box.height));
+        re.doLayout();
         
         // Hack: panel components not laid out if not in a window
         JFrame tempFrame = new JFrame();
-        tempFrame.add(renderer);
+        tempFrame.add(re);
         tempFrame.pack();
 
         g.translate(box.x, box.y);
         // paintall() of JPanel doesn't work so we draw each component separately
-        JComponent[] cs = new JComponent[]{renderer.x, renderer.y, renderer.z};
+        JComponent[] cs = new JComponent[]{re.x, re.y, re.z};
         for (JComponent c : cs) {
             g.translate(c.getX() - 2, c.getY());
             c.print(g);
@@ -81,7 +81,7 @@ public class Vector3Editor extends PropertyEditorSupport implements ExPropertyEd
     }
     @Override
     public InplaceEditor getInplaceEditor() {
-        return editor;
+        return ed;
     }
 
     private static class Renderer extends JPanel {
@@ -108,7 +108,7 @@ public class Vector3Editor extends PropertyEditorSupport implements ExPropertyEd
 
     }
 
-    private static class Editor implements InplaceEditor {
+    private static class Inplace implements InplaceEditor {
 
         private PropertyEditor editor = null;
         private PropertyModel model;
@@ -145,7 +145,7 @@ public class Vector3Editor extends PropertyEditorSupport implements ExPropertyEd
 
         @Override
         public boolean supportsTextEntry() {
-            return false;
+            return true;
         }
 
         @Override

@@ -32,7 +32,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -41,14 +40,16 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
+import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.FontUIResource;
 import org.apache.commons.io.IOUtils;
 import org.pushingpixels.substance.api.SubstanceConstants.SubstanceWidgetType;
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
-import org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel;
+import org.pushingpixels.substance.api.fonts.FontPolicy;
+import org.pushingpixels.substance.api.fonts.FontSet;
 
 /**
  * Utility class for missing Swing features.
@@ -145,10 +146,46 @@ final public class GUIToolkit {
      */
     public static void setSubstanceLAF(String laf) {
         try {
-            //LookAndFeel laf = new SubstanceGraphiteLookAndFeel();
             UIManager.setLookAndFeel(laf);
+            UIManager.put(SubstanceLookAndFeel.WINDOW_ROUNDED_CORNERS, Boolean.FALSE);
             JFrame.setDefaultLookAndFeelDecorated(true);
             JDialog.setDefaultLookAndFeelDecorated(true);
+
+            // Substance forgot to put a border for JTextArea,
+            // So we give it the same border that TextField has
+            Object border = UIManager.get("TextField.border");
+            UIManager.put("TextArea.border", border);
+            // Plain title font
+            SubstanceLookAndFeel.setFontPolicy(new FontPolicy() {
+                public FontSet getFontSet(String arg0, UIDefaults arg1) {
+                    FontSet fontSet = new FontSet() {
+                        public FontUIResource getWindowTitleFont() {
+                            return new FontUIResource(new Font("Source Sans Pro", Font.PLAIN, 16)); //this is where the title font changes
+                        }
+
+                        public FontUIResource getTitleFont() {
+                            return new FontUIResource(new Font("Source Sans Pro", Font.PLAIN, 16));
+                        }
+
+                        public FontUIResource getSmallFont() {
+                            return new FontUIResource(new Font("Source Sans Pro", Font.PLAIN, 16));
+                        }
+
+                        public FontUIResource getMessageFont() {
+                            return new FontUIResource(new Font("Source Sans Pro", Font.PLAIN, 16));
+                        }
+
+                        public FontUIResource getMenuFont() {
+                            return new FontUIResource(new Font("Source Sans Pro", Font.PLAIN, 16));
+                        }
+
+                        public FontUIResource getControlFont() {
+                            return new FontUIResource(new Font("Source Sans Pro", Font.PLAIN, 16));
+                        }
+                    };
+                    return fontSet;
+                }
+            });        
         } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(GUIToolkit.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -232,11 +269,8 @@ final public class GUIToolkit {
             GUIToolkit.setDefaultFont("Source Sans Pro", 16);
             // Enable Substance Look&Feel
             GUIToolkit.setSubstanceLAF(laf);
-
-            // Substance forgot to put a border for JTextArea,
-            // So we give it the same border that TextField has
-            Object border = UIManager.get("TextField.border");
-            UIManager.put("TextArea.border", border);
+            
+            // TODO: Create main icon
             // UIManager.put("InternalFrame.icon", MainWindow.icon);
             // UIManager.put("ProgressBar.background", Dark.DARKBLACK);
 
