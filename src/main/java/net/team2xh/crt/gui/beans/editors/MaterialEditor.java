@@ -43,7 +43,7 @@ import org.openide.explorer.propertysheet.PropertyModel;
  */
 public class MaterialEditor extends PropertyEditorSupport implements ExPropertyEditor, InplaceEditor.Factory {
 
-    private Inplace ed = new Inplace();
+    private Inplace ed = null;
 
     @Override
     public void attachEnv(PropertyEnv env) {
@@ -58,16 +58,23 @@ public class MaterialEditor extends PropertyEditorSupport implements ExPropertyE
 
     @Override
     public void paintValue(Graphics g, Rectangle box) {
-        g.translate(box.x, box.y);
+        if (ed != null) {
+            g.translate(box.x, box.y);
 
-        ed.panel.setBounds(box);
-        ed.panel.paintAll(g);
-        
-        g.translate(-box.x, -box.y);
+            ed.panel.setBounds(box);
+            ed.panel.doLayout();
+
+            ed.colorSquare.paint(g);
+    //        ed.panel.paintAll(g);
+
+            g.translate(-box.x, -box.y);
+        }
     }
 
     @Override
     public InplaceEditor getInplaceEditor() {
+        if (ed == null)
+            ed = new Inplace();
         return ed;
     }
 

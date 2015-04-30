@@ -17,10 +17,6 @@
 package net.team2xh.crt.gui.beans.infos;
 
 import java.beans.*;
-import static java.beans.BeanInfo.ICON_COLOR_16x16;
-import static java.beans.BeanInfo.ICON_COLOR_32x32;
-import static java.beans.BeanInfo.ICON_MONO_16x16;
-import static java.beans.BeanInfo.ICON_MONO_32x32;
 
 /**
  *
@@ -28,7 +24,7 @@ import static java.beans.BeanInfo.ICON_MONO_32x32;
  */
 public class SphereBeanInfo extends SimpleBeanInfo {
 
-    // Bean descriptor                          
+    // Bean descriptor
     private static BeanDescriptor getBdescriptor() {
         BeanDescriptor beanDescriptor = new BeanDescriptor(net.team2xh.crt.raytracer.entities.Sphere.class, null); // NOI18N
         beanDescriptor.setDisplayName("Sphere");
@@ -36,12 +32,12 @@ public class SphereBeanInfo extends SimpleBeanInfo {
         return beanDescriptor;
     }
 
-    // Property identifiers                      
+    // Property identifiers
     private static final int PROPERTY_center = 0;
     private static final int PROPERTY_material = 1;
     private static final int PROPERTY_radius = 2;
 
-    // Property array 
+    // Property array
     private static PropertyDescriptor[] getPdescriptor() {
         PropertyDescriptor[] properties = new PropertyDescriptor[3];
 
@@ -63,7 +59,7 @@ public class SphereBeanInfo extends SimpleBeanInfo {
 
         return properties;
     }
-    
+
     @Override
     public BeanDescriptor getBeanDescriptor() {
         return getBdescriptor();
