@@ -70,6 +70,13 @@
 [x] Mouse object picking
 [ ] Multiple viewports: top, side, free-view, quick-render
 
+# Gui
+
+[~] Property viewing
+[-] Figure out netbeans trees
+[-] Figure out netbeans window system
+[-] Assemble parts 
+
 # Refactoring
 
 [-] Clean up everything
