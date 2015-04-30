@@ -17,11 +17,15 @@
 package net.team2xh.crt.gui.beans.editors;
 
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.Rectangle;
 import java.awt.event.ActionListener;
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorSupport;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.KeyStroke;
@@ -38,46 +42,78 @@ import org.openide.explorer.propertysheet.PropertyModel;
  */
 public class Vector3Editor extends PropertyEditorSupport implements ExPropertyEditor, InplaceEditor.Factory {
 
+    private final Editor editor = new Editor();
+    private final Renderer renderer = new Renderer();
+    
     @Override
     public void attachEnv(PropertyEnv env) {
         env.registerInplaceEditorFactory(this);
     }
 
-    private InplaceEditor ed = null;
-
     @Override
-    public InplaceEditor getInplaceEditor() {
-        if (ed == null) {
-            ed = new Inplace();
-        }
-        return ed;
+    public boolean isPaintable() {
+        return true;
     }
 
-    private static class Inplace implements InplaceEditor {
+    @Override
+    public void paintValue(Graphics g, Rectangle box) {
+        
+        renderer.setVector((Vector3) getValue());
+        renderer.setPreferredSize(new Dimension(box.width + 2, box.height));
+        renderer.doLayout();
+        
+        // Hack: panel components not laid out if not in a window
+        JFrame tempFrame = new JFrame();
+        tempFrame.add(renderer);
+        tempFrame.pack();
 
-        private final JPanel panel = new JPanel();
+        g.translate(box.x, box.y);
+        // paintall() of JPanel doesn't work so we draw each component separately
+        JComponent[] cs = new JComponent[]{renderer.x, renderer.y, renderer.z};
+        for (JComponent c : cs) {
+            g.translate(c.getX() - 2, c.getY());
+            c.print(g);
+            g.translate(-c.getX() + 2, -c.getY());
+        }
+        g.translate(-box.x, -box.y);
+        
+        tempFrame.dispose();
+    }
+    @Override
+    public InplaceEditor getInplaceEditor() {
+        return editor;
+    }
+
+    private static class Renderer extends JPanel {
+
         private final JSpinner x = new JSpinner(new SpinnerNumberModel((Double) 0.0, null, null, 0.01));
         private final JSpinner y = new JSpinner(new SpinnerNumberModel((Double) 0.0, null, null, 0.01));
         private final JSpinner z = new JSpinner(new SpinnerNumberModel((Double) 0.0, null, null, 0.01));
-        
+
         {
             x.setBorder(null);
             y.setBorder(null);
             z.setBorder(null);
-            panel.setLayout(new GridLayout(1, 0));
-            panel.add(x);
-            panel.add(y);
-            panel.add(z);
+            setLayout(new GridLayout(1, 0));
+            add(x);
+            add(y);
+            add(z);
         }
-        
-        private PropertyEditor editor = null;
-        private PropertyModel model;
 
         private void setVector(Vector3 v) {
             x.getModel().setValue(v.x);
             y.getModel().setValue(v.y);
             z.getModel().setValue(v.z);
         }
+
+    }
+
+    private static class Editor implements InplaceEditor {
+
+        private PropertyEditor editor = null;
+        private PropertyModel model;
+
+        private final Renderer panel = new Renderer();
 
         @Override
         public void connect(PropertyEditor propertyEditor, PropertyEnv env) {
@@ -98,25 +134,25 @@ public class Vector3Editor extends PropertyEditorSupport implements ExPropertyEd
 
         @Override
         public Object getValue() {
-            return new Vector3((double) x.getValue(), (double) y.getValue(), (double) z.getValue());
+            return new Vector3((double) panel.x.getValue(), (double) panel.y.getValue(), (double) panel.z.getValue());
         }
 
         @Override
         public void setValue(Object o) {
             Vector3 v = (Vector3) o;
-            setVector(v);
+            panel.setVector(v);
         }
 
         @Override
         public boolean supportsTextEntry() {
-            return true;
+            return false;
         }
 
         @Override
         public void reset() {
             Vector3 v = (Vector3) editor.getValue();
             if (v != null) {
-                setVector(v);
+                panel.setVector(v);
             }
         }
 

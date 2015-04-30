@@ -27,7 +27,7 @@ import net.team2xh.crt.raytracer.math.Vector3;
  */
 public class Plane extends Entity {
 
-    private final Vector3 normal, position;
+    private Vector3 normal, position;
 
     public Plane(Vector3 normal, Vector3 position, Material material) {
         super(material);
@@ -61,5 +61,21 @@ public class Plane extends Entity {
     @Override
     public Vector3 getCenter() {
         return position;
+    }
+
+    public Vector3 getNormal() {
+        return normal;
+    }
+
+    public void setNormal(Vector3 normal) {
+        this.normal = normal;
+    }
+
+    public Vector3 getPosition() {
+        return position;
+    }
+
+    public void setPosition(Vector3 position) {
+        this.position = position;
     }
 }

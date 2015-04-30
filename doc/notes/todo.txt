@@ -16,11 +16,14 @@
     - Continue
 [-] GUI
     - Live view: OpenGL
-    - jPCT, LWJGL
-    - Conversion from scene
-    - Sacrifices made
-    - Techniques used
-    - Hacks
+        - jPCT, LWJGL
+        - Conversion from scene
+        - Sacrifices made
+        - Techniques used
+        - Hacks
+    - NetBeans API
+        - Introspection power
+        - PropertySheet & PropertyEditor
 
 # Raytracer
 

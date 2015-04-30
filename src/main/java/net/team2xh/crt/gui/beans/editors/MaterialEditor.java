@@ -28,6 +28,7 @@ import java.beans.PropertyEditor;
 import java.beans.PropertyEditorSupport;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
@@ -43,7 +44,8 @@ import org.openide.explorer.propertysheet.PropertyModel;
  */
 public class MaterialEditor extends PropertyEditorSupport implements ExPropertyEditor, InplaceEditor.Factory {
 
-    private Inplace ed = null;
+    private final Editor editor = new Editor();
+    private final Renderer renderer = new Renderer();
 
     @Override
     public void attachEnv(PropertyEnv env) {
@@ -55,32 +57,39 @@ public class MaterialEditor extends PropertyEditorSupport implements ExPropertyE
         return true;
     }
 
-
     @Override
     public void paintValue(Graphics g, Rectangle box) {
-        if (ed != null) {
-            g.translate(box.x, box.y);
+        
+        renderer.setMaterial((Material) getValue());
+        renderer.setPreferredSize(box.getSize());
+        renderer.doLayout();
+        
+        // Hack: panel components not laid out if not in a window
+        JFrame tempFrame = new JFrame();
+        tempFrame.add(renderer);
+        tempFrame.pack();
 
-            ed.panel.setBounds(box);
-            ed.panel.doLayout();
-
-            ed.colorSquare.paint(g);
-    //        ed.panel.paintAll(g);
-
-            g.translate(-box.x, -box.y);
+        g.translate(box.x, box.y);
+        // paintall() of JPanel doesn't work so we draw each component separately
+        JComponent[] cs = new JComponent[]{renderer.colorSquare, renderer.description, renderer.more};
+        for (Component c : cs) {
+            int ofs = c == renderer.more ? 0 : - 1;
+            g.translate(c.getX() + ofs, c.getY());
+            c.paint(g);
+            g.translate(-c.getX() - ofs, -c.getY());
         }
+        g.translate(-box.x, -box.y);
+        
+        tempFrame.dispose();
     }
 
     @Override
     public InplaceEditor getInplaceEditor() {
-        if (ed == null)
-            ed = new Inplace();
-        return ed;
+        return editor;
     }
 
-    private static class Inplace implements InplaceEditor {
+    private class Renderer extends JPanel {
 
-        private final JPanel panel = new JPanel();
         private final JButton more = new JButton("\u2026");
         private final JPanel view = new JPanel();
         private final JLabel description = new JLabel();
@@ -104,29 +113,37 @@ public class MaterialEditor extends PropertyEditorSupport implements ExPropertyE
         };
 
         {
-            panel.setLayout(new BorderLayout());
+            setLayout(new BorderLayout());
             view.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 1));
             view.add(colorSquare);
             view.add(description);
             int h = more.getPreferredSize().height;
             more.setPreferredSize(new Dimension(h, h));
-            panel.add(view, BorderLayout.LINE_START);
-            panel.add(more, BorderLayout.LINE_END);
+            add(view, BorderLayout.LINE_START);
+            add(more, BorderLayout.LINE_END);
         }
-
-        private PropertyEditor editor = null;
-        private PropertyModel model;
 
         private void setMaterial(Material m) {
             color = m.color.getColor();
             colorSquare.repaint();
             description.setText(getDescription(m));
+            validate();
+            repaint();
         }
 
         private String getDescription(Material m) {
             return String.format("d: %d%% / r: %d%%", (int) m.diffuse * 100, (int) m.reflectivity * 100);
         }
+        
+    }
 
+    private class Editor implements InplaceEditor {
+
+        private final Renderer panel = new Renderer();
+        
+        private PropertyEditor editor = null;
+        private PropertyModel model;
+        
         @Override
         public void connect(PropertyEditor propertyEditor, PropertyEnv env) {
             editor = propertyEditor;
@@ -153,19 +170,19 @@ public class MaterialEditor extends PropertyEditorSupport implements ExPropertyE
         @Override
         public void setValue(Object o) {
             Material m = (Material) o;
-            setMaterial(m);
+            panel.setMaterial(m);
         }
 
         @Override
         public boolean supportsTextEntry() {
-            return true;
+            return false;
         }
 
         @Override
         public void reset() {
             Material m = (Material) editor.getValue();
             if (m != null) {
-                setMaterial(m);
+                panel.setMaterial(m);
             }
         }
 

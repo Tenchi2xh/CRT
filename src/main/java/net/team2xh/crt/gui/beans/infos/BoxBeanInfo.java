@@ -25,38 +25,37 @@ import java.beans.SimpleBeanInfo;
  *
  * @author Hamza Haiken <tenchi@team2xh.net>
  */
-public class SphereBeanInfo extends SimpleBeanInfo {
-
+public class BoxBeanInfo extends SimpleBeanInfo {
+    
     // TODO: Icons
     
     // Bean descriptor
     private static BeanDescriptor getBdescriptor() {
-        BeanDescriptor beanDescriptor = new BeanDescriptor(net.team2xh.crt.raytracer.entities.Sphere.class, null); // NOI18N
-        beanDescriptor.setDisplayName("Sphere");
-        beanDescriptor.setShortDescription("Mathematical primitive representing a sphere.");
+        BeanDescriptor beanDescriptor = new BeanDescriptor(net.team2xh.crt.raytracer.entities.Box.class, null); // NOI18N
+        beanDescriptor.setDisplayName("Box");
+        beanDescriptor.setShortDescription("Mathematical primitive representing a box.");
         return beanDescriptor;
     }
 
     // Property identifiers
-    private static final int PROPERTY_center = 0;
-    private static final int PROPERTY_material = 1;
-    private static final int PROPERTY_radius = 2;
+    private static final int PROPERTY_cornerA = 0;
+    private static final int PROPERTY_cornerB = 1;
+    private static final int PROPERTY_material = 2;
 
     // Property array
     private static PropertyDescriptor[] getPdescriptor() {
         PropertyDescriptor[] properties = new PropertyDescriptor[3];
 
         try {
-            properties[PROPERTY_center] = new PropertyDescriptor("center", net.team2xh.crt.raytracer.entities.Sphere.class, "getCenter", "setCenter"); // NOI18N
-            properties[PROPERTY_center].setDisplayName("Center");
-            properties[PROPERTY_center].setShortDescription("Coordinates for the center of the sphere.");
-            properties[PROPERTY_material] = new PropertyDescriptor("material", net.team2xh.crt.raytracer.entities.Sphere.class, "getMaterial", "setMaterial"); // NOI18N
+            properties[PROPERTY_cornerA] = new PropertyDescriptor("cornerA", net.team2xh.crt.raytracer.entities.Box.class, "getCornerA", "setCornerA"); // NOI18N
+            properties[PROPERTY_cornerA].setDisplayName("Corner A");
+            properties[PROPERTY_cornerA].setShortDescription("One of the two corner defining the box.");
+            properties[PROPERTY_cornerB] = new PropertyDescriptor("cornerB", net.team2xh.crt.raytracer.entities.Box.class, "getCornerB", "setCornerB"); // NOI18N
+            properties[PROPERTY_cornerB].setDisplayName("Corner B");
+            properties[PROPERTY_cornerB].setShortDescription("One of the two corner defining the box.");
+            properties[PROPERTY_material] = new PropertyDescriptor("material", net.team2xh.crt.raytracer.entities.Box.class, "getMaterial", "setMaterial"); // NOI18N
             properties[PROPERTY_material].setDisplayName("Material");
-            properties[PROPERTY_material].setShortDescription("The sphere's material.");
-            properties[PROPERTY_material].setValue("tabName", "Daboudawa");
-            properties[PROPERTY_radius] = new PropertyDescriptor("radius", net.team2xh.crt.raytracer.entities.Sphere.class, "getRadius", "setRadius"); // NOI18N
-            properties[PROPERTY_radius].setDisplayName("Radius");
-            properties[PROPERTY_radius].setShortDescription("The sphere's radius.");
+            properties[PROPERTY_material].setShortDescription("The box's material.");
         } catch (IntrospectionException e) {
             e.printStackTrace();
         }

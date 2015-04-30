@@ -28,8 +28,8 @@ import net.team2xh.crt.raytracer.math.Vector3;
  */
 public class Box extends Entity {
 
-    private final Vector3 cornerA;
-    private final Vector3 cornerB;
+    private Vector3 cornerA;
+    private Vector3 cornerB;
 
     public Box(Vector3 cornerA, Vector3 cornerB, Material material) {
         super(material);
@@ -59,6 +59,10 @@ public class Box extends Entity {
 
     public Vector3 getMinCorner() {
         return new Vector3(min(0), min(1), min(2));
+    }
+    
+    public Vector3 getMaxCorner() {
+        return new Vector3(max(0), max(1), max(2));
     }
     
     @Override
@@ -168,4 +172,20 @@ public class Box extends Entity {
 
     }
 
+    public Vector3 getCornerA() {
+        return cornerA;
+    }
+
+    public void setCornerA(Vector3 cornerA) {
+        this.cornerA = cornerA;
+    }
+
+    public Vector3 getCornerB() {
+        return cornerB;
+    }
+
+    public void setCornerB(Vector3 cornerB) {
+        this.cornerB = cornerB;
+    }
+    
 }

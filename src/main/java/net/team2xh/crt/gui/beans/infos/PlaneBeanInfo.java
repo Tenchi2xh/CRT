@@ -25,38 +25,37 @@ import java.beans.SimpleBeanInfo;
  *
  * @author Hamza Haiken <tenchi@team2xh.net>
  */
-public class SphereBeanInfo extends SimpleBeanInfo {
-
+public class PlaneBeanInfo extends SimpleBeanInfo {
+    
     // TODO: Icons
     
     // Bean descriptor
     private static BeanDescriptor getBdescriptor() {
-        BeanDescriptor beanDescriptor = new BeanDescriptor(net.team2xh.crt.raytracer.entities.Sphere.class, null); // NOI18N
-        beanDescriptor.setDisplayName("Sphere");
-        beanDescriptor.setShortDescription("Mathematical primitive representing a sphere.");
+        BeanDescriptor beanDescriptor = new BeanDescriptor(net.team2xh.crt.raytracer.entities.Plane.class, null); // NOI18N
+        beanDescriptor.setDisplayName("Plane");
+        beanDescriptor.setShortDescription("Mathematical primitive representing an infinite plane.");
         return beanDescriptor;
     }
 
     // Property identifiers
-    private static final int PROPERTY_center = 0;
-    private static final int PROPERTY_material = 1;
-    private static final int PROPERTY_radius = 2;
+    private static final int PROPERTY_normal = 0;
+    private static final int PROPERTY_position = 1;
+    private static final int PROPERTY_material = 2;
 
     // Property array
     private static PropertyDescriptor[] getPdescriptor() {
         PropertyDescriptor[] properties = new PropertyDescriptor[3];
 
         try {
-            properties[PROPERTY_center] = new PropertyDescriptor("center", net.team2xh.crt.raytracer.entities.Sphere.class, "getCenter", "setCenter"); // NOI18N
-            properties[PROPERTY_center].setDisplayName("Center");
-            properties[PROPERTY_center].setShortDescription("Coordinates for the center of the sphere.");
-            properties[PROPERTY_material] = new PropertyDescriptor("material", net.team2xh.crt.raytracer.entities.Sphere.class, "getMaterial", "setMaterial"); // NOI18N
+            properties[PROPERTY_normal] = new PropertyDescriptor("normal", net.team2xh.crt.raytracer.entities.Plane.class, "getNormal", "setNormal"); // NOI18N
+            properties[PROPERTY_normal].setDisplayName("Normal");
+            properties[PROPERTY_normal].setShortDescription("The plane's normal vector.");
+            properties[PROPERTY_position] = new PropertyDescriptor("position", net.team2xh.crt.raytracer.entities.Plane.class, "getPosition", "setPosition"); // NOI18N
+            properties[PROPERTY_position].setDisplayName("Position");
+            properties[PROPERTY_position].setShortDescription("Position of the plane.");
+            properties[PROPERTY_material] = new PropertyDescriptor("material", net.team2xh.crt.raytracer.entities.Plane.class, "getMaterial", "setMaterial"); // NOI18N
             properties[PROPERTY_material].setDisplayName("Material");
-            properties[PROPERTY_material].setShortDescription("The sphere's material.");
-            properties[PROPERTY_material].setValue("tabName", "Daboudawa");
-            properties[PROPERTY_radius] = new PropertyDescriptor("radius", net.team2xh.crt.raytracer.entities.Sphere.class, "getRadius", "setRadius"); // NOI18N
-            properties[PROPERTY_radius].setDisplayName("Radius");
-            properties[PROPERTY_radius].setShortDescription("The sphere's radius.");
+            properties[PROPERTY_material].setShortDescription("The plane's material.");
         } catch (IntrospectionException e) {
             e.printStackTrace();
         }

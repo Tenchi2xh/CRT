@@ -26,6 +26,8 @@ import net.team2xh.crt.gui.themes.Theme;
 import net.team2xh.crt.gui.util.GUIToolkit;
 import net.team2xh.crt.raytracer.Material;
 import net.team2xh.crt.raytracer.Pigment;
+import net.team2xh.crt.raytracer.entities.Box;
+import net.team2xh.crt.raytracer.entities.Plane;
 import net.team2xh.crt.raytracer.entities.Sphere;
 import net.team2xh.crt.raytracer.math.Vector3;
 
@@ -45,9 +47,11 @@ public class TestEntityProperties {
             JFrame frame = new JFrame("Entity properties test");
 
             Sphere s = new Sphere(Vector3.X, 0.15, new Material(new Pigment(0.9, 0.5, 0.0)));
+            Box b = new Box(Vector3.X, Vector3.Y, new Material(new Pigment(0.3, 0.5, 0.8)));
+            Plane p = new Plane(Vector3.X, Vector3.X, new Material(new Pigment(0.4, 0.8, 0.3)));
 
             EntityProperties ep = new EntityProperties();
-            ep.viewProperties(s);
+            ep.viewProperties(p);
 
             frame.getContentPane().add(ep, BorderLayout.CENTER);
             frame.setPreferredSize(new Dimension(400, 500));
