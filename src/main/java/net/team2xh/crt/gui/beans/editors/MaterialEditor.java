@@ -55,12 +55,13 @@ public class MaterialEditor extends PropertyEditorSupport implements ExPropertyE
         return true;
     }
 
+
     @Override
     public void paintValue(Graphics g, Rectangle box) {
         g.translate(box.x, box.y);
-        
-        ed.getComponent().setSize(box.width, box.height);
-        ed.getComponent().paintAll(g);
+
+        ed.panel.setBounds(box);
+        ed.panel.paintAll(g);
         
         g.translate(-box.x, -box.y);
     }
@@ -108,7 +109,7 @@ public class MaterialEditor extends PropertyEditorSupport implements ExPropertyE
 
         private PropertyEditor editor = null;
         private PropertyModel model;
-        
+
         private void setMaterial(Material m) {
             color = m.color.getColor();
             colorSquare.repaint();
