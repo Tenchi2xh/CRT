@@ -16,17 +16,22 @@
  */
 package net.team2xh.crt.gui.beans.editors;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
-import java.awt.GridLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.event.ActionListener;
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorSupport;
+import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSpinner;
 import javax.swing.KeyStroke;
-import javax.swing.SpinnerNumberModel;
-import net.team2xh.crt.raytracer.math.Vector3;
+import net.team2xh.crt.raytracer.Material;
 import org.openide.explorer.propertysheet.ExPropertyEditor;
 import org.openide.explorer.propertysheet.InplaceEditor;
 import org.openide.explorer.propertysheet.PropertyEnv;
@@ -36,47 +41,82 @@ import org.openide.explorer.propertysheet.PropertyModel;
  *
  * @author Hamza Haiken <tenchi@team2xh.net>
  */
-public class Vector3Editor extends PropertyEditorSupport implements ExPropertyEditor, InplaceEditor.Factory {
+public class MaterialEditor extends PropertyEditorSupport implements ExPropertyEditor, InplaceEditor.Factory {
+
+    private Inplace ed = new Inplace();
 
     @Override
     public void attachEnv(PropertyEnv env) {
         env.registerInplaceEditorFactory(this);
     }
 
-    private InplaceEditor ed = null;
+    @Override
+    public boolean isPaintable() {
+        return true;
+    }
+
+    @Override
+    public void paintValue(Graphics g, Rectangle box) {
+        g.translate(box.x, box.y);
+        
+        ed.getComponent().setSize(box.width, box.height);
+        ed.getComponent().paintAll(g);
+        
+        g.translate(-box.x, -box.y);
+    }
 
     @Override
     public InplaceEditor getInplaceEditor() {
-        if (ed == null) {
-            ed = new Inplace();
-        }
         return ed;
     }
 
     private static class Inplace implements InplaceEditor {
 
         private final JPanel panel = new JPanel();
-        private final JSpinner x = new JSpinner(new SpinnerNumberModel((Double) 0.0, null, null, 0.01));
-        private final JSpinner y = new JSpinner(new SpinnerNumberModel((Double) 0.0, null, null, 0.01));
-        private final JSpinner z = new JSpinner(new SpinnerNumberModel((Double) 0.0, null, null, 0.01));
-        
+        private final JButton more = new JButton("\u2026");
+        private final JPanel view = new JPanel();
+        private final JLabel description = new JLabel();
+        private Color color = Color.GRAY;
+        private final JLabel colorSquare = new JLabel() {
+
+            private final static int W = 15;
+
+            @Override
+            public void paintComponent(Graphics g) {
+                g.setColor(color);
+                g.fillRect(0, 0, W, W);
+                g.setColor(color.brighter());
+                g.drawRect(0, 0, W - 1, W - 1);
+            }
+
+            @Override
+            public Dimension getPreferredSize() {
+                return new Dimension(W, W);
+            }
+        };
+
         {
-            x.setBorder(null);
-            y.setBorder(null);
-            z.setBorder(null);
-            panel.setLayout(new GridLayout(1, 0));
-            panel.add(x);
-            panel.add(y);
-            panel.add(z);
+            panel.setLayout(new BorderLayout());
+            view.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 1));
+            view.add(colorSquare);
+            view.add(description);
+            int h = more.getPreferredSize().height;
+            more.setPreferredSize(new Dimension(h, h));
+            panel.add(view, BorderLayout.LINE_START);
+            panel.add(more, BorderLayout.LINE_END);
         }
-        
+
         private PropertyEditor editor = null;
         private PropertyModel model;
+        
+        private void setMaterial(Material m) {
+            color = m.color.getColor();
+            colorSquare.repaint();
+            description.setText(getDescription(m));
+        }
 
-        private void setVector(Vector3 v) {
-            x.getModel().setValue(v.x);
-            y.getModel().setValue(v.y);
-            z.getModel().setValue(v.z);
+        private String getDescription(Material m) {
+            return String.format("d: %d%% / r: %d%%", (int) m.diffuse * 100, (int) m.reflectivity * 100);
         }
 
         @Override
@@ -98,13 +138,14 @@ public class Vector3Editor extends PropertyEditorSupport implements ExPropertyEd
 
         @Override
         public Object getValue() {
-            return new Vector3((double) x.getValue(), (double) y.getValue(), (double) z.getValue());
+            // TODO: return correct material once material editing window is done
+            return editor.getValue();
         }
 
         @Override
         public void setValue(Object o) {
-            Vector3 v = (Vector3) o;
-            setVector(v);
+            Material m = (Material) o;
+            setMaterial(m);
         }
 
         @Override
@@ -114,9 +155,9 @@ public class Vector3Editor extends PropertyEditorSupport implements ExPropertyEd
 
         @Override
         public void reset() {
-            Vector3 v = (Vector3) editor.getValue();
-            if (v != null) {
-                setVector(v);
+            Material m = (Material) editor.getValue();
+            if (m != null) {
+                setMaterial(m);
             }
         }
 

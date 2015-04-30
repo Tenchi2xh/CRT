@@ -52,6 +52,7 @@ public class SphereBeanInfo extends SimpleBeanInfo {
             properties[PROPERTY_material] = new PropertyDescriptor("material", net.team2xh.crt.raytracer.entities.Sphere.class, "getMaterial", "setMaterial"); // NOI18N
             properties[PROPERTY_material].setDisplayName("Material");
             properties[PROPERTY_material].setShortDescription("The sphere's material.");
+            properties[PROPERTY_material].setValue("i", false);
             properties[PROPERTY_radius] = new PropertyDescriptor("radius", net.team2xh.crt.raytracer.entities.Sphere.class, "getRadius", "setRadius"); // NOI18N
             properties[PROPERTY_radius].setDisplayName("Radius");
             properties[PROPERTY_radius].setShortDescription("The sphere's radius.");

@@ -44,9 +44,11 @@ public class TestEntityProperties {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Entity properties test");
 
+            Sphere s = new Sphere(Vector3.X, 0.15, new Material(new Pigment(0.9, 0.5, 0.0)));
+
             EntityProperties ep = new EntityProperties();
-            ep.viewProperties(new Sphere(Vector3.X, 0.15, new Material(new Pigment(0.1))));
-            
+            ep.viewProperties(s);
+
             frame.getContentPane().add(ep, BorderLayout.CENTER);
             frame.setPreferredSize(new Dimension(400, 500));
             frame.pack();
@@ -55,6 +57,18 @@ public class TestEntityProperties {
 
             frame.setVisible(true);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+//            new Thread(() -> {
+//                for (;;) {
+//                    try {
+//                        Thread.sleep(1000);
+//                        System.out.println(s.getCenter());
+//                    } catch (InterruptedException ex) {
+//                        Exceptions.printStackTrace(ex);
+//                    }
+//                }
+//            }).start();
+
         });
 
     }
