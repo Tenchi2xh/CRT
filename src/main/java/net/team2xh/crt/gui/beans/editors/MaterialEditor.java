@@ -21,6 +21,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.ActionListener;
@@ -32,6 +33,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
+import javax.swing.border.EmptyBorder;
 import net.team2xh.crt.raytracer.Material;
 import org.openide.explorer.propertysheet.ExPropertyEditor;
 import org.openide.explorer.propertysheet.InplaceEditor;
@@ -58,12 +60,24 @@ public class MaterialEditor extends PropertyEditorSupport implements ExPropertyE
     }
 
     @Override
+    public Component getCustomEditor() {
+        return new JLabel("TODO Editor");
+    }
+
+    @Override
+    public boolean supportsCustomEditor() {
+        return true;
+    }
+
+    @Override
     public void paintValue(Graphics g, Rectangle box) {
-        
+
         renderer.setMaterial((Material) getValue());
         renderer.setPreferredSize(box.getSize());
         renderer.doLayout();
-        
+
+        FontMetrics fm = g.getFontMetrics();
+
         // Hack: panel components not laid out if not in a window
         JFrame tempFrame = new JFrame();
         tempFrame.add(renderer);
@@ -71,15 +85,27 @@ public class MaterialEditor extends PropertyEditorSupport implements ExPropertyE
 
         g.translate(box.x, box.y);
         // paintall() of JPanel doesn't work so we draw each component separately
-        JComponent[] cs = new JComponent[]{renderer.colorSquare, renderer.description, renderer.more};
+        JComponent[] cs = new JComponent[]{renderer.colorSquare, renderer.description/*, renderer.more*/};
+        int i = 0;
         for (Component c : cs) {
-            int ofs = c == renderer.more ? 0 : - 1;
+//            int ofs = c == renderer.more ? 0 : - 1;
+            int ofs = -1;
             g.translate(c.getX() + ofs, c.getY());
-            c.paint(g);
+//            c.print(g);
+            if (i == 0) {
+                Color orig = g.getColor();
+                g.setColor(renderer.color);
+                g.fillRect(0, 0, 11, 11);
+                g.setColor(orig);
+                g.drawRect(0, 0, 10, 10);
+            } else {
+                g.drawString(renderer.description.getText(), 0, fm.getAscent());
+            }
+            ++i;
             g.translate(-c.getX() - ofs, -c.getY());
         }
         g.translate(-box.x, -box.y);
-        
+
         tempFrame.dispose();
     }
 
@@ -90,37 +116,41 @@ public class MaterialEditor extends PropertyEditorSupport implements ExPropertyE
 
     private class Renderer extends JPanel {
 
-        private final JButton more = new JButton("\u2026");
+//        private final JButton more = new JButton("\u2026");
         private final JPanel view = new JPanel();
         private final JLabel description = new JLabel();
         private Color color = Color.GRAY;
-        private final JLabel colorSquare = new JLabel() {
 
-            private final static int W = 15;
+        private int ofs = 0;
+        private final static int W = 11;
+        private final JLabel colorSquare = new JLabel() {
 
             @Override
             public void paintComponent(Graphics g) {
+                Color orig = g.getColor();
                 g.setColor(color);
-                g.fillRect(0, 0, W, W);
-                g.setColor(color.brighter());
-                g.drawRect(0, 0, W - 1, W - 1);
-            }
-
-            @Override
-            public Dimension getPreferredSize() {
-                return new Dimension(W, W);
+                g.fillRect(ofs, 0, W, W);
+                g.setColor(orig);
+                g.drawRect(ofs, 0, W - 1, W - 1);
             }
         };
 
         {
+            colorSquare.setPreferredSize(new Dimension(W + 4, W));
             setLayout(new BorderLayout());
-            view.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 1));
+            view.setLayout(new FlowLayout(FlowLayout.LEFT, 1, 1));
             view.add(colorSquare);
             view.add(description);
-            int h = more.getPreferredSize().height;
-            more.setPreferredSize(new Dimension(h, h));
+//            int h = more.getPreferredSize().height;
+//            more.setPreferredSize(new Dimension(h, h));
             add(view, BorderLayout.LINE_START);
-            add(more, BorderLayout.LINE_END);
+//            add(more, BorderLayout.LINE_END);
+        }
+
+        public void shift() {
+            ofs += 2;
+            colorSquare.setPreferredSize(new Dimension(ofs + W + 4, W));
+            colorSquare.repaint();
         }
 
         private void setMaterial(Material m) {
@@ -134,16 +164,20 @@ public class MaterialEditor extends PropertyEditorSupport implements ExPropertyE
         private String getDescription(Material m) {
             return String.format("d: %d%% / r: %d%%", (int) m.diffuse * 100, (int) m.reflectivity * 100);
         }
-        
+
     }
 
     private class Editor implements InplaceEditor {
 
         private final Renderer panel = new Renderer();
-        
+
+        {
+            panel.shift();
+        }
+
         private PropertyEditor editor = null;
         private PropertyModel model;
-        
+
         @Override
         public void connect(PropertyEditor propertyEditor, PropertyEnv env) {
             editor = propertyEditor;

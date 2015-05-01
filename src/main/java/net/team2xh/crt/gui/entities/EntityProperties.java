@@ -21,7 +21,6 @@ import org.openide.explorer.propertysheet.PropertySheetView;
 import org.openide.nodes.BeanNode;
 import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
-import org.openide.util.HelpCtx;
 
 /**
  *
@@ -30,9 +29,7 @@ import org.openide.util.HelpCtx;
 public class EntityProperties extends PropertySheetView {
     
     public EntityProperties() {
-//        setDescriptionAreaVisible(false);
         setPopupEnabled(false);
-        getActionMap().put("invokeHelp", null);
     }
     
     public void viewProperties(Object object) {

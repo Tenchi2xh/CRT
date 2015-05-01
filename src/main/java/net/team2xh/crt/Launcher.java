@@ -16,7 +16,6 @@
  */
 package net.team2xh.crt;
 
-import java.beans.Introspector;
 import java.beans.PropertyEditorManager;
 import java.lang.reflect.Field;
 import java.util.logging.Level;
@@ -31,17 +30,18 @@ public class Launcher {
 
     public static void main(String[] args) {
         try {
-            
+
             // Set BeanInfo and Editors paths
-            Introspector.setBeanInfoSearchPath(new String[]{"net.team2xh.crt.gui.beans.infos"});
             PropertyEditorManager.setEditorSearchPath(new String[]{"net.team2xh.crt.gui.beans.editors"});
-            
+            // Doesn't work with many packages ??
+            // Introspector.setBeanInfoSearchPath(new String[]{"net.team2xh.crt.gui.beans.infos"});
+
             // Instead of forcing user to launch jarfile with -Djava.library.path=..., set with hack
             System.setProperty("java.library.path", "lib/natives/");
             final Field sysPathsField = ClassLoader.class.getDeclaredField("sys_paths");
             sysPathsField.setAccessible(true);
             sysPathsField.set(null, null);
-            
+
             TestEntityTree.main(args);
         } catch (Exception ex) {
             Logger.getLogger(Launcher.class.getName()).log(Level.SEVERE, null, ex);

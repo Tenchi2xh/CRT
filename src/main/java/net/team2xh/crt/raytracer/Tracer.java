@@ -103,7 +103,7 @@ public class Tracer {
                 }
 
                 Pigment  color    = m.color;
-                Pigment  light    = l.getColor();
+                Pigment  light    = l.getPigment();
 
                 // Inverse square law
                 double isl = 1.0;

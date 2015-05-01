@@ -27,6 +27,16 @@ public class ParallelLight extends Light {
 
     private Vector3 direction;
     
+    public ParallelLight(Vector3 direction, Pigment pigment) {
+        super(pigment);
+        this.direction = direction;
+    }
+        
+    public ParallelLight(Vector3 direction, Pigment pigment, double ambient) {
+        super(pigment, ambient);
+        this.direction = direction;
+    }
+    
     public ParallelLight(Vector3 from, Vector3 pointingTo, Pigment pigment) {
         super(pigment);
         init(from, pointingTo);
@@ -44,6 +54,14 @@ public class ParallelLight extends Light {
     @Override
     public Vector3 getDirection(Vector3 from) {
         return direction;
+    }
+
+    public Vector3 getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Vector3 direction) {
+        this.direction = direction;
     }
     
     @Override

@@ -16,6 +16,7 @@
  */
 package net.team2xh.crt.raytracer.lights;
 
+import java.awt.Color;
 import net.team2xh.crt.raytracer.Pigment;
 import net.team2xh.crt.raytracer.math.Vector3;
 
@@ -27,14 +28,16 @@ public abstract class Light {
     
     private double falloff = -1;
     private double ambient = 0.0;
-    private Pigment color;
+    private Pigment pigment;
+    // For property sheet editor
+    private Color color;
 
     public Light(Pigment pigment) {
-        this.color  = pigment;
+        setPigment(pigment);
     }
 
     public Light(Pigment pigment, double ambient) {
-        this.color   = pigment;
+        setPigment(pigment);
         this.ambient = ambient;
     }
 
@@ -58,12 +61,21 @@ public abstract class Light {
         this.ambient = ambient;
     }
 
-    public Pigment getColor() {
+    public Pigment getPigment() {
+        return pigment;
+    }
+
+    public void setPigment(Pigment pigment) {
+        this.pigment = pigment;
+        this.color = pigment.getColor();
+    }
+
+    public Color getColor() {
         return color;
     }
 
-    public void setColor(Pigment color) {
-        this.color = color;
+    public void setColor(Color color) {
+        setPigment(new Pigment(color));
     }
-
+    
 }

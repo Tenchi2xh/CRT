@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.team2xh.crt.gui.beans.infos;
+package net.team2xh.crt.raytracer.entities;
 
 import java.beans.BeanDescriptor;
 import java.beans.IntrospectionException;

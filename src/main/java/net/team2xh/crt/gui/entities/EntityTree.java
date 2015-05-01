@@ -20,9 +20,12 @@ import java.awt.BorderLayout;
 import java.beans.beancontext.BeanContext;
 import java.beans.beancontext.BeanContextSupport;
 import javax.swing.JPanel;
-import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
+import javax.swing.tree.TreeSelectionModel;
 import net.team2xh.crt.raytracer.Scene;
 import net.team2xh.crt.raytracer.entities.Entity;
+import net.team2xh.crt.raytracer.lights.Light;
+import net.team2xh.crt.raytracer.lights.PointLight;
 import org.openide.explorer.ExplorerManager;
 import org.openide.explorer.view.BeanTreeView;
 import org.openide.nodes.AbstractNode;
@@ -46,21 +49,44 @@ public class EntityTree extends JPanel implements ExplorerManager.Provider {
         add(properties, BorderLayout.PAGE_END);
 
         tree.getVerticalScrollBar().setUnitIncrement(16);
-        tree.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tree.setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        tree.setPopupAllowed(false);
 
-        BeanContext beans = new BeanContextSupport();
-
+        // Entities
+        BeanContext entities = new BeanContextSupport();
         for (Entity e : scene.getEntities()) {
-            beans.add(e);
+            // TODO: Some way of differentiating similar objects in a scene
+            // Counter ? maybe keep track of named variables
+            entities.add(e);
         }
+        Children entitiesChildren = new BeanChildren(entities);
+        Node entitiesNode = new AbstractNode(entitiesChildren);
+        entitiesNode.setDisplayName("Entities");
+        entitiesNode.setShortDescription("The entities present in the compiled scene.");
 
-        Children children = new BeanChildren(beans);
+        // Lights
+        BeanContext lights = new BeanContextSupport();
+        for (Light l : scene.getLights()) {
+            lights.add(l);
+        }
+        Children lightsChildren = new BeanChildren(lights);
+        Node lightsNode = new AbstractNode(lightsChildren);
+        lightsNode.setDisplayName("Lights");
+        lightsNode.setShortDescription("The lights present in the compiled scene.");
 
-        Node root = new AbstractNode(children);
+        // Scene
+        Children sceneChildren = new Children.Array();
+        sceneChildren.add(new Node[]{lightsNode, entitiesNode});
+
+        Node root = new AbstractNode(sceneChildren);
         root.setDisplayName("Scene");
         root.setShortDescription("The current scene after execution of the script.");
 
         manager.setRootContext(root);
+        
+        SwingUtilities.invokeLater(() -> {
+           tree.expandAll(); 
+        });
 
     }
 

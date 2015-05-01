@@ -55,4 +55,8 @@ public class PointLight extends Light {
         return origin;
     }
     
+    public void setOrigin(Vector3 origin) {
+        this.origin = origin;
+    }
+    
 }

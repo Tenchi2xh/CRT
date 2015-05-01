@@ -157,13 +157,13 @@ public class Test {
                 }
             }
 
-            SimpleVector intensity = l0.getColor().getVector().simpleVector();
+            SimpleVector intensity = l0.getPigment().getVector().simpleVector();
             intensity.scalarMul(255f);
             l1.setIntensity(intensity);
             l1.setAttenuation((float) l0.getFalloff() * distMult);
 
             if (type == ParallelLight.class) {
-                intensity = l0.getColor().getVector().simpleVector();
+                intensity = l0.getPigment().getVector().simpleVector();
                 intensity.scalarMul(255f);
                 l1.setIntensity(intensity);
             }

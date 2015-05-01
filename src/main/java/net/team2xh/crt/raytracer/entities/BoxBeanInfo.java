@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.team2xh.crt.gui.beans.infos;
+package net.team2xh.crt.raytracer.entities;
 
 import java.beans.BeanDescriptor;
 import java.beans.IntrospectionException;
@@ -25,21 +25,21 @@ import java.beans.SimpleBeanInfo;
  *
  * @author Hamza Haiken <tenchi@team2xh.net>
  */
-public class PlaneBeanInfo extends SimpleBeanInfo {
-
+public class BoxBeanInfo extends SimpleBeanInfo {
+    
     // TODO: Icons
+    
     // Bean descriptor
     private static BeanDescriptor getBdescriptor() {
-        BeanDescriptor beanDescriptor = new BeanDescriptor(net.team2xh.crt.raytracer.entities.Plane.class, null); // NOI18N
-        beanDescriptor.setDisplayName("Plane");
-        beanDescriptor.setShortDescription("Mathematical primitive representing an infinite plane.");
-        beanDescriptor.setValue("ADOKSADOK", "OADSKOASDOK");
+        BeanDescriptor beanDescriptor = new BeanDescriptor(net.team2xh.crt.raytracer.entities.Box.class, null); // NOI18N
+        beanDescriptor.setDisplayName("Box");
+        beanDescriptor.setShortDescription("Mathematical primitive representing a box.");
         return beanDescriptor;
     }
 
     // Property identifiers
-    private static final int PROPERTY_normal = 0;
-    private static final int PROPERTY_position = 1;
+    private static final int PROPERTY_cornerA = 0;
+    private static final int PROPERTY_cornerB = 1;
     private static final int PROPERTY_material = 2;
 
     // Property array
@@ -47,15 +47,15 @@ public class PlaneBeanInfo extends SimpleBeanInfo {
         PropertyDescriptor[] properties = new PropertyDescriptor[3];
 
         try {
-            properties[PROPERTY_normal] = new PropertyDescriptor("normal", net.team2xh.crt.raytracer.entities.Plane.class, "getNormal", "setNormal"); // NOI18N
-            properties[PROPERTY_normal].setDisplayName("Normal");
-            properties[PROPERTY_normal].setShortDescription("The plane's normal vector.");
-            properties[PROPERTY_position] = new PropertyDescriptor("position", net.team2xh.crt.raytracer.entities.Plane.class, "getPosition", "setPosition"); // NOI18N
-            properties[PROPERTY_position].setDisplayName("Position");
-            properties[PROPERTY_position].setShortDescription("Position of the plane.");
-            properties[PROPERTY_material] = new PropertyDescriptor("material", net.team2xh.crt.raytracer.entities.Plane.class, "getMaterial", "setMaterial"); // NOI18N
+            properties[PROPERTY_cornerA] = new PropertyDescriptor("cornerA", net.team2xh.crt.raytracer.entities.Box.class, "getCornerA", "setCornerA"); // NOI18N
+            properties[PROPERTY_cornerA].setDisplayName("Corner A");
+            properties[PROPERTY_cornerA].setShortDescription("One of the two corner defining the box.");
+            properties[PROPERTY_cornerB] = new PropertyDescriptor("cornerB", net.team2xh.crt.raytracer.entities.Box.class, "getCornerB", "setCornerB"); // NOI18N
+            properties[PROPERTY_cornerB].setDisplayName("Corner B");
+            properties[PROPERTY_cornerB].setShortDescription("One of the two corner defining the box.");
+            properties[PROPERTY_material] = new PropertyDescriptor("material", net.team2xh.crt.raytracer.entities.Box.class, "getMaterial", "setMaterial"); // NOI18N
             properties[PROPERTY_material].setDisplayName("Material");
-            properties[PROPERTY_material].setShortDescription("The plane's material.");
+            properties[PROPERTY_material].setShortDescription("The box's material.");
         } catch (IntrospectionException e) {
             e.printStackTrace();
         }
