@@ -65,7 +65,6 @@ public class EditorTextPane extends JTextPane {
 //    private int length = 0;
 //    private int cursor = 0;
 //    private int line = 0;
-
     final private LineHighlighter lh;
     final private LineHighlighter ll;
     final private WordHighlighter wh;
@@ -79,27 +78,27 @@ public class EditorTextPane extends JTextPane {
     private int marginSize = margin * charWidth + 3;
 
     private LinkedList<Object> occurrences = new LinkedList<>();
-    
+
     private final Theme theme;
 
     public EditorTextPane(Theme theme) {
 
         this.theme = theme;
-        
+
         // Initialize highlighters
         lh = new LineHighlighter(theme.COLOR_13);
         ll = new LineHighlighter(theme.COLOR_04);
         wh = new WordHighlighter(theme.COLOR_11);
         eh = new ErrorHighlighter(Color.RED);
-        
-        // Initialise colors 
+
+        // Initialise colors
         initAttributeSets();
-        
+
         setOpaque(false); // Background will be drawn later on
         setFont(font);
 
         doc = (DefaultStyledDocument) getDocument();
-        
+
         // Replace all tabs with four spaces
         // TODO: tab whole selection
         // TODO: insert matching brace
@@ -154,11 +153,11 @@ public class EditorTextPane extends JTextPane {
 
                 return true;
             }
-            
+
             @Override
             public void caretUpdate(CaretEvent ce) {
                 try {
-                            
+
                     // Highlight current line
                     highlightCurrentLine();
 
@@ -218,10 +217,10 @@ public class EditorTextPane extends JTextPane {
     }
 
     class SyntaxHighlightingListener extends CRTBaseListener {
-        
+
         @Override
         public void visitErrorNode(@NotNull ErrorNode node) {
-           
+
             Token t = node.getSymbol();
             String m = node.getText();
             System.out.println("Parse error: " + m);
@@ -253,7 +252,7 @@ public class EditorTextPane extends JTextPane {
             throws BadLocationException {
         return getHighlighter().addHighlight(start, end, hl);
     }
-    
+
     private SimpleAttributeSet OPERATORS = new SimpleAttributeSet();
     private SimpleAttributeSet NAME = new SimpleAttributeSet();
     private SimpleAttributeSet IDENTIFIER = new SimpleAttributeSet();
@@ -282,13 +281,13 @@ public class EditorTextPane extends JTextPane {
     }
 
     private Object lastLine = null;
-    
+
     private void highlightText() {
         getHighlighter().removeAllHighlights();
         colorize(COMMENT, 0, 0, getText().length());
-        
+
         highlightCurrentLine();
-        
+
         CRTLexer lexer = new CRTLexer(new ANTLRInputStream(getText()));
         CRTParser parser = new CRTParser(new CommonTokenStream(lexer));
         ParserRuleContext tree = parser.script();
@@ -303,7 +302,7 @@ public class EditorTextPane extends JTextPane {
             int cursor = token.getCharPositionInLine();
             int line = token.getLine() - 1;
             int length = token.getText().length();
-            
+
             switch (token.getType()) {
                 case CRTLexer.ASSIGN:
                 case CRTLexer.ATTRIBUTE:
@@ -326,7 +325,7 @@ public class EditorTextPane extends JTextPane {
                 case CRTLexer.COLON:
                     colorize(OPERATORS, line, cursor, length);
                     break;
-                    
+
                 case CRTLexer.TRANSLATE:
                 case CRTLexer.SCALE:
                 case CRTLexer.ROTATE:
@@ -336,39 +335,39 @@ public class EditorTextPane extends JTextPane {
                 case CRTLexer.NAME:
                     colorize(NAME, line, cursor, length);
                     break;
-                    
+
                 case CRTLexer.IDENTIFIER:
                     colorize(IDENTIFIER, line, cursor, length);
                     break;
-                    
+
                 case CRTLexer.FLOAT:
                 case CRTLexer.INTEGER:
-//                case CRTLexer.TRUE:
-//                case CRTLexer.FALSE:
+                case CRTLexer.TRUE:
+                case CRTLexer.FALSE:
                     colorize(NUMBER, line, cursor, length);
                     break;
-                    
+
                 case CRTLexer.SCENE:
                 case CRTLexer.SETTINGS:
-//                case CRTLexer.MACRO:
+                case CRTLexer.MACRO:
                     colorize(BLOCK, line, cursor, length);
                     break;
-                    
+
                 case CRTLexer.STRING:
                     colorize(STRING, line, cursor, length);
                     break;
 
-                // TODO: Add INVALID: . -> channel(HIDDEN);
-//                case CRTLexer.INVALID:
-//                    try {
-//                        int line = getLineOfOffset(cursor);
-//                        int s = getLineStartOffset(line);
-//                        int e = getLineEndOffset(line);
-//                        highlight(cursor, cursor + length, eh);
-//                        highlight(s, e, lh);
-//                    } catch (BadLocationException e) {
-//                    }
-//                    break;
+                // TODO: don't hide under line highlight
+                case CRTLexer.INVALID:
+                    try {
+                        int index = getLineStartOffset(line) + cursor;
+                        int s = getLineStartOffset(index);
+                        int e = getLineEndOffset(index);
+                        highlight(cursor, cursor + length, eh);
+                        highlight(s, e, lh);
+                    } catch (BadLocationException e) {
+                    }
+                    break;
 
                 default:
                     colorize(NORMAL, line, cursor, length);

@@ -27,11 +27,11 @@ import org.openide.util.Exceptions;
  * @author Hamza Haiken <tenchi@team2xh.net>
  */
 public class EntityProperties extends PropertySheetView {
-    
+
     public EntityProperties() {
         setPopupEnabled(false);
     }
-    
+
     public void viewProperties(Object object) {
         try {
             setNodes(new Node[]{new BeanNode(object)});

@@ -17,18 +17,18 @@ public class CRTParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__2=1, T__1=2, T__0=3, SETTINGS=4, SCENE=5, SCALE=6, TRANSLATE=7, ROTATE=8, 
-		IDENTIFIER=9, NAME=10, STRING=11, SKIP=12, INTEGER=13, FLOAT=14, LPAREN=15, 
-		RPAREN=16, LBRACE=17, RBRACE=18, LBRACK=19, RBRACK=20, COMMA=21, ASSIGN=22, 
-		ATTRIBUTE=23, ADD=24, SUBTRACT=25, INTERSECTION=26, MULTIPLY=27, DIVIDE=28, 
-		MODULO=29, NOT=30, LESS=31, GREATER=32, LESS_EQUAL=33, GREATER_EQUAL=34, 
-		EQUAL=35, NOT_EQUAL=36, AND=37, OR=38, QUESTION=39, COLON=40;
+		SETTINGS=1, SCENE=2, SCALE=3, TRANSLATE=4, ROTATE=5, TRUE=6, FALSE=7, 
+		MACRO=8, IDENTIFIER=9, NAME=10, STRING=11, SKIP=12, INTEGER=13, FLOAT=14, 
+		LPAREN=15, RPAREN=16, LBRACE=17, RBRACE=18, LBRACK=19, RBRACK=20, COMMA=21, 
+		ASSIGN=22, ATTRIBUTE=23, ADD=24, SUBTRACT=25, INTERSECTION=26, MULTIPLY=27, 
+		DIVIDE=28, MODULO=29, NOT=30, LESS=31, GREATER=32, LESS_EQUAL=33, GREATER_EQUAL=34, 
+		EQUAL=35, NOT_EQUAL=36, AND=37, OR=38, QUESTION=39, COLON=40, INVALID=41;
 	public static final String[] tokenNames = {
-		"<INVALID>", "'true'", "'false'", "'Macro'", "'Settings'", "'Scene'", 
-		"'scale'", "'translate'", "'rotate'", "IDENTIFIER", "NAME", "STRING", 
-		"SKIP", "INTEGER", "FLOAT", "'('", "')'", "'{'", "'}'", "'['", "']'", 
-		"','", "'='", "'->'", "'+'", "'-'", "'^'", "'*'", "'/'", "'%'", "'!'", 
-		"'<'", "'>'", "'<='", "'>='", "'=='", "'!='", "'&&'", "'||'", "'?'", "':'"
+		"<INVALID>", "'Settings'", "'Scene'", "'scale'", "'translate'", "'rotate'", 
+		"'true'", "'false'", "'Macro'", "IDENTIFIER", "NAME", "STRING", "SKIP", 
+		"INTEGER", "FLOAT", "'('", "')'", "'{'", "'}'", "'['", "']'", "','", "'='", 
+		"'->'", "'+'", "'-'", "'^'", "'*'", "'/'", "'%'", "'!'", "'<'", "'>'", 
+		"'<='", "'>='", "'=='", "'!='", "'&&'", "'||'", "'?'", "':'", "INVALID"
 	};
 	public static final int
 		RULE_script = 0, RULE_statement = 1, RULE_settings = 2, RULE_scene = 3, 
@@ -98,7 +98,7 @@ public class CRTParser extends Parser {
 			setState(39);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__2) | (1L << T__1) | (1L << T__0) | (1L << SETTINGS) | (1L << SCENE) | (1L << IDENTIFIER) | (1L << NAME) | (1L << STRING) | (1L << INTEGER) | (1L << FLOAT) | (1L << LPAREN) | (1L << LBRACK) | (1L << ADD) | (1L << SUBTRACT) | (1L << NOT))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << SETTINGS) | (1L << SCENE) | (1L << TRUE) | (1L << FALSE) | (1L << MACRO) | (1L << IDENTIFIER) | (1L << NAME) | (1L << STRING) | (1L << INTEGER) | (1L << FLOAT) | (1L << LPAREN) | (1L << LBRACK) | (1L << ADD) | (1L << SUBTRACT) | (1L << NOT))) != 0)) {
 				{
 				{
 				setState(36); statement();
@@ -168,9 +168,9 @@ public class CRTParser extends Parser {
 				setState(43); scene();
 				}
 				break;
-			case T__2:
-			case T__1:
-			case T__0:
+			case TRUE:
+			case FALSE:
+			case MACRO:
 			case IDENTIFIER:
 			case NAME:
 			case STRING:
@@ -301,7 +301,7 @@ public class CRTParser extends Parser {
 			setState(62);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__2) | (1L << T__1) | (1L << T__0) | (1L << IDENTIFIER) | (1L << NAME) | (1L << STRING) | (1L << INTEGER) | (1L << FLOAT) | (1L << LPAREN) | (1L << LBRACK) | (1L << ADD) | (1L << SUBTRACT) | (1L << NOT))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TRUE) | (1L << FALSE) | (1L << MACRO) | (1L << IDENTIFIER) | (1L << NAME) | (1L << STRING) | (1L << INTEGER) | (1L << FLOAT) | (1L << LPAREN) | (1L << LBRACK) | (1L << ADD) | (1L << SUBTRACT) | (1L << NOT))) != 0)) {
 				{
 				{
 				setState(59); expression(0);
@@ -717,8 +717,8 @@ public class CRTParser extends Parser {
 				setState(71); expression(8);
 				}
 				break;
-			case T__2:
-			case T__1:
+			case TRUE:
+			case FALSE:
 			case IDENTIFIER:
 			case STRING:
 			case INTEGER:
@@ -739,7 +739,7 @@ public class CRTParser extends Parser {
 				setState(73); object();
 				}
 				break;
-			case T__0:
+			case MACRO:
 				{
 				_localctx = new MacroExprContext(_localctx);
 				_ctx = _localctx;
@@ -755,7 +755,7 @@ public class CRTParser extends Parser {
 				setState(75); match(LBRACK);
 				setState(77);
 				_la = _input.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__2) | (1L << T__1) | (1L << T__0) | (1L << IDENTIFIER) | (1L << NAME) | (1L << STRING) | (1L << INTEGER) | (1L << FLOAT) | (1L << LPAREN) | (1L << LBRACK) | (1L << ADD) | (1L << SUBTRACT) | (1L << NOT))) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TRUE) | (1L << FALSE) | (1L << MACRO) | (1L << IDENTIFIER) | (1L << NAME) | (1L << STRING) | (1L << INTEGER) | (1L << FLOAT) | (1L << LPAREN) | (1L << LBRACK) | (1L << ADD) | (1L << SUBTRACT) | (1L << NOT))) != 0)) {
 					{
 					setState(76); expressionList();
 					}
@@ -893,7 +893,7 @@ public class CRTParser extends Parser {
 						setState(112); match(LPAREN);
 						setState(114);
 						_la = _input.LA(1);
-						if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__2) | (1L << T__1) | (1L << T__0) | (1L << IDENTIFIER) | (1L << NAME) | (1L << STRING) | (1L << INTEGER) | (1L << FLOAT) | (1L << LPAREN) | (1L << LBRACK) | (1L << ADD) | (1L << SUBTRACT) | (1L << NOT))) != 0)) {
+						if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TRUE) | (1L << FALSE) | (1L << MACRO) | (1L << IDENTIFIER) | (1L << NAME) | (1L << STRING) | (1L << INTEGER) | (1L << FLOAT) | (1L << LPAREN) | (1L << LBRACK) | (1L << ADD) | (1L << SUBTRACT) | (1L << NOT))) != 0)) {
 							{
 							setState(113); expressionList();
 							}
@@ -1052,8 +1052,8 @@ public class CRTParser extends Parser {
 				setState(144); match(RPAREN);
 				}
 				break;
-			case T__2:
-			case T__1:
+			case TRUE:
+			case FALSE:
 			case STRING:
 			case INTEGER:
 			case FLOAT:
@@ -1182,7 +1182,7 @@ public class CRTParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(160); match(T__0);
+			setState(160); match(MACRO);
 			setState(161); match(LPAREN);
 			setState(163);
 			_la = _input.LA(1);
@@ -1197,7 +1197,7 @@ public class CRTParser extends Parser {
 			setState(170);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__2) | (1L << T__1) | (1L << T__0) | (1L << IDENTIFIER) | (1L << NAME) | (1L << STRING) | (1L << INTEGER) | (1L << FLOAT) | (1L << LPAREN) | (1L << LBRACK) | (1L << ADD) | (1L << SUBTRACT) | (1L << NOT))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TRUE) | (1L << FALSE) | (1L << MACRO) | (1L << IDENTIFIER) | (1L << NAME) | (1L << STRING) | (1L << INTEGER) | (1L << FLOAT) | (1L << LPAREN) | (1L << LBRACK) | (1L << ADD) | (1L << SUBTRACT) | (1L << NOT))) != 0)) {
 				{
 				{
 				setState(167); expression(0);
@@ -1377,8 +1377,8 @@ public class CRTParser extends Parser {
 				setState(187); stringLiteral();
 				}
 				break;
-			case T__2:
-			case T__1:
+			case TRUE:
+			case FALSE:
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(188); booleanLiteral();
@@ -1662,7 +1662,7 @@ public class CRTParser extends Parser {
 			{
 			setState(209);
 			_la = _input.LA(1);
-			if ( !(_la==T__2 || _la==T__1) ) {
+			if ( !(_la==TRUE || _la==FALSE) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -1711,7 +1711,7 @@ public class CRTParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3*\u00d6\4\2\t\2\4"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3+\u00d6\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\3\2\7\2(\n\2\f\2\16\2+\13\2\3\3\3\3\3\3\5\3\60\n\3\3\4\3\4"+
@@ -1727,16 +1727,16 @@ public class CRTParser extends Parser {
 		"\f\13\16\13\u00b8\13\13\3\f\3\f\3\r\3\r\3\r\3\r\5\r\u00c0\n\r\3\16\3\16"+
 		"\3\16\3\16\3\17\3\17\3\17\3\17\3\17\3\17\5\17\u00cc\n\17\3\20\3\20\3\21"+
 		"\3\21\3\22\3\22\3\23\3\23\3\23\2\3\n\24\2\4\6\b\n\f\16\20\22\24\26\30"+
-		"\32\34\36 \"$\2\7\3\2\32\33\3\2\35\37\3\2\32\34\3\2!&\3\2\3\4\u00e6\2"+
+		"\32\34\36 \"$\2\7\3\2\32\33\3\2\35\37\3\2\32\34\3\2!&\3\2\b\t\u00e6\2"+
 		")\3\2\2\2\4/\3\2\2\2\6\61\3\2\2\2\b;\3\2\2\2\nR\3\2\2\2\f\u0088\3\2\2"+
 		"\2\16\u0096\3\2\2\2\20\u0098\3\2\2\2\22\u00a2\3\2\2\2\24\u00b1\3\2\2\2"+
 		"\26\u00b9\3\2\2\2\30\u00bf\3\2\2\2\32\u00c1\3\2\2\2\34\u00cb\3\2\2\2\36"+
 		"\u00cd\3\2\2\2 \u00cf\3\2\2\2\"\u00d1\3\2\2\2$\u00d3\3\2\2\2&(\5\4\3\2"+
 		"\'&\3\2\2\2(+\3\2\2\2)\'\3\2\2\2)*\3\2\2\2*\3\3\2\2\2+)\3\2\2\2,\60\5"+
 		"\6\4\2-\60\5\b\5\2.\60\5\n\6\2/,\3\2\2\2/-\3\2\2\2/.\3\2\2\2\60\5\3\2"+
-		"\2\2\61\62\7\6\2\2\62\66\7\23\2\2\63\65\5\32\16\2\64\63\3\2\2\2\658\3"+
+		"\2\2\61\62\7\3\2\2\62\66\7\23\2\2\63\65\5\32\16\2\64\63\3\2\2\2\658\3"+
 		"\2\2\2\66\64\3\2\2\2\66\67\3\2\2\2\679\3\2\2\28\66\3\2\2\29:\7\24\2\2"+
-		":\7\3\2\2\2;<\7\7\2\2<@\7\23\2\2=?\5\n\6\2>=\3\2\2\2?B\3\2\2\2@>\3\2\2"+
+		":\7\3\2\2\2;<\7\4\2\2<@\7\23\2\2=?\5\n\6\2>=\3\2\2\2?B\3\2\2\2@>\3\2\2"+
 		"\2@A\3\2\2\2AC\3\2\2\2B@\3\2\2\2CD\7\24\2\2D\t\3\2\2\2EF\b\6\1\2FG\t\2"+
 		"\2\2GS\5\n\6\13HI\7 \2\2IS\5\n\6\nJS\5\16\b\2KS\5\20\t\2LS\5\22\n\2MO"+
 		"\7\25\2\2NP\5\f\7\2ON\3\2\2\2OP\3\2\2\2PQ\3\2\2\2QS\7\26\2\2RE\3\2\2\2"+
@@ -1761,7 +1761,7 @@ public class CRTParser extends Parser {
 		"\2\2\2\u0097\17\3\2\2\2\u0098\u0099\7\f\2\2\u0099\u009d\7\23\2\2\u009a"+
 		"\u009c\5\32\16\2\u009b\u009a\3\2\2\2\u009c\u009f\3\2\2\2\u009d\u009b\3"+
 		"\2\2\2\u009d\u009e\3\2\2\2\u009e\u00a0\3\2\2\2\u009f\u009d\3\2\2\2\u00a0"+
-		"\u00a1\7\24\2\2\u00a1\21\3\2\2\2\u00a2\u00a3\7\5\2\2\u00a3\u00a5\7\21"+
+		"\u00a1\7\24\2\2\u00a1\21\3\2\2\2\u00a2\u00a3\7\n\2\2\u00a3\u00a5\7\21"+
 		"\2\2\u00a4\u00a6\5\24\13\2\u00a5\u00a4\3\2\2\2\u00a5\u00a6\3\2\2\2\u00a6"+
 		"\u00a7\3\2\2\2\u00a7\u00a8\7\22\2\2\u00a8\u00ac\7\23\2\2\u00a9\u00ab\5"+
 		"\n\6\2\u00aa\u00a9\3\2\2\2\u00ab\u00ae\3\2\2\2\u00ac\u00aa\3\2\2\2\u00ac"+
@@ -1773,8 +1773,8 @@ public class CRTParser extends Parser {
 		"\21\2\u00bd\u00c0\5\"\22\2\u00be\u00c0\5$\23\2\u00bf\u00bb\3\2\2\2\u00bf"+
 		"\u00bc\3\2\2\2\u00bf\u00bd\3\2\2\2\u00bf\u00be\3\2\2\2\u00c0\31\3\2\2"+
 		"\2\u00c1\u00c2\7\13\2\2\u00c2\u00c3\7\31\2\2\u00c3\u00c4\5\n\6\2\u00c4"+
-		"\33\3\2\2\2\u00c5\u00c6\7\b\2\2\u00c6\u00cc\5\n\6\2\u00c7\u00c8\7\t\2"+
-		"\2\u00c8\u00cc\5\n\6\2\u00c9\u00ca\7\n\2\2\u00ca\u00cc\5\n\6\2\u00cb\u00c5"+
+		"\33\3\2\2\2\u00c5\u00c6\7\5\2\2\u00c6\u00cc\5\n\6\2\u00c7\u00c8\7\6\2"+
+		"\2\u00c8\u00cc\5\n\6\2\u00c9\u00ca\7\7\2\2\u00ca\u00cc\5\n\6\2\u00cb\u00c5"+
 		"\3\2\2\2\u00cb\u00c7\3\2\2\2\u00cb\u00c9\3\2\2\2\u00cc\35\3\2\2\2\u00cd"+
 		"\u00ce\7\17\2\2\u00ce\37\3\2\2\2\u00cf\u00d0\7\20\2\2\u00d0!\3\2\2\2\u00d1"+
 		"\u00d2\7\r\2\2\u00d2#\3\2\2\2\u00d3\u00d4\t\6\2\2\u00d4%\3\2\2\2\24)/"+

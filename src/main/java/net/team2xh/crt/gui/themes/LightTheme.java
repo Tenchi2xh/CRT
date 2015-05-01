@@ -18,11 +18,11 @@ package net.team2xh.crt.gui.themes;
 
 /**
  * Light theme
- * 
+ *
  * @author Hamza Haiken <tenchi@team2xh.net>
  */
 public class LightTheme extends Theme {
-    
+
     // TODO: Actually find colors for light theme
     public LightTheme() {
         super("#1a1a1a", // 01 Black
@@ -38,7 +38,7 @@ public class LightTheme extends Theme {
               "#f8f8f2", // 11 White
               "#e6db74", // 12 Yellow
               "#5e3535", // 13 Error
-              "org.pushingpixels.substance.api.skin.SubstanceNebulaLookAndFeel"
+              "org.pushingpixels.substance.api.skin.SubstanceOfficeBlack2007LookAndFeel"
         );
     }
 }
