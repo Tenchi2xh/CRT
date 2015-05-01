@@ -20,7 +20,7 @@ import java.beans.PropertyEditorManager;
 import java.lang.reflect.Field;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.team2xh.crt.tests.TestEditor;
+import net.team2xh.crt.tests.TestEntityTree;
 
 /**
  *
@@ -42,7 +42,7 @@ public class Launcher {
             sysPathsField.setAccessible(true);
             sysPathsField.set(null, null);
 
-            TestEditor.main(args);
+            TestEntityTree.main(args);
         } catch (Exception ex) {
             Logger.getLogger(Launcher.class.getName()).log(Level.SEVERE, null, ex);
         }

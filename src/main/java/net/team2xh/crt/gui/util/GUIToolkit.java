@@ -156,36 +156,36 @@ final public class GUIToolkit {
             Object border = UIManager.get("TextField.border");
             UIManager.put("TextArea.border", border);
             // Plain title font
-            SubstanceLookAndFeel.setFontPolicy(new FontPolicy() {
-                public FontSet getFontSet(String arg0, UIDefaults arg1) {
-                    FontSet fontSet = new FontSet() {
-                        public FontUIResource getWindowTitleFont() {
-                            return new FontUIResource(new Font("Source Sans Pro", Font.PLAIN, 16)); //this is where the title font changes
-                        }
-
-                        public FontUIResource getTitleFont() {
-                            return new FontUIResource(new Font("Source Sans Pro", Font.PLAIN, 16));
-                        }
-
-                        public FontUIResource getSmallFont() {
-                            return new FontUIResource(new Font("Source Sans Pro", Font.PLAIN, 16));
-                        }
-
-                        public FontUIResource getMessageFont() {
-                            return new FontUIResource(new Font("Source Sans Pro", Font.PLAIN, 16));
-                        }
-
-                        public FontUIResource getMenuFont() {
-                            return new FontUIResource(new Font("Source Sans Pro", Font.PLAIN, 16));
-                        }
-
-                        public FontUIResource getControlFont() {
-                            return new FontUIResource(new Font("Source Sans Pro", Font.PLAIN, 16));
-                        }
-                    };
-                    return fontSet;
-                }
-            });        
+//            SubstanceLookAndFeel.setFontPolicy(new FontPolicy() {
+//                public FontSet getFontSet(String arg0, UIDefaults arg1) {
+//                    FontSet fontSet = new FontSet() {
+//                        public FontUIResource getWindowTitleFont() {
+//                            return new FontUIResource(new Font("Source Sans Pro", Font.PLAIN, 14)); //this is where the title font changes
+//                        }
+//
+//                        public FontUIResource getTitleFont() {
+//                            return new FontUIResource(new Font("Source Sans Pro", Font.PLAIN, 14));
+//                        }
+//
+//                        public FontUIResource getSmallFont() {
+//                            return new FontUIResource(new Font("Source Sans Pro", Font.PLAIN, 14));
+//                        }
+//
+//                        public FontUIResource getMessageFont() {
+//                            return new FontUIResource(new Font("Source Sans Pro", Font.PLAIN, 14));
+//                        }
+//
+//                        public FontUIResource getMenuFont() {
+//                            return new FontUIResource(new Font("Source Sans Pro", Font.PLAIN, 14));
+//                        }
+//
+//                        public FontUIResource getControlFont() {
+//                            return new FontUIResource(new Font("Source Sans Pro", Font.PLAIN, 14));
+//                        }
+//                    };
+//                    return fontSet;
+//                }
+//            });        
         } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(GUIToolkit.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -266,7 +266,7 @@ final public class GUIToolkit {
             GUIToolkit.registerFont(caller, "/fonts/ENVYCODERITALIC.TTF");
             GUIToolkit.registerFont(caller, "/fonts/ENVYCODERBOLD.TTF");
             // Set default dialog font
-            GUIToolkit.setDefaultFont("Source Sans Pro", 16);
+            GUIToolkit.setDefaultFont("Source Sans Pro", 15);
             // Enable Substance Look&Feel
             GUIToolkit.setSubstanceLAF(laf);
             

@@ -13,7 +13,6 @@
             <name>NetBeans</name>
             <url>http://bits.netbeans.org/nexus/content/groups/netbeans/</url>
         </repository>
-
         <!--Local repository contains jPCT, not available on Maven Central-->
         <repository>
             <id>repo</id>
@@ -29,6 +28,11 @@
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>org.dockingframes</groupId>
+            <artifactId>docking-frames-common</artifactId>
+            <version>1.1.1</version>
+        </dependency>
         <dependency>
             <groupId>com.github.insubstantial</groupId>
             <artifactId>substance</artifactId>
@@ -170,7 +174,7 @@
             </resource>
         </resources>
         <!--Renamce final jar to just CRT-->
-        <finalName>${artifactId}</finalName>
+        <finalName>${project.artifactId}</finalName>
     </build>
     
     <properties>
