@@ -101,3 +101,10 @@
 - Implemented object picking in live view
 - Optimized rendering speed
 - Shader prototype
+
+# 30.04.2015 - 06.05.2015
+
+- Entity trees
+- Entity properties
+- Docking system
+- Language touch-ups

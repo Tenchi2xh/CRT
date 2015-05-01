@@ -41,6 +41,8 @@ public class Launcher {
             final Field sysPathsField = ClassLoader.class.getDeclaredField("sys_paths");
             sysPathsField.setAccessible(true);
             sysPathsField.set(null, null);
+            
+            // Set GUI
 
             TestEntityTree.main(args);
         } catch (Exception ex) {

@@ -48,6 +48,8 @@ public class TestEntityTree {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Entity properties test");
 
+            GUIToolkit.enableHeapStatus(frame);
+        
             Sphere s = new Sphere(Vector3.X, 0.15, new Material(new Pigment(0.9, 0.5, 0.0)));
             Box b = new Box(Vector3.X, Vector3.Y, new Material(new Pigment(0.3, 0.5, 0.8)));
             Plane p = new Plane(Vector3.X, Vector3.X, new Material(new Pigment(0.4, 0.8, 0.3)));

@@ -73,8 +73,8 @@
 # Gui
 
 [~] Property viewing
-[-] Figure out netbeans trees
-[-] Figure out netbeans window system
+[x] Figure out netbeans trees
+[-] Figure out docking frames
 [-] Assemble parts 
 
 # Refactoring
