@@ -26,14 +26,14 @@ import java.beans.SimpleBeanInfo;
  * @author Hamza Haiken <tenchi@team2xh.net>
  */
 public class PlaneBeanInfo extends SimpleBeanInfo {
-    
+
     // TODO: Icons
-    
     // Bean descriptor
     private static BeanDescriptor getBdescriptor() {
         BeanDescriptor beanDescriptor = new BeanDescriptor(net.team2xh.crt.raytracer.entities.Plane.class, null); // NOI18N
         beanDescriptor.setDisplayName("Plane");
         beanDescriptor.setShortDescription("Mathematical primitive representing an infinite plane.");
+        beanDescriptor.setValue("ADOKSADOK", "OADSKOASDOK");
         return beanDescriptor;
     }
 

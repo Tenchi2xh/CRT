@@ -17,21 +17,22 @@
 package net.team2xh.crt.gui.entities;
 
 import java.beans.IntrospectionException;
-import org.openide.explorer.propertysheet.PropertySheet;
+import org.openide.explorer.propertysheet.PropertySheetView;
 import org.openide.nodes.BeanNode;
 import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
+import org.openide.util.HelpCtx;
 
 /**
  *
  * @author Hamza Haiken <tenchi@team2xh.net>
  */
-public class EntityProperties extends PropertySheet {
+public class EntityProperties extends PropertySheetView {
     
     public EntityProperties() {
-        setDescriptionAreaVisible(false);
+//        setDescriptionAreaVisible(false);
         setPopupEnabled(false);
-        
+        getActionMap().put("invokeHelp", null);
     }
     
     public void viewProperties(Object object) {
