@@ -16,6 +16,7 @@
  */
 package net.team2xh.crt.gui;
 
+import net.team2xh.crt.gui.console.ConsolePanel;
 import bibliothek.extension.gui.dock.theme.EclipseTheme;
 import bibliothek.extension.gui.dock.theme.eclipse.stack.tab.RectGradientPainter;
 import bibliothek.gui.DockController;
@@ -55,7 +56,7 @@ public class MainWindow extends JFrame {
     private final RenderPanel render;
     private final JLabel system;
     private final JLabel settings;
-    private final JLabel console;
+    private final ConsolePanel console;
 
     public MainWindow(Theme theme) {
 
@@ -85,7 +86,7 @@ public class MainWindow extends JFrame {
         render = new RenderPanel();
         system = new JLabel("Infos go here");
         settings = new JLabel("Settings go here");
-        console = new JLabel("Console goes here");
+        console = new ConsolePanel(theme);
 
         DefaultCDockable dEditor = (DefaultCDockable) create("Script", editor);
         DefaultCDockable dNavigator = (DefaultCDockable) create("Navigator", navigator);
@@ -94,8 +95,8 @@ public class MainWindow extends JFrame {
         DefaultCDockable dSettings = (DefaultCDockable) create("Settings", settings);
         DefaultCDockable dConsole = (DefaultCDockable) create("Console", console);
 
-        double wr = 0.45;
-        double we = 0.35;
+        double wr = 0.4;
+        double we = 0.4;
         double wn = 1 - wr - we;
 
         double h1 = 0.7;
@@ -121,6 +122,8 @@ public class MainWindow extends JFrame {
         dNavigator.setExtendedMode(ExtendedMode.NORMALIZED);
 
         setVisible(true);
+
+        System.out.println("Welcome to CRT");
     }
 
     public void loadScene(Scene scene) {

@@ -25,19 +25,19 @@ public class LightTheme extends Theme {
 
     // TODO: Actually find colors for light theme
     public LightTheme() {
-        super("#1a1a1a", // 01 Black
-              "#222222", // 02 Light black
-              "#2a2a2a", // 03 Dark Gray
-              "#333333", // 04 Gray
-              "#969696", // 05 Light Gray
+        super("#eaeaea", // 01 White
+              "#f0f0f0", // 02 Very light gray
+              "#eaeaea", // 03 Light gray
+              "#e0e0e0", // 04 Gray
+              "#555555", // 05 Dark gray
               "#66d9ef", // 06 Blue
               "#8fe22b", // 07 Green
               "#fd971f", // 08 Orange
               "#be84ff", // 09 Purple
               "#f92672", // 10 Red
-              "#f8f8f2", // 11 White
+              "#222222", // 11 Black
               "#e6db74", // 12 Yellow
-              "#5e3535", // 13 Error
+              "#eb8888", // 13 Error
               "org.pushingpixels.substance.api.skin.SubstanceOfficeBlack2007LookAndFeel"
         );
     }

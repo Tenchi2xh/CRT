@@ -18,7 +18,7 @@ package net.team2xh.crt.tests;
 
 import javax.swing.SwingUtilities;
 import net.team2xh.crt.gui.MainWindow;
-import net.team2xh.crt.gui.themes.DarkTheme;
+import net.team2xh.crt.gui.themes.LightTheme;
 import net.team2xh.crt.gui.themes.Theme;
 import net.team2xh.crt.gui.util.GUIToolkit;
 import net.team2xh.crt.raytracer.Material;
@@ -38,14 +38,14 @@ import net.team2xh.crt.raytracer.math.Vector3;
 public class TestMainWindow {
 
     public static void main(String[] args) {
-        Theme theme = new DarkTheme();
+        Theme theme = new LightTheme();
 
         GUIToolkit.initGUI(theme, theme.LAF);
 
         SwingUtilities.invokeLater(() -> {
             MainWindow frame = new MainWindow(theme);
             GUIToolkit.enableHeapStatus(frame);
-            
+
             Sphere s = new Sphere(Vector3.X, 0.15, new Material(new Pigment(0.9, 0.5, 0.0)));
             Box b = new Box(Vector3.X, Vector3.Y, new Material(new Pigment(0.3, 0.5, 0.8)));
             Plane p = new Plane(Vector3.X, Vector3.X, new Material(new Pigment(0.4, 0.8, 0.3)));
@@ -68,7 +68,7 @@ public class TestMainWindow {
             sc.addLight(l1);
             sc.addLight(l2);
             sc.addLight(l3);
-            
+
             frame.loadScene(sc);
         });
     }
