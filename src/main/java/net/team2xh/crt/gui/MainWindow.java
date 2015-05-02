@@ -30,7 +30,6 @@ import bibliothek.gui.dock.common.intern.DefaultCDockable;
 import bibliothek.gui.dock.common.mode.ExtendedMode;
 import bibliothek.gui.dock.common.theme.ThemeMap;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
@@ -53,7 +52,7 @@ public class MainWindow extends JFrame {
 
     private final Editor editor;
     private final EntityTree navigator;
-    private final JLabel render;
+    private final RenderPanel render;
     private final JLabel system;
     private final JLabel settings;
     private final JLabel console;
@@ -71,19 +70,19 @@ public class MainWindow extends JFrame {
         ThemeMap themes = control.getThemes();
         themes.select(ThemeMap.KEY_ECLIPSE_THEME);
         control.putProperty(EclipseTheme.TAB_PAINTER, RectGradientPainter.FACTORY);
-                
+
         DockController controller = control.getController();
 //        controller.getThemeManager().setBorderModifier("dock.border.displayer.basic.base", (Border) -> BorderFactory.createLineBorder(Color.BLUE, 20));
 //        controller.getThemeManager().setBorderModifier("dock.border.displayer.basic.content", (Border) -> BorderFactory.createLineBorder(Color.RED, 20));
 //        controller.getThemeManager().setBorderModifier("dock.border.stack.eclipse", (Border) -> BorderFactory.createLineBorder(Color.CYAN, 20));
         controller.getThemeManager().setBorderModifier("dock.border.stack.eclipse.content", (Border) -> BorderFactory.createEmptyBorder());
-        
+
         CContentArea contentArea = control.getContentArea();
         add(contentArea, BorderLayout.CENTER);
 
         editor = new Editor(theme);
         navigator = new EntityTree();
-        render = new JLabel("Render goes here");
+        render = new RenderPanel();
         system = new JLabel("Infos go here");
         settings = new JLabel("Settings go here");
         console = new JLabel("Console goes here");
@@ -98,15 +97,16 @@ public class MainWindow extends JFrame {
         double wr = 0.45;
         double we = 0.35;
         double wn = 1 - wr - we;
-        
-        double h1 = 0.75;
+
+        double h1 = 0.7;
         double h2 = 1 - h1;
-        
+
         CGrid grid = new CGrid(control);
         grid.add(0,     0,  wr, h1, dRender);
         grid.add(wr,    0,  we, h1, dEditor);
         grid.add(wr+we, 0,  wn, h1, dNavigator);
-        grid.add(0,     h1, wr, h2, dConsole);
+        grid.addHorizontalDivider(0, 1, h1);
+        grid.add(0,     h1, wr+we, h2, dConsole);
         grid.add(wr+we, h1, wn, h2, dSettings, dSystem);
         contentArea.deploy(grid);
 
@@ -115,11 +115,11 @@ public class MainWindow extends JFrame {
         dRender.setMinimizable(true);
         dRender.setLocation(CLocation.base().minimalWest());
         dRender.setExtendedMode(ExtendedMode.NORMALIZED);
-        
+
         dNavigator.setMinimizable(true);
         dNavigator.setLocation(CLocation.base().minimalEast());
         dNavigator.setExtendedMode(ExtendedMode.NORMALIZED);
-        
+
         setVisible(true);
     }
 
