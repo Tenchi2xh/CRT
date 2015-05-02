@@ -100,6 +100,7 @@ public class EditorTextPane extends JTextPane {
         doc = (DefaultStyledDocument) getDocument();
 
         // Replace all tabs with four spaces
+        // TODO: tab to next multiple of 4 column
         // TODO: tab whole selection
         // TODO: insert matching brace
         doc.setDocumentFilter(new DocumentFilter() {

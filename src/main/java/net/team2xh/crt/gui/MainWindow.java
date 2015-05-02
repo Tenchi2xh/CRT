@@ -29,7 +29,8 @@ import bibliothek.gui.dock.common.DefaultSingleCDockable;
 import bibliothek.gui.dock.common.intern.CDockable;
 import bibliothek.gui.dock.common.intern.DefaultCDockable;
 import bibliothek.gui.dock.common.mode.ExtendedMode;
-import bibliothek.gui.dock.common.theme.ThemeMap;
+import bibliothek.gui.dock.common.theme.CEclipseTheme;
+import bibliothek.gui.dock.dockable.ScreencaptureMovingImageFactory;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.BorderFactory;
@@ -41,6 +42,7 @@ import net.team2xh.crt.gui.editor.Editor;
 import net.team2xh.crt.gui.entities.EntityTree;
 import net.team2xh.crt.gui.themes.Theme;
 import net.team2xh.crt.raytracer.Scene;
+
 
 /**
  *
@@ -66,19 +68,17 @@ public class MainWindow extends JFrame {
         setTitle("CRT");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
-        setMinimumSize(new Dimension(800, 600));
+        setMinimumSize(new Dimension(1024, 768));
 
-        ThemeMap themes = control.getThemes();
-        themes.select(ThemeMap.KEY_ECLIPSE_THEME);
+        EclipseTheme etheme = new EclipseTheme();
+        etheme.setMovingImageFactory(new ScreencaptureMovingImageFactory(new Dimension(500, 500)));
+        control.setTheme(new CEclipseTheme(control, etheme));
         control.putProperty(EclipseTheme.TAB_PAINTER, RectGradientPainter.FACTORY);
 
         DockController controller = control.getController();
-//        controller.getThemeManager().setBorderModifier("dock.border.displayer.basic.base", (Border) -> BorderFactory.createLineBorder(Color.BLUE, 20));
-//        controller.getThemeManager().setBorderModifier("dock.border.displayer.basic.content", (Border) -> BorderFactory.createLineBorder(Color.RED, 20));
-//        controller.getThemeManager().setBorderModifier("dock.border.stack.eclipse", (Border) -> BorderFactory.createLineBorder(Color.CYAN, 20));
         controller.getThemeManager().setBorderModifier("dock.border.stack.eclipse.content", (Border) -> BorderFactory.createEmptyBorder());
         controller.getThemeManager().setBorderModifier("dock.border.title.eclipse.button.flat", (Border) -> BorderFactory.createLineBorder(UIManager.getColor("TextArea.selectionForeground"), 1));
-
+        
         CContentArea contentArea = control.getContentArea();
         add(contentArea, BorderLayout.CENTER);
 
@@ -92,7 +92,7 @@ public class MainWindow extends JFrame {
         DefaultCDockable dEditor = (DefaultCDockable) create("Script", editor);
         DefaultCDockable dNavigator = (DefaultCDockable) create("Navigator", navigator);
         DefaultCDockable dRender = (DefaultCDockable) create("Render", render);
-        DefaultCDockable dSystem = (DefaultCDockable) create("System informations", system);
+        DefaultCDockable dSystem = (DefaultCDockable) create("System", system);
         DefaultCDockable dSettings = (DefaultCDockable) create("Settings", settings);
         DefaultCDockable dConsole = (DefaultCDockable) create("Console", console);
 
