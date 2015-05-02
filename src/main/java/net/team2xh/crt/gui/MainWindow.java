@@ -16,30 +16,27 @@
  */
 package net.team2xh.crt.gui;
 
-import bibliothek.extension.gui.dock.preference.PreferenceDialog;
-import bibliothek.extension.gui.dock.preference.PreferenceModel;
-import bibliothek.extension.gui.dock.preference.PreferenceTreeDialog;
-import bibliothek.extension.gui.dock.preference.PreferenceTreeModel;
+import bibliothek.extension.gui.dock.theme.EclipseTheme;
+import bibliothek.extension.gui.dock.theme.eclipse.stack.tab.RectGradientPainter;
 import bibliothek.gui.DockController;
 import bibliothek.gui.dock.common.CContentArea;
 import bibliothek.gui.dock.common.CControl;
 import bibliothek.gui.dock.common.CGrid;
-import bibliothek.gui.dock.common.CPreferenceModel;
+import bibliothek.gui.dock.common.CLocation;
 import bibliothek.gui.dock.common.ColorMap;
 import bibliothek.gui.dock.common.DefaultSingleCDockable;
 import bibliothek.gui.dock.common.intern.CDockable;
 import bibliothek.gui.dock.common.intern.DefaultCDockable;
+import bibliothek.gui.dock.common.mode.ExtendedMode;
 import bibliothek.gui.dock.common.theme.ThemeMap;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.UIManager;
-import javax.swing.border.EmptyBorder;
 import net.team2xh.crt.gui.editor.Editor;
 import net.team2xh.crt.gui.entities.EntityTree;
 import net.team2xh.crt.gui.themes.Theme;
@@ -65,26 +62,21 @@ public class MainWindow extends JFrame {
         this.theme = theme;
         this.control = new CControl(this);
 
+        setTitle("CRT");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
         setMinimumSize(new Dimension(800, 600));
 
         ThemeMap themes = control.getThemes();
         themes.select(ThemeMap.KEY_ECLIPSE_THEME);
-
+        control.putProperty(EclipseTheme.TAB_PAINTER, RectGradientPainter.FACTORY);
+                
         DockController controller = control.getController();
-//        controller.getThemeManager().setBorderModifier(null, null);
-
-        PreferenceModel model = new CPreferenceModel(control);
-        control.setPreferenceModel(model);
-        Component owner = control.intern().getController().findRootWindow();
-        if (model instanceof PreferenceTreeModel) {
-            PreferenceTreeModel tree = (PreferenceTreeModel) model;
-            PreferenceTreeDialog.openDialog(tree, owner);
-        } else {
-            PreferenceDialog.openDialog(model, owner);
-        }
-
+//        controller.getThemeManager().setBorderModifier("dock.border.displayer.basic.base", (Border) -> BorderFactory.createLineBorder(Color.BLUE, 20));
+//        controller.getThemeManager().setBorderModifier("dock.border.displayer.basic.content", (Border) -> BorderFactory.createLineBorder(Color.RED, 20));
+//        controller.getThemeManager().setBorderModifier("dock.border.stack.eclipse", (Border) -> BorderFactory.createLineBorder(Color.CYAN, 20));
+        controller.getThemeManager().setBorderModifier("dock.border.stack.eclipse.content", (Border) -> BorderFactory.createEmptyBorder());
+        
         CContentArea contentArea = control.getContentArea();
         add(contentArea, BorderLayout.CENTER);
 
@@ -100,17 +92,28 @@ public class MainWindow extends JFrame {
         DefaultCDockable dSystem = (DefaultCDockable) create("System informations", system);
         DefaultCDockable dSettings = (DefaultCDockable) create("Settings", settings);
 
-        dRender.setExternalizable(true);
-        // TODO: see how to minimize on the left or right
-
+        double wr = 0.45;
+        double we = 0.35;
+        double wn = 1 - wr - we;
+        
         CGrid grid = new CGrid(control);
-        grid.add(0, 0, 0.5, 0.75, dRender);
-        grid.add(0.5, 0, 0.25, 0.75, dEditor);
-        grid.add(0.75, 0, 0.25, 1, dNavigator);
-        grid.add(0, 0.75, 0.375, 0.25, dSystem);
-        grid.add(0.375, 0.75, 0.375, 0.25, dSettings);
+        grid.add(0,     0,     wr,    0.75, dRender);
+        grid.add(wr,    0,     we,    0.75, dEditor);
+        grid.add(wr+we, 0,     wn,    1,    dNavigator);
+        grid.add(0,     0.75,  0.375, 0.25, dSystem);
+        grid.add(0.375, 0.75,  0.375, 0.25, dSettings);
         contentArea.deploy(grid);
 
+        dRender.setExternalizable(true);
+        dRender.setMaximizable(true);
+        dRender.setMinimizable(true);
+        dRender.setLocation(CLocation.base().minimalWest());
+        dRender.setExtendedMode(ExtendedMode.NORMALIZED);
+        
+        dNavigator.setMinimizable(true);
+        dNavigator.setLocation(CLocation.base().minimalEast());
+        dNavigator.setExtendedMode(ExtendedMode.NORMALIZED);
+        
         setVisible(true);
     }
 
@@ -122,23 +125,26 @@ public class MainWindow extends JFrame {
         DefaultCDockable dockable = new DefaultSingleCDockable(title, title, component);
         dockable.setCloseable(false);
         dockable.setExternalizable(false);
+        dockable.setMinimizable(false);
+        dockable.setMaximizable(false);
 
         ColorMap map = dockable.getColors();
         map.setColor(ColorMap.COLOR_KEY_TITLE_BACKGROUND, UIManager.getColor("TextArea.background", null));
-        map.setColor(ColorMap.COLOR_KEY_MINIMIZED_BUTTON_BACKGROUND, UIManager.getColor("TextArea.background", null));
-        map.setColor(ColorMap.COLOR_KEY_TAB_BACKGROUND, UIManager.getColor("TextArea.background", null));
+        map.setColor(ColorMap.COLOR_KEY_MINIMIZED_BUTTON_BACKGROUND, UIManager.getColor("TextArea.background"));
+//        map.setColor(ColorMap.COLOR_KEY_TAB_BACKGROUND, UIManager.getColor("TextArea.background"));
 
-        map.setColor(ColorMap.COLOR_KEY_TITLE_BACKGROUND_FOCUSED, UIManager.getColor("TextArea.selectionBackground", null));
-        map.setColor(ColorMap.COLOR_KEY_MINIMIZED_BUTTON_BACKGROUND_FOCUSED, UIManager.getColor("TextArea.selectionBackground", null));
-        map.setColor(ColorMap.COLOR_KEY_MINIMIZED_BUTTON_BACKGROUND_SELECTED, UIManager.getColor("TextArea.selectionBackground", null));
-        map.setColor(ColorMap.COLOR_KEY_TAB_BACKGROUND_FOCUSED, UIManager.getColor("TextArea.selectionBackground", null));
-//        map.setColor(ColorMap.COLOR_KEY_TAB_BACKGROUND_SELECTED, UIManager.getColor("TextArea.selectionBackground", null));
+        map.setColor(ColorMap.COLOR_KEY_TITLE_BACKGROUND_FOCUSED, UIManager.getColor("TextArea.selectionBackground"));
+        map.setColor(ColorMap.COLOR_KEY_MINIMIZED_BUTTON_BACKGROUND_FOCUSED, UIManager.getColor("TextArea.selectionBackground"));
+        map.setColor(ColorMap.COLOR_KEY_MINIMIZED_BUTTON_BACKGROUND_SELECTED, UIManager.getColor("TextArea.selectionBackground"));
+        map.setColor(ColorMap.COLOR_KEY_TAB_BACKGROUND_FOCUSED, UIManager.getColor("TextArea.selectionBackground"));
+//        map.setColor(ColorMap.COLOR_KEY_TAB_BACKGROUND_SELECTED, UIManager.getColor("TextArea.selectionBackground"));
 
-        map.setColor(ColorMap.COLOR_KEY_TAB_FOREGROUND_FOCUSED, Color.RED);
-        map.setColor(ColorMap.COLOR_KEY_TAB_FOREGROUND_SELECTED, Color.BLACK);
-        map.setColor(ColorMap.COLOR_KEY_TAB_FOREGROUND, Color.ORANGE);
-        map.setColor(ColorMap.COLOR_KEY_TITLE_FOREGROUND, Color.CYAN);
-        map.setColor(ColorMap.COLOR_KEY_TITLE_FOREGROUND_FOCUSED, Color.PINK);
+//        map.setColor(ColorMap.COLOR_KEY_TAB_FOREGROUND_FOCUSED, UIManager.getColor("TextArea.selectionForeground"));
+//        map.setColor(ColorMap.COLOR_KEY_TAB_FOREGROUND_SELECTED, Color.BLACK);
+//        map.setColor(ColorMap.COLOR_KEY_TAB_FOREGROUND, Color.ORANGE);
+//        map.setColor(ColorMap.COLOR_KEY_TITLE_FOREGROUND, Color.CYAN);
+//        map.setColor(ColorMap.COLOR_KEY_TITLE_FOREGROUND_FOCUSED, Color.PINK);
+//        map.setColor(ColorMap.COLOR_KEY_MINIMIZED_BUTTON_BACKGROUND_SELECTED, Color.PINK);
 
         return dockable;
     }

@@ -266,7 +266,7 @@ final public class GUIToolkit {
             GUIToolkit.registerFont(caller, "/fonts/ENVYCODERITALIC.TTF");
             GUIToolkit.registerFont(caller, "/fonts/ENVYCODERBOLD.TTF");
             // Set default dialog font
-            GUIToolkit.setDefaultFont("Source Sans Pro", 15);
+            GUIToolkit.setDefaultFont("Source Sans Pro", 14);
             // Enable Substance Look&Feel
             GUIToolkit.setSubstanceLAF(laf);
             

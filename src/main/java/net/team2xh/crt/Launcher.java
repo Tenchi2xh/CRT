@@ -20,6 +20,7 @@ import java.beans.PropertyEditorManager;
 import java.lang.reflect.Field;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.UIManager;
 import net.team2xh.crt.tests.TestMainWindow;
 
 /**
