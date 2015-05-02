@@ -44,6 +44,11 @@ public class EntityTree extends JPanel implements ExplorerManager.Provider {
     private final EntityProperties properties = new EntityProperties();
 
     public EntityTree(Scene scene) {
+        this();
+        loadScene(scene);
+    }
+    
+    public EntityTree() {
         setLayout(new BorderLayout());
         add(tree, BorderLayout.CENTER);
         add(properties, BorderLayout.PAGE_END);
@@ -51,7 +56,14 @@ public class EntityTree extends JPanel implements ExplorerManager.Provider {
         tree.getVerticalScrollBar().setUnitIncrement(16);
         tree.setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         tree.setPopupAllowed(false);
+    }
 
+    @Override
+    public ExplorerManager getExplorerManager() {
+        return manager;
+    }
+
+    public void loadScene(Scene scene) {
         // Entities
         BeanContext entities = new BeanContextSupport();
         for (Entity e : scene.getEntities()) {
@@ -83,15 +95,9 @@ public class EntityTree extends JPanel implements ExplorerManager.Provider {
         root.setShortDescription("The current scene after execution of the script.");
 
         manager.setRootContext(root);
-        
+
         SwingUtilities.invokeLater(() -> {
-           tree.expandAll(); 
+            tree.expandAll();
         });
-
-    }
-
-    @Override
-    public ExplorerManager getExplorerManager() {
-        return manager;
     }
 }
