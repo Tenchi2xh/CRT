@@ -23,7 +23,7 @@ package net.team2xh.crt.gui.themes;
  */
 public class LightTheme extends Theme {
 
-    // TODO: Actually find colors for light theme
+    // TODO: Copy greybeans theme
     public LightTheme() {
         super("#eaeaea", // 01 White
               "#f0f0f0", // 02 Very light gray
@@ -38,7 +38,7 @@ public class LightTheme extends Theme {
               "#222222", // 11 Black
               "#e6db74", // 12 Yellow
               "#eb8888", // 13 Error
-              "org.pushingpixels.substance.api.skin.SubstanceOfficeBlack2007LookAndFeel"
+              "org.pushingpixels.substance.api.skin.SubstanceDustLookAndFeel"
         );
     }
 }

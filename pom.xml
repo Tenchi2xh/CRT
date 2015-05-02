@@ -33,7 +33,7 @@
             <artifactId>docking-frames-common</artifactId>
             <version>1.1.1</version>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>org.dockingframes</groupId>
             <artifactId>docking-frames-ext-glass</artifactId>
             <version>1.1.1</version>
@@ -42,7 +42,7 @@
             <groupId>kux.glasslib</groupId>
             <artifactId>glasslib</artifactId>
             <version>1.1.1</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>com.github.insubstantial</groupId>
             <artifactId>substance</artifactId>

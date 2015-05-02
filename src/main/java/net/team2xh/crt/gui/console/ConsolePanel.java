@@ -19,14 +19,17 @@ package net.team2xh.crt.gui.console;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import net.team2xh.crt.gui.themes.LightTheme;
 import net.team2xh.crt.gui.themes.Theme;
-import org.pushingpixels.substance.api.SubstanceLookAndFeel;
 
 /**
  *
@@ -60,8 +63,28 @@ public class ConsolePanel extends JPanel {
         scrollpane = new JScrollPane();
         scrollpane.getVerticalScrollBar().setUnitIncrement(16);
         scrollpane.setViewportView(console);
-
+        scrollpane.setBorder(BorderFactory.createEmptyBorder());
         add(scrollpane);
+
+        console.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                scrollToBottom();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                scrollToBottom();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+            }
+
+            private void scrollToBottom() {
+                console.setCaretPosition(console.getDocument().getLength());
+            }
+        });
 
         StyleConstants.setForeground(out, fg);
         StyleConstants.setForeground(err, Color.RED);

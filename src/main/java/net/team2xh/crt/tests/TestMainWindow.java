@@ -18,7 +18,7 @@ package net.team2xh.crt.tests;
 
 import javax.swing.SwingUtilities;
 import net.team2xh.crt.gui.MainWindow;
-import net.team2xh.crt.gui.themes.LightTheme;
+import net.team2xh.crt.gui.themes.DarkTheme;
 import net.team2xh.crt.gui.themes.Theme;
 import net.team2xh.crt.gui.util.GUIToolkit;
 import net.team2xh.crt.raytracer.Material;
@@ -38,7 +38,9 @@ import net.team2xh.crt.raytracer.math.Vector3;
 public class TestMainWindow {
 
     public static void main(String[] args) {
-        Theme theme = new LightTheme();
+
+        // TODO: Iplement dynamic theme changing
+        Theme theme = new DarkTheme();
 
         GUIToolkit.initGUI(theme, theme.LAF);
 

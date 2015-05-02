@@ -17,6 +17,7 @@
 package net.team2xh.crt.gui.editor;
 
 import java.awt.BorderLayout;
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import net.team2xh.crt.gui.themes.Theme;
@@ -30,7 +31,7 @@ public class Editor extends JScrollPane {
     private EditorTextPane textPane;
 
     public Editor(Theme theme) {
-        
+
         // Trick for no text wrap with JTextPane
         JPanel nowrap = new JPanel(new BorderLayout());
         textPane = new EditorTextPane(theme);
@@ -42,7 +43,7 @@ public class Editor extends JScrollPane {
 
         setViewportView(nowrap);
         setRowHeaderView(ln);
-        setBorder(null);
+        setBorder(BorderFactory.createEmptyBorder());
     }
 
     public EditorTextPane getEditor() {

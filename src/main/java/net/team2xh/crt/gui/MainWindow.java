@@ -77,6 +77,7 @@ public class MainWindow extends JFrame {
 //        controller.getThemeManager().setBorderModifier("dock.border.displayer.basic.content", (Border) -> BorderFactory.createLineBorder(Color.RED, 20));
 //        controller.getThemeManager().setBorderModifier("dock.border.stack.eclipse", (Border) -> BorderFactory.createLineBorder(Color.CYAN, 20));
         controller.getThemeManager().setBorderModifier("dock.border.stack.eclipse.content", (Border) -> BorderFactory.createEmptyBorder());
+        controller.getThemeManager().setBorderModifier("dock.border.title.eclipse.button.flat", (Border) -> BorderFactory.createLineBorder(UIManager.getColor("TextArea.selectionForeground"), 1));
 
         CContentArea contentArea = control.getContentArea();
         add(contentArea, BorderLayout.CENTER);
@@ -103,12 +104,13 @@ public class MainWindow extends JFrame {
         double h2 = 1 - h1;
 
         CGrid grid = new CGrid(control);
-        grid.add(0,     0,  wr, h1, dRender);
-        grid.add(wr,    0,  we, h1, dEditor);
-        grid.add(wr+we, 0,  wn, h1, dNavigator);
+        grid.add(0, 0, wr, h1, dRender);
+        grid.add(wr, 0, we, h1, dEditor);
+        grid.add(wr + we, 0, wn, h1, dNavigator);
+        grid.add(0, h1, wr + we, h2, dConsole);
+        grid.add(wr + we, h1, wn, h2, dSettings, dSystem);
         grid.addHorizontalDivider(0, 1, h1);
-        grid.add(0,     h1, wr+we, h2, dConsole);
-        grid.add(wr+we, h1, wn, h2, dSettings, dSystem);
+//        grid.addVerticalDivider(wr + we, 0, 1);
         contentArea.deploy(grid);
 
         dRender.setExternalizable(true);
@@ -120,6 +122,21 @@ public class MainWindow extends JFrame {
         dNavigator.setMinimizable(true);
         dNavigator.setLocation(CLocation.base().minimalEast());
         dNavigator.setExtendedMode(ExtendedMode.NORMALIZED);
+
+        dSettings.setMinimizable(true);
+        dSettings.setLocation(CLocation.base().minimalSouth());
+        dSettings.setExtendedMode(ExtendedMode.NORMALIZED);
+
+        dSystem.setMinimizable(true);
+        dSystem.setLocation(CLocation.base().minimalSouth());
+        dSystem.setExtendedMode(ExtendedMode.NORMALIZED);
+
+        dConsole.setMinimizable(true);
+        dConsole.setMaximizable(true);
+        dConsole.setLocation(CLocation.base().minimalSouth());
+        dConsole.setExtendedMode(ExtendedMode.NORMALIZED);
+
+        dEditor.setMaximizable(true);
 
         setVisible(true);
 
@@ -154,7 +171,6 @@ public class MainWindow extends JFrame {
 //        map.setColor(ColorMap.COLOR_KEY_TITLE_FOREGROUND, Color.CYAN);
 //        map.setColor(ColorMap.COLOR_KEY_TITLE_FOREGROUND_FOCUSED, Color.PINK);
 //        map.setColor(ColorMap.COLOR_KEY_MINIMIZED_BUTTON_BACKGROUND_SELECTED, Color.PINK);
-
         return dockable;
     }
 

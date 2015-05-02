@@ -34,7 +34,8 @@ class LineHighlighter extends LayeredHighlighter.LayerPainter {
     protected Color color; // The color for the underline
 
     public LineHighlighter(Color color) {
-        this.color = color;
+        this.color = new Color(color.getRed(), color.getBlue(), color.getRed(), 178);
+
     }
 
     public void paint(Graphics g, int offs0, int offs1, Shape bounds, JTextComponent c) {
