@@ -56,6 +56,7 @@ public class MainWindow extends JFrame {
     private final JLabel render;
     private final JLabel system;
     private final JLabel settings;
+    private final JLabel console;
 
     public MainWindow(Theme theme) {
 
@@ -85,23 +86,28 @@ public class MainWindow extends JFrame {
         render = new JLabel("Render goes here");
         system = new JLabel("Infos go here");
         settings = new JLabel("Settings go here");
+        console = new JLabel("Console goes here");
 
         DefaultCDockable dEditor = (DefaultCDockable) create("Script", editor);
         DefaultCDockable dNavigator = (DefaultCDockable) create("Navigator", navigator);
         DefaultCDockable dRender = (DefaultCDockable) create("Render", render);
         DefaultCDockable dSystem = (DefaultCDockable) create("System informations", system);
         DefaultCDockable dSettings = (DefaultCDockable) create("Settings", settings);
+        DefaultCDockable dConsole = (DefaultCDockable) create("Console", console);
 
         double wr = 0.45;
         double we = 0.35;
         double wn = 1 - wr - we;
         
+        double h1 = 0.75;
+        double h2 = 1 - h1;
+        
         CGrid grid = new CGrid(control);
-        grid.add(0,     0,     wr,    0.75, dRender);
-        grid.add(wr,    0,     we,    0.75, dEditor);
-        grid.add(wr+we, 0,     wn,    1,    dNavigator);
-        grid.add(0,     0.75,  0.375, 0.25, dSystem);
-        grid.add(0.375, 0.75,  0.375, 0.25, dSettings);
+        grid.add(0,     0,  wr, h1, dRender);
+        grid.add(wr,    0,  we, h1, dEditor);
+        grid.add(wr+we, 0,  wn, h1, dNavigator);
+        grid.add(0,     h1, wr, h2, dConsole);
+        grid.add(wr+we, h1, wn, h2, dSettings, dSystem);
         contentArea.deploy(grid);
 
         dRender.setExternalizable(true);
