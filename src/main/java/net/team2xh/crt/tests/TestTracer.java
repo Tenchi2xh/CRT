@@ -69,8 +69,8 @@ public class TestTracer {
 //        for (int t = 0; t < 60; ++t) {
 //            double d = 0.9 + 0.001*t*t;
         double d = 1;
-        Camera camera = new Camera(new Vector3(d * 0.6, d * 0.05, d * -0.9), new Vector3(0.0, 0.0, 0.0), 70 / d);
-//        Camera camera = new Camera(new Vector3(d * -0.3, d * 0.55, d * -1), new Vector3(0.0, 0.0, 0.0), 40 / d);
+//        Camera camera = new Camera(new Vector3(d * 0.6, d * 0.05, d * -0.9), new Vector3(0.0, 0.0, 0.0), 70 / d);
+        Camera camera = new Camera(new Vector3(d * -0.3, d * 0.55, d * -1), new Vector3(0.0, 0.0, 0.0), 40 / d);
 //        Camera camera = new Camera(new Vector3(d * 1.4, d * 1.45, d * -1.9), new Vector3(0.0, 0.0, 0.0), 40 / d);
 
         Scene scene = Scene.createScene(w, h, camera);
@@ -91,7 +91,7 @@ public class TestTracer {
         center.setFalloff(10.5);
         sun.setAmbient(0.35);
 
-        boolean day = true;
+        boolean day = false;
         double b = 1.0;
 
         if (day) {
@@ -105,8 +105,8 @@ public class TestTracer {
             b = 0.2;
         }
         
-//        scene.setBackground(new Background(new Pigment(b * 147 / 255., b * 195 / 255., b * 209 / 255.), new Pigment(0, b * 88 / 255., b * 151 / 255.)));
-        scene.setBackground(new Background("/images/panorama/sky3.jpg", 0.0));
+        scene.setBackground(new Background(new Pigment(b * 147 / 255., b * 195 / 255., b * 209 / 255.), new Pigment(0, b * 88 / 255., b * 151 / 255.)));
+//        scene.setBackground(new Background("/images/panorama/sky3.jpg", 0.0));
 
         scene.getSettings().setRecursionDepth(2);
         scene.getSettings().setProjection(Settings.Projection.PINHOLE);
@@ -182,8 +182,8 @@ public class TestTracer {
 //            scene.add(new Sphere(new Vector3(x, y, z), 0.01, sphereMat));
 //        }
         scene.getSettings().setSupersampling(2);
-//        scene.getSettings().setDOFSamples(32);
-        camera.setAperture(10);
+        scene.getSettings().setDOFSamples(32);
+        camera.setAperture(30);
         camera.setFocalDistance(0.9);
         Tracer tracer = Tracer.getInstance();
 
