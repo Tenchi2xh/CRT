@@ -23,7 +23,7 @@ import java.awt.Color;
  * 
  * @author Hamza Haiken <tenchi@team2xh.net>
  */
-abstract public class Theme {
+public class Theme {
     
     final public Color COLOR_01;
     final public Color COLOR_02;
@@ -40,8 +40,12 @@ abstract public class Theme {
     final public Color COLOR_13;
     
     final public String LAF;
+    
+    private final static Theme light = new LightTheme();
+    private final static Theme dark = new DarkTheme();
+    private static Theme theme = dark;
 
-    public Theme(String color01, String color02, String color03, String color04, String color05,
+    Theme(String color01, String color02, String color03, String color04, String color05,
                  String color06, String color07, String color08, String color09, String color10,
                  String color11, String color12, String color13, String laf) {
         this.COLOR_01 = c(color01);
@@ -59,6 +63,18 @@ abstract public class Theme {
         this.COLOR_13 = c(color13);
         
         this.LAF = laf;
+    }
+    
+    public static Theme getTheme() {
+        return theme;
+    }
+    
+    public static void setLightTheme() {
+        theme = light;
+    }
+    
+    public static void setDarkTheme() {
+        theme = dark;
     }
     
     private Color c(String hex) {

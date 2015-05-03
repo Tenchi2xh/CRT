@@ -16,10 +16,12 @@
  */
 package net.team2xh.crt.raytracer.entities;
 
+import java.awt.Image;
 import java.beans.BeanDescriptor;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.beans.SimpleBeanInfo;
+import net.team2xh.crt.gui.util.GUIToolkit;
 
 /**
  *
@@ -27,8 +29,12 @@ import java.beans.SimpleBeanInfo;
  */
 public class SphereBeanInfo extends SimpleBeanInfo {
 
-    // TODO: Icons
+    private final static Image ICON = GUIToolkit.getIcon("/icons/sphere.png");
     
+    @Override
+    public Image getIcon(int iconKind) {
+        return ICON;
+    }    
     // Bean descriptor
     private static BeanDescriptor getBdescriptor() {
         BeanDescriptor beanDescriptor = new BeanDescriptor(net.team2xh.crt.raytracer.entities.Sphere.class, null); // NOI18N

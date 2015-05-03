@@ -79,16 +79,12 @@ public class EditorTextPane extends JTextPane {
 
     private LinkedList<Object> occurrences = new LinkedList<>();
 
-    private final Theme theme;
-
-    public EditorTextPane(Theme theme) {
-
-        this.theme = theme;
+    public EditorTextPane() {
 
         // Initialize highlighters
-        lh = new LineHighlighter(theme.COLOR_13);
-        ll = new LineHighlighter(theme.COLOR_04);
-        wh = new WordHighlighter(theme.COLOR_11);
+        lh = new LineHighlighter(Theme.getTheme().COLOR_13);
+        ll = new LineHighlighter(Theme.getTheme().COLOR_04);
+        wh = new WordHighlighter(Theme.getTheme().COLOR_11);
         eh = new ErrorHighlighter(Color.RED);
 
         // Initialise colors
@@ -197,7 +193,7 @@ public class EditorTextPane extends JTextPane {
             }
         });
 
-        setCaretColor(theme.COLOR_11);
+        setCaretColor(Theme.getTheme().COLOR_11);
 
         highlightText();
     }
@@ -266,6 +262,7 @@ public class EditorTextPane extends JTextPane {
     private SimpleAttributeSet STRING = new SimpleAttributeSet();
 
     private void initAttributeSets() {
+        Theme theme = Theme.getTheme();
         StyleConstants.setForeground(OPERATORS, theme.COLOR_10);
         StyleConstants.setForeground(NAME, theme.COLOR_11);
         StyleConstants.setItalic(NAME, true);
@@ -405,15 +402,15 @@ public class EditorTextPane extends JTextPane {
         int m = marginSize;
         int w = getWidth(), h = getHeight();
         // Background
-        g2d.setPaint(theme.COLOR_02);
+        g2d.setPaint(Theme.getTheme().COLOR_02);
         g2d.fillRect(0, 0, m, h);
         // Margin background
         if (m < w) {
-            g2d.setColor(theme.COLOR_01);
+            g2d.setColor(Theme.getTheme().COLOR_01);
             g2d.fillRect(m, 0, w - m, h);
         }
         // Margin line
-        g2d.setColor(theme.COLOR_04);
+        g2d.setColor(Theme.getTheme().COLOR_04);
         g2d.drawLine(m, 0, m, h);
         // Draw the rest
         super.paintComponent(g);

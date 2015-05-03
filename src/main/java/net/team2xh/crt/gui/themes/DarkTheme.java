@@ -23,7 +23,7 @@ package net.team2xh.crt.gui.themes;
  */
 public class DarkTheme extends Theme {
     
-    public DarkTheme() {
+    DarkTheme() {
         super("#1a1a1a", // 01 Black
               "#222222", // 02 Light black
               "#2a2a2a", // 03 Dark Gray

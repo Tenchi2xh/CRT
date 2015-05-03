@@ -33,14 +33,10 @@ public class TestEditor {
 
     public static void main(String[] args) {
 
-        Theme theme = new DarkTheme();
-
-        GUIToolkit.initGUI(theme, theme.LAF);
-
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Editor test");
 
-            frame.getContentPane().add(new Editor(theme), BorderLayout.CENTER);
+            frame.getContentPane().add(new Editor(), BorderLayout.CENTER);
             frame.setPreferredSize(new Dimension(500, 500));
             frame.pack();
 

@@ -113,3 +113,5 @@
 - Language touch-ups
 - Console panel, catching `stdout` and `stderr`, autoscrolling
 - Renderer panel
+- Dynamic icon system dependent on theme
+- Theme singleton

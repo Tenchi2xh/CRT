@@ -20,7 +20,8 @@ import java.beans.PropertyEditorManager;
 import java.lang.reflect.Field;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.UIManager;
+import net.team2xh.crt.gui.themes.Theme;
+import net.team2xh.crt.gui.util.GUIToolkit;
 import net.team2xh.crt.tests.TestMainWindow;
 
 /**
@@ -44,6 +45,9 @@ public class Launcher {
             sysPathsField.set(null, null);
             
             // Set GUI
+            // TODO: Implement dynamic theme changing
+            Theme.setLightTheme();
+            GUIToolkit.initGUI();
 
             TestMainWindow.main(args);
         } catch (Exception ex) {

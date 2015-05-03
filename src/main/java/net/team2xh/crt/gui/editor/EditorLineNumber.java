@@ -91,8 +91,6 @@ public final class EditorLineNumber extends JPanel
 
     private HashMap<String, FontMetrics> fonts;
     
-    private final Theme theme;
-
     /**
      *  Create a line number component for a text component. This minimum
      *  display width will be based on 3 digits.
@@ -100,9 +98,9 @@ public final class EditorLineNumber extends JPanel
      *  @param component  the related text component
      *  @param theme  the theme to use
      */
-    public EditorLineNumber(JTextComponent component, Theme theme)
+    public EditorLineNumber(JTextComponent component)
     {
-        this(component, 3, theme);
+        this(component, 3);
     }
 
     /**
@@ -113,13 +111,11 @@ public final class EditorLineNumber extends JPanel
      *                               the minimum width of the component
      *  @param theme  the theme to use
      */
-    public EditorLineNumber(JTextComponent component, int minimumDisplayDigits, Theme theme)
+    public EditorLineNumber(JTextComponent component, int minimumDisplayDigits)
     {
         this.component = component;
-        
-        this.theme = theme;
-        
-        OUTER = new MatteBorder(0, 0, 0, 0, theme.COLOR_05);
+                
+        OUTER = new MatteBorder(0, 0, 0, 0, Theme.getTheme().COLOR_05);
         
         setFont( component.getFont() );
 
@@ -284,7 +280,7 @@ public final class EditorLineNumber extends JPanel
     {
         //super.paintComponent(g);
 
-        g.setColor(theme.COLOR_03);
+        g.setColor(Theme.getTheme().COLOR_03);
         g.fillRect(0, 0, getWidth(), getHeight());
 
         ((Graphics2D)g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON/*LCD_HRGB*/);
@@ -315,10 +311,10 @@ public final class EditorLineNumber extends JPanel
                 int x = getOffsetX(availableWidth, stringWidth) + insets.left;
                 int y = getOffsetY(rowStartOffset, fontMetrics);
                 if (isCurrentLine(rowStartOffset)) {
-                    g.setColor(theme.COLOR_04);
+                    g.setColor(Theme.getTheme().COLOR_04);
                     g.fillRect(0, y-15, getWidth(), stringHeight);
                 }
-                g.setColor(theme.COLOR_05);
+                g.setColor(Theme.getTheme().COLOR_05);
                 g.drawString(lineNumber, x, y);
 
                 //  Move to the next row

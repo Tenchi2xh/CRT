@@ -17,15 +17,16 @@
 package net.team2xh.crt.gui.entities;
 
 import java.awt.BorderLayout;
+import java.awt.Image;
 import java.beans.beancontext.BeanContext;
 import java.beans.beancontext.BeanContextSupport;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.TreeSelectionModel;
+import net.team2xh.crt.gui.util.GUIToolkit;
 import net.team2xh.crt.raytracer.Scene;
 import net.team2xh.crt.raytracer.entities.Entity;
 import net.team2xh.crt.raytracer.lights.Light;
-import net.team2xh.crt.raytracer.lights.PointLight;
 import org.openide.explorer.ExplorerManager;
 import org.openide.explorer.view.BeanTreeView;
 import org.openide.nodes.AbstractNode;
@@ -43,6 +44,10 @@ public class EntityTree extends JPanel implements ExplorerManager.Provider {
     private final BeanTreeView tree = new BeanTreeView();
     private final EntityProperties properties = new EntityProperties();
 
+    private final static Image ICON_SCENE = GUIToolkit.getIcon("/icons/scene.png");;
+    private final static Image ICON_ENTITIES = GUIToolkit.getIcon("/icons/entities.png");
+    private final static Image ICON_LIGHTS = GUIToolkit.getIcon("/icons/lights.png");;
+    
     public EntityTree(Scene scene) {
         this();
         loadScene(scene);
@@ -72,7 +77,7 @@ public class EntityTree extends JPanel implements ExplorerManager.Provider {
             entities.add(e);
         }
         Children entitiesChildren = new BeanChildren(entities);
-        Node entitiesNode = new AbstractNode(entitiesChildren);
+        Node entitiesNode = createNode(entitiesChildren, ICON_ENTITIES);
         entitiesNode.setDisplayName("Entities");
         entitiesNode.setShortDescription("The entities present in the compiled scene.");
 
@@ -82,7 +87,7 @@ public class EntityTree extends JPanel implements ExplorerManager.Provider {
             lights.add(l);
         }
         Children lightsChildren = new BeanChildren(lights);
-        Node lightsNode = new AbstractNode(lightsChildren);
+        Node lightsNode = createNode(lightsChildren, ICON_LIGHTS);
         lightsNode.setDisplayName("Lights");
         lightsNode.setShortDescription("The lights present in the compiled scene.");
 
@@ -90,7 +95,7 @@ public class EntityTree extends JPanel implements ExplorerManager.Provider {
         Children sceneChildren = new Children.Array();
         sceneChildren.add(new Node[]{lightsNode, entitiesNode});
 
-        Node root = new AbstractNode(sceneChildren);
+        Node root = createNode(sceneChildren, ICON_SCENE);
         root.setDisplayName("Scene");
         root.setShortDescription("The current scene after execution of the script.");
 
@@ -99,5 +104,18 @@ public class EntityTree extends JPanel implements ExplorerManager.Provider {
         SwingUtilities.invokeLater(() -> {
             tree.expandAll();
         });
+    }
+    
+    private Node createNode(Children children, Image icon) {
+        return new AbstractNode(children) {
+            @Override
+            public Image getIcon(int iconKind) {
+                return icon;
+            }
+            @Override
+            public Image getOpenedIcon(int iconKind) {
+                return icon;
+            }
+        };
     }
 }

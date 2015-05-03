@@ -41,15 +41,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.plaf.FontUIResource;
+import net.team2xh.crt.gui.themes.DarkTheme;
+import net.team2xh.crt.gui.themes.Theme;
 import org.apache.commons.io.IOUtils;
+import org.openide.util.Exceptions;
 import org.pushingpixels.substance.api.SubstanceConstants.SubstanceWidgetType;
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
-import org.pushingpixels.substance.api.fonts.FontPolicy;
-import org.pushingpixels.substance.api.fonts.FontSet;
 
 /**
  * Utility class for missing Swing features.
@@ -226,14 +225,35 @@ final public class GUIToolkit {
      * @param path Picture file name
      * @return     ImageIcon
      */
-    public static ImageIcon getIcon(String path) {
+    public static Image getIcon(String path) {
         Image img = null;
+        Theme theme = Theme.getTheme();
         try {
-            img = ImageIO.read(ClassLoader.getSystemResource(path));
+            URI uri = theme.getClass().getResource(path).toURI();
+            File file = new File(uri);
+            img = ImageIO.read(file);
+            
         } catch (IOException ex) {
             Logger.getLogger(GUIToolkit.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (URISyntaxException ex) {
+            Exceptions.printStackTrace(ex);
         }
-        return new ImageIcon(img);
+        
+        if (img != null) {
+            if (theme.getClass() == DarkTheme.class) {
+                // If dark theme, invert colors
+                // http://stackoverflow.com/a/25425107
+                BufferedImage bi = (BufferedImage) img;
+                for (int y = 0; y < bi.getHeight(); ++y) {
+                    for (int x = 0; x < bi.getWidth(); ++x) {
+                        int c = bi.getRGB(x, y);
+                        bi.setRGB(x, y, 0x00ffffff - (c | 0xff000000) | (c & 0xff000000));
+                    }
+                }
+            }
+        }
+        
+        return img;
     }
     
     /**
@@ -258,17 +278,18 @@ final public class GUIToolkit {
      * @param caller Caller instance for resource aquisition
      * @param laf    Desired Substance LooK&Feel class
      */
-    public static void initGUI(Object caller, String laf) {
+    public static void initGUI() {
         try {
+            Theme theme = Theme.getTheme();
             // Import custom fonts
-            GUIToolkit.registerFont(caller, "/fonts/SOURCESANSPRO-REGULAR.TTF");
-            GUIToolkit.registerFont(caller, "/fonts/ENVYCODER.TTF");
-            GUIToolkit.registerFont(caller, "/fonts/ENVYCODERITALIC.TTF");
-            GUIToolkit.registerFont(caller, "/fonts/ENVYCODERBOLD.TTF");
+            GUIToolkit.registerFont(theme, "/fonts/SOURCESANSPRO-REGULAR.TTF");
+            GUIToolkit.registerFont(theme, "/fonts/ENVYCODER.TTF");
+            GUIToolkit.registerFont(theme, "/fonts/ENVYCODERITALIC.TTF");
+            GUIToolkit.registerFont(theme, "/fonts/ENVYCODERBOLD.TTF");
             // Set default dialog font
             GUIToolkit.setDefaultFont("Source Sans Pro", 14);
             // Enable Substance Look&Feel
-            GUIToolkit.setSubstanceLAF(laf);
+            GUIToolkit.setSubstanceLAF(theme.LAF);
             
             // TODO: Create main icon
             // UIManager.put("InternalFrame.icon", MainWindow.icon);

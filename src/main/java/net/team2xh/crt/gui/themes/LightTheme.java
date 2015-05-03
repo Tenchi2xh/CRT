@@ -24,7 +24,7 @@ package net.team2xh.crt.gui.themes;
 public class LightTheme extends Theme {
 
     // TODO: Copy greybeans theme
-    public LightTheme() {
+    LightTheme() {
         super("#eaeaea", // 01 White
               "#f0f0f0", // 02 Very light gray
               "#eaeaea", // 03 Light gray

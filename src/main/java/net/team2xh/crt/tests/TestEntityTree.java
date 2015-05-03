@@ -41,9 +41,6 @@ import net.team2xh.crt.raytracer.math.Vector3;
 public class TestEntityTree {
 
     public static void main(String[] args) {
-        Theme theme = new DarkTheme();
-
-        GUIToolkit.initGUI(theme, theme.LAF);
 
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Entity properties test");

@@ -37,7 +37,6 @@ import net.team2xh.crt.gui.themes.Theme;
  */
 public class ConsolePanel extends JPanel {
 
-    private final Theme theme;
     private Color bg;
     private Color fg;
 
@@ -47,8 +46,7 @@ public class ConsolePanel extends JPanel {
     SimpleAttributeSet out = new SimpleAttributeSet();
     SimpleAttributeSet err = new SimpleAttributeSet();
 
-    public ConsolePanel(Theme theme) {
-        this.theme = theme;
+    public ConsolePanel() {
         initColors();
 
         console = new JTextPane();
@@ -96,7 +94,7 @@ public class ConsolePanel extends JPanel {
     private void initColors() {
         bg = Color.BLACK;
         fg = Color.WHITE;
-        if (theme.getClass() == LightTheme.class) {
+        if (Theme.getTheme().getClass() == LightTheme.class) {
             bg = Color.WHITE;
             fg = Color.BLACK;
         }

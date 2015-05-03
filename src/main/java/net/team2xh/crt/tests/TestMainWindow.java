@@ -39,13 +39,8 @@ public class TestMainWindow {
 
     public static void main(String[] args) {
 
-        // TODO: Iplement dynamic theme changing
-        Theme theme = new DarkTheme();
-
-        GUIToolkit.initGUI(theme, theme.LAF);
-
         SwingUtilities.invokeLater(() -> {
-            MainWindow frame = new MainWindow(theme);
+            MainWindow frame = new MainWindow();
             GUIToolkit.enableHeapStatus(frame);
 
             Sphere s = new Sphere(Vector3.X, 0.15, new Material(new Pigment(0.9, 0.5, 0.0)));

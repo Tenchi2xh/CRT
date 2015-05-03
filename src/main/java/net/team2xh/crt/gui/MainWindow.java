@@ -34,13 +34,14 @@ import bibliothek.gui.dock.dockable.ScreencaptureMovingImageFactory;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.UIManager;
 import net.team2xh.crt.gui.editor.Editor;
 import net.team2xh.crt.gui.entities.EntityTree;
-import net.team2xh.crt.gui.themes.Theme;
+import net.team2xh.crt.gui.util.GUIToolkit;
 import net.team2xh.crt.raytracer.Scene;
 
 
@@ -51,7 +52,6 @@ import net.team2xh.crt.raytracer.Scene;
 public class MainWindow extends JFrame {
 
     private final CControl control;
-    private final Theme theme;
 
     private final Editor editor;
     private final EntityTree navigator;
@@ -60,9 +60,8 @@ public class MainWindow extends JFrame {
     private final JLabel settings;
     private final ConsolePanel console;
 
-    public MainWindow(Theme theme) {
+    public MainWindow() {
 
-        this.theme = theme;
         this.control = new CControl(this);
 
         setTitle("CRT");
@@ -74,6 +73,7 @@ public class MainWindow extends JFrame {
         etheme.setMovingImageFactory(new ScreencaptureMovingImageFactory(new Dimension(500, 500)));
         control.setTheme(new CEclipseTheme(control, etheme));
         control.putProperty(EclipseTheme.TAB_PAINTER, RectGradientPainter.FACTORY);
+        control.putProperty(EclipseTheme.PAINT_ICONS_WHEN_DESELECTED, true);
 
         DockController controller = control.getController();
         controller.getThemeManager().setBorderModifier("dock.border.stack.eclipse.content", (Border) -> BorderFactory.createEmptyBorder());
@@ -82,12 +82,12 @@ public class MainWindow extends JFrame {
         CContentArea contentArea = control.getContentArea();
         add(contentArea, BorderLayout.CENTER);
 
-        editor = new Editor(theme);
+        editor = new Editor();
         navigator = new EntityTree();
         render = new RenderPanel();
         system = new JLabel("Infos go here");
         settings = new JLabel("Settings go here");
-        console = new ConsolePanel(theme);
+        console = new ConsolePanel();
 
         DefaultCDockable dEditor = (DefaultCDockable) create("Script", editor);
         DefaultCDockable dNavigator = (DefaultCDockable) create("Navigator", navigator);
@@ -95,6 +95,13 @@ public class MainWindow extends JFrame {
         DefaultCDockable dSystem = (DefaultCDockable) create("System", system);
         DefaultCDockable dSettings = (DefaultCDockable) create("Settings", settings);
         DefaultCDockable dConsole = (DefaultCDockable) create("Console", console);
+        
+        dEditor.setTitleIcon(new ImageIcon(GUIToolkit.getIcon("/icons/script.png")));
+        dNavigator.setTitleIcon(new ImageIcon(GUIToolkit.getIcon("/icons/navigator.png")));
+        dRender.setTitleIcon(new ImageIcon(GUIToolkit.getIcon("/icons/renderer.png")));
+        dSystem.setTitleIcon(new ImageIcon(GUIToolkit.getIcon("/icons/system.png")));
+        dSettings.setTitleIcon(new ImageIcon(GUIToolkit.getIcon("/icons/settings.png")));
+        dConsole.setTitleIcon(new ImageIcon(GUIToolkit.getIcon("/icons/console.png")));
 
         double wr = 0.4;
         double we = 0.4;
@@ -108,7 +115,7 @@ public class MainWindow extends JFrame {
         grid.add(wr, 0, we, h1, dEditor);
         grid.add(wr + we, 0, wn, h1, dNavigator);
         grid.add(0, h1, wr + we, h2, dConsole);
-        grid.add(wr + we, h1, wn, h2, dSettings, dSystem);
+        grid.add(wr + we, h1, wn, h2, dSystem, dSettings);
         grid.addHorizontalDivider(0, 1, h1);
 //        grid.addVerticalDivider(wr + we, 0, 1);
         contentArea.deploy(grid);

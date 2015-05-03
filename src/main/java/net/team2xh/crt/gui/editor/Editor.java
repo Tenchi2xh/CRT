@@ -30,13 +30,13 @@ public class Editor extends JScrollPane {
 
     private EditorTextPane textPane;
 
-    public Editor(Theme theme) {
+    public Editor() {
 
         // Trick for no text wrap with JTextPane
         JPanel nowrap = new JPanel(new BorderLayout());
-        textPane = new EditorTextPane(theme);
+        textPane = new EditorTextPane();
         nowrap.add(textPane);
-        EditorLineNumber ln = new EditorLineNumber(textPane, theme);
+        EditorLineNumber ln = new EditorLineNumber(textPane);
 
         // Faster scroll
         getVerticalScrollBar().setUnitIncrement(16);
