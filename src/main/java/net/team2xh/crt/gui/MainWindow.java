@@ -77,7 +77,7 @@ public class MainWindow extends JFrame {
 
         DockController controller = control.getController();
         controller.getThemeManager().setBorderModifier("dock.border.stack.eclipse.content", (Border) -> BorderFactory.createEmptyBorder());
-        controller.getThemeManager().setBorderModifier("dock.border.title.eclipse.button.flat", (Border) -> BorderFactory.createLineBorder(UIManager.getColor("TextArea.selectionForeground"), 1));
+        controller.getThemeManager().setBorderModifier("dock.border.title.eclipse.button.flat", (Border) -> BorderFactory.createLineBorder(UIManager.getColor("Button.border"), 1));
         
         CContentArea contentArea = control.getContentArea();
         add(contentArea, BorderLayout.CENTER);
