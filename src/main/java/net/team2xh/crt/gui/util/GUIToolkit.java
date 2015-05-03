@@ -274,9 +274,6 @@ final public class GUIToolkit {
 
     /**
      * Initialises default GUI parameters and fonts.
-     * 
-     * @param caller Caller instance for resource aquisition
-     * @param laf    Desired Substance LooK&Feel class
      */
     public static void initGUI() {
         try {
@@ -287,7 +284,7 @@ final public class GUIToolkit {
             GUIToolkit.registerFont(theme, "/fonts/ENVYCODERITALIC.TTF");
             GUIToolkit.registerFont(theme, "/fonts/ENVYCODERBOLD.TTF");
             // Set default dialog font
-            GUIToolkit.setDefaultFont("Source Sans Pro", 14);
+            GUIToolkit.setDefaultFont("Source Sans Pro", 16);
             // Enable Substance Look&Feel
             GUIToolkit.setSubstanceLAF(theme.LAF);
             
