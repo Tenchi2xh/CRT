@@ -23,7 +23,11 @@
         - Hacks
     - NetBeans API
         - Introspection power
-        - PropertySheet & PropertyEditor
+        - Java Beans
+        - PropertySheet (hack) & PropertyEditor
+    - Docking Frames
+        - General work
+        - Implementation difficulties
 
 # Raytracer
 
@@ -45,37 +49,45 @@
     - List of cameras + list of times -> interpolation between cameras
 [-] Procedural texturing
     - Bump mapping
-    - Perlin noise class for basis
+    - 3D Perlin noise class for basis
     - Material type that returns texture color for any point in space
         - Woods
         - Metals
     - Try pictures?
+[-] Animations
+    - Time constant 
+    - Possibility to put list of cameras in settings, needs list of times as well -> interpolate
 
 # Live view
 
-[-] Do a generic parametric shader for all surface types
+[x] Background via Skybox, raytraced
+[x] Camera movement
+[~] Mouse object picking
+    - Object selection
+    - Transmit info to netbeans Explorer for properties
+    - Object movement
+[~] Do a generic parametric shader for all surface types
+[~] Camera roll
     - Boolean parameter for highlighted objects (do an outline + gray out)
-[x] Background via Skybox
-    - For 1 color, just change the clear parameter
-    - For 2 colors, generate images
-    - For panorama, find way to split it in 6 faces
-        - Maybe ray trace them!
-        - Set a square resolution, 90° FOV, and render all faces
 [-] Recursively go through CSG
     - For union, just display everything
     - For intersection, display both transparent
     - For difference, display B transparent
-[~] Camera roll
-[x] Camera movement
-[x] Mouse object picking
-[ ] Multiple viewports: top, side, free-view, quick-render
+[-] Multiple viewports: top, side, free-view, quick-render
 
 # Gui
 
-[~] Property viewing
 [x] Figure out netbeans trees
-[-] Figure out docking frames
-[-] Assemble parts 
+[x] Figure out docking frames
+[~] Property viewing
+[~] Assemble parts 
+[-] Workspaces (script / live)
+[-] Live mode inclusion
+[-] Import settings viewer and system info graphs
+[-] Menubar
+[-] Toolbar
+[-] RendererPanel methods to draw picture in the center
+[-] Icons
 
 # Refactoring
 

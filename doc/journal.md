@@ -104,7 +104,12 @@
 
 # 30.04.2015 - 06.05.2015
 
+- Studied Docking Frames API
+- Java Beans infos and editors
+- Code editor with syntax highlighting and some features
 - Entity trees
 - Entity properties
 - Docking system
 - Language touch-ups
+- Console panel, catching `stdout` and `stderr`, autoscrolling
+- Renderer panel
