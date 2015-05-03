@@ -28,6 +28,8 @@
     - Docking Frames
         - General work
         - Implementation difficulties
+[-] Start gathering biography
+    - Zotero ?
 
 # Raytracer
 
@@ -82,6 +84,8 @@
 [~] Property viewing
 [~] Assemble parts 
 [~] Icons
+[-] Find way to unite all components
+    - How to rewrite script when live editing ? Macros ?
 [-] Workspaces (script / live)
 [-] Live mode inclusion
 [-] Import settings viewer and system info graphs
