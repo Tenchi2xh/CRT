@@ -64,18 +64,19 @@
 
 [x] Background via Skybox, raytraced
 [x] Camera movement
+[x] Camera roll
 [~] Mouse object picking
     - Object selection
     - Transmit info to netbeans Explorer for properties
     - Object movement
-[~] Do a generic parametric shader for all surface types
-[~] Camera roll
     - Boolean parameter for highlighted objects (do an outline + gray out)
+[~] Do a generic parametric shader for all surface types
+[~] Multiple viewports: top, side, free-view, quick-render
+    - Buttons to choose camera type
 [-] Recursively go through CSG
     - For union, just display everything
     - For intersection, display both transparent
     - For difference, display B transparent
-[-] Multiple viewports: top, side, free-view, quick-render
 
 # Gui
 
@@ -84,6 +85,8 @@
 [~] Property viewing
 [~] Assemble parts 
 [~] Icons
+[~] RendererPanel methods to draw picture in the center
+    - Test if always center
 [-] Find way to unite all components
     - How to rewrite script when live editing ? Macros ?
 [-] Workspaces (script / live)
@@ -91,7 +94,6 @@
 [-] Import settings viewer and system info graphs
 [-] Menubar
 [-] Toolbar
-[-] RendererPanel methods to draw picture in the center
 
 # Refactoring
 
