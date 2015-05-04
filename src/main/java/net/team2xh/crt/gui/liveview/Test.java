@@ -113,9 +113,9 @@ public class Test {
     private final Camera cameraZ;
     
     public Test() {
-        buffer1 = new FrameBuffer(scene.getSettings().getWidth() / 2, scene.getSettings().getHeight() / 2, FrameBuffer.SAMPLINGMODE_NORMAL);
-        buffer2 = new FrameBuffer(scene.getSettings().getWidth() / 2, scene.getSettings().getHeight() / 2, FrameBuffer.SAMPLINGMODE_NORMAL);
-        buffer3 = new FrameBuffer(scene.getSettings().getWidth() / 2, scene.getSettings().getHeight() / 2, FrameBuffer.SAMPLINGMODE_NORMAL);
+        buffer1 = new FrameBuffer(scene.getSettings().getWidth() / 2, scene.getSettings().getHeight() / 2, FrameBuffer.SAMPLINGMODE_GL_AA_4X);
+        buffer2 = new FrameBuffer(scene.getSettings().getWidth() / 2, scene.getSettings().getHeight() / 2, FrameBuffer.SAMPLINGMODE_GL_AA_4X);
+        buffer3 = new FrameBuffer(scene.getSettings().getWidth() / 2, scene.getSettings().getHeight() / 2, FrameBuffer.SAMPLINGMODE_GL_AA_4X);
 
         buffer1.disableRenderer(IRenderer.RENDERER_SOFTWARE);
         buffer2.disableRenderer(IRenderer.RENDERER_SOFTWARE);
