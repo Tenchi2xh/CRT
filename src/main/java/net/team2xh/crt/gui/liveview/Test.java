@@ -37,7 +37,10 @@ import com.threed.jpct.util.SkyBox;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.GridLayout;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
@@ -48,7 +51,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
+import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
+import net.team2xh.crt.gui.RenderPanel;
 import net.team2xh.crt.gui.liveview.converters.BackgroundConverter;
 import net.team2xh.crt.gui.util.GUIToolkit;
 import net.team2xh.crt.raytracer.Material;
@@ -62,19 +67,28 @@ import net.team2xh.crt.raytracer.lights.PointLight;
 import net.team2xh.crt.raytracer.math.Vector3;
 
 /**
- *
+ * TODO: set focal distance function by clicking a point then trace a ray to it
+ * 
  * @author Hamza Haiken <tenchi@team2xh.net>
  */
 public class Test {
 
     private World world;
     private SkyBox skybox;
-    private FrameBuffer buffer;
-    private ShadowHelper sh;
+    private FrameBuffer buffer1;
+    private FrameBuffer buffer2;
+    private FrameBuffer buffer3;
+    private FrameBuffer buffers[];
+    
+    private ShadowHelper[] shs = new ShadowHelper[3];
     private Projector projector;
 
     private JFrame frame;
-    private Canvas canvas;
+    private Canvas canvas1;
+    private Canvas canvas2;
+    private Canvas canvas3;
+    private RenderPanel canvas4;
+    private final Canvas[] canvases;
 
     private int distMult = 20;
     
@@ -82,11 +96,12 @@ public class Test {
 
     private Scene scene = new TestScene();
     
-    private final JButton camLt;
-    private final JButton camRt;
-    private final JButton camUp;
-    private final JButton camDn;
-    private final JToggleButton toggleShdr;
+    private JButton camLt;
+    private JButton camRt;
+    private JButton camUp;
+    private JButton camDn;
+    private JButton renderButton;
+    private JToggleButton toggleShdr;
 
     private MouseListener ml;
     
@@ -94,41 +109,73 @@ public class Test {
     private Color lastColor = null;
     
     private boolean useShaders = false;
+    private final Camera cameraY;
+    private final Camera cameraZ;
     
     public Test() {
-        frame = new JFrame("CRT OpenGL Renderer");
-        buffer = new FrameBuffer(scene.getSettings().getWidth(), scene.getSettings().getHeight(), FrameBuffer.SAMPLINGMODE_GL_AA_4X);
+        buffer1 = new FrameBuffer(scene.getSettings().getWidth() / 2, scene.getSettings().getHeight() / 2, FrameBuffer.SAMPLINGMODE_NORMAL);
+        buffer2 = new FrameBuffer(scene.getSettings().getWidth() / 2, scene.getSettings().getHeight() / 2, FrameBuffer.SAMPLINGMODE_NORMAL);
+        buffer3 = new FrameBuffer(scene.getSettings().getWidth() / 2, scene.getSettings().getHeight() / 2, FrameBuffer.SAMPLINGMODE_NORMAL);
 
-        canvas = buffer.enableGLCanvasRenderer();
-        buffer.disableRenderer(IRenderer.RENDERER_SOFTWARE);
-        frame.getContentPane().add(canvas, BorderLayout.CENTER);
-
-        ml = new MouseListener();
-        canvas.addMouseListener(ml);
-        canvas.addMouseMotionListener(ml);
+        buffer1.disableRenderer(IRenderer.RENDERER_SOFTWARE);
+        buffer2.disableRenderer(IRenderer.RENDERER_SOFTWARE);
+        buffer3.disableRenderer(IRenderer.RENDERER_SOFTWARE);
+        canvas1 = buffer1.enableGLCanvasRenderer();
+        canvas2 = buffer2.enableGLCanvasRenderer();
+        canvas3 = buffer3.enableGLCanvasRenderer();
         
-        Config.lightMul = 5;
+        buffers = new FrameBuffer[] { buffer1, buffer2, buffer3 };
+        canvases = new Canvas[] { canvas1, canvas2, canvas3 };
+        
+        SwingUtilities.invokeLater(() -> {
+            frame = new JFrame("CRT OpenGL Renderer");
+            JPanel panel = new JPanel(new GridLayout(2, 2));
+            
+            canvas4 = new RenderPanel();
+        
+            panel.add(canvas2);
+            panel.add(canvas3);
+            panel.add(canvas4);
+            panel.add(canvas1);
+            
+            // TODO: resize listener to resize buffers
+
+            frame.getContentPane().add(panel, BorderLayout.CENTER);
+
+            ml = new MouseListener();
+            canvas1.addMouseListener(ml);
+            canvas1.addMouseMotionListener(ml);
+            
+            JPanel buttons = new JPanel();
+            camUp = new JButton("^");
+            camDn = new JButton("v");
+            camLt = new JButton("<");
+            camRt = new JButton(">");
+            renderButton = new JButton("Render");
+            toggleShdr = new JToggleButton("Shaders");
+            buttons.add(camUp);
+            buttons.add(camDn);
+            buttons.add(camLt);
+            buttons.add(camRt);
+            buttons.add(renderButton);
+            buttons.add(toggleShdr);
+            frame.add(buttons, BorderLayout.PAGE_END);
+            
+            renderButton.addActionListener((ActionEvent e) -> {
+                RenderPanel.renderScene(scene, canvas4);
+            });
+
+            frame.pack();
+            frame.setVisible(true);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            GUIToolkit.centerFrame(frame);
+        });
+
+        
+        Config.lightMul = 1;
         Config.specPow = 100;
         Config.specTerm = 15;
         Config.glShadowZBias = 0.03f * distMult;
-        
-        JPanel buttons = new JPanel();
-        camUp = new JButton("^");
-        camDn = new JButton("v");
-        camLt = new JButton("<");
-        camRt = new JButton(">");
-        toggleShdr = new JToggleButton("Shaders");
-        buttons.add(camUp);
-        buttons.add(camDn);
-        buttons.add(camLt);
-        buttons.add(camRt);
-        buttons.add(toggleShdr);
-        frame.add(buttons, BorderLayout.PAGE_END);
-
-        frame.pack();
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        GUIToolkit.centerFrame(frame);
 
         world = new World();
         world.setAmbientLight(0, 0, 0);
@@ -151,10 +198,11 @@ public class Test {
                 ParallelLight pl = (ParallelLight) l0;
                 SimpleVector pos = pl.getDirection(Vector3.O).multiply(20*distMult).getRightHanded().simpleVector();
                 l1.setPosition(pos);
-                if (sun == null) {
-                    sun = pos;
-                    System.out.println(pos);
-                }
+                // Shadows buggy with multiple viewports
+//                if (sun == null) {
+//                    sun = pos;
+//                    System.out.println(pos);
+//                }
             }
 
             SimpleVector intensity = l0.getPigment().getVector().simpleVector();
@@ -181,17 +229,29 @@ public class Test {
         world.getCamera().lookAt(camLookAt);
         world.getCamera().rotateCameraAxis(world.getCamera().getDirection(), (float) -scene.getCamera().getRoll());
 
+        cameraY = new Camera();
+        cameraZ = new Camera();
+        cameraY.setPosition(0, -5*distMult, 0);
+        cameraZ.setPosition(0, 0, -5*distMult);
+        cameraY.lookAt(SimpleVector.ORIGIN);
+        cameraZ.lookAt(SimpleVector.ORIGIN);
+        
         if (sun != null) {
             
             projector = new Projector();
             projector.setFOV(1.5f);
             projector.setYFOV(1.5f);
 
-            sh = new ShadowHelper(world, buffer, projector, 4096);
-            sh.setCullingMode(false);
-            sh.setAmbientLight(new Color(0, 0, 0));
-            sh.setLightMode(true);
-            sh.setBorder(1);
+            for (int i = 0; i < 3; ++i) {
+                ShadowHelper sh = new ShadowHelper(world, buffers[i], projector, 4096);
+                
+                sh.setCullingMode(false);
+                sh.setAmbientLight(new Color(0, 0, 0));
+                sh.setLightMode(true);
+                sh.setBorder(1);
+                
+                shs[i] = sh;
+            }
         }
 
         for (Entity e : scene.getEntities()) {
@@ -221,8 +281,10 @@ public class Test {
             }
 
             if (sun != null && !sprite) {
-                sh.addCaster(obj);
-                sh.addReceiver(obj);
+                for (int i = 0; i < 3; ++i) {
+                    shs[i].addCaster(obj);
+                    shs[i].addReceiver(obj);
+                }
             }
 
             obj.translate(e.getCenter().multiply(distMult).getRightHanded().simpleVector());
@@ -241,7 +303,9 @@ public class Test {
                 obj.setRenderHook(shader);
             }
 
-            obj.compileAndStrip();
+            // Compile has to be dynamic or else it crashes when having multiple viewports
+            obj.compile(true);
+            obj.strip();
             obj.build();
 
             world.addObject(obj);
@@ -251,7 +315,9 @@ public class Test {
             projector.setPosition(sun);
             projector.lookAt(SimpleVector.ORIGIN);
 
-            sh.updateShadowMap();
+            for (int i = 0; i < 3; ++i) {
+                shs[i].updateShadowMap();
+            }
         }
         
         skybox = BackgroundConverter.convertBackground(scene.getBackground());
@@ -306,7 +372,7 @@ public class Test {
     }
 
     private Object[] getHoveredObject() {
-        SimpleVector dir = Interact2D.reproject2D3DWS(world.getCamera(), buffer, ml.x, ml.y).normalize();
+        SimpleVector dir = Interact2D.reproject2D3DWS(world.getCamera(), buffer1, ml.x, ml.y).normalize();
         return world.calcMinDistanceAndObject3D(world.getCamera().getPosition(), dir, 1000f);
     }
     
@@ -371,23 +437,44 @@ public class Test {
             
             if (!ml.pressed) highlightHoveredObject();
 
-            buffer.clear(java.awt.Color.GRAY);
-            skybox.render(world, buffer);
-            if (sun != null) {
-                sh.drawScene();
-            } else {
+            Camera[] cameras = new Camera[] { world.getCamera(), cameraY, cameraZ };
+
+            for (int i = 0; i < 3; ++i) {
+                FrameBuffer buffer = buffers[i];
+                Camera camera = cameras[i];
+                Canvas canvas = canvases[i];
+                ShadowHelper sh = shs[i];
+                
+                world.setCameraTo(camera);
+                
+                buffer.clear(java.awt.Color.GRAY);
+                
+                skybox.render(world, buffer);
+
+                // TODO: Shadows buggy when 3 viewports
+//                if (sun != null) {
+//                    sh.drawScene();
+//                } else {
+                
                 world.renderScene(buffer);
                 world.draw(buffer);
+                    
+                buffer.update();
+                buffer.displayGLOnly();
+                canvas.repaint();
+                
             }
-            
-            buffer.update();
-            buffer.displayGLOnly();
-            canvas.repaint();
+
             Thread.sleep(10);
+            world.setCameraTo(cameras[0]);
 
         }
-        buffer.disableRenderer(IRenderer.RENDERER_OPENGL);
-        buffer.dispose();
+        buffer1.disableRenderer(IRenderer.RENDERER_OPENGL);
+        buffer2.disableRenderer(IRenderer.RENDERER_OPENGL);
+        buffer3.disableRenderer(IRenderer.RENDERER_OPENGL);
+        buffer1.dispose();
+        buffer2.dispose();
+        buffer3.dispose();
     }
     
     private class MouseListener extends MouseInputAdapter {

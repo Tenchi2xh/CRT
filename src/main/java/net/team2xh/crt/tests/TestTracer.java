@@ -222,18 +222,15 @@ public class TestTracer {
     }
 
     public void draw(int[][] picture, int pass, int w, int h) {
-        // TODO: Compare with length of picture not w and h
-        int x0 = w < image.getWidth() ? (image.getWidth() / 2) - (w / 2) : 0;
-        int y0 = h < image.getHeight() ? (image.getHeight() / 2) - (h / 2) : 0;
         int step = (int) Math.pow(2, pass);
-        for (int x = 0; x < w; x += step) {
-            for (int y = 0; y < h; y += step) {
+        for (int x = 0; x < w - (w % step); x += step) {
+            for (int y = 0; y < h - (h % step); y += step) {
                 if (pass == 0) {
-                    bi.setRGB(x + x0, y + y0, picture[x][y]);
+                    bi.setRGB(x, y, picture[x][y]);
                 } else {
                     for (int i = 0; i < step; ++i) {
                         for (int j = 0; j < step; ++j) {
-                            bi.setRGB(x + i + x0, y + j + y0, picture[x][y]);
+                            bi.setRGB(x + i, y + j, picture[x][y]);
                         }
                     }
                 }

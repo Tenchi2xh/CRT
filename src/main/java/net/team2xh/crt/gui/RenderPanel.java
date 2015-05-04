@@ -16,13 +16,18 @@
  */
 package net.team2xh.crt.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.TexturePaint;
 import java.awt.image.BufferedImage;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import net.team2xh.crt.raytracer.Scene;
+import net.team2xh.crt.raytracer.Tracer;
 
 /**
  *
@@ -50,10 +55,61 @@ public class RenderPanel extends JPanel {
         texture = new TexturePaint(pattern, rectangle);
     }
 
+    private static BufferedImage bi;
+    private static JLabel image = new JLabel() {
+        {
+            setOpaque(false);
+        }
+
+        @Override
+        public void paintComponent(Graphics g) {
+            if (bi != null) {
+                g.drawImage(bi, 0, 0, null);
+            }
+        }
+    };
+
+    public RenderPanel() {
+        setLayout(new BorderLayout());
+        add(image, BorderLayout.CENTER);
+    }
+
     @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setPaint(texture);
         g2d.fillRect(0, 0, getWidth(), getHeight());
+    }
+
+    public static void renderScene(Scene scene, RenderPanel panel) {
+        scene.getSettings().setResolution(panel.getWidth(), panel.getHeight());
+        
+        int w = scene.getSettings().getWidth();
+        int h = scene.getSettings().getHeight();
+
+        image.setPreferredSize(new Dimension(w, h));
+        bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+        
+        Tracer tracer = Tracer.getInstance();
+        tracer.parallelRender(4, (int[][] p, Integer i) -> draw(p, i, w, h), scene);
+
+    }
+
+    public static void draw(int[][] picture, int pass, int w, int h) {
+        int step = (int) Math.pow(2, pass);
+        for (int x = 0; x < w - (w % step); x += step) {
+            for (int y = 0; y < h - (h % step); y += step) {
+                if (pass == 0) {
+                    bi.setRGB(x, y, picture[x][y]);
+                } else {
+                    for (int i = 0; i < step; ++i) {
+                        for (int j = 0; j < step; ++j) {
+                            bi.setRGB(x + i, y + j, picture[x][y]);
+                        }
+                    }
+                }
+            }
+        }
+        image.repaint();
     }
 }
