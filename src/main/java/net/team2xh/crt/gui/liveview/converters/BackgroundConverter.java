@@ -37,7 +37,7 @@ final public class BackgroundConverter {
     final private static Object sync = new Object();
     private static BufferedImage temp;
 
-    final private static int SIZE = 512;
+    final private static int SIZE = 256;
 
     final private static String prefix = "skybox-";
     final private static String[] names = new String[]{"left", "front", "right", "back", "top", "bottom"};

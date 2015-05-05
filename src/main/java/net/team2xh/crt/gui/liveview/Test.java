@@ -65,37 +65,31 @@ import net.team2xh.crt.raytracer.entities.Sphere;
 import net.team2xh.crt.raytracer.lights.ParallelLight;
 import net.team2xh.crt.raytracer.lights.PointLight;
 import net.team2xh.crt.raytracer.math.Vector3;
+import org.openide.util.Exceptions;
 
 /**
  * TODO: set focal distance function by clicking a point then trace a ray to it
- * 
+ *
  * @author Hamza Haiken <tenchi@team2xh.net>
  */
 public class Test {
 
     private World world;
     private SkyBox skybox;
-    private FrameBuffer buffer1;
-    private FrameBuffer buffer2;
-    private FrameBuffer buffer3;
-    private FrameBuffer buffers[];
-    
+    private BufferPanel buffers[];
+
     private ShadowHelper[] shs = new ShadowHelper[3];
     private Projector projector;
 
     private JFrame frame;
-    private Canvas canvas1;
-    private Canvas canvas2;
-    private Canvas canvas3;
-    private RenderPanel canvas4;
-    private final Canvas[] canvases;
+    private RenderPanel renderPanel;
 
     private int distMult = 20;
-    
+
     SimpleVector sun = null;
 
     private Scene scene = new TestScene();
-    
+
     private JButton camLt;
     private JButton camRt;
     private JButton camUp;
@@ -104,48 +98,36 @@ public class Test {
     private JToggleButton toggleShdr;
 
     private MouseListener ml;
-    
+
     private Object3D lastHighlight = null;
     private Color lastColor = null;
-    
-    private boolean useShaders = false;
-    private final Camera cameraY;
-    private final Camera cameraZ;
-    
-    public Test() {
-        buffer1 = new FrameBuffer(scene.getSettings().getWidth() / 2, scene.getSettings().getHeight() / 2, FrameBuffer.SAMPLINGMODE_GL_AA_4X);
-        buffer2 = new FrameBuffer(scene.getSettings().getWidth() / 2, scene.getSettings().getHeight() / 2, FrameBuffer.SAMPLINGMODE_GL_AA_4X);
-        buffer3 = new FrameBuffer(scene.getSettings().getWidth() / 2, scene.getSettings().getHeight() / 2, FrameBuffer.SAMPLINGMODE_GL_AA_4X);
 
-        buffer1.disableRenderer(IRenderer.RENDERER_SOFTWARE);
-        buffer2.disableRenderer(IRenderer.RENDERER_SOFTWARE);
-        buffer3.disableRenderer(IRenderer.RENDERER_SOFTWARE);
-        canvas1 = buffer1.enableGLCanvasRenderer();
-        canvas2 = buffer2.enableGLCanvasRenderer();
-        canvas3 = buffer3.enableGLCanvasRenderer();
-        
-        buffers = new FrameBuffer[] { buffer1, buffer2, buffer3 };
-        canvases = new Canvas[] { canvas1, canvas2, canvas3 };
-        
+    private boolean useShaders = false;
+    private Camera cameraY;
+    private Camera cameraZ;
+
+    public Test() {
+
         SwingUtilities.invokeLater(() -> {
             frame = new JFrame("CRT OpenGL Renderer");
             JPanel panel = new JPanel(new GridLayout(2, 2));
-            
-            canvas4 = new RenderPanel();
-        
-            panel.add(canvas2);
-            panel.add(canvas3);
-            panel.add(canvas4);
-            panel.add(canvas1);
-            
-            // TODO: resize listener to resize buffers
 
+            buffers = new BufferPanel[]{new BufferPanel(), new BufferPanel(), new BufferPanel()};
+
+            renderPanel = new RenderPanel();
+
+            panel.add(buffers[1]);
+            panel.add(buffers[2]);
+            panel.add(renderPanel);
+            panel.add(buffers[0]);
+
+            // TODO: resize listener to resize buffers
             frame.getContentPane().add(panel, BorderLayout.CENTER);
 
             ml = new MouseListener();
-            canvas1.addMouseListener(ml);
-            canvas1.addMouseMotionListener(ml);
-            
+            buffers[0].getCanvas().addMouseListener(ml);
+            buffers[0].getCanvas().addMouseMotionListener(ml);
+
             JPanel buttons = new JPanel();
             camUp = new JButton("^");
             camDn = new JButton("v");
@@ -160,222 +142,227 @@ public class Test {
             buttons.add(renderButton);
             buttons.add(toggleShdr);
             frame.add(buttons, BorderLayout.PAGE_END);
-            
+
             renderButton.addActionListener((ActionEvent e) -> {
-                RenderPanel.renderScene(scene, canvas4);
+                RenderPanel.renderScene(scene, renderPanel);
             });
 
             frame.pack();
             frame.setVisible(true);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             GUIToolkit.centerFrame(frame);
-        });
 
-        
-        Config.lightMul = 1;
-        Config.specPow = 100;
-        Config.specTerm = 15;
-        Config.glShadowZBias = 0.03f * distMult;
+            Config.lightMul = 1;
+            Config.specPow = 100;
+            Config.specTerm = 15;
+            Config.glShadowZBias = 0.03f * distMult;
 
-        world = new World();
-        world.setAmbientLight(0, 0, 0);
+            world = new World();
+            world.setAmbientLight(0, 0, 0);
 
-        InputStream unknown = getClass().getResourceAsStream("/images/unknown.png");
-        TextureManager.getInstance().addTexture("unknown", new Texture(unknown, true));
-        
-        String vertex = Loader.loadTextFile(getClass().getResourceAsStream("shaders/vertex.glsl"));
-        String fragment = Loader.loadTextFile(getClass().getResourceAsStream("shaders/fragment.glsl"));
-        
-        for (net.team2xh.crt.raytracer.lights.Light l0 : scene.getLights()) {
-            Light l1 = new Light(world);
-            Class type = l0.getClass();
+            InputStream unknown = getClass().getResourceAsStream("/images/unknown.png");
+            TextureManager.getInstance().addTexture("unknown", new Texture(unknown, true));
 
-            if (type == PointLight.class) {
-                PointLight pl = (PointLight) l0;
-                l1.setPosition(pl.getOrigin().multiply(distMult).getRightHanded().simpleVector());
+            String vertex = Loader.loadTextFile(getClass().getResourceAsStream("shaders/vertex.glsl"));
+            String fragment = Loader.loadTextFile(getClass().getResourceAsStream("shaders/fragment.glsl"));
 
-            } else if (type == ParallelLight.class) {
-                ParallelLight pl = (ParallelLight) l0;
-                SimpleVector pos = pl.getDirection(Vector3.O).multiply(20*distMult).getRightHanded().simpleVector();
-                l1.setPosition(pos);
-                // Shadows buggy with multiple viewports
+            for (net.team2xh.crt.raytracer.lights.Light l0 : scene.getLights()) {
+                Light l1 = new Light(world);
+                Class type = l0.getClass();
+
+                if (type == PointLight.class) {
+                    PointLight pl = (PointLight) l0;
+                    l1.setPosition(pl.getOrigin().multiply(distMult).getRightHanded().simpleVector());
+
+                } else if (type == ParallelLight.class) {
+                    ParallelLight pl = (ParallelLight) l0;
+                    SimpleVector pos = pl.getDirection(Vector3.O).multiply(20 * distMult).getRightHanded().simpleVector();
+                    l1.setPosition(pos);
+                    // Shadows buggy with multiple viewports
 //                if (sun == null) {
 //                    sun = pos;
 //                    System.out.println(pos);
 //                }
-            }
+                }
 
-            SimpleVector intensity = l0.getPigment().getVector().simpleVector();
-            intensity.scalarMul(255f);
-            l1.setIntensity(intensity);
-            l1.setAttenuation((float) l0.getFalloff() * distMult);
-
-            if (type == ParallelLight.class) {
-                intensity = l0.getPigment().getVector().simpleVector();
+                SimpleVector intensity = l0.getPigment().getVector().simpleVector();
                 intensity.scalarMul(255f);
                 l1.setIntensity(intensity);
-            }
-        }
+                l1.setAttenuation((float) l0.getFalloff() * distMult);
 
-        float vfov = (float) scene.getCamera().getVerticalFov();
-        float hfov = 2 * (float) Math.atan(Math.tan(vfov / 2) * scene.getSettings().getWidth() / scene.getSettings().getHeight());
-        
-        world.getCamera().setFOVLimits(0, (float) (2*Math.PI));
-        world.getCamera().setFovAngle(hfov);
-
-        camOrigPos = scene.getCamera().getPosition().multiply(distMult).getRightHanded().simpleVector();
-        camLookAt = scene.getCamera().getPointing().multiply(distMult).getRightHanded().simpleVector();
-        world.getCamera().setPosition(camOrigPos);
-        world.getCamera().lookAt(camLookAt);
-        world.getCamera().rotateCameraAxis(world.getCamera().getDirection(), (float) -scene.getCamera().getRoll());
-
-        cameraY = new Camera();
-        cameraZ = new Camera();
-        cameraY.setPosition(0, -5*distMult, 0);
-        cameraZ.setPosition(0, 0, -5*distMult);
-        cameraY.lookAt(SimpleVector.ORIGIN);
-        cameraZ.lookAt(SimpleVector.ORIGIN);
-        
-        if (sun != null) {
-            
-            projector = new Projector();
-            projector.setFOV(1.5f);
-            projector.setYFOV(1.5f);
-
-            for (int i = 0; i < 3; ++i) {
-                ShadowHelper sh = new ShadowHelper(world, buffers[i], projector, 4096);
-                
-                sh.setCullingMode(false);
-                sh.setAmbientLight(new Color(0, 0, 0));
-                sh.setLightMode(true);
-                sh.setBorder(1);
-                
-                shs[i] = sh;
-            }
-        }
-
-        for (Entity e : scene.getEntities()) {
-            Object3D obj;
-            Class type = e.getClass();
-
-            boolean sprite = false;
-
-            if (type == Box.class) {
-                Box box = (Box) e;
-                SimpleVector dimensions = SimpleVector.create((float) box.getWidth() * distMult,
-                        (float) box.getHeight() * distMult,
-                        (float) box.getDepth() * distMult);
-                obj = ExtendedPrimitives.createBox(dimensions);
-                obj.translate(box.getMinCorner().multiply(distMult).getRightHanded().simpleVector());
-//                obj.setShadingMode(Object3D.SHADING_FAKED_FLAT);
-            } else if (type == Sphere.class) {
-                Sphere sphere = (Sphere) e;
-                obj = Primitives.getSphere((float) sphere.getRadius() * distMult);
-            } else if (type == Plane.class) {
-                obj = ExtendedPrimitives.createPlane(distMult, 100);
-            } else {
-                obj = ExtendedPrimitives.createSprite(0.2f * distMult);
-                obj.setTexture("unknown");
-                obj.setTransparency(20);
-                sprite = true;
+                if (type == ParallelLight.class) {
+                    intensity = l0.getPigment().getVector().simpleVector();
+                    intensity.scalarMul(255f);
+                    l1.setIntensity(intensity);
+                }
             }
 
-            if (sun != null && !sprite) {
+            float vfov = (float) scene.getCamera().getVerticalFov();
+            float hfov = 2 * (float) Math.atan(Math.tan(vfov / 2) * scene.getSettings().getWidth() / scene.getSettings().getHeight());
+
+            world.getCamera().setFOVLimits(0, (float) (2 * Math.PI));
+            world.getCamera().setFovAngle(hfov);
+
+            camOrigPos = scene.getCamera().getPosition().multiply(distMult).getRightHanded().simpleVector();
+            camLookAt = scene.getCamera().getPointing().multiply(distMult).getRightHanded().simpleVector();
+            world.getCamera().setPosition(camOrigPos);
+            world.getCamera().lookAt(camLookAt);
+            world.getCamera().rotateCameraAxis(world.getCamera().getDirection(), (float) -scene.getCamera().getRoll());
+
+            cameraY = new Camera();
+            cameraZ = new Camera();
+            cameraY.setPosition(0, -5 * distMult, 0);
+            cameraZ.setPosition(0, 0, -5 * distMult);
+            cameraY.lookAt(SimpleVector.ORIGIN);
+            cameraZ.lookAt(SimpleVector.ORIGIN);
+
+            if (sun != null) {
+
+                projector = new Projector();
+                projector.setFOV(1.5f);
+                projector.setYFOV(1.5f);
+
                 for (int i = 0; i < 3; ++i) {
-                    shs[i].addCaster(obj);
-                    shs[i].addReceiver(obj);
+                    ShadowHelper sh = new ShadowHelper(world, buffers[i].getBuffer(), projector, 4096);
+
+                    sh.setCullingMode(false);
+                    sh.setAmbientLight(new Color(0, 0, 0));
+                    sh.setLightMode(true);
+                    sh.setBorder(1);
+
+                    shs[i] = sh;
                 }
             }
 
-            obj.translate(e.getCenter().multiply(distMult).getRightHanded().simpleVector());
-            obj.setCollisionMode(Object3D.COLLISION_CHECK_OTHERS);
+            for (Entity e : scene.getEntities()) {
+                Object3D obj;
+                Class type = e.getClass();
 
-            Material m = e.getMaterial();
+                boolean sprite = false;
 
-            obj.setSpecularLighting(true);
-            obj.setAdditionalColor(m.color.getColor().darker().darker().darker());
+                if (type == Box.class) {
+                    Box box = (Box) e;
+                    SimpleVector dimensions = SimpleVector.create((float) box.getWidth() * distMult,
+                            (float) box.getHeight() * distMult,
+                            (float) box.getDepth() * distMult);
+                    obj = ExtendedPrimitives.createBox(dimensions);
+                    obj.translate(box.getMinCorner().multiply(distMult).getRightHanded().simpleVector());
+//                obj.setShadingMode(Object3D.SHADING_FAKED_FLAT);
+                } else if (type == Sphere.class) {
+                    Sphere sphere = (Sphere) e;
+                    obj = Primitives.getSphere((float) sphere.getRadius() * distMult);
+                } else if (type == Plane.class) {
+                    obj = ExtendedPrimitives.createPlane(distMult, 100);
+                } else {
+                    obj = ExtendedPrimitives.createSprite(0.2f * distMult);
+                    obj.setTexture("unknown");
+                    obj.setTransparency(20);
+                    sprite = true;
+                }
+
+                if (sun != null && !sprite) {
+                    for (int i = 0; i < 3; ++i) {
+                        shs[i].addCaster(obj);
+                        shs[i].addReceiver(obj);
+                    }
+                }
+
+                obj.translate(e.getCenter().multiply(distMult).getRightHanded().simpleVector());
+                obj.setCollisionMode(Object3D.COLLISION_CHECK_OTHERS);
+
+                Material m = e.getMaterial();
+
+                obj.setSpecularLighting(true);
+                obj.setAdditionalColor(m.color.getColor().darker().darker().darker());
+
+                GLSLShader shader = new GLSLShader(vertex, fragment);
+                shader.setUniform("isHighlighted", 0);
+                shader.setUniform("matColor", m.color.getColor().getColorComponents(null));
+                obj.setUserObject(shader);
+                if (useShaders) {
+                    obj.setRenderHook(shader);
+                }
+
+                // Compile has to be dynamic or else it crashes when having multiple viewports
+                obj.compile(true);
+                obj.build();
+
+                world.addObject(obj);
+            }
+
+            if (sun != null) {
+                projector.setPosition(sun);
+                projector.lookAt(SimpleVector.ORIGIN);
+
+                for (int i = 0; i < 3; ++i) {
+                    shs[i].updateShadowMap();
+                }
+            }
+
+            skybox = BackgroundConverter.convertBackground(scene.getBackground());
+
+            toggleShdr.addItemListener(new ItemListener() {
+
+                @Override
+                public void itemStateChanged(ItemEvent ev) {
+                    if (ev.getStateChange() == ItemEvent.SELECTED) {
+                        for (Enumeration<Object3D> en = world.getObjects(); en.hasMoreElements();) {
+                            Object3D obj = en.nextElement();
+                            GLSLShader shader = (GLSLShader) obj.getUserObject();
+                            obj.setRenderHook(shader);
+                        }
+                        useShaders = true;
+                    } else if (ev.getStateChange() == ItemEvent.DESELECTED) {
+                        for (Enumeration<Object3D> en = world.getObjects(); en.hasMoreElements();) {
+                            Object3D obj = en.nextElement();
+                            obj.setRenderHook(null);
+                        }
+                        useShaders = false;
+                    }
+                }
+            });
             
-            GLSLShader shader = new GLSLShader(vertex, fragment);
-            shader.setUniform("isHighlighted", 0);
-            shader.setUniform("matColor", m.color.getColor().getColorComponents(null));
-            obj.setUserObject(shader);
-            if (useShaders) {
-                obj.setRenderHook(shader);
-            }
-
-            // Compile has to be dynamic or else it crashes when having multiple viewports
-            obj.compile(true);
-            obj.strip();
-            obj.build();
-
-            world.addObject(obj);
-        }
-
-        if (sun != null) {
-            projector.setPosition(sun);
-            projector.lookAt(SimpleVector.ORIGIN);
-
-            for (int i = 0; i < 3; ++i) {
-                shs[i].updateShadowMap();
-            }
-        }
-        
-        skybox = BackgroundConverter.convertBackground(scene.getBackground());
-
-        
-        toggleShdr.addItemListener(new ItemListener() {
-
-            @Override
-            public void itemStateChanged(ItemEvent ev) {
-                if (ev.getStateChange() == ItemEvent.SELECTED) {
-                    for (Enumeration<Object3D> en = world.getObjects(); en.hasMoreElements();) {
-                        Object3D obj = en.nextElement();
-                        GLSLShader shader = (GLSLShader) obj.getUserObject();
-                        obj.setRenderHook(shader);
-                    }
-                    useShaders = true;
-                } else if (ev.getStateChange() == ItemEvent.DESELECTED) {
-                    for (Enumeration<Object3D> en = world.getObjects(); en.hasMoreElements();) {
-                        Object3D obj = en.nextElement();
-                        obj.setRenderHook(null);
-                    }
-                    useShaders = false;
+            (new Thread(() -> {
+                try {
+                    loop();
+                } catch (InterruptedException ex) {
+                    Exceptions.printStackTrace(ex);
                 }
-            }
+            })).start();
+            
         });
-        
     }
 
     private SimpleVector camOrigPos;
     private SimpleVector camLookAt;
 
     private void moveCamera(float ax, float ay) {
-      
+
         SimpleVector up = world.getCamera().getUpVector();
         SimpleVector right = world.getCamera().getSideVector();
-        
+
         SimpleVector pos = world.getCamera().getPosition();
         float distance = camLookAt.distance(pos);
-   
+
         right.scalarMul(ax);
         up.scalarMul(ay);
 
         pos.add(right);
         pos.add(up);
-        
+
         world.getCamera().setPosition(pos);
         world.getCamera().lookAt(camLookAt);
-        
+
         float newDistance = camLookAt.distance(pos);
         world.getCamera().moveCamera(Camera.CAMERA_MOVEIN, newDistance - distance);
-        
+
     }
 
     private Object[] getHoveredObject() {
-        SimpleVector dir = Interact2D.reproject2D3DWS(world.getCamera(), buffer1, ml.x, ml.y).normalize();
+        SimpleVector dir = Interact2D.reproject2D3DWS(world.getCamera(), buffers[0].getBuffer(), ml.x, ml.y).normalize();
         return world.calcMinDistanceAndObject3D(world.getCamera().getPosition(), dir, 1000f);
     }
-    
+
     private void highlightHoveredObject() {
         Object[] hit = getHoveredObject();
         if ((float) hit[0] != Object3D.COLLISION_NONE) {
@@ -408,9 +395,8 @@ public class Test {
             }
         }
     }
-    
-    private void loop() throws InterruptedException {
 
+    private void loop() throws InterruptedException {
         while (frame.isShowing()) {
 
             float mdx = 0.0f;
@@ -434,61 +420,60 @@ public class Test {
                 ml.dx = 0;
                 ml.dy = 0;
             }
-            
-            if (!ml.pressed) highlightHoveredObject();
 
-            Camera[] cameras = new Camera[] { world.getCamera(), cameraY, cameraZ };
+            if (!ml.pressed) {
+                highlightHoveredObject();
+            }
+
+            Camera[] cameras = new Camera[]{world.getCamera(), cameraY, cameraZ};
 
             for (int i = 0; i < 3; ++i) {
-                FrameBuffer buffer = buffers[i];
+                FrameBuffer buffer = buffers[i].getBuffer();
                 Camera camera = cameras[i];
-                Canvas canvas = canvases[i];
+                Canvas canvas = buffers[i].getCanvas();
                 ShadowHelper sh = shs[i];
-                
+
                 world.setCameraTo(camera);
-                
+
                 buffer.clear(java.awt.Color.GRAY);
-                
+
                 skybox.render(world, buffer);
 
                 // TODO: Shadows buggy when 3 viewports
 //                if (sun != null) {
 //                    sh.drawScene();
 //                } else {
-                
                 world.renderScene(buffer);
                 world.draw(buffer);
-                    
+
                 buffer.update();
                 buffer.displayGLOnly();
                 canvas.repaint();
-                
+
             }
 
             Thread.sleep(10);
             world.setCameraTo(cameras[0]);
 
         }
-        buffer1.disableRenderer(IRenderer.RENDERER_OPENGL);
-        buffer2.disableRenderer(IRenderer.RENDERER_OPENGL);
-        buffer3.disableRenderer(IRenderer.RENDERER_OPENGL);
-        buffer1.dispose();
-        buffer2.dispose();
-        buffer3.dispose();
+        for (BufferPanel p : buffers) {
+            p.getBuffer().disableRenderer(IRenderer.RENDERER_OPENGL);
+            p.getBuffer().dispose();
+        }
     }
-    
+
     private class MouseListener extends MouseInputAdapter {
-        
+
         private int x = 0;
         private int y = 0;
-        
+
         private int dx = 0;
         private int dy = 0;
-        
+
         private Point p;
-        
+
         private boolean pressed = false;
-        
+
         @Override
         public void mouseClicked(MouseEvent e) {
         }
@@ -525,15 +510,9 @@ public class Test {
             y = e.getY();
         }
 
-
-        
     }
 
     public static void main(String[] args) {
-        try {
-            new Test().loop();
-        } catch (InterruptedException ex) {
-            java.util.logging.Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        Test t = new Test();
     }
 }
