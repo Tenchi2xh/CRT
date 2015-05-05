@@ -34,7 +34,7 @@ class LineHighlighter extends LayeredHighlighter.LayerPainter {
     protected Color color; // The color for the underline
 
     public LineHighlighter(Color color) {
-        this.color = new Color(color.getRed(), color.getBlue(), color.getRed(), 178);
+        this.color = color;
 
     }
 

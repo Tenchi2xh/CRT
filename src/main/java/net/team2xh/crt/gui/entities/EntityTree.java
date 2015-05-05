@@ -18,8 +18,13 @@ package net.team2xh.crt.gui.entities;
 
 import java.awt.BorderLayout;
 import java.awt.Image;
+import java.beans.IntrospectionException;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.beans.beancontext.BeanContext;
 import java.beans.beancontext.BeanContextSupport;
+import java.util.LinkedList;
+import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.TreeSelectionModel;
@@ -27,12 +32,15 @@ import net.team2xh.crt.gui.util.GUIToolkit;
 import net.team2xh.crt.raytracer.Scene;
 import net.team2xh.crt.raytracer.entities.Entity;
 import net.team2xh.crt.raytracer.lights.Light;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.openide.explorer.ExplorerManager;
 import org.openide.explorer.view.BeanTreeView;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.BeanChildren;
+import org.openide.nodes.BeanNode;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -61,6 +69,8 @@ public class EntityTree extends JPanel implements ExplorerManager.Provider {
         tree.getVerticalScrollBar().setUnitIncrement(16);
         tree.setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         tree.setPopupAllowed(false);
+        
+//        ((JViewport) tree.getComponent(0)).getComponent(0).setForeground(Color.white);
     }
 
     @Override
@@ -70,13 +80,30 @@ public class EntityTree extends JPanel implements ExplorerManager.Provider {
 
     public void loadScene(Scene scene) {
         // Entities
-        BeanContext entities = new BeanContextSupport();
+        List<Node> entities = new LinkedList<>();
         for (Entity e : scene.getEntities()) {
-            // TODO: Some way of differentiating similar objects in a scene
-            // Counter ? maybe keep track of named variables
-            entities.add(e);
+            try {
+                // TODO: Some way of differentiating similar objects in a scene
+                // Counter ? maybe keep track of named variables
+                entities.add(new DynamicNode(e) {
+                    @Override
+                    public String getHtmlDisplayName() {
+                        System.out.println(e);
+                        System.out.println(e.getCenter());
+                        return getDisplayName()
+                               + " <font color='!controlShadow'><i>"
+                               + StringEscapeUtils.escapeHtml3(e.getCenter().toString()) + "</i></font>";
+                    }
+                });
+            } catch (IntrospectionException ex) {
+                Exceptions.printStackTrace(ex);
+            }
         }
-        Children entitiesChildren = new BeanChildren(entities);
+        Children entitiesChildren = new Children.Array();
+        entitiesChildren.add(entities.toArray(new Node[0]));
+        for (Node n : entitiesChildren.getNodes()) {
+            
+        }
         Node entitiesNode = createNode(entitiesChildren, ICON_ENTITIES);
         entitiesNode.setDisplayName("Entities");
         entitiesNode.setShortDescription("The entities present in the compiled scene.");
@@ -117,5 +144,22 @@ public class EntityTree extends JPanel implements ExplorerManager.Provider {
                 return icon;
             }
         };
+    }
+    
+    private static class DynamicNode extends BeanNode implements PropertyChangeListener {
+
+        // TODO: NOT WORKING
+        
+        public DynamicNode(Object o) throws IntrospectionException {
+            super(o);
+            addPropertyChangeListener(this);
+        }
+        
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
+            System.out.println("!!! " + evt.getPropertyName());
+            fireDisplayNameChange(null, getDisplayName());
+        }
+        
     }
 }

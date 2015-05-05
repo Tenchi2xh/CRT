@@ -16,6 +16,8 @@
  */
 package net.team2xh.crt.gui.themes;
 
+import org.pushingpixels.substance.api.SubstanceLookAndFeel;
+
 /**
  * Light theme
  *
@@ -25,20 +27,24 @@ public class LightTheme extends Theme {
 
     // TODO: Copy greybeans theme
     LightTheme() {
-        super("#eaeaea", // 01 White
-              "#f0f0f0", // 02 Very light gray
-              "#eaeaea", // 03 Light gray
-              "#e0e0e0", // 04 Gray
-              "#555555", // 05 Dark gray
-              "#66d9ef", // 06 Blue
+        super("#e9eef2", // 01 Margin
+              "#f5faff", // 02 Background
+              "#9da5ab", // 03 Line numbers background
+              "#d8dde1", // 04 Margin line
+              "#ffffff", // 05 Line numbers
+              "#00a0bd", // 06 Keywords (blue)
               "#8fe22b", // 07 Green
               "#fd971f", // 08 Orange
-              "#be84ff", // 09 Purple
-              "#f92672", // 10 Red
+              "#ec3933", // 09 Numbers
+              "#00a0bd", // 10 Operators
               "#222222", // 11 Black
-              "#e6db74", // 12 Yellow
+              "#fc35e4", // 12 Strings
               "#eb8888", // 13 Error
-              "org.pushingpixels.substance.api.skin.SubstanceDustLookAndFeel"
+              "#f7eed0", // 14 Current line highlight
+              "#aeb7bd", // 15 Line numbers highlight background
+              "#9da5ab", // 16 Comments
+              "org.pushingpixels.substance.api.skin.SubstanceBusinessLookAndFeel"
         );
+
     }
 }

@@ -264,9 +264,6 @@ public class Tracer {
     }
 
     public int[][] render(int passes, BiConsumer<int[][], Integer> drawer, Scene scene) {
-
-        //TODO: Case where passes is not multiple of width or height
-        
         Settings settings = scene.getSettings();
 
         boolean[][] done = new boolean[settings.width][settings.height];

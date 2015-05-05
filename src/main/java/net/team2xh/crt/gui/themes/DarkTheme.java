@@ -37,6 +37,9 @@ public class DarkTheme extends Theme {
               "#f8f8f2", // 11 White
               "#e6db74", // 12 Yellow
               "#5e3535", // 13 Error
+              "#333333", // 14 Current line highlight
+              "#616161", // 15 Line numbers highlight background
+              "#969696", // 15 Comments
               "org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel"
         );
     }

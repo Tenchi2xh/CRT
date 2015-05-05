@@ -38,6 +38,9 @@ public class Theme {
     final public Color COLOR_11;
     final public Color COLOR_12;
     final public Color COLOR_13;
+    final public Color COLOR_14;
+    final public Color COLOR_15;
+    final public Color COLOR_16;
     
     final public String LAF;
     
@@ -45,9 +48,10 @@ public class Theme {
     private final static Theme dark = new DarkTheme();
     private static Theme theme = dark;
 
-    Theme(String color01, String color02, String color03, String color04, String color05,
-                 String color06, String color07, String color08, String color09, String color10,
-                 String color11, String color12, String color13, String laf) {
+    Theme(String color01, String color02, String color03, String color04,
+          String color05, String color06, String color07, String color08,
+          String color09, String color10, String color11, String color12,
+          String color13, String color14, String color15, String color16, String laf) {
         this.COLOR_01 = c(color01);
         this.COLOR_02 = c(color02);
         this.COLOR_03 = c(color03);
@@ -61,6 +65,9 @@ public class Theme {
         this.COLOR_11 = c(color11);
         this.COLOR_12 = c(color12);
         this.COLOR_13 = c(color13);
+        this.COLOR_14 = c(color14);
+        this.COLOR_15 = c(color15);
+        this.COLOR_16 = c(color16);
         
         this.LAF = laf;
     }

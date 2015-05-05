@@ -311,7 +311,7 @@ public final class EditorLineNumber extends JPanel
                 int x = getOffsetX(availableWidth, stringWidth) + insets.left;
                 int y = getOffsetY(rowStartOffset, fontMetrics);
                 if (isCurrentLine(rowStartOffset)) {
-                    g.setColor(Theme.getTheme().COLOR_04);
+                    g.setColor(Theme.getTheme().COLOR_15);
                     g.fillRect(0, y-15, getWidth(), stringHeight);
                 }
                 g.setColor(Theme.getTheme().COLOR_05);

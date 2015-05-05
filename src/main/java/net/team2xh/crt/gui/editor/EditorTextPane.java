@@ -83,7 +83,7 @@ public class EditorTextPane extends JTextPane {
 
         // Initialize highlighters
         lh = new LineHighlighter(Theme.getTheme().COLOR_13);
-        ll = new LineHighlighter(Theme.getTheme().COLOR_04);
+        ll = new LineHighlighter(Theme.getTheme().COLOR_14);
         wh = new WordHighlighter(Theme.getTheme().COLOR_11);
         eh = new ErrorHighlighter(Color.RED);
 
@@ -256,7 +256,6 @@ public class EditorTextPane extends JTextPane {
     private SimpleAttributeSet NUMBER = new SimpleAttributeSet();
     private SimpleAttributeSet COMMENT = new SimpleAttributeSet();
     private SimpleAttributeSet BLOCK = new SimpleAttributeSet();
-    private SimpleAttributeSet OBJECT = new SimpleAttributeSet();
     private SimpleAttributeSet NORMAL = new SimpleAttributeSet();
     private SimpleAttributeSet TRANSFORM = new SimpleAttributeSet();
     private SimpleAttributeSet STRING = new SimpleAttributeSet();
@@ -267,11 +266,9 @@ public class EditorTextPane extends JTextPane {
         StyleConstants.setForeground(NAME, theme.COLOR_11);
         StyleConstants.setItalic(NAME, true);
         StyleConstants.setForeground(NUMBER, theme.COLOR_09);
-        StyleConstants.setForeground(COMMENT, theme.COLOR_05);
+        StyleConstants.setForeground(COMMENT, theme.COLOR_16);
         StyleConstants.setForeground(BLOCK, theme.COLOR_06);
         StyleConstants.setItalic(BLOCK, true);
-        StyleConstants.setForeground(OBJECT, theme.COLOR_07);
-        StyleConstants.setItalic(OBJECT, true);
         StyleConstants.setForeground(NORMAL, theme.COLOR_11);
         StyleConstants.setForeground(IDENTIFIER, theme.COLOR_11);
         StyleConstants.setForeground(TRANSFORM, theme.COLOR_08);
@@ -290,10 +287,7 @@ public class EditorTextPane extends JTextPane {
         CRTParser parser = new CRTParser(new CommonTokenStream(lexer));
         ParserRuleContext tree = parser.script();
         ParseTreeWalker walker = new ParseTreeWalker();
-        // Parser is run once to detect errors
-        walker.walk(new SyntaxHighlightingListener(), tree);
 
-        // Reset lexer for coloration because parser consumed it
         lexer = new CRTLexer(new ANTLRInputStream(getText()));
 
         for (Token token = lexer.nextToken(); token.getType() != Token.EOF; token = lexer.nextToken()) {
@@ -372,6 +366,9 @@ public class EditorTextPane extends JTextPane {
                     break;
             }
         }
+        
+        // Reset lexer for errors because parser consumed it
+        walker.walk(new SyntaxHighlightingListener(), tree);
 
     }
 
