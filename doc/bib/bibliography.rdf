@@ -111,6 +111,29 @@
             </dcterms:URI>
         </dc:identifier>
     </bib:Document>
+    <bib:Document rdf:about="http://stackoverflow.com/a/15402012">
+        <z:itemType>forumPost</z:itemType>
+        <dcterms:isPartOf>
+           <z:Forum></z:Forum>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Vladimirov</foaf:surname>
+                        <foaf:givenname>Mikhail</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Analyze system memory/cpu stats with Java</dc:title>
+        <dc:date>14/03/2013</dc:date>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>http://stackoverflow.com/a/15402012</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </bib:Document>
     <bib:Document rdf:about="http://forum.byte-welt.net/byte-welt-projekte-projects/dockingframes/">
         <z:itemType>webpage</z:itemType>
         <dcterms:isPartOf>
@@ -315,6 +338,26 @@
         <dc:identifier>
             <dcterms:URI>
                 <rdf:value>https://tips4java.wordpress.com/2009/05/23/text-component-line-number/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </bib:Document>
+    <bib:Document rdf:about="http://stackoverflow.com/a/21962037">
+        <z:itemType>forumPost</z:itemType>
+        <dcterms:isPartOf>
+           <z:Forum></z:Forum>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                   <foaf:Person><foaf:surname>Igal</foaf:surname></foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>How to get percentage of CPU usage of OS from java</dc:title>
+        <dc:date>22/02/2014</dc:date>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>http://stackoverflow.com/a/21962037</rdf:value>
             </dcterms:URI>
         </dc:identifier>
     </bib:Document>

@@ -87,5 +87,16 @@ public class Theme {
     private Color c(String hex) {
         return Color.decode(hex);
     }
-    
+
+    public static Color mix(Color c1, Color c2, double ratio) {
+        float r = (float) ratio;
+        float ir = 1 - r;
+        float[] rgb1 = new float[3];
+        float[] rgb2 = new float[3];
+        c1.getColorComponents(rgb1);
+        c2.getColorComponents(rgb2);
+        return new Color(rgb1[0] * r + rgb2[0] * ir,
+                rgb1[1] * r + rgb2[1] * ir,
+                rgb1[2] * r + rgb2[2] * ir);
+    }
 }

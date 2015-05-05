@@ -88,8 +88,6 @@ public class EntityTree extends JPanel implements ExplorerManager.Provider {
                 entities.add(new DynamicNode(e) {
                     @Override
                     public String getHtmlDisplayName() {
-                        System.out.println(e);
-                        System.out.println(e.getCenter());
                         return getDisplayName()
                                + " <font color='!controlShadow'><i>"
                                + StringEscapeUtils.escapeHtml3(e.getCenter().toString()) + "</i></font>";

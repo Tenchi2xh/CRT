@@ -41,6 +41,7 @@ import javax.swing.JLabel;
 import javax.swing.UIManager;
 import net.team2xh.crt.gui.editor.Editor;
 import net.team2xh.crt.gui.entities.EntityTree;
+import net.team2xh.crt.gui.graphs.SystemPanel;
 import net.team2xh.crt.gui.util.GUIToolkit;
 import net.team2xh.crt.raytracer.Scene;
 
@@ -56,7 +57,7 @@ public class MainWindow extends JFrame {
     private final Editor editor;
     private final EntityTree navigator;
     private final RenderPanel render;
-    private final JLabel system;
+    private final SystemPanel system;
     private final JLabel settings;
     private final ConsolePanel console;
 
@@ -67,7 +68,7 @@ public class MainWindow extends JFrame {
         setTitle("CRT");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
-        setMinimumSize(new Dimension(1024, 768));
+        setMinimumSize(new Dimension(1280, 720));
 
         EclipseTheme etheme = new EclipseTheme();
         etheme.setMovingImageFactory(new ScreencaptureMovingImageFactory(new Dimension(500, 500)));
@@ -85,7 +86,7 @@ public class MainWindow extends JFrame {
         editor = new Editor();
         navigator = new EntityTree();
         render = new RenderPanel();
-        system = new JLabel("Infos go here");
+        system = new SystemPanel();
         settings = new JLabel("Settings go here");
         console = new ConsolePanel();
 
@@ -106,6 +107,7 @@ public class MainWindow extends JFrame {
         double wr = 0.4;
         double we = 0.4;
         double wn = 1 - wr - we;
+        double wi = 0.4;
 
         double h1 = 0.7;
         double h2 = 1 - h1;
@@ -115,9 +117,8 @@ public class MainWindow extends JFrame {
         grid.add(wr, 0, we, h1, dEditor);
         grid.add(wr + we, 0, wn, h1, dNavigator);
         grid.add(0, h1, wr + we, h2, dConsole);
-        grid.add(wr + we, h1, wn, h2, dSystem, dSettings);
+        grid.add(1 - wi, h1, wi, h2, dSystem, dSettings);
         grid.addHorizontalDivider(0, 1, h1);
-//        grid.addVerticalDivider(wr + we, 0, 1);
         contentArea.deploy(grid);
 
         dRender.setExternalizable(true);
