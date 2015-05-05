@@ -115,3 +115,4 @@
 - Renderer panel
 - Dynamic icon system dependent on theme
 - Theme singleton
+- Multiple resizeable viewports

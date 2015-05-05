@@ -1,0 +1,321 @@
+<rdf:RDF
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns:z="http://www.zotero.org/namespaces/export#"
+ xmlns:bib="http://purl.org/net/biblio#"
+ xmlns:foaf="http://xmlns.com/foaf/0.1/"
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+ xmlns:dcterms="http://purl.org/dc/terms/">
+    <bib:Report rdf:about="http://people.csail.mit.edu/amy/papers/box-jgt.pdf">
+        <z:itemType>report</z:itemType>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Williams</foaf:surname>
+                        <foaf:givenname>Amy</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Barrus</foaf:surname>
+                        <foaf:givenname>Steve</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Morley</foaf:surname>
+                        <foaf:givenname>R. Keith</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Shirley</foaf:surname>
+                        <foaf:givenname>Peter</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>An Efficient and Robust Ray–Box Intersection Algorithm</dc:title>
+        <dcterms:abstract>The computational bottleneck in a ray tracer using bounding volume hierarchies is often the ray intersection routine with axis-aligned bounding boxes. We describe a version of this routine that uses IEEE numerical properties to ensure that those tests are both robust and efficient. Sample source code is available online.</dcterms:abstract>
+        <dc:date>06/09/2005</dc:date>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://people.csail.mit.edu/amy/papers/box-jgt.pdf</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </bib:Report>
+    <bib:Document rdf:about="https://netbeans.org/kb/trails/platform.html">
+        <z:itemType>webpage</z:itemType>
+        <dcterms:isPartOf>
+           <z:Website></z:Website>
+        </dcterms:isPartOf>
+        <dc:title>NetBeans Platform Learning Trail</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>https://netbeans.org/kb/trails/platform.html</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </bib:Document>
+    <bib:Document rdf:about="http://stackoverflow.com/a/25425107">
+        <z:itemType>forumPost</z:itemType>
+        <dcterms:isPartOf>
+           <z:Forum></z:Forum>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                   <foaf:Person><foaf:surname>johnny</foaf:surname></foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>How to invert an RGB color in integer form?</dc:title>
+        <dc:date>08/21/2014</dc:date>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>http://stackoverflow.com/a/25425107</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </bib:Document>
+    <bib:Document rdf:about="http://www.jpct.net/doc/index.html">
+        <z:itemType>webpage</z:itemType>
+        <dcterms:isPartOf>
+           <z:Website></z:Website>
+        </dcterms:isPartOf>
+        <dc:title>jPCT documentation</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>http://www.jpct.net/doc/index.html</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </bib:Document>
+    <bib:Document rdf:about="http://stackoverflow.com/a/3269471">
+        <z:itemType>forumPost</z:itemType>
+        <dcterms:isPartOf>
+           <z:Forum></z:Forum>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Nickerson</foaf:surname>
+                        <foaf:givenname>Simon</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>What's the most efficient way to test two integer ranges for overlap?</dc:title>
+        <dc:date>10/15/2012</dc:date>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>http://stackoverflow.com/a/3269471</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </bib:Document>
+    <bib:Document rdf:about="http://forum.byte-welt.net/byte-welt-projekte-projects/dockingframes/">
+        <z:itemType>webpage</z:itemType>
+        <dcterms:isPartOf>
+           <z:Website></z:Website>
+        </dcterms:isPartOf>
+        <dc:title>Docking Frames forums</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://forum.byte-welt.net/byte-welt-projekte-projects/dockingframes/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </bib:Document>
+    <bib:Document rdf:about="http://stackoverflow.com/a/20925348">
+        <z:itemType>forumPost</z:itemType>
+        <dcterms:isPartOf>
+           <z:Forum></z:Forum>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Crist</foaf:surname>
+                        <foaf:givenname>Benjamin M.</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>How to rotate a vector by a given direction</dc:title>
+        <dc:date>01/04/2014</dc:date>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>http://stackoverflow.com/a/20925348</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </bib:Document>
+    <bib:Document rdf:about="http://stackoverflow.com/a/5838991">
+        <z:itemType>forumPost</z:itemType>
+        <dcterms:isPartOf>
+           <z:Forum></z:Forum>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                   <foaf:Person><foaf:surname>btilly</foaf:surname></foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Generate a random point within a circle (uniformly)</dc:title>
+        <dc:date>04/30/2011</dc:date>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>http://stackoverflow.com/a/5838991</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </bib:Document>
+    <bib:Document rdf:about="http://www.rorydriscoll.com/2009/01/07/better-sampling/">
+        <z:itemType>blogPost</z:itemType>
+        <dcterms:isPartOf>
+           <z:Blog><dc:title>CodeItNow</dc:title></z:Blog>
+        </dcterms:isPartOf>
+        <dc:title>Better Sampling</dc:title>
+        <dc:date>01/07/2009</dc:date>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.rorydriscoll.com/2009/01/07/better-sampling/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2015-05-05 13:18:59</dcterms:dateSubmitted>
+    </bib:Document>
+    <bib:Document rdf:about="http://dock.javaforge.com/dockingFrames_v1.1.1/doc/index.html">
+        <z:itemType>webpage</z:itemType>
+        <dcterms:isPartOf>
+           <z:Website></z:Website>
+        </dcterms:isPartOf>
+        <dc:title>Docking Frames documentation</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://dock.javaforge.com/dockingFrames_v1.1.1/doc/index.html</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </bib:Document>
+    <bib:Document rdf:about="http://everything2.com/title/Determining+if+a+point+is+inside+a+regular+polygon">
+        <z:itemType>blogPost</z:itemType>
+        <dcterms:isPartOf>
+           <z:Blog><dc:title>everything2</dc:title></z:Blog>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                   <foaf:Person><foaf:surname>Elrac</foaf:surname></foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Determining if a point is inside a regular polygon</dc:title>
+        <dc:date>03/15/2001</dc:date>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://everything2.com/title/Determining+if+a+point+is+inside+a+regular+polygon</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </bib:Document>
+    <bib:Document rdf:about="http://www.jpct.net/wiki/">
+        <z:itemType>webpage</z:itemType>
+        <dcterms:isPartOf>
+           <z:Website></z:Website>
+        </dcterms:isPartOf>
+        <dc:title>The jPCT wiki</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>http://www.jpct.net/wiki/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </bib:Document>
+    <rdf:Description rdf:about="http://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection">
+        <z:itemType>encyclopediaArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Book>
+               <dc:title>Wikipedia, the free encyclopedia</dc:title>
+            </bib:Book>
+        </dcterms:isPartOf>
+        <dc:title>Line–sphere intersection</dc:title>
+        <dcterms:abstract>In analytic geometry, a line and a sphere can intersect in three ways: no intersection at all, at exactly one point, or in two points. Methods for distinguishing these cases, and determining equations for the points in the latter cases, are useful in a number of circumstances. For example, this is a common calculation to perform during ray tracing (Eberly 2006:698).</dcterms:abstract>
+        <dc:date>2015-02-03T16:48:01Z</dc:date>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2015-05-05 13:01:29</dcterms:dateSubmitted>
+        <z:language>en</z:language>
+        <z:libraryCatalog>Wikipedia</z:libraryCatalog>
+        <dc:rights>Creative Commons Attribution-ShareAlike License</dc:rights>
+        <dc:description>Page Version ID: 645471517</dc:description>
+    </rdf:Description>
+    <bib:Document rdf:about="http://supercomputingblog.com/graphics/coding-bilinear-interpolation/">
+        <z:itemType>blogPost</z:itemType>
+        <dcterms:isPartOf>
+           <z:Blog><dc:title>The Supercomputing Blog</dc:title></z:Blog>
+        </dcterms:isPartOf>
+        <dc:title>Coding Bilinear Interpolation</dc:title>
+        <dcterms:abstract>When performing image transformation and manipulation techniques, it is often necessary to employ some sort of interpolation or filtering in order to obtain a</dcterms:abstract>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://supercomputingblog.com/graphics/coding-bilinear-interpolation/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2015-05-05 13:16:45</dcterms:dateSubmitted>
+    </bib:Document>
+    <bib:Document rdf:about="http://stackoverflow.com/a/7847310">
+        <z:itemType>forumPost</z:itemType>
+        <dcterms:isPartOf>
+           <z:Forum></z:Forum>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Bourg</foaf:surname>
+                        <foaf:givenname>Emmanuel</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Is there a Java function which parses escaped characters?</dc:title>
+        <dc:date>10/21/2011</dc:date>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>http://stackoverflow.com/a/7847310</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </bib:Document>
+    <bib:Document rdf:about="https://theantlrguy.atlassian.net/wiki/display/ANTLR4/">
+        <z:itemType>webpage</z:itemType>
+        <dcterms:isPartOf>
+           <z:Website></z:Website>
+        </dcterms:isPartOf>
+        <dc:title>ANTLR4 wiki</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://theantlrguy.atlassian.net/wiki/display/ANTLR4/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </bib:Document>
+    <bib:Document rdf:about="https://tips4java.wordpress.com/2009/05/23/text-component-line-number/">
+        <z:itemType>blogPost</z:itemType>
+        <dcterms:isPartOf>
+           <z:Blog><dc:title>Java Tips Weblog</dc:title></z:Blog>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Camick</foaf:surname>
+                        <foaf:givenname>Rob</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Text Component Line Number</dc:title>
+        <dcterms:abstract>Over the years I've seen many requests in the forums for the ability to display line numbers in a text component. I've probably seen just as many solutions as well. I even posted my own solution ye...</dcterms:abstract>
+        <dc:date>05/23/2009</dc:date>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://tips4java.wordpress.com/2009/05/23/text-component-line-number/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </bib:Document>
+</rdf:RDF>

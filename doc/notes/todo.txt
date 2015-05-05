@@ -73,6 +73,8 @@
 [~] Do a generic parametric shader for all surface types
 [~] Multiple viewports: top, side, free-view, quick-render
     - Buttons to choose camera type
+    - Grids on parallel views
+    - Orthographic projection ?
 [-] Recursively go through CSG
     - For union, just display everything
     - For intersection, display both transparent
