@@ -40,13 +40,11 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.io.InputStream;
 import java.util.Enumeration;
-import java.util.logging.Level;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -427,6 +425,7 @@ public class Test {
 
             Camera[] cameras = new Camera[]{world.getCamera(), cameraY, cameraZ};
 
+            // TODO: Only draw when needed
             for (int i = 0; i < 3; ++i) {
                 FrameBuffer buffer = buffers[i].getBuffer();
                 Camera camera = cameras[i];

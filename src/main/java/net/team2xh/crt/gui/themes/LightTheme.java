@@ -25,7 +25,6 @@ import org.pushingpixels.substance.api.SubstanceLookAndFeel;
  */
 public class LightTheme extends Theme {
 
-    // TODO: Copy greybeans theme
     LightTheme() {
         super("#e9eef2", // 01 Margin
               "#f5faff", // 02 Background
