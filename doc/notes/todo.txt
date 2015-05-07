@@ -21,6 +21,7 @@
         - Sacrifices made
         - Techniques used
         - Hacks
+        - Problems with multiple ports
     - NetBeans API
         - Introspection power
         - Java Beans
@@ -28,7 +29,7 @@
     - Docking Frames
         - General work
         - Implementation difficulties
-[-] Start gathering biography
+[x] Start gathering biography
     - Zotero ?
 
 # Raytracer
@@ -59,6 +60,9 @@
 [-] Animations
     - Time constant 
     - Possibility to put list of cameras in settings, needs list of times as well -> interpolate
+[-] Post processing
+    - Chromatic aberration
+    - Vignetting
 
 # Live view
 
