@@ -98,8 +98,17 @@
 [-] Workspaces (script / live)
 [-] Live mode inclusion
 [-] Import settings viewer and system info graphs
-[-] Menubar
-[-] Toolbar
+[-] Menubar + Toolbar
+    - Perspective selection
+    - File handling
+    - Render actions
+[-] Investigate JIDE common
+    - Searchable textpane
+    - MultiplePageDialog for config
+[-] Config dialog
+    - Theme
+    - Antialiasing for live view
+    - ...
 
 # Refactoring
 
