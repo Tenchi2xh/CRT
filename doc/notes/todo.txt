@@ -30,7 +30,7 @@
         - General work
         - Implementation difficulties
 [x] Start gathering biography
-    - Zotero ?
+    - Zotero
 
 # Raytracer
 
@@ -120,11 +120,12 @@
 [x] Unify settings
 [x] Procedure notation
 [x] Review style
+[x] Add missing tokens (true, false, Macro)
 [-] Add loops
 [-] Add conditions
 [-] Invalid channel
-[-] Add missing tokens (true, false, Macro)
 [-] CSG Blocks don't have attributes
+[-] Correct blocks for CSG (no attributes but expr)
 
 # Next steps
 
