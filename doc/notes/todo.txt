@@ -34,6 +34,7 @@
 
 # Raytracer
 
+[-] Get fovfactor out of settings and compute at trace time, simplify Settings instantiation
 [-] Gamma for color blending ! https://www.youtube.com/watch?v=LKnqECcg6Gw
 [-] Continue investigating global illumination
 [-] More primitives

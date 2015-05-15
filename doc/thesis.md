@@ -273,7 +273,7 @@ The FOV factor is easily calculated: if $\alpha$ is the FOV angle and because $\
 \draw[->, thick, >=latex] (0, 0) node[left]{$\vec{o}$} -- node[below]{$\vec{d}$}(2, 0);
 \draw (0, 0) circle (2);
 \draw[thick] (2, 3) -- (2, 0);
-\draw[thick] (2, -3) -- node[right]{\rotatebox{90}{screen}} (2, 0);
+\draw[thick] (2, -3) -- node[right]{\rotatebox{90}{\textit{screen}}} (2, 0);
 \draw[decorate, decoration={brace, amplitude=5pt}, xshift=1mm] (2, 3) -- node[right, xshift=1mm]{$\tan(\frac{\alpha}{2})$}(2, 0);
 
 \draw[dashed] (0, 0) -- (2, 3);
@@ -317,7 +317,7 @@ where $\vec{r}$ is a point on the sphere, $\vec{c}$ the centre of the sphere and
 
 \begin{equation} {\| \vec{o} + t\vec{d} - \vec{c} \|}^2 = R^2 \end{equation}
 
-which, when expanded and rearranged gives
+which, when expanded and rearranged, gives
 
 \begin{equation} t^2(\vec{d} \cdot \vec{d}) + 2t(\vec{d} \cdot (\vec{o} - \vec{c})) + (\vec{o} - \vec{c}) \cdot (\vec{o} - \vec{c}) - R^2 = 0 \end{equation}
 
