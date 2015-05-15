@@ -188,7 +188,7 @@ This system choice incurs a small consideration when doing linear algebra, but c
 
 Before tracing the path of a ray, we need to *generate* it. A **ray** has an origin ($\vec{o}$), a length ($t$) and a direction ($\vec{d}$). Its equation is thus:
 
-\begin{equation} \vec{r} = \vec{o} + t\vec{d} \end{equation}
+\begin{equation} \label{eq:ray} \vec{r} = \vec{o} + t\vec{d} \end{equation}
 
 The initial rays we begin with when ray-tracing are called **primary rays**. For a standard *pinhole* projection, they originate (before camera transformation) at $\vec{o} = \vec{0}$ and each ray points towards the centre of a pixel situated on a *virtual screen* the same resolution as the desired output, situated 1 unit away on the $z$ axis.
 
@@ -296,10 +296,33 @@ Ray primary = new Ray(direction, camera.getPosition());
 
 ### Primitives
 
-Sphere:
-Ray-sphere intersection:
+Next in the pipeline after generating a primary ray is to check whether or not it *intersects* with any of the *primitives* present in the scene, and take the closest one.
 
-- Diagram
+Checking if a ray intersects with a primitive amounts to put both their equations in one and *solve it*. In this section we will see how to compute a ray-sphere intersection and find the intersection points if they exist^[In the code, more than that is done because other parts of the ray-tracer need intersection normals].
+
+In vector notation, the equation of a sphere is
+
+\begin{equation} {\| \vec{r} - \vec{c} \|}^2 = R^2 \end{equation}
+
+where $\vec{r}$ is a point on the sphere, $\vec{c}$ the centre of the sphere and $R$ its radius. By substituting $\vec{r}$ with the ray equation (\ref{eq:ray}), we get
+
+\begin{equation} {\| \vec{o} + t\vec{d} - \vec{c} \|}^2 = R^2 \end{equation}
+
+which, when expanded and rearranged gives
+
+\begin{equation} t^2(\vec{d} \cdot \vec{d}) + 2t(\vec{d} \cdot (\vec{o} - \vec{c})) + (\vec{o} - \vec{c}) \cdot (\vec{o} - \vec{c}) - R^2 = 0 \end{equation}
+
+We can now solve this quadratic equation of the form $at^2 + bt + c = 0$ for $t$, where
+
+\begin{equation} a = \vec{d} \cdot \vec{d} \end{equation} 
+\begin{equation} b = 2(\vec{d} \cdot (\vec{o} - \vec{c})) \end{equation} 
+\begin{equation} c = (\vec{o} - \vec{c}) \cdot (\vec{o} - \vec{c}) - R^2 \end{equation} 
+
+Using the method of the discriminant, we get:
+
+\begin{equation} t = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} \end{equation}
+
+Next, depending on whether or not there is zero, one or two solutions, we can find the intersection points by injecting $t$ back into the ray equation, check whether or not the ray was shot from inside the sphere, compute the normals, etc. These informations will be useful later when we will be doing *CSG operations*.
 
 ### Light calculations
 

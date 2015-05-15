@@ -3,14 +3,14 @@
 [-] Add sections for:
     - Poster design
 
-[-] Ray tracing
-    - Axis system choice
-    - Ray generation
-    - Shading pipeline
-    - Reflections
-    - Depth of field
-    - Supersampling
-    - etc. (look at source)
+[~] Ray tracing
+    [x] Axis system choice
+    [x] Ray generation
+    [-] Shading pipeline
+    [-] Reflections
+    [-] Depth of field
+    [-] Supersampling
+    [-] etc. (look at source)
 [-] Language
     - Examples with code and result scope
     - Continue
