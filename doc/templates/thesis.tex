@@ -5,6 +5,7 @@
 % for code blocks
 \usepackage{listings}
 \usepackage{xcolor}
+\newcommand{\CodeSymbol}[1]{\textcolor{red}{#1}}
 \lstset{
   basicstyle=\ttfamily\footnotesize,
   numbers=left,
@@ -100,7 +101,7 @@
 
 % for graphs
 \usepackage{tikz}
-\usetikzlibrary{automata,arrows,topaths}
+\usetikzlibrary{automata,arrows,topaths,decorations.pathreplacing}
 
 \usepackage{lmodern}
 \usepackage{amssymb,amsmath}

@@ -63,7 +63,7 @@ A light source is defined by the `Light` class and has the following properties:
 
 One has to keep in mind that each additional light source adds up to the amount of rays to bounce and thus linearly increase computation time.
 
-### Camera
+### Camera \label{sec:camera}
 
 A lit and populated scene still needs a window through which we will observe it: the `Camera` class defines the point of view of our rendered scene.
 
@@ -142,7 +142,7 @@ The basic idea of backward tracing, explained in details in the next section, is
 
 ### Backward tracing implementation
 
-For every pixel on the screen, a ray is generated, then traced. Because each pixel's tracing is **independent** from one another, the process can be parallelized. This is easily done thanks to the new Java 8 API and its *streams*: after splitting the screen into blocks in a Java list `coords`, all we have to do is call:
+For every pixel on the screen, a **primary ray** is generated, then traced. Because each pixel's tracing is **independent** from one another, the process can be parallelized. This is easily done thanks to the new Java 8 API and its *streams*: after splitting the screen into blocks in a Java list `coords`, all we have to do is call:
 
 ```{.java caption="Java 8's easy parallelization"}
 coords.parallelStream().forEach(
@@ -164,9 +164,10 @@ The process of tracing a ray takes the following steps:
 
 ### Coordinate system
 
-\begin{figure}[h]
-\centering
+Like *POV-Ray*, *OpenGL*, *DirectX*, *Unity* and many others, this project opted for a **left-handed coordinate system** where the $z$ axis points inside the screen and not outwards. 
 
+\begin{figure}[!htbp]
+\centering
 \begin{tikzpicture}[]
 
   \draw[thin, dashed] (-1, 0, -2) -- (-1, 0, 2);
@@ -184,21 +185,24 @@ The process of tracing a ray takes the following steps:
   \draw[dashed, thin] (0,0,0) -- (0,0,2);
   
 \end{tikzpicture}
-
 \caption{Left-handed coordinate system}
 \label{fig:coords}
 \end{figure}
 
+For graphical composition, having an inverted $z$ axis is (for some people) more intuitive: if the origin is located at the bottom-left of the screen, $x$ goes *right*, $y$ goes *up*, and $z$ goes *inside* the screen. 
+
+This system choice incurs a small consideration when doing linear algebra, but can be converted any time between both systems. The only real thing to change is the way the *cross product* behaves and invert some results.
+
 ### Ray generation
 
-Ray:
+Before tracing the path of a ray, we need to *generate* it. A **ray** has an origin ($\vec{o}$), a length ($t$) and a direction ($\vec{d}$). Its equation is thus:
 
-$$ \vec{o} + t\vec{r} $$
+\begin{equation} \vec{r} = \vec{o} + t\vec{d} \end{equation}
 
-\usetikzlibrary{decorations.pathreplacing}
-\begin{figure}[h]
+The initial rays we begin with when ray-tracing are called **primary rays**. For a standard *pinhole* projection, they originate (before camera transformation) at $\vec{o} = \vec{0}$ and each ray points towards the centre of a pixel situated on a *virtual screen* the same resolution as the desired output, situated 1 unit away on the $z$ axis.
+
+\begin{figure}[!htbp]
 \centering
-
 \begin{tikzpicture}[scale=0.9]
 \coordinate (o) at (-3, 0, 0);
 
@@ -207,24 +211,20 @@ $$ \vec{o} + t\vec{r} $$
 \draw[thick, dashed] (0.8, 0, 0) -- (2, 0, 0);
 \draw[->, thick, >=latex] (2, 0, 0) -- (4, 0, 0) node[right]{$\vec{d}$};
 
-\draw[very thin] (2, -3.0, -3.0) -- ++(0, 0, 6);
 \draw[very thin] (2, -1.0, -3.0) -- ++(0, 0, 6);
 \draw[very thin] (2, 1.0, -3.0) -- ++(0, 0, 6);
 \draw[very thin] (2, 3.0, -3.0) -- ++(0, 0, 6);
 
-\draw[very thin] (2, -3.0, -3.0) -- ++(0, 6, 0);
-\draw[very thin] (2, -3.0, -1.0) -- ++(0, 6, 0);
-\draw[very thin] (2, -3.0, 1.0) -- ++(0, 6, 0);
-\draw[very thin] (2, -3.0, 3.0) -- ++(0, 6, 0);
+\draw[very thin] (2, -1.0, -3.0) -- ++(0, 4, 0);
+\draw[very thin] (2, -1.0, -1.0) -- ++(0, 4, 0);
+\draw[very thin] (2, -1.0, 1.0) -- ++(0, 4, 0);
+\draw[very thin] (2, -1.0, 3.0) -- ++(0, 4, 0);
 
 %\draw[loosely dotted] (o) -- (2, -3, -3);
 %\draw[loosely dotted] (o) -- (2, 3, -3);
 %\draw[loosely dotted] (o) -- (2, -3, 3);
 %\draw[loosely dotted] (o) -- (2, 3, 3);
 
-\coordinate (p1) at (2, -2, -2);
-\coordinate (p2) at (2, -2, 0);
-\coordinate (p3) at (2, -2, 2);
 \coordinate (p4) at (2, 0, -2);
 \coordinate (p5) at (2, 0, 0);
 \coordinate (p6) at (2, 0, 2);
@@ -232,9 +232,6 @@ $$ \vec{o} + t\vec{r} $$
 \coordinate (p8) at (2, 2, 0);
 \coordinate (p9) at (2, 2, 2);
 
-\draw[fill] (p1) circle (0.5pt);
-\draw[fill] (p2) circle (0.5pt);
-\draw[fill] (p3) circle (0.5pt);
 \draw[fill] (p4) circle (0.5pt);
 \draw[fill] (p5) circle (1pt);
 \draw[fill] (p6) circle (0.5pt);
@@ -253,9 +250,58 @@ $$ \vec{o} + t\vec{r} $$
 \draw[decorate, decoration={brace, amplitude=5pt, mirror}, xshift=2pt] (2, 0, 0) -- node[below right, xshift=2pt]{$n_x$} (2, 0, -2);
 
 \end{tikzpicture}
-
 \caption{Primary ray}
 \end{figure}
+
+The first step is to normalize the coordinates of the targeted pixel to be between $-1$ and $1$. We add $0.5$ in both directions so that the ray "aims" towards its centre, if it was $1$ unit long and $1$ unit high. 
+
+```{.java caption="Pixel coordinates normalization"}
+double nX = (2 * ((x + 0.5) / settings.width) - 1);
+double nY = (1 - 2 * ((y + 0.5) / settings.height));
+```
+
+The next is to take in account the camera's *field of view* (see section \ref{sec:camera}): the wider the angle, the more we will see left and right, up and down. To reflect this, we have to multiply both normalized pixel coordinates by a **FOV factor**.
+
+Because the FOV value corresponds to the vertical FOV, we also need to multiply the $x$ coordinates by the screen's ratio.
+
+The FOV factor is easily calculated: if $\alpha$ is the FOV angle and because $\|\vec{d}\| = 1$, simple trigonometry tells us that the factor we need to multiply our normalized coordinates by is $\tan(\frac{\alpha}{2})$:
+
+\begin{figure}[!htbp]
+\centering
+\begin{tikzpicture}
+
+\draw[->, thick, >=latex] (0, 0) node[left]{$\vec{o}$} -- node[below]{$\vec{d}$}(2, 0);
+\draw (0, 0) circle (2);
+\draw[thick] (2, 3) -- (2, 0);
+\draw[thick] (2, -3) -- node[right]{\rotatebox{90}{screen}} (2, 0);
+\draw[decorate, decoration={brace, amplitude=5pt}, xshift=1mm] (2, 3) -- node[right, xshift=1mm]{$\tan(\frac{\alpha}{2})$}(2, 0);
+
+\draw[dashed] (0, 0) -- (2, 3);
+\draw[dashed] (0, 0) -- (2, -3);
+\draw (0.5, 0) arc (0:56.30:0.5) node at (28.15:0.7) {$\frac{\alpha}{2}$};
+
+\end{tikzpicture}
+\caption{Finding the FOV factor}
+\label{fig:coords}
+\end{figure}
+
+These two operations leave us with primary rays originating from $\vec{0}$, looking at a screen centred at $(0, 0, 1)$. To transform these rays and put them where the camera actually is, we could translate and rotate them using a *transformation matrix*, but it is simpler to just add the camera's *up* and *right* component multiplied by the normalized and FOV-adjusted coordinates we computed earlier.
+
+If we sum up, these are all the steps needed for primary ray generation (code from the `Tracer` class):
+
+```{.java caption="Primary ray generation"}
+double nX = (2 * ((x + 0.5) / settings.width) - 1);
+double nY = (1 - 2 * ((y + 0.5) / settings.height));
+
+double camX = nX * settings.fovFactor * settings.ratio;
+double camY = nY * settings.fovFactor;
+
+Vector3 rightComp = camera.getRight().multiply(camX);
+Vector3 upComp = camera.getUp().multiply(camY);
+direction = direction.add(rightComp).add(upComp).normalize();
+
+Ray primary = new Ray(direction, camera.getPosition());
+```
 
 ### Primitives
 
