@@ -501,13 +501,23 @@ In the code, this is implemented by making parallel light sources always return 
 
 ### Constructive solid geometry
 
-\customfigC{img/csg.png}{A piano foot obtained from CSG operations}{}{csgexample}{}
+CSG operations are similar to *set operations*, but apply to primitive solids or results of other CSG operations. They are of three kinds: union, intersection and difference. In the code, CSG operations inherit from `Entity` and must provide an `intersect(Ray r)` method.
 
-(Union)
+The first CSG operation is the **union**. It is very trivial: the intersection of a ray and and a union of objects is just the intersection point of all the objects that is *closest* to the ray's origin. 
 
-(Difference)
+\customfigB{img/union.png}{CSG union between a cube and a sphere}{}{csgunion}{}
 
-(Intersection)
+Next is the **intersection** ...
+
+\customfigB{img/intersection.png}{CSG intersection between a cube and a sphere}{}{csgintersection}{}
+
+Finally, the **difference** ...
+
+\customfigB{img/difference.png}{CSG difference between a cube and a sphere}{}{csgdifference}{}
+
+Using only those three basic processes, one can combine simple primitives and iteratively produce complex shapes, like following upright piano foot produced in POV-Ray, resulting from multiple CSG operations: cylinders are subtracted twice from boxes and tori quarters are used to fill the gaps between the two resulting boxes.
+
+\customfigB{img/csg.png}{A piano foot obtained from CSG operations}{}{csgexample}{}
 
 ### Background projections
 
