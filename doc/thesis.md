@@ -140,7 +140,7 @@ The basic idea of backward tracing, explained in details in the next section, is
 
 \customfig{img/ray-tracing.eps}{Backtracing light rays}{.}{raytracing}{Wikipedia}
 
-### Backward tracing implementation
+### Backward tracing implementation \label{sec:backtracing}
 
 For every pixel on the screen, a **primary ray** is generated, then traced. Because each pixel's tracing is **independent** from one another, the process can be parallelized. This is easily done thanks to the new Java 8 API and its *streams*: after splitting the screen into blocks in a Java list `coords`, all we have to do is call:
 
@@ -335,11 +335,122 @@ Next, depending on whether or not there is zero, one or two solutions, we can fi
 
 ### Light calculations
 
-\usetikzlibrary{arrows}
-\usetikzlibrary{decorations.markings}
-\usetikzlibrary{patterns}
+As quickly described in section \ref{sec:backtracing}, colours are computed in an *additive* fashion, depending on several factors such as light source *angle*, *intensity* and material properties. 
 
-\begin{figure}[h]
+There are several colour components derived from the lights present in a scene: ambient, diffuse and specular. This method of computing light components is called the **Blinn--Phong shading model**.
+
+\customfig{img/phong.png}{Phong shading model}{: light components are computed in steps.}{phong}{Clara.io (TODO: do with CRT)}
+
+First off, let's define the **inverse square law**, which we will use for computing the following components. In physics, the amount of light received from a light source at a given distance is *inversely proportional* to the square of the distance:
+
+\begin{equation} I \propto \frac{1}{t^2} \end{equation}
+
+In the following diagram, we can see that effect represented in three dimensions: every square is the same area, but from a greater distance, the same amount of rays hit more squares and thus, each square gets less light.
+
+\customfig{img/isl.png}{Inverse square law}{}{isl}{Wikipedia}
+
+In the code, the recursive tracing functions keeps track of all the distance that the starting primary ray travelled, and computes the ISL factor by dividing the light's *falloff* factor by the square of the total distance squared.
+
+The first component of the Blinn--Phong model is trivial: **ambient** light is just a fraction of the light's colour that is added to any point on the scene, whether or not it is in shadow:
+
+\begin{equation} \vec{c}_\textrm{a} = l_\textrm{a} \vec{l}_\textrm{c} \end{equation}
+
+where $l_\textrm{a}$ is the light's ambient factor and $l_\textrm{c}$ its colour. Note that this is a quick and dirty *trick* to simulate global illumination which would otherwise be costly, inherited from more standard rendering techniques like in OpenGL for example.
+
+**Diffuse** light is the amount of light that is scattered by the material when hit by a light source. It simulates the fact that for a point on a material's surface, the more a light source's *direction* is aligned with its *normal*, the more the point gets illuminated by the light source. Let's observe that in the following diagram:
+
+\begin{figure}[!htbp]
+\centering
+
+\subfloat[Rays parallel with normal]{%
+\centering
+\makebox[.45\linewidth]{
+\begin{tikzpicture}[rotate=-45, scale=0.7]
+
+  \draw[dashed] (0.0, 0.0) -- (1.5, 0.0);
+  \draw[dashed] (0.0, 1.0) -- (1.5, 1.0);
+  \draw[dashed] (0.0, 2.0) -- (1.5, 2.0);
+
+  \draw[->, >=latex] (1.5, 0.0) -- (3.0, 0.0);
+  \draw[->, >=latex] (1.5, 1.0) -- (3.0, 1.0);
+  \draw[->, >=latex] (1.5, 2.0) -- (3.0, 2.0);
+
+  \draw[<->] (0.5, 1.0) -- node[midway, below right]{$x$} (0.5, 0.0);
+
+  \draw[very thick] (3.0, -0.5) -- (3.0, 2.5);
+  \fill[pattern=vertical lines] (3.0, -0.5) rectangle (3.2, 2.5); 
+\end{tikzpicture}}}%
+\subfloat[Rays at \SI{45}{\degree} with normal]{%
+\centering
+\makebox[.45\linewidth]{
+\begin{tikzpicture}[rotate=-45, scale=0.7]
+
+  \draw[->, >=latex, thick] (3.0, 1.0) -- ++(-2, 2) node[above]{$\vec{n}$};
+
+  \draw[dashed] (0.0, 0.0) -- (1.5, 0.0);
+  \draw[dashed] (0.0, 1.0) -- (1.5, 1.0);
+  \draw[dashed] (0.0, 2.0) -- (1.5, 2.0);
+
+  \draw[->, >=latex] (1.5, 0.0) -- (2.0, 0.0);
+  \draw[->, >=latex] (1.5, 1.0) -- (3.0, 1.0);
+  \draw[->, >=latex] (1.5, 2.0) -- (4.0, 2.0);
+
+  \draw[<->] (0.5, 0.0) -- node[midway, above, fill=white, inner sep=1.1pt]{$\sqrt{x}$} ++(1.0, 1.0);
+
+  \draw[very thick] (1.5, -0.5) -- (4.3, 2.3);
+  \fill[pattern=north east lines, rotate=-45] (1.4, 0.7) rectangle ++(0.3, 4.0); 
+  \fill[fill=white] (2.5, -1) rectangle ++(0.1, 0);
+\end{tikzpicture}}}%
+\caption{Surface angle with incoming rays}
+\label{fig:lightangle}
+\end{figure}
+
+As we can see, if our rays are separated by a distance $x$ and hit a surface whose normal is parallel with them, their distance on the surface is still $x$, whereas if the surface normal is at a \SI{45}{\degree} angle with the rays, they are separated by a distance of $\sqrt{x}$ --- reducing the density of photons per area, and thus the surface is *darker*. 
+
+An *attenuation* factor is first computed by taking the *dot product* of the surface normal and the light's direction vector, giving the cosine of the angle. We then proceed to multiply this factor with the ISL and the light's colour, then multiply this result with the surface's material colour:
+
+\begin{equation} \vec{c}_\textrm{d} = \Big[\vec{l}_\textrm{c} I (\vec{l}_\textrm{d} \cdot \vec{n})\Big] \cdot (\vec{m}_\textrm{c} m_\textrm{d}) \end{equation}
+
+Lastly, we have the **specular** component which emulates shininess. This is also not physically accurate; it is a *trick* to give light sources more "width" instead of just being single infinitesimally small points, so that their reflections can be seen on diffuse shiny surfaces.
+
+The specular factor of any given point on a surface depends on how much the light source's reflected ray ($\vec{l'}$) on that point is aligned with the viewing direction ($\vec{r}$), i.e. the angle between the reflected light ray and the incoming primary ray:
+
+\begin{figure}[!htbp]
+\centering\begin{tikzpicture}[scale=0.7]
+
+  \draw[->, >=latex, thick] (0, 0) -- ++(0, 3) node[above]{$\vec{n}$};
+  \draw[->, >=latex] (60:3) node[above right]{$\vec{l}$} -- (0, 0);
+  \draw[->, >=latex, dashed] (0, 0) -- (120:3) node[above left]{$\vec{l'}$};
+  \draw[->, >=latex, thick] (150:3) node[above left]{$\vec{r}$} -- (0, 0);
+
+  \draw (120:1) arc (120:150:1) node at (135:1.3) {$\alpha$};
+
+  \draw[very thick] (-2, 0) -- (2, 0);
+  \fill[pattern=north east lines] (-2, 0) rectangle (2, -0.2); 
+
+\end{tikzpicture}
+
+\caption{Angle between reflected light ray and primary ray}
+\label{fig:lightangle}
+\end{figure}
+
+The reflected ray is computed as follows:
+
+\begin{equation} \label{eq:reflect} \vec{l'} = \vec{l} - 2(\vec{l}\cdot\vec{n})\vec{n} \end{equation}
+
+The specular factor is then computed by taking the cosine of the angle (*aka* dot product) between the reflected ray and the primary ray to the power $m_\textrm{sh}$, the material's shininess factor. The formula for the specular component is then:
+
+\begin{equation} \vec{c}_\textrm{s} = (\vec{l'} \cdot \vec{r})^{m_\textrm{sh}} m_\textrm{s} I (\vec{l}_\textrm{c} \cdot \vec{m}_\textrm{c}) \end{equation}
+
+Summing up, the total colour of a given point using the Blinn--Phong model is
+
+\begin{equation} \vec{c} = \vec{c}_\textrm{a} + \vec{c}_\textrm{d} + \vec{c}_\textrm{s} \end{equation}
+
+To this, we can add reflectivity and refraction, by recursively tracing the reflected / refracted rays.
+
+In this project, two types of light sources were implemented: *parallel* lights and *point* lights. As explained on the next figure, parallel lights like the sun represent a light source that is infinitely far away rendering its rays virtually parallel. This implies that the ISL is no longer in effect^[By looking at figure \ref{fig:isl}, we can see that if all rays were indeed parallel, all the squares would receive the same amount of rays] whereas with the point light, we can see on the figure that just by going a bit further down the surface the light vectors are longer and more spread out.
+
+\begin{figure}[!htbp]
 \centering
 
 \subfloat[Parallel light]{%
@@ -386,51 +497,7 @@ Next, depending on whether or not there is zero, one or two solutions, we can fi
 \label{fig:lighttypes}
 \end{figure}
 
-\begin{figure}[h]
-\centering
-
-\subfloat[Rays parallel with normal]{%
-\centering
-\makebox[.45\linewidth]{
-\begin{tikzpicture}[rotate=-45, scale=0.7]
-
-  \draw[dashed] (0.0, 0.0) -- (1.5, 0.0);
-  \draw[dashed] (0.0, 1.0) -- (1.5, 1.0);
-  \draw[dashed] (0.0, 2.0) -- (1.5, 2.0);
-
-  \draw[->, >=latex] (1.5, 0.0) -- (3.0, 0.0);
-  \draw[->, >=latex] (1.5, 1.0) -- (3.0, 1.0);
-  \draw[->, >=latex] (1.5, 2.0) -- (3.0, 2.0);
-
-  \draw[<->] (0.5, 1.0) -- node[midway, below right]{$x$} (0.5, 0.0);
-
-  \draw[very thick] (3.0, -0.5) -- (3.0, 2.5);
-  \fill[pattern=vertical lines] (3.0, -0.5) rectangle (3.2, 2.5); 
-\end{tikzpicture}}}%
-\subfloat[Rays at \SI{45}{\degree} with normal]{%
-\centering
-\makebox[.45\linewidth]{
-\begin{tikzpicture}[rotate=-45, scale=0.7]
-
-  \draw[->, >=latex, thick] (3.0, 1.0) -- ++(-2, 2) node[above]{$\vec{n}$};
-
-  \draw[dashed] (0.0, 0.0) -- (1.5, 0.0);
-  \draw[dashed] (0.0, 1.0) -- (1.5, 1.0);
-  \draw[dashed] (0.0, 2.0) -- (1.5, 2.0);
-
-  \draw[->, >=latex] (1.5, 0.0) -- (2.0, 0.0);
-  \draw[->, >=latex] (1.5, 1.0) -- (3.0, 1.0);
-  \draw[->, >=latex] (1.5, 2.0) -- (4.0, 2.0);
-
-  \draw[<->] (0.5, 0.0) -- node[midway, above, fill=white, inner sep=1.1pt]{$\sqrt{x}$} ++(1.0, 1.0);
-
-  \draw[very thick] (1.5, -0.5) -- (4.3, 2.3);
-  \fill[pattern=north east lines, rotate=-45] (1.4, 0.7) rectangle ++(0.3, 4.0); 
-  \fill[fill=white] (2.5, -1) rectangle ++(0.1, 0);
-\end{tikzpicture}}}%
-\caption{Surface angle with incoming rays}
-\label{fig:lightangle}
-\end{figure}
+In the code, this is implemented by making parallel light sources always return the same direction vector, whereas point light sources compute each direction vector by subtracting the surface point to their origin.
 
 ### Constructive solid geometry
 
