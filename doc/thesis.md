@@ -77,7 +77,7 @@ To further add to the user's creative possibilities, several artistic features w
 - An aperture shape, which will be used to physically simulate the shape that *bokeh* will have (see figure \ref{fig:bokeh}).
 - A focal distance, defining at which distance objects are sharp.
 
-\customfig{img/bokeh.jpg}{Real-life \emph{bokeh}}{: the blurriness of out-of-focus objects will take the shape of the camera's aperture (pinhole). Here, the \emph{bokeh} is octogonal.}{bokeh}{Scott Tucker on Flickr}
+\customfig{img/bokeh.jpg}{Real-life \emph{bokeh}}{ --- the blurriness of out-of-focus objects will take the shape of the camera's aperture (pinhole). Here, the \emph{bokeh} is octogonal.}{bokeh}{Scott Tucker on Flickr}
 
 ### Settings
 
@@ -105,7 +105,7 @@ Traditionally, 3D computer graphics are rendered using a technique called **rast
 
 In the rasterisation world, a 3D scene is described by a collection of **polygons**, usually triangles, defined by 3 three-dimensional vertices. A rasteriser will take a stream of such vertices, transform them into corresponding two-dimensional points on the viewer's monitor, and fill in the transformed two-dimensional triangles (with either lines, or colours). 
 
-\customfigB{img/rasterisation.png}{Rasterisation of a triangle}{: once the vertices have been projected on the screen, a discrete pixel is ``lit'' if its continuous centre is contained within the projected triangle's boundaries.}{}{Wikipedia}
+\customfigB{img/rasterisation.png}{Rasterisation of a triangle}{ --- once the vertices have been projected on the screen, a discrete pixel is ``lit'' if its continuous centre is contained within the projected triangle's boundaries.}{}{Wikipedia}
 
 Some effects of light observed in real life can be reproduce (or at least *mimicked*) on top of rasterisation. For example, if a polygon is not directly facing the camera (i.e. its *normal vector* is not parallel with the camera's direction), the resulting colour of the rasterised triangle will be darker.
 
@@ -339,7 +339,21 @@ As quickly described in section \ref{sec:backtracing}, colours are computed in a
 
 There are several colour components derived from the lights present in a scene: ambient, diffuse and specular. This method of computing light components is called the **Blinn--Phong shading model**.
 
-\customfig{img/phong.png}{Phong shading model}{: light components are computed in steps.}{phong}{Clara.io (TODO: do with CRT)}
+\begin{figure}[!htbp]
+\centering
+
+\subfloat[Ambient]{\centering\makebox[.24\linewidth]{
+\includegraphics[width=0.20\linewidth,keepaspectratio]{img/phong_ambient.png}}}
+\subfloat[Diffuse]{\centering\makebox[.24\linewidth]{
+\includegraphics[width=0.20\linewidth,keepaspectratio]{img/phong_diffuse.png}}}
+\subfloat[Specular]{\centering\makebox[.24\linewidth]{
+\includegraphics[width=0.20\linewidth,keepaspectratio]{img/phong_specular.png}}}
+\subfloat[Combined]{\centering\makebox[.24\linewidth]{
+\includegraphics[width=0.20\linewidth,keepaspectratio]{img/phong_combined.png}}}
+
+\label{fig:phong}
+\caption[Phong shading model]{Phong shading model --- light components are computed in steps.}
+\end{figure}
 
 First off, let's define the **inverse square law**, which we will use for computing the following components. In physics, the amount of light received from a light source at a given distance is *inversely proportional* to the square of the distance:
 
