@@ -15,7 +15,7 @@ os.system('> ' + fn)
 print "Concatenating files..."
 
 add("""\\onecolumn
-\\section*{Foreword}
+\\chapter*{Foreword}
 \\addcontentsline{toc}{chapter}{Foreword}""")
 cat("thesis/foreword.md")
 

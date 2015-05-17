@@ -539,9 +539,10 @@ Using only those three basic processes, one can combine simple primitives and it
 - List shapes with a few pics
 
 ### Materials
-#### Procedural texturing
-#### Bump mapping
-#### UV Mapping
+
+- Procedural texturing
+- Bump mapping
+- UV Mapping
 
 ### Misc
 
