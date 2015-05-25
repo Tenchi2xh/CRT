@@ -201,7 +201,6 @@
                 <rdf:value>http://www.rorydriscoll.com/2009/01/07/better-sampling/</rdf:value>
             </dcterms:URI>
         </dc:identifier>
-        <dcterms:dateSubmitted>2015-05-05 13:18:59</dcterms:dateSubmitted>
     </bib:Document>
     <bib:Document rdf:about="http://dock.javaforge.com/dockingFrames_v1.1.1/doc/index.html">
         <z:itemType>webpage</z:itemType>
@@ -262,7 +261,6 @@
                 <rdf:value>http://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection</rdf:value>
             </dcterms:URI>
         </dc:identifier>
-        <dcterms:dateSubmitted>2015-05-05 13:01:29</dcterms:dateSubmitted>
         <z:language>en</z:language>
         <z:libraryCatalog>Wikipedia</z:libraryCatalog>
         <dc:rights>Creative Commons Attribution-ShareAlike License</dc:rights>
@@ -280,7 +278,6 @@
                 <rdf:value>http://supercomputingblog.com/graphics/coding-bilinear-interpolation/</rdf:value>
             </dcterms:URI>
         </dc:identifier>
-        <dcterms:dateSubmitted>2015-05-05 13:16:45</dcterms:dateSubmitted>
     </bib:Document>
     <bib:Document rdf:about="http://stackoverflow.com/a/7847310">
         <z:itemType>forumPost</z:itemType>

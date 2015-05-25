@@ -1,1 +1,2 @@
-Bibliography...
+\nocite{*}
+\printbibliography[heading=none]

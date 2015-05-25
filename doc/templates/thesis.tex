@@ -142,16 +142,6 @@ $endif$
 $if(geometry)$
 \usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
 $endif$
-$if(natbib)$
-\usepackage{natbib}
-\bibliographystyle{$if(biblio-style)$$biblio-style$$else$plainnat$endif$}
-$endif$
-$if(biblatex)$
-\usepackage{biblatex}
-$if(biblio-files)$
-\bibliography{$biblio-files$}
-$endif$
-$endif$
 $if(listings)$
 \usepackage{listings}
 $endif$
@@ -189,10 +179,6 @@ $endif$
             bookmarks=true,
             pdfauthor={$author-meta$},
             pdftitle={$title-meta$},
-            colorlinks=true,
-            citecolor=$if(citecolor)$$citecolor$$else$blue$endif$,
-            urlcolor=$if(urlcolor)$$urlcolor$$else$blue$endif$,
-            linkcolor=$if(linkcolor)$$linkcolor$$else$magenta$endif$,
             pdfborder={0 0 0}}
 \urlstyle{same}  % don't use monospace font for urls
 $if(links-as-notes)$
@@ -223,6 +209,17 @@ $if(lang)$
   \usepackage[$lang$]{babel}
 \fi
 $endif$
+$if(natbib)$
+\usepackage{natbib}
+\bibliographystyle{$if(biblio-style)$$biblio-style$$else$plainnat$endif$}
+$endif$
+$if(biblatex)$
+\usepackage{biblatex}
+$if(biblio-files)$
+\bibliography{$biblio-files$}
+$endif$
+$endif$
+
 
 % $if(title)$
 % \title{$title$}
@@ -268,6 +265,10 @@ $endif$
 % for tables
 \usepackage{multirow}
 \usepackage{booktabs}
+
+% bibliography
+% \usepackage[backend=bibtex]{biblatex}
+% \addbibresource{bibliography.bib}
 
 % for grammar
 \usepackage[nounderscore]{syntax}
@@ -325,6 +326,42 @@ $endif$
 % \usepackage[black]{Alegreya}
 % \usepackage[light, black]{merriweather}
 % \usepackage{librecaslon} % no SC
+
+% URL on new line in bib
+\newbibmacro*{bbx:parunit}{%
+  \ifbibliography
+    {\setunit{\bibpagerefpunct}\newblock
+     \usebibmacro{pageref}%
+     \clearlist{pageref}%
+     \setunit{\adddot\par\nobreak}}
+    {}}
+
+\renewbibmacro*{doi+eprint+url}{%
+  \usebibmacro{bbx:parunit}% Added
+  \iftoggle{bbx:doi}
+    {\printfield{doi}}
+    {}%
+  \iftoggle{bbx:eprint}
+    {\usebibmacro{eprint}}
+    {}%
+  \iftoggle{bbx:url}
+    {\usebibmacro{url+urldate}}
+    {}}
+
+\renewbibmacro*{eprint}{%
+  \usebibmacro{bbx:parunit}% Added
+  \iffieldundef{eprinttype}
+    {\printfield{eprint}}
+    {\printfield[eprint:\strfield{eprinttype}]{eprint}}}
+
+\renewbibmacro*{url+urldate}{%
+  \usebibmacro{bbx:parunit}% Added
+  \printfield{url}%
+  \iffieldundef{urlyear}
+    {}
+    {\setunit*{\addspace}%
+     \printtext[urldate]{\printurldate}}}
+
 
 \begin{document}
 
@@ -421,7 +458,6 @@ $endfor$
 
 $if(toc)$
 {
-\hypersetup{linkcolor=black}
 \setcounter{tocdepth}{5}
 \onecolumn
 \renewcommand{\contentsname}{Table of contents}
@@ -470,7 +506,7 @@ $endif$
 $endif$
 $endif$
 $if(biblatex)$
-\printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
+% \printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
 
 $endif$
 $for(include-after)$

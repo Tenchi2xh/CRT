@@ -44,9 +44,16 @@ cat("thesis/bibliography.md")
 
 print "Building PDF..."
 
-os.system('pandoc thesis.md -o pdf/thesis.pdf --toc \
+os.system('pandoc thesis.md -o thesis.tex --toc \
           --template="templates/thesis.tex" -N --listings \
           -V lang=english -V geometry:hmargin=1.5cm -V geometry:vmargin=2.3cm \
-          -V urlcolor=blue -V linkcolor=black --latex-engine=xelatex --chapters')
+          -V urlcolor=blue -V linkcolor=black --latex-engine=xelatex --chapters \
+          --bibliography=bibliography.bib --biblatex')
+os.system('xelatex thesis')
+os.system('biber thesis')
+os.system('xelatex thesis')
 
-os.system('rm -rf tex2pdf.*')
+toRm = ["tex", "md", "aux", "bcf", "lof", "log", "lol", "lot", "out", "run.xml", "toc", "synctex.gz", "bbl", "blg"]
+toRm = ["thesis." + s for s in toRm]
+os.system('rm -rf ' + " ".join(toRm))
+os.system('mv thesis.pdf pdf')
