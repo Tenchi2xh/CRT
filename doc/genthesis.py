@@ -48,7 +48,7 @@ os.system('pandoc thesis.md -o thesis.tex --toc \
           --template="templates/thesis.tex" -N --listings \
           -V lang=english -V geometry:hmargin=1.5cm -V geometry:vmargin=2.3cm \
           -V urlcolor=blue -V linkcolor=black --latex-engine=xelatex --chapters \
-          --bibliography=bibliography.bib --biblatex')
+          --bibliography=bib/bibliography.bib --biblatex')
 os.system('xelatex thesis')
 os.system('biber thesis')
 os.system('xelatex thesis')

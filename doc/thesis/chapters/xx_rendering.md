@@ -273,7 +273,7 @@ The FOV factor is easily calculated: if $\alpha$ is the FOV angle and because $\
 
 \end{tikzpicture}
 \caption{Finding the FOV factor}
-\label{fig:coords}
+\label{fig:fov}
 \end{figure}
 
 These two operations leave us with primary rays originating from $\vec{0}$, looking at a screen centred at $(0, 0, 1)$. To transform these rays and put them where the camera actually is, we could translate and rotate them using a *transformation matrix*, but it is simpler to just add the camera's *up* and *right* component multiplied by the normalized and FOV-adjusted coordinates we computed earlier.
@@ -436,7 +436,7 @@ The specular factor of any given point on a surface depends on how much the ligh
 \end{tikzpicture}
 
 \caption{Angle between reflected light ray and primary ray}
-\label{fig:lightangle}
+\label{fig:angles}
 \end{figure}
 
 The reflected ray is computed as follows:
@@ -547,4 +547,21 @@ Using only those three basic processes, one can combine simple primitives and it
 ### Misc
 
 - Gamma value
-- Super-sampling factor
+
+In order to produce quality pictures, **supersampling** was implemented. It is a spatial anti-aliasing^[Aliasing is seen in most edges, which appear jagged and pixelated.] method which works by tracing multiple rays per pixel instead of just one, then *averaging* the resulting colours, providing a much more accurate final colour for a given pixel.
+
+There are multiple ways to select coordinates inside a pixel: one could choose $n$ random points inside each pixels, or choose a more advanced sampling pattern^[See http://en.wikipedia.org/wiki/Supersampling#Supersampling_patterns], but for the purpose of this project, a simple *grid* pattern was used.
+
+\begin{figure}[!htbp]
+\centering
+\subfloat[No supersampling]{\centering\makebox[.33\linewidth]{
+\includegraphics[width=0.28\linewidth,keepaspectratio]{img/ss1.png}}}
+\subfloat[$2\times 2$ SSAA]{\centering\makebox[.33\linewidth]{
+\includegraphics[width=0.28\linewidth,keepaspectratio]{img/ss2.png}}}
+\subfloat[$4\times 4$ SSAA]{\centering\makebox[.33\linewidth]{
+\includegraphics[width=0.28\linewidth,keepaspectratio]{img/ss3.png}}}
+\caption[Different supersampling values]{Different supersampling values}
+\label{fig:ssaa}
+\end{figure}
+
+In figure \ref{fig:ssaa}, we can see that the bigger grid we use, the more refined the final picture is. This, however, comes at a big cost: with a $4\times 4$ grid, a render will likely take at least 16 times as much time to render.
