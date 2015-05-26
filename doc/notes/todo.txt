@@ -6,10 +6,10 @@
 [~] Ray tracing
     [x] Axis system choice
     [x] Ray generation
-    [-] Shading pipeline
-    [-] Reflections
+    [x] Shading pipeline
+    [x] Reflections
     [-] Depth of field
-    [-] Supersampling
+    [x] Supersampling
     [-] etc. (look at source)
 [-] Language
     - Examples with code and result scope
