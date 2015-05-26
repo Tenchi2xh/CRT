@@ -42,6 +42,7 @@ import javax.swing.UIManager;
 import net.team2xh.crt.gui.editor.Editor;
 import net.team2xh.crt.gui.entities.EntityTree;
 import net.team2xh.crt.gui.graphs.SystemPanel;
+import net.team2xh.crt.gui.menus.ToolBar;
 import net.team2xh.crt.gui.util.GUIToolkit;
 import net.team2xh.crt.raytracer.Scene;
 
@@ -81,6 +82,9 @@ public class MainWindow extends JFrame {
         controller.getThemeManager().setBorderModifier("dock.border.title.eclipse.button.flat", (Border) -> BorderFactory.createLineBorder(UIManager.getColor("Button.border"), 1));
         
         CContentArea contentArea = control.getContentArea();
+        ToolBar toolbar = new ToolBar();
+        
+        add(toolbar, BorderLayout.PAGE_START);
         add(contentArea, BorderLayout.CENTER);
 
         editor = new Editor();
