@@ -94,15 +94,15 @@
 [~] Icons
 [~] RendererPanel methods to draw picture in the center
     - Test if always center
+[~] Menubar + Toolbar
+    - Perspective selection
+    - File handling
+    - Render actions
 [-] Find way to unite all components
     - How to rewrite script when live editing ? Macros ?
 [-] Workspaces (script / live)
 [-] Live mode inclusion
 [-] Import settings viewer and system info graphs
-[-] Menubar + Toolbar
-    - Perspective selection
-    - File handling
-    - Render actions
 [-] Investigate JIDE common
     - Searchable textpane
     - MultiplePageDialog for config
