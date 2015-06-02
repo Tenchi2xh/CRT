@@ -295,6 +295,33 @@ final public class Compiler extends CRTBaseVisitor {
                 o = new Plane((Vector3) normal, (Vector3) position, (Material) material);
                 break;
             }
+            case "Background": {
+                Object color = attributes.get("color");
+                Object image = attributes.get("image");
+                Object horizon = attributes.get("horizon");
+                Object sky = attributes.get("sky");
+                Object angle = attributes.get("angle");
+                
+                
+                if (image != null) {
+                    assertAttributeType(image, "image", ctx, String.class);
+                    if (angle != null) {
+                        assertAttributeType(angle, "angle", ctx, Double.class);
+                        o = new Background((String) image, (double) angle);
+                    }
+                    else {
+                        o = new Background((String) image);
+                    }
+                } else if (horizon != null && sky != null) {
+                    assertAttributeType(horizon, "horizon", ctx, Pigment.class);
+                    assertAttributeType(sky, "sky", ctx, Pigment.class);
+                    o = new Background((Pigment) horizon, (Pigment) sky);
+                } else {
+                    assertAttributeType(color, "color", ctx, Pigment.class);
+                    o = new Background((Pigment) color);
+                }
+                break;
+            }
         }
         return o;
     }
