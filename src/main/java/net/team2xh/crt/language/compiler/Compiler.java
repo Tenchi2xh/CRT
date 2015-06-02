@@ -16,22 +16,30 @@
  */
 package net.team2xh.crt.language.compiler;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import net.team2xh.crt.language.parser.CRTBaseVisitor;
 import net.team2xh.crt.language.parser.CRTLexer;
 import net.team2xh.crt.language.parser.CRTParser;
 import net.team2xh.crt.language.parser.CRTParser.*;
 import net.team2xh.crt.raytracer.Background;
 import net.team2xh.crt.raytracer.Camera;
+import net.team2xh.crt.raytracer.Material;
 import net.team2xh.crt.raytracer.lights.Light;
 import net.team2xh.crt.raytracer.Pigment;
 import net.team2xh.crt.raytracer.Scene;
 import net.team2xh.crt.raytracer.Settings;
+import net.team2xh.crt.raytracer.entities.Box;
 import net.team2xh.crt.raytracer.entities.Entity;
+import net.team2xh.crt.raytracer.entities.Plane;
+import net.team2xh.crt.raytracer.entities.Sphere;
 import net.team2xh.crt.raytracer.entities.csg.Difference;
 import net.team2xh.crt.raytracer.entities.csg.Intersection;
 import net.team2xh.crt.raytracer.entities.csg.Union;
+import net.team2xh.crt.raytracer.lights.ParallelLight;
+import net.team2xh.crt.raytracer.lights.PointLight;
 import net.team2xh.crt.raytracer.math.Vector3;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -101,12 +109,13 @@ final public class Compiler extends CRTBaseVisitor {
 
         if (!hasSettings)
             throw new CompilerException("Script must define settings block");
-//        if (!hasScene)
-//            throw new CompilerException("Script must define a scene");
+        if (!hasScene)
+            throw new CompilerException("Script must define a scene");
 
         script.getSettings().setParent(script.getScene());
 
         System.out.println(scope.getVariables());
+        System.out.println(script.getScene());
 
         return script;
     }
@@ -154,7 +163,8 @@ final public class Compiler extends CRTBaseVisitor {
                     assertAttributeType(value, "lights", expr, LinkedList.class);
                     LinkedList<Object> lights = (LinkedList) value;
                     for (Object o : lights) {
-                        assertAttributeType(o, "light", expr, Light.class);
+                        if (!(o instanceof Light))
+                            throw new CompilerException(ctx, code, "Attribute 'light' must be of type Light");
                         scene.addLight((Light) o);
                     }
                 break;
@@ -165,8 +175,128 @@ final public class Compiler extends CRTBaseVisitor {
     }
 
     private void assertAttributeType(Object object, String name, ParserRuleContext ctx, Class expected) {
+        if (object == null) {
+            throw new CompilerException(ctx, code, "Attribute '" + name + "' is required.");
+        }
         if (object.getClass() != expected)
             throw new CompilerException(ctx, code, "Attribute '" + name + "' must be of type " + expected.getSimpleName());
+    }
+    
+    @Override
+    public Scene visitScene(SceneContext ctx) {
+        Scene scene = script.getScene();
+        for (ExpressionContext expr : ctx.expression()) {
+            Object o = resolve(expr);
+            Class c = o.getClass();
+            if (c == Variable.class) {
+                scope.add((Variable) o);
+            } else if (o instanceof Entity) {
+                scene.add((Entity) o);
+            }
+        }
+        return scene;
+    }
+    
+    @Override
+    public Object visitObject(ObjectContext ctx) {
+        String name = ctx.NAME().getText();
+        
+        Map<String, Object> attributes = new HashMap<>();
+        
+        for (AttributeContext a: ctx.attribute()) {
+            ExpressionContext expr = a.expression();
+            Object value = resolve(expr);
+            String key = a.IDENTIFIER().getText();
+            attributes.put(key, value);
+        }
+        
+        Object o = null;
+        switch (name) {
+            case "Material": {
+                Object color = attributes.get("color");
+                assertAttributeType(color, "color", ctx, Pigment.class);
+                o = new Material((Pigment) color);
+                
+                Object reflectivity = attributes.get("reflectivity");
+                if (reflectivity != null) {
+                    assertAttributeType(reflectivity, "reflectivity", ctx, Double.class);
+                    // TODO: reflectivity setter
+                    o = new Material((Pigment) color, (double) reflectivity);
+                }
+                
+                break;
+            }
+            case "Camera": {
+                Object position = attributes.get("position");
+                Object pointing = attributes.get("pointing");
+                Object fov = attributes.get("fov");
+                assertAttributeType(position, "position", ctx, Vector3.class);
+                assertAttributeType(pointing, "pointing", ctx, Vector3.class);
+                assertAttributeType(fov, "fov", ctx, Double.class);
+                o = new Camera((Vector3) position, (Vector3) pointing, (double) fov);
+                break;
+            }
+            case "ParallelLight": {
+                Object from = attributes.get("from");
+                Object pointing = attributes.get("pointing");
+                Object color = attributes.get("color");
+                assertAttributeType(from, "from", ctx, Vector3.class);
+                assertAttributeType(pointing, "pointing", ctx, Vector3.class);
+                assertAttributeType(color, "color", ctx, Pigment.class);
+                o = new ParallelLight((Vector3) from, (Vector3) pointing, (Pigment) color);
+                break;
+            }
+            case "PointLight": {
+                Object origin = attributes.get("origin");
+                Object color = attributes.get("color");
+                assertAttributeType(origin, "origin", ctx, Vector3.class);
+                assertAttributeType(color, "color", ctx, Pigment.class);
+                o = new PointLight((Vector3) origin, (Pigment) color);
+                
+                Object ambient = attributes.get("ambient");
+                if (ambient != null) {
+                    assertAttributeType(ambient, "ambient", ctx, Double.class);
+                    ((PointLight) o).setAmbient((double) ambient);
+                }
+                Object falloff = attributes.get("falloff");
+                if (ambient != null) {
+                    assertAttributeType(falloff, "falloff", ctx, Double.class);
+                    ((PointLight) o).setFalloff((double) falloff);
+                }
+                break;
+            }
+            case "Sphere": {
+                Object center = attributes.get("center");
+                Object radius = attributes.get("radius");
+                Object material = attributes.get("material");
+                assertAttributeType(center, "center", ctx, Vector3.class);
+                assertAttributeType(radius, "radius", ctx, Double.class);
+                assertAttributeType(material, "material", ctx, Material.class);
+                o = new Sphere((Vector3) center, (double) radius, (Material) material);
+                break;
+            }
+            case "Box": {
+                Object cornerA = attributes.get("cornerA");
+                Object cornerB = attributes.get("cornerB");
+                Object material = attributes.get("material");
+                assertAttributeType(cornerA, "cornerA", ctx, Vector3.class);
+                assertAttributeType(cornerB, "cornerB", ctx, Vector3.class);
+                assertAttributeType(material, "material", ctx, Material.class);
+                o = new Box((Vector3) cornerA, (Vector3) cornerB, (Material) material);
+                break;
+            }
+            case "Plane": {
+                Object normal = attributes.get("normal");
+                Object position = attributes.get("position");
+                Object material = attributes.get("material");
+                assertAttributeType(normal, "normal", ctx, Vector3.class);
+                assertAttributeType(position, "position", ctx, Vector3.class);
+                assertAttributeType(material, "material", ctx, Material.class);
+                o = new Plane((Vector3) normal, (Vector3) position, (Material) material);
+                break;
+            }
+        }
+        return o;
     }
 
     @Override

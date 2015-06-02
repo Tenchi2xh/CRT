@@ -56,7 +56,7 @@ public class TextPanePrintStream extends PrintStream {
 
     @Override
     public void print(String string) {
-        output(string);
+        output(string + "\n");
     }
 
     private void output(String string) {

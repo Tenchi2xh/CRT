@@ -17,6 +17,10 @@
 package net.team2xh.crt.gui.menus;
 
 import java.awt.event.KeyEvent;
+import net.team2xh.crt.gui.MainWindow;
+import net.team2xh.crt.gui.RenderPanel;
+import net.team2xh.crt.language.compiler.Script;
+import net.team2xh.crt.language.compiler.Compiler;
 
 /**
  *
@@ -42,6 +46,10 @@ final public class Actions {
                 if ((boolean) a.getUserObject()) {
                     a.init("stop", "Stop", "Cancel the render", KeyEvent.VK_R);
                     a.setUserObject(false);
+                    // TODO: do in forkpool for interrupt
+                    String code = MainWindow.getInstance().getEditor().getText();
+                    Script script = Compiler.compile(code);
+                    RenderPanel.renderScene(script.getScene(), MainWindow.getInstance().getRenderer());
                 } else {
                     a.init("play", "Render", "Render the current scene", KeyEvent.VK_R);
                     a.setUserObject(true);

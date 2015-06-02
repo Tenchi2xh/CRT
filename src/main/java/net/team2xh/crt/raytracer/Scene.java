@@ -86,5 +86,10 @@ public class Scene {
     public void setSettings(Settings settings) {
         this.settings = settings;
     }
+    
+    @Override
+    public String toString() {
+        return String.format("Scene (%d entities, %d lights)", entities.size(), lights.size());
+    }
 
 }

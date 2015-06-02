@@ -40,7 +40,7 @@ public class TestMainWindow {
     public static void main(String[] args) {
 
         SwingUtilities.invokeLater(() -> {
-            MainWindow frame = new MainWindow();
+            MainWindow frame = MainWindow.getInstance();
             GUIToolkit.enableHeapStatus(frame);
 
             Sphere s = new Sphere(Vector3.X, 0.15, new Material(new Pigment(0.9, 0.5, 0.0)));

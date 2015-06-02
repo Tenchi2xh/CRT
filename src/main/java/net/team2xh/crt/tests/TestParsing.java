@@ -70,15 +70,38 @@ public class TestParsing {
                 + "i = true && false\n"
                 + "j = (3 < 5) ? \"smaller\" : \"bigger\"";
 
-        String code =
-                  "Settings {\n" +
-                  "    title      -> \"Example 01\"\n" +
-                  "    author     -> \"Tenchi (tenchi@team2xh.net)\"\n" +
-                  "    date       -> \"08.06.2014\"\n" +
-                  "    notes      -> \"Sample CRT scene in TRC language\"\n" +
-                  "    gamma      -> 1.0\n" +
-                  "}";
+        String code6 =
+                "l1 = PointLight {\n" +
+                "    origin -> vec3(1.0, 1.0, 0.0)\n" +
+                "    color -> rgb(0.9, 0.9, 0.9)\n" +
+                "}\n" +
+                "\n" +
+                "cam = Camera {\n" +
+                "    position -> vec3(0.5, 0.5, 0.5)\n" +
+                "    pointing -> vec3(0.0, 0.5, 0.0)\n" +
+                "    fov -> 45.0\n" +
+                "}\n" +
+                "\n" +
+                "Settings {\n" +
+                "    title      -> \"Example 01\"\n" +
+                "    author     -> \"Tenchi (tenchi@team2xh.net)\"\n" +
+                "    date       -> \"08.06.2014\"\n" +
+                "    notes      -> \"Sample CRT scene in TRC language\"\n" +
+                "    gamma      -> 1.0\n" +
+                "    lights     -> [l1]\n" +
+                "    camera     -> cam\n" +
+                "}";
 
+        String code =
+                code6 + "\n" +
+                "Scene {\n" +
+                "    Sphere {\n" +
+                "        center -> vec3(0.0, 0.5, 0.0)\n" +
+                "        radius -> 0.5\n" +
+                "        material -> Material { color -> rgb(1.0, 0.5, 0.0) }\n" +
+                "   }\n" +
+                "}";
+        
         try {
             Compiler.compile(code);
         } catch (CompilerException ex) {

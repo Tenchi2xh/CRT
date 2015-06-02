@@ -40,6 +40,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.UIManager;
 import net.team2xh.crt.gui.editor.Editor;
+import net.team2xh.crt.gui.editor.EditorTextPane;
 import net.team2xh.crt.gui.entities.EntityTree;
 import net.team2xh.crt.gui.graphs.SystemPanel;
 import net.team2xh.crt.gui.menus.ToolBar;
@@ -53,6 +54,8 @@ import net.team2xh.crt.raytracer.Scene;
  */
 public class MainWindow extends JFrame {
 
+    public static MainWindow instance = null;
+    
     private final CControl control;
 
     private final Editor editor;
@@ -61,8 +64,14 @@ public class MainWindow extends JFrame {
     private final SystemPanel system;
     private final JLabel settings;
     private final ConsolePanel console;
-
-    public MainWindow() {
+    
+    public static MainWindow getInstance() {
+        if (instance == null)
+            instance = new MainWindow();
+        return instance;
+    }
+    
+    private MainWindow() {
 
         this.control = new CControl(this);
 
@@ -184,6 +193,14 @@ public class MainWindow extends JFrame {
 //        map.setColor(ColorMap.COLOR_KEY_TITLE_FOREGROUND_FOCUSED, Color.PINK);
 //        map.setColor(ColorMap.COLOR_KEY_MINIMIZED_BUTTON_BACKGROUND_SELECTED, Color.PINK);
         return dockable;
+    }
+
+    public EditorTextPane getEditor() {
+        return editor.getEditor();
+    }
+
+    public RenderPanel getRenderer() {
+        return render;
     }
 
 }
