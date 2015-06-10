@@ -17,9 +17,9 @@ We call "scene" the composition of *elements* and *parameters* that, after the r
 
 ### Entities \label{subsec:entities}
 
-Entities are **primitive volumes** that can easily be described with *mathematical equations*, such as boxes (*parallelepipeds*), spheres, cones, planes and half-planes, tori, etc. 
+Entities are **primitive volumes** that can easily be described with *mathematical equations*, such as boxes (*parallelepipeds*), spheres, cones, planes and half-planes, tori, etc.
 
-Every entity has a position in space and must provide an `intersect()` method to compute its eventual intersection point or points with any given ray, which we will need later on to do the rendering. 
+Every entity has a position in space and must provide an `intersect()` method to compute its eventual intersection point or points with any given ray, which we will need later on to do the rendering.
 
 Entities also contain a `Material` property, which defines what material the entity is made out of. Materials possess several attributes that describe how light interacts with it:
 
@@ -50,7 +50,7 @@ A light source is defined by the `Light` class and has the following properties:
 - An origin, defining from where the light is shining.
 - A *falloff* factor: describes the natural effect observable in nature, where light follows an inverse square law: the intensity of light from a point source is inversely proportional to the square of the distance from the source. We receive only a fourth of the photons from a light source twice as far away.
 - A colour, given by the `Pigment` class
-- An ambient light factor: because simulating global illumination is mathematically difficult and takes a lot of processing, we can simulate ambient light (accumulation of light that bounces of many surfaces) by setting an ambient factor, which will basically add a fraction of the value of its colour and intensity. 
+- An ambient light factor: because simulating global illumination is mathematically difficult and takes a lot of processing, we can simulate ambient light (accumulation of light that bounces of many surfaces) by setting an ambient factor, which will basically add a fraction of the value of its colour and intensity.
 
 One has to keep in mind that each additional light source adds up to the amount of rays to bounce and thus linearly increase computation time.
 
@@ -94,7 +94,7 @@ A lot of elements were defined thus far --- but just what *is* ray tracing? Firs
 
 Traditionally, 3D computer graphics are rendered using a technique called **rasterisation**. Compared to ray tracing, rasterisation is extremely fast and is more suited for real-time applications, and takes advantage of years of hardware development dedicated to accelerating it.
 
-In the rasterisation world, a 3D scene is described by a collection of **polygons**, usually triangles, defined by 3 three-dimensional vertices. A rasteriser will take a stream of such vertices, transform them into corresponding two-dimensional points on the viewer's monitor, and fill in the transformed two-dimensional triangles (with either lines, or colours). 
+In the rasterisation world, a 3D scene is described by a collection of **polygons**, usually triangles, defined by 3 three-dimensional vertices. A rasteriser will take a stream of such vertices, transform them into corresponding two-dimensional points on the viewer's monitor, and fill in the transformed two-dimensional triangles (with either lines, or colours).
 
 \customfigB{img/rasterisation.png}{Rasterisation of a triangle}{ --- once the vertices have been projected on the screen, a discrete pixel is ``lit'' if its continuous centre is contained within the projected triangle's boundaries.}{}{Wikipedia}
 
@@ -105,13 +105,13 @@ However, the very nature of rasterisation makes it hard to implement other very 
 - To reproduce shadows, complicated stencil buffers must be used, along with a depth buffer computed by rendering a sub-scene from the point of view of the light source. This not only is complex but the results look very pixelated
 - Refraction is very hard to reproduce. For a long time, raster application went without refraction effects and just have less opaque models. Nowadays, advanced pixel shaders use techniques similar to ray tracing
 
-Ray tracing solves these issues, at the cost of being slower. 
+Ray tracing solves these issues, at the cost of being slower.
 
-Instead of projecting things *from* the scene on the screen like with rasterisation, ray tracing is about sending rays *from* the screen *towards* the various elements of the scene. 
+Instead of projecting things *from* the scene on the screen like with rasterisation, ray tracing is about sending rays *from* the screen *towards* the various elements of the scene.
 
 But why this way? In real life, light sources send protons in all directions at random. Some of them hit objects, which *absorb* some of the energy from the photons (thus changing the perceived colour). The photons are then reflected, bouncing *off* the object with a mirrored angle of incidence^[Note that is angle is generally not exactly the mirrored incident angle and is in fact mostly random. Perfect surfaces like mirrors will indeed bounce off photons with a perfect angle (**specular** reflection), but most surfaces will scatter the protons in all directions (**diffuse** reflection --- that is why stones are not reflective like a mirror, their surface is *rough* so all incoming photons are dispersed)].
 
-An ideal ray tracer simulating real life would instead send rays *from* the light sources *onto* the subjected surfaces, but this is in reality not practical and one would have to wait a very long time for an image to render; the probability of a light ray coming out of a source in a *random* direction, hitting an object, bouncing off that object in another *random* direction, and finally hitting the camera is *very* small. 
+An ideal ray tracer simulating real life would instead send rays *from* the light sources *onto* the subjected surfaces, but this is in reality not practical and one would have to wait a very long time for an image to render; the probability of a light ray coming out of a source in a *random* direction, hitting an object, bouncing off that object in another *random* direction, and finally hitting the camera is *very* small.
 
 In real life, our human eyes still manage to see photons because there is just *too many* of them. Let's count how many photons per second are emitted by a typical \SI{100}{\watt} (\SI{100}{\joule\per\second}) lightbulb with an average wavelength of \SI{600}{\nano\meter}:
 
@@ -148,14 +148,14 @@ The process of tracing a ray takes the following steps:
     - Add the *ambient* factor of the light
     - If it hits nothing before reaching the light, add a mix of the light's colour and the object's to the current colour. The light's colour contribution is attenuated by two factors:
         * The less parallel the surface normal is with the incoming ray, the darker
-        * The further the light had to travel, the darker (inverse square law) 
+        * The further the light had to travel, the darker (inverse square law)
     + If the shadow ray hits an object, it is in its shadow: no colour is added
-4. If the surface's material has a reflective component, recursively trace a **reflection ray** in an angle symmetrical to the angle of incidence, and add the resulting colour 
+4. If the surface's material has a reflective component, recursively trace a **reflection ray** in an angle symmetrical to the angle of incidence, and add the resulting colour
 5. If the surface's material has a refractive component, recursively trace a **refraction ray** in an angle obtained with the Snell-Descartes law, and add the resulting colour
 
 ### Coordinate system
 
-Like *POV-Ray*, *OpenGL*, *DirectX*, *Unity* and many others, this project opted for a **left-handed coordinate system** where the $z$ axis points inside the screen and not outwards. 
+Like *POV-Ray*, *OpenGL*, *DirectX*, *Unity* and many others, this project opted for a **left-handed coordinate system** where the $z$ axis points inside the screen and not outwards.
 
 \begin{figure}[!htbp]
 \centering
@@ -168,19 +168,19 @@ Like *POV-Ray*, *OpenGL*, *DirectX*, *Unity* and many others, this project opted
   \draw[thin, dashed] (-2, 0,  1) -- (2, 0,  1);
   \draw[thin, dashed] (-2, 0,  1) -- (2, 0,  1);
 
-  \draw[->, thick] (0,0,0) -- (2,0,0) node[right]{$x$}; 
-  \draw[->, thick] (0,0,0) -- (0,2,0) node[above]{$y$}; 
+  \draw[->, thick] (0,0,0) -- (2,0,0) node[right]{$x$};
+  \draw[->, thick] (0,0,0) -- (0,2,0) node[above]{$y$};
   \draw[->, thick] (0,0,0) -- (0,0,-3) node[above right]{$z$};
-  
-  \draw[dashed, thin] (0,0,0) -- (-2,0,0); 
+
+  \draw[dashed, thin] (0,0,0) -- (-2,0,0);
   \draw[dashed, thin] (0,0,0) -- (0,0,2);
-  
+
 \end{tikzpicture}
 \caption{Left-handed coordinate system}
 \label{fig:coords}
 \end{figure}
 
-For graphical composition, having an inverted $z$ axis is (for some people) more intuitive: if the origin is located at the bottom-left of the screen, $x$ goes *right*, $y$ goes *up*, and $z$ goes *inside* the screen. 
+For graphical composition, having an inverted $z$ axis is (for some people) more intuitive: if the origin is located at the bottom-left of the screen, $x$ goes *right*, $y$ goes *up*, and $z$ goes *inside* the screen.
 
 This system choice incurs a small consideration when doing linear algebra, but can be converted any time between both systems. The only real thing to change is the way the *cross product* behaves and invert some results.
 
@@ -244,7 +244,7 @@ The initial rays we begin with when ray-tracing are called **primary rays**. For
 \caption{Primary ray}
 \end{figure}
 
-The first step is to normalize the coordinates of the targeted pixel to be between $-1$ and $1$. We add $0.5$ in both directions so that the ray "aims" towards its centre, if it was $1$ unit long and $1$ unit high. 
+The first step is to normalize the coordinates of the targeted pixel to be between $-1$ and $1$. We add $0.5$ in both directions so that the ray "aims" towards its centre, if it was $1$ unit long and $1$ unit high.
 
 ```{.java caption="Pixel coordinates normalization"}
 double nX = (2 * ((x + 0.5) / settings.width) - 1);
@@ -314,9 +314,9 @@ which, when expanded and rearranged, gives
 
 We can now solve this quadratic equation of the form $at^2 + bt + c = 0$ for $t$, where
 
-\begin{equation} a = \vec{d} \cdot \vec{d} \end{equation} 
-\begin{equation} b = 2(\vec{d} \cdot (\vec{o} - \vec{c})) \end{equation} 
-\begin{equation} c = (\vec{o} - \vec{c}) \cdot (\vec{o} - \vec{c}) - R^2 \end{equation} 
+\begin{equation} a = \vec{d} \cdot \vec{d} \end{equation}
+\begin{equation} b = 2(\vec{d} \cdot (\vec{o} - \vec{c})) \end{equation}
+\begin{equation} c = (\vec{o} - \vec{c}) \cdot (\vec{o} - \vec{c}) - R^2 \end{equation}
 
 Using the method of the discriminant, we get:
 
@@ -326,7 +326,7 @@ Next, depending on whether or not there is zero, one or two solutions, we can fi
 
 ### Light calculations
 
-As quickly described in section \ref{sec:backtracing}, colours are computed in an *additive* fashion, depending on several factors such as light source *angle*, *intensity* and material properties. 
+As quickly described in section \ref{sec:backtracing}, colours are computed in an *additive* fashion, depending on several factors such as light source *angle*, *intensity* and material properties.
 
 There are several colour components derived from the lights present in a scene: ambient, diffuse and specular. This method of computing light components is called the **Blinn--Phong shading model**.
 
@@ -383,7 +383,7 @@ where $l_\textrm{a}$ is the light's ambient factor and $l_\textrm{c}$ its colour
   \draw[<->] (0.5, 1.0) -- node[midway, below right]{$x$} (0.5, 0.0);
 
   \draw[very thick] (3.0, -0.5) -- (3.0, 2.5);
-  \fill[pattern=vertical lines] (3.0, -0.5) rectangle (3.2, 2.5); 
+  \fill[pattern=vertical lines] (3.0, -0.5) rectangle (3.2, 2.5);
 \end{tikzpicture}}}%
 \subfloat[Rays at \SI{45}{\degree} with normal]{%
 \centering
@@ -403,14 +403,14 @@ where $l_\textrm{a}$ is the light's ambient factor and $l_\textrm{c}$ its colour
   \draw[<->] (0.5, 0.0) -- node[midway, above, fill=white, inner sep=1.1pt]{$\sqrt{x}$} ++(1.0, 1.0);
 
   \draw[very thick] (1.5, -0.5) -- (4.3, 2.3);
-  \fill[pattern=north east lines, rotate=-45] (1.4, 0.7) rectangle ++(0.3, 4.0); 
+  \fill[pattern=north east lines, rotate=-45] (1.4, 0.7) rectangle ++(0.3, 4.0);
   \fill[fill=white] (2.5, -1) rectangle ++(0.1, 0);
 \end{tikzpicture}}}%
 \caption{Surface angle with incoming rays}
 \label{fig:lightangle}
 \end{figure}
 
-As we can see, if our rays are separated by a distance $x$ and hit a surface whose normal is parallel with them, their distance on the surface is still $x$, whereas if the surface normal is at a \SI{45}{\degree} angle with the rays, they are separated by a distance of $\sqrt{x}$ --- reducing the density of photons per area, and thus the surface is *darker*. 
+As we can see, if our rays are separated by a distance $x$ and hit a surface whose normal is parallel with them, their distance on the surface is still $x$, whereas if the surface normal is at a \SI{45}{\degree} angle with the rays, they are separated by a distance of $\sqrt{x}$ --- reducing the density of photons per area, and thus the surface is *darker*.
 
 An *attenuation* factor is first computed by taking the *dot product* of the surface normal and the light's direction vector, giving the cosine of the angle. We then proceed to multiply this factor with the ISL and the light's colour, then multiply this result with the surface's material colour:
 
@@ -431,7 +431,7 @@ The specular factor of any given point on a surface depends on how much the ligh
   \draw (120:1) arc (120:150:1) node at (135:1.3) {$\alpha$};
 
   \draw[very thick] (-2, 0) -- (2, 0);
-  \fill[pattern=north east lines] (-2, 0) rectangle (2, -0.2); 
+  \fill[pattern=north east lines] (-2, 0) rectangle (2, -0.2);
 
 \end{tikzpicture}
 
@@ -475,7 +475,7 @@ In this project, two types of light sources were implemented: *parallel* lights 
   \draw[->, >=latex] (1.5, 2.0) -- (3.0, 2.0);
 
   \draw[very thick] (3.0, -0.5) -- (3.0, 2.5);
-  \fill[pattern=vertical lines] (3.0, -0.5) rectangle (3.2, 2.5); 
+  \fill[pattern=vertical lines] (3.0, -0.5) rectangle (3.2, 2.5);
 \end{tikzpicture}}%
 \hspace{0.1\linewidth}%
 \subfloat[Point light]{%
@@ -495,8 +495,8 @@ In this project, two types of light sources were implemented: *parallel* lights 
   \draw[->, >=latex, dashed] (x) -- ++(-210:1cm);
 
   \draw[very thick] (3.0, -0.5) -- (3.0, 2.5);
-  \fill[pattern=vertical lines] (3.0, -0.5) rectangle (3.2, 2.5); 
-  
+  \fill[pattern=vertical lines] (3.0, -0.5) rectangle (3.2, 2.5);
+
 \end{tikzpicture}}
 \caption{Light source types}
 \label{fig:lighttypes}
@@ -504,11 +504,11 @@ In this project, two types of light sources were implemented: *parallel* lights 
 
 In the code, this is implemented by making parallel light sources always return the same direction vector, whereas point light sources compute each direction vector by subtracting the surface point to their origin.
 
-### Constructive solid geometry
+### Constructive solid geometry \ref{sec:csg}
 
 CSG operations are similar to *set operations*, but apply to primitive solids or results of other CSG operations. They are of three kinds: union, intersection and difference. In the code, CSG operations inherit from `Entity` and must provide an `intersect(Ray r)` method.
 
-The first CSG operation is the **union**. It is very trivial: the intersection of a ray and and a union of objects is just the intersection point of all the objects that is *closest* to the ray's origin. 
+The first CSG operation is the **union**. It is very trivial: the intersection of a ray and and a union of objects is just the intersection point of all the objects that is *closest* to the ray's origin.
 
 \customfigB{img/union.png}{CSG union between a cube and a sphere}{}{csgunion}{}
 

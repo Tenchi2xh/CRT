@@ -132,7 +132,7 @@ final public class Compiler extends CRTBaseVisitor {
             switch (a.IDENTIFIER().getText()) {
                 case "title":
                     assertAttributeType(value, "title", expr, String.class);
-                    System.out.println(value);
+                    System.out.println("Compiling " + value + "...");
                     settings.setTitle((String) value);
                     break;
                 case "author":
@@ -181,7 +181,7 @@ final public class Compiler extends CRTBaseVisitor {
         if (object.getClass() != expected)
             throw new CompilerException(ctx, code, "Attribute '" + name + "' must be of type " + expected.getSimpleName());
     }
-    
+
     @Override
     public Scene visitScene(SceneContext ctx) {
         Scene scene = script.getScene();
@@ -196,34 +196,34 @@ final public class Compiler extends CRTBaseVisitor {
         }
         return scene;
     }
-    
+
     @Override
     public Object visitObject(ObjectContext ctx) {
         String name = ctx.NAME().getText();
-        
+
         Map<String, Object> attributes = new HashMap<>();
-        
+
         for (AttributeContext a: ctx.attribute()) {
             ExpressionContext expr = a.expression();
             Object value = resolve(expr);
             String key = a.IDENTIFIER().getText();
             attributes.put(key, value);
         }
-        
+
         Object o = null;
         switch (name) {
             case "Material": {
                 Object color = attributes.get("color");
                 assertAttributeType(color, "color", ctx, Pigment.class);
                 o = new Material((Pigment) color);
-                
+
                 Object reflectivity = attributes.get("reflectivity");
                 if (reflectivity != null) {
                     assertAttributeType(reflectivity, "reflectivity", ctx, Double.class);
                     // TODO: reflectivity setter
                     o = new Material((Pigment) color, (double) reflectivity);
                 }
-                
+
                 break;
             }
             case "Camera": {
@@ -252,7 +252,7 @@ final public class Compiler extends CRTBaseVisitor {
                 assertAttributeType(origin, "origin", ctx, Vector3.class);
                 assertAttributeType(color, "color", ctx, Pigment.class);
                 o = new PointLight((Vector3) origin, (Pigment) color);
-                
+
                 Object ambient = attributes.get("ambient");
                 if (ambient != null) {
                     assertAttributeType(ambient, "ambient", ctx, Double.class);
@@ -301,8 +301,8 @@ final public class Compiler extends CRTBaseVisitor {
                 Object horizon = attributes.get("horizon");
                 Object sky = attributes.get("sky");
                 Object angle = attributes.get("angle");
-                
-                
+
+
                 if (image != null) {
                     assertAttributeType(image, "image", ctx, String.class);
                     if (angle != null) {
