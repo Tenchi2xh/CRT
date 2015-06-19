@@ -34,11 +34,11 @@ add("""\n\n
 \\chapter{Acknowledgements}""")
 cat("thesis/acknowledgements.md")
 
-add("""\n\n
+add("""\\twocolumn\n\n
 \\chapter{Appendix}""")
 cat("thesis/appendix.md")
 
-add("""\n\n
+add("""\\onecolumn\n\n
 \\chapter{Bibliography}""")
 cat("thesis/bibliography.md")
 

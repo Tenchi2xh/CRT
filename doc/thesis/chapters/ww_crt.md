@@ -8,9 +8,17 @@ Ray tracing is a technique for computer optical calculations used for rendering 
 
 The project was designed to involve a lot of different computer science and general science fields: mathematics, physics, algorithmics, grammar, compilation, user interfaces and object-oriented design patterns.
 
-## Workflow
-
 ## Technologies
+
+CRT was realized in Java 8, with the help of the following libraries:
+
+- ANTLR4
+- Apache Commons
+- Docking Frames
+- jPCT
+- LWJGL
+- Netbeans OpenIDE
+- Substance
 
 ## Intermediary report
 
@@ -33,5 +41,3 @@ Here are all the features that have been implemented so far:
 - The grammar lacks rules for loops and conditions, and the CSG blocks are wrong.
 - No animation support for now.
 - The ray tracer lacks: gamma support, more primitives, affine transformations, procedural texturing, post processing.
-
-### Re-evaluation of goals

@@ -117,3 +117,32 @@
 - Theme singleton
 - Multiple resizeable viewports
 - System informations
+
+# 07.05.2015 - 13.05.2015
+
+- Work on the paper
+
+# 14.05.2015 - 20.05.2015
+
+- Work on the paper
+
+# 21.05.2015 - 27.05.2015
+
+- Work on the paper
+- Bibliography collecting
+- Bibliography integration
+
+# 28.05.2015 - 03.06.2015
+
+- Work on the paper
+- Toolbar and menubar
+- Icons
+
+# 04.06.2015 - 10.06.2015
+
+- Work on the paper
+- Almost finished compilation --- can now fully compile and render scenes without macros and loops
+
+# 11.06.2015 - 17.06.2015
+
+- Intermediary report

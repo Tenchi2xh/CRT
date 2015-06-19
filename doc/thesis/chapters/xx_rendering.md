@@ -504,7 +504,7 @@ In this project, two types of light sources were implemented: *parallel* lights 
 
 In the code, this is implemented by making parallel light sources always return the same direction vector, whereas point light sources compute each direction vector by subtracting the surface point to their origin.
 
-### Constructive solid geometry \ref{sec:csg}
+### Constructive solid geometry \label{sec:csg}
 
 CSG operations are similar to *set operations*, but apply to primitive solids or results of other CSG operations. They are of three kinds: union, intersection and difference. In the code, CSG operations inherit from `Entity` and must provide an `intersect(Ray r)` method.
 
