@@ -334,10 +334,47 @@ myMacro = Macro (arg1) {
 
 # Interface
 
-## Implemented features
 ## Text editor
+
+- Syntax highlighting using lexer
+- Occurrences highlighting
+
+---
+
+![Syntax highlighted code editor](img/editor.png)
+
+## Graphs
+
+- AWT
+- Multiplatform
+- No third party dependency
+- Uses obscure Java APIs
+
+---
+
+![Custom graphs](img/graphs.png)
+
+## Console
+
+- Intercepts `stdout` and `stderr`
+- Custom `PrintStream`
+
+## Property sheet
+
+- NetBeans Open Platform API
+- Java Beans
+- Custom editors
+
+---
+
+![Property tree and editor](img/properties.png)
+
 ## Docking frames
-## Netbeans API
+
+- Easy to use
+- Robust
+- Hard to customize
+
 ## Live view
 
 # Demonstration
@@ -349,4 +386,10 @@ myMacro = Macro (arg1) {
 - Animations
 - Drag-and-drop
 - Code generation
+    + Property sheets change code
+    + Settings tab changes code
 - User interface
+    + All menus and buttons
+    + Configuration window
+    + Perspectives
+    + Undo / Redo
