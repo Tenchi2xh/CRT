@@ -159,6 +159,18 @@ final public class Compiler extends CRTBaseVisitor {
                     assertAttributeType(value, "camera", expr, Camera.class);
                     scene.setCamera((Camera) value);
                     break;
+                case "supersampling":
+                    assertAttributeType(value, "supersampling", expr, Integer.class);
+                    settings.setSupersampling((int) value);
+                    break;
+                case "dofsamples":
+                    assertAttributeType(value, "dofsamples", expr, Integer.class);
+                    settings.setDOFSamples((int) value);
+                    break;
+                case "recursiondepth":
+                    assertAttributeType(value, "recursiondepth", expr, Integer.class);
+                    settings.setRecursionDepth((int) value);
+                    break;
                 case "lights":
                     assertAttributeType(value, "lights", expr, LinkedList.class);
                     LinkedList<Object> lights = (LinkedList) value;
@@ -234,6 +246,17 @@ final public class Compiler extends CRTBaseVisitor {
                 assertAttributeType(pointing, "pointing", ctx, Vector3.class);
                 assertAttributeType(fov, "fov", ctx, Double.class);
                 o = new Camera((Vector3) position, (Vector3) pointing, (double) fov);
+                
+                Object aperture = attributes.get("aperture");
+                if (aperture != null) {
+                    assertAttributeType(aperture, "aperture", ctx, Double.class);
+                    ((Camera) o).setAperture((double) aperture);
+                }
+                Object focaldistance = attributes.get("focaldistance");
+                if (focaldistance != null) {
+                    assertAttributeType(focaldistance, "focaldistance", ctx, Double.class);
+                    ((Camera) o).setFocalDistance((double) focaldistance);
+                }
                 break;
             }
             case "ParallelLight": {
@@ -259,7 +282,7 @@ final public class Compiler extends CRTBaseVisitor {
                     ((PointLight) o).setAmbient((double) ambient);
                 }
                 Object falloff = attributes.get("falloff");
-                if (ambient != null) {
+                if (falloff != null) {
                     assertAttributeType(falloff, "falloff", ctx, Double.class);
                     ((PointLight) o).setFalloff((double) falloff);
                 }

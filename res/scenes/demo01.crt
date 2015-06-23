@@ -1,0 +1,104 @@
+l1 = PointLight {
+    origin -> vec3(2.0, 1.0, -2.0)
+    color -> rgb(0.7, 0.2, 0.2)
+    falloff -> 15.0
+}
+l2 = PointLight {
+    origin -> vec3(-2.0, 1.0, -2.0)
+    color -> rgb(0.2, 0.9, 0.2)
+    falloff -> 15.0
+}
+l3 = PointLight {
+    origin -> vec3(0.0, 1.0, 2.0)
+    color -> rgb(0.2, 0.2, 0.9)
+    falloff -> 15.0
+}
+
+sun = ParallelLight {
+    from -> vec3(-0.2, 1.0, -0.2)
+    pointing -> vec3(0.0, 0.0, 0.0)
+    color -> rgb(1.0, 1.0, 1.0)
+}
+
+d = 0.6
+cam = Camera {
+    position -> vec3(d*2.5, d*0.3, d*-2.0)
+    pointing -> vec3(0.0, 0.5, 0.0)
+    fov -> 90.0
+    -- Faire varier ap & dist
+    aperture -> 20.0
+    focaldistance -> d*5
+}
+
+bg = Background {
+    image -> "/images/panorama/stars2.jpg"
+    angle -> 3.4
+}
+
+Settings {
+    title      -> "Example 01"
+    author     -> "Tenchi (tenchi@team2xh.net)"
+    date       -> "24.06.2015"
+    notes      -> "Sample CRT scene in TRC language"
+    lights     -> [l1, l2, l3]
+    camera     -> cam
+    background -> bg
+    --supersampling -> 2
+    --dofsamples -> 10
+}
+
+ground = Plane {
+        normal -> vec3(0.0, 1.0, 0.0)
+        position -> vec3(0.0, -0.5, 0.0)
+        material -> Material {
+            color -> rgb(1.0, 1.0, 1.0)
+            reflectivity -> 0.15
+        }
+}
+
+sph = Sphere {
+    center -> vec3(0.0, 0.0, 0.0)
+    radius -> 0.68
+    material -> Material {
+        color -> rgb(1.0, 1.0, 1.0)
+    }
+}
+box = Box {
+    cornerA -> vec3(-0.5, -0.5, -0.5)
+    cornerB -> vec3(0.5, 0.5, 0.5)
+    material -> Material {
+        color -> rgb(0.5, 0.5, 0.5)
+        reflectivity -> 0.3
+    }
+}
+
+redmat = Material {
+    color -> rgb(0.8, 0.1, 0.1)
+    reflectivity -> 0.5
+}
+
+r = 0.3
+sph2 = Sphere {
+    center -> vec3(-1.0, r - 0.5, -1.0) 
+    radius -> r
+    material -> redmat
+}
+sph3 = Sphere {
+    center -> vec3(-1.0, r - 0.5, 2.0) 
+    radius -> r
+    material -> redmat
+}
+sph4 = Sphere {
+    center -> vec3(-1.0, r - 0.5, 5.0) 
+    radius -> r
+    material -> redmat
+}
+
+Scene {
+    box
+    --box - sph
+    --sph2
+    --sph3
+    --sph4
+    ground
+}

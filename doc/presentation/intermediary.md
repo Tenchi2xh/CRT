@@ -27,6 +27,14 @@
 
 ![Example of a rendered 3D image](img/example.png)
 
+---
+
+## Technologies
+
+- Java 8
+- ANTLR4
+- OpenGL (jPCT, LWJGL)
+
 # Ray Tracing
 
 ## Classical method

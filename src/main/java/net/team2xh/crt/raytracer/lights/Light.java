@@ -78,4 +78,9 @@ public abstract class Light {
         setPigment(new Pigment(color));
     }
     
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + ", faloff=" + falloff;
+    }
+    
 }

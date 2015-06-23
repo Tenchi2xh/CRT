@@ -20,9 +20,9 @@ import java.beans.PropertyEditorManager;
 import java.lang.reflect.Field;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.team2xh.crt.gui.liveview.Test;
 import net.team2xh.crt.gui.themes.Theme;
 import net.team2xh.crt.gui.util.GUIToolkit;
+import net.team2xh.crt.tests.TestMainWindow;
 
 /**
  *
@@ -49,7 +49,7 @@ public class Launcher {
             Theme.setLightTheme();
             GUIToolkit.initGUI();
 
-            Test.main(args);
+            TestMainWindow.main(args);
         } catch (Exception ex) {
             Logger.getLogger(Launcher.class.getName()).log(Level.SEVERE, null, ex);
         }
