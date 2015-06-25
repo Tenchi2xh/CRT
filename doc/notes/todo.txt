@@ -32,6 +32,9 @@
 [x] Start gathering biography
     - Zotero
 
+[-] Credits
+    - Flückiger Alfred
+
 # Raytracer
 
 [-] Get fovfactor out of settings and compute at trace time, simplify Settings instantiation
