@@ -526,8 +526,17 @@ Using only those three basic processes, one can combine simple primitives and it
 
 ### Background projections
 
-- Take other 3d diagram and apply projection
-- List projections
+Rendering purely mathematical primitive volumes is nice and fun but a little dull without an interesting background behind them. To add more depth to the scenes, backgrounds were implemented in the `Background` object. It provides three modes:
+
+- Solid colour
+- Horizon and zenith gradient
+- Spherical panoramic projection
+
+The interesting one is the latter, which takes a \SI{360}{\degree} panorama and a direction vector, and returns the colour at which the vector would point if the panorama was wrapped around the scene on an infinitely big sphere.
+
+The way the pixel coordinates are computed on the panorama picture is as follows: using `atan2()`, the angle of the vector projected on the $xz$ plane (*yaw*) is mapped to the $x$ coordinate on the picture, and the angle of the vector projected on the $yz$ plane (*pitch*) is mapped to the $y$ coordinate. The final colour is then bilinearly interpolated and returned to the ray tracer.
+
+TODO picture
 
 ### Depth of field
 
@@ -540,13 +549,21 @@ Using only those three basic processes, one can combine simple primitives and it
 
 ### Materials
 
+The following ideas were not implemented in the final project but were studied in detail. 
+
+INTRO TEXT
+
+TODO perlin noise picture
+
+- 3D texturing function
+
 - Procedural texturing
-- Bump mapping
-- UV Mapping
 
-### Misc
+We can also use perlin noise to do bump mapping...
 
-- Gamma value
+Map pictures to spheres or boxes UV mapping
+
+### Supersampling
 
 In order to produce quality pictures, **supersampling** was implemented. It is a spatial anti-aliasing^[Aliasing is seen in most edges, which appear jagged and pixelated.] method which works by tracing multiple rays per pixel instead of just one, then *averaging* the resulting colours, providing a much more accurate final colour for a given pixel.
 
