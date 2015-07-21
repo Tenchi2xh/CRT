@@ -54,7 +54,7 @@ import net.team2xh.crt.raytracer.Scene;
  */
 public class MainWindow extends JFrame {
 
-    public static MainWindow instance = null;
+    public static final MainWindow instance = new MainWindow();
     
     private final CControl control;
 
@@ -66,8 +66,6 @@ public class MainWindow extends JFrame {
     private final ConsolePanel console;
     
     public static MainWindow getInstance() {
-        if (instance == null)
-            instance = new MainWindow();
         return instance;
     }
     

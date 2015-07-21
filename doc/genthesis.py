@@ -4,7 +4,10 @@ import os, glob
 
 fn = "thesis.md"
 
-def add(s): os.system('echo "' + s + '" >> ' + fn)
+def add(s):
+    fh = open(fn, 'a')
+    fh.write(s + "\n\n")
+    # os.system(' "' + s + '" >> ' + fn)
 
 def cat(f): os.system('cat ' + f + ' >> ' + fn)
 

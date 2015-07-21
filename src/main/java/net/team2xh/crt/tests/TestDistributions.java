@@ -52,10 +52,10 @@ public class TestDistributions {
                 g.drawOval(o, 0, w, w);
                 g.setColor(Color.BLACK);
                 long start = System.currentTimeMillis();
-                for (int i = 0; i < 8000; ++i) {
-                    double[] p = randomPolygonPoint(6);
+                for (int i = 0; i < 1000; ++i) {
+                    double[] p = randomPolygonPoint(5);
                     // double[] p = randomCirclePoint();
-                    g.fillOval(o+(int)(p[0]*(w/2) - 2 + (w/2)), (int)(p[1]*(w/2) - 2 + (w/2)), 4, 4);
+                    g.fillOval(o+(int)(p[0]*(w/2) - 2 + (w/2)), (int)(p[1]*(w/2) - 2 + (w/2)), 8, 8);
                 }
                 long time = System.currentTimeMillis() - start;
                 g.drawString(time + "ms", 0, 10);

@@ -44,7 +44,17 @@ The conversion is pretty straight forward: we recursively go through a `Scene` o
 
 During that conversion process, some sacrifices have to be made. The CSG objects cannot be easily translated to the polygonal world and computing the positions of the vertices of a CSG operation would be a project of its own right. Also, limitations of jPCT only allow for one light source for use with shadow mapping, which will make the preview even more different than the resulting ray-traced render.
 
-- Skybox mapping
+Finishing and testing the live view module was a very exciting moment, because comparing the same `Scene` rendered once with our ray tracing engine and then with OpenGL would validate that all our algorithms are correct. And, indeed, all lines match, the perspective is correct.
+
+TODO: comparison shot
+
+After tweaking the module for a moment, the lack of a background in the previewed scenes was quickly made apparent. Because there are no rays in rasterization, we cannot just assign a colour to rays hitting infinity like we did with ray tracing (see section \ref{subsec:bg}).
+
+So instead, we invented a clever hack that uses jPCT's implementation of sky boxes^[In video games, sky boxes are used for backgrounds and consist of cube much larger in magnitude than the rendered world and 6 textures are mapped on its faces.]: during the conversion process of a `Scene`, a secondary empty `Scene` is created that shares the same background. In its settings, the field of view is set to \SI{90}{\degree}, which is the angle needed to see only one face of the cube when the camera is placed in its centre.
+
+We then proceed to render 6 separate images of the panorama background and use them for the jPCT sky box, which leads to an almost similar result to the regular spherical projection mapping used earlier:
+
+TODO: skybox screenshot
 
 - jPCT, LWJGL
 - Conversion

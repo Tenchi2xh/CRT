@@ -61,6 +61,8 @@ import org.apache.commons.lang3.StringEscapeUtils;
 public class EditorTextPane extends JTextPane {
 
     private DefaultStyledDocument doc;
+    
+    private boolean changed = false;
 
 //    private int length = 0;
 //    private int cursor = 0;
@@ -123,11 +125,13 @@ public class EditorTextPane extends JTextPane {
             @Override
             public void removeUpdate(DocumentEvent e) {
                 SwingUtilities.invokeLater(() -> highlightText());
+                changed = true;
             }
 
             @Override
             public void insertUpdate(DocumentEvent e) {
                 SwingUtilities.invokeLater(() -> highlightText());
+                changed = true;
             }
 
             @Override
@@ -278,6 +282,7 @@ public class EditorTextPane extends JTextPane {
     private Object lastLine = null;
 
     private void highlightText() {
+
         getHighlighter().removeAllHighlights();
         colorize(COMMENT, 0, 0, getText().length());
 
@@ -467,5 +472,13 @@ public class EditorTextPane extends JTextPane {
             Element map = doc.getDefaultRootElement();
             return map.getElementIndex(offset);
         }
+    }
+    
+    public boolean getChanged() {
+        return changed;
+    }
+    
+    public void resetChanged() {
+        changed = false;
     }
 }

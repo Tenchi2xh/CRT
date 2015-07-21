@@ -68,7 +68,7 @@ To further add to the user's creative possibilities, several artistic features w
 - An aperture shape, which will be used to physically simulate the shape that *bokeh* will have (see figure \ref{fig:bokeh}).
 - A focal distance, defining at which distance objects are sharp.
 
-\customfig{img/bokeh.jpg}{Real-life \emph{bokeh}}{ --- the blurriness of out-of-focus objects will take the shape of the camera's aperture (pinhole). Here, the \emph{bokeh} is octogonal.}{bokeh}{Scott Tucker on Flickr}
+\customfig{img/bokeh.jpg}{Real-life \emph{bokeh}}{ --- the blurriness of out of focus objects will take the shape of the camera's aperture (pinhole). Here, the \emph{bokeh} is octogonal.}{bokeh}{Scott Tucker on Flickr}
 
 ### Settings
 
@@ -524,7 +524,7 @@ Using only those three basic processes, one can combine simple primitives and it
 
 \customfigB{img/csg.png}{A piano foot obtained from CSG operations}{}{csgexample}{}
 
-### Background projections
+### Background projections \label{subsec:bg}
 
 Rendering purely mathematical primitive volumes is nice and fun but a little dull without an interesting background behind them. To add more depth to the scenes, backgrounds were implemented in the `Background` object. It provides three modes:
 
@@ -540,7 +540,51 @@ TODO picture
 
 ### Depth of field
 
-- Vector shifting diagram
+To simulate a real camera, the implemented ray tracing model supports depth of field simulation. It provides an additional layer of realism and dynamism to the rendered pictures by making all out of focus objects blurred in a physically realistic way.
+
+In order to achieve this effect, the ray tracing model is modified from the rays all originating from one point to another model where rays can originate from any point on a disc (mimicking the fact that a camera has a disc-shaped aperture hole and not a single point hole).
+
+TODO diagram
+
+As can be seen on the diagram, the primary rays can be generated anywhere on the origin disc, and aim at the desired object as seen from the focal plane. If the object lies on that focal plane, all rays originating from the disc will land on the same spot on the object.
+
+However, if the object is further away from the focal plane, rays originating from different location on the disc will meet on the focal plane and then start to diverge until they reach their destination, which will not always be the object aimed at.
+
+By averaging the colour resulting from these rays, the final colour will either be the object's precise colour if it lies on the focal plane, or a mixture of the object's colour and the background around it. This effectively creates a depth of field blur.
+
+TODO example of DOF
+
+Three factors have an effect on how the depth of field blur will look like: aperture size, focal distance and aperture shape.
+
+Aperture size determines the thickness of the area that will be in focus, and will effectively represent the radius of the aperture disc (or other regular polygon). The smaller this disc is, the closer it will be to a point-source, and thus resembling more the normal model with no depth of field. The bigger it is, the shallower the area where objects are in focus will be.
+
+The focal distance's effect is very straight forward: it controls the distance at which the focal plane will reside, in which objects are in focus and not blurred.
+
+Finally, the aperture shape will determine the shape of the *bokeh* (see section \ref{sec:camera}). We need to model shapes, which will provide a method to obtain a uniformly distributed random point from inside their boundaries. A lazy but efficient approach is to take a random point from a square, which only consists of having two random float numbers ranging from 0 to 1 as $x$ and $y$ coordinates.
+
+A perfect model uses a disc, which is the shape cameras try to obtain. Efficient and correct algorithms to generate a random point in a circle already exists and were implemented in the project.
+
+In reality, because real life cameras need their aperture size to change for different exposures, their aperture mechanism is constructed of a number of blades that can change the size of the hole they create:
+
+\customfig{img/blades.jpg}{Aperture blades}{, also called iris, here with a pentagonal shape}{}{Nayu Kim on Flickr}
+
+In practice, this means that the resulting shape is never a perfect circle, but is approximated with a regular polygon such as a pentagon for cheap lenses or octagons for luxury lenses. Professor Jean-François \textsc{Hêche} devised an efficient algorithm for generating random coordinates inside a regular polygon, by dividing the work in sub steps. First, generate a point inside a square and map it to a triangle. Because all regular polygons can be split into triangles, the last step is to randomly choose which triangle contains the point and rotate the coordinates to that position. This gives us a smooth, shaped *bokeh*:
+
+\begin{figure}[!htbp]
+\centering
+\subfloat[Generating 1000 points in a pentagon takes less then \SI{10}{\milli\second}]{\centering\makebox[.45\linewidth]{
+\includegraphics[width=0.44\linewidth,keepaspectratio]{img/random.png}}}
+\qquad
+\subfloat[Pentagonal \textit{bokeh} in a ray-traced scene]{\centering\makebox[.45\linewidth]{
+\includegraphics[width=0.44\linewidth,keepaspectratio]{img/inengine.png}}}
+\caption[In-engine \textit{bokeh}]{In-engine \textit{bokeh}}
+\label{fig:bokeh2}
+\end{figure}
+
+The depth of field model isn't very efficient performance-wise: because the source of the rays is not a point any more, we need to trace more than one ray per pixel on the screen. The rays origins are to be chosen randomly on the aperture shape, and their number is chosen by the user at render time. If this number is too low, the resulting image will look very noisy, as seen in the following diagram. A number too big will multiply the render time linearly, and by adding supersampling (see section \ref{subsec:ss}), the render time will become very long. Empirically, a good number of samples for depth of field has been found to be between 32 and 64.
+
+\customfig{img/noisy.png}{Noisy DOF}{}{}{}
+
 - Aperture shape diagrams
 - Effect of aperture
 - Effect of focal distance
@@ -563,7 +607,7 @@ We can also use perlin noise to do bump mapping...
 
 Map pictures to spheres or boxes UV mapping
 
-### Supersampling
+### Supersampling \label{subsec:ss}
 
 In order to produce quality pictures, **supersampling** was implemented. It is a spatial anti-aliasing^[Aliasing is seen in most edges, which appear jagged and pixelated.] method which works by tracing multiple rays per pixel instead of just one, then *averaging* the resulting colours, providing a much more accurate final colour for a given pixel.
 
