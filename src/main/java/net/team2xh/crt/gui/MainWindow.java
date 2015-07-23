@@ -37,15 +37,16 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.UIManager;
 import net.team2xh.crt.gui.editor.Editor;
 import net.team2xh.crt.gui.editor.EditorTextPane;
 import net.team2xh.crt.gui.entities.EntityTree;
 import net.team2xh.crt.gui.graphs.SystemPanel;
+import net.team2xh.crt.gui.menus.StatusBar;
 import net.team2xh.crt.gui.menus.ToolBar;
 import net.team2xh.crt.gui.util.GUIToolkit;
 import net.team2xh.crt.raytracer.Scene;
+import net.team2xh.crt.raytracer.Tracer;
 
 
 /**
@@ -62,8 +63,8 @@ public class MainWindow extends JFrame {
     private final EntityTree navigator;
     private final RenderPanel render;
     private final SystemPanel system;
-    private final JLabel settings;
     private final ConsolePanel console;
+    private final StatusBar statusbar;
     
     public static MainWindow getInstance() {
         return instance;
@@ -88,31 +89,32 @@ public class MainWindow extends JFrame {
         controller.getThemeManager().setBorderModifier("dock.border.stack.eclipse.content", (Border) -> BorderFactory.createEmptyBorder());
         controller.getThemeManager().setBorderModifier("dock.border.title.eclipse.button.flat", (Border) -> BorderFactory.createLineBorder(UIManager.getColor("Button.border"), 1));
         
-        CContentArea contentArea = control.getContentArea();
-        ToolBar toolbar = new ToolBar();
-        
-        add(toolbar, BorderLayout.PAGE_START);
-        add(contentArea, BorderLayout.CENTER);
-
         editor = new Editor();
         navigator = new EntityTree();
         render = new RenderPanel();
         system = new SystemPanel();
-        settings = new JLabel("Settings go here");
         console = new ConsolePanel();
+        
+        CContentArea contentArea = control.getContentArea();
+        ToolBar toolbar = new ToolBar();
+        statusbar = new StatusBar(editor.getEditor());
+        Tracer.getInstance().setProgressBar(statusbar.getProgressBar());
+        
+        add(toolbar, BorderLayout.PAGE_START);
+        add(contentArea, BorderLayout.CENTER);
+        add(statusbar, BorderLayout.PAGE_END);
+
 
         DefaultCDockable dEditor = (DefaultCDockable) create("Script", editor);
         DefaultCDockable dNavigator = (DefaultCDockable) create("Navigator", navigator);
         DefaultCDockable dRender = (DefaultCDockable) create("Render", render);
         DefaultCDockable dSystem = (DefaultCDockable) create("System", system);
-        DefaultCDockable dSettings = (DefaultCDockable) create("Settings", settings);
         DefaultCDockable dConsole = (DefaultCDockable) create("Console", console);
         
         dEditor.setTitleIcon(new ImageIcon(GUIToolkit.getIcon("/icons/script.png")));
         dNavigator.setTitleIcon(new ImageIcon(GUIToolkit.getIcon("/icons/navigator.png")));
         dRender.setTitleIcon(new ImageIcon(GUIToolkit.getIcon("/icons/renderer.png")));
         dSystem.setTitleIcon(new ImageIcon(GUIToolkit.getIcon("/icons/system.png")));
-        dSettings.setTitleIcon(new ImageIcon(GUIToolkit.getIcon("/icons/settings.png")));
         dConsole.setTitleIcon(new ImageIcon(GUIToolkit.getIcon("/icons/console.png")));
 
         double wr = 0.4;
@@ -128,7 +130,7 @@ public class MainWindow extends JFrame {
         grid.add(wr, 0, we, h1, dEditor);
         grid.add(wr + we, 0, wn, h1, dNavigator);
         grid.add(0, h1, wr + we, h2, dConsole);
-        grid.add(1 - wi, h1, wi, h2, dSystem, dSettings);
+        grid.add(1 - wi, h1, wi, h2, dSystem);
         grid.addHorizontalDivider(0, 1, h1);
         contentArea.deploy(grid);
 
@@ -141,10 +143,6 @@ public class MainWindow extends JFrame {
         dNavigator.setMinimizable(true);
         dNavigator.setLocation(CLocation.base().minimalEast());
         dNavigator.setExtendedMode(ExtendedMode.NORMALIZED);
-
-        dSettings.setMinimizable(true);
-        dSettings.setLocation(CLocation.base().minimalSouth());
-        dSettings.setExtendedMode(ExtendedMode.NORMALIZED);
 
         dSystem.setMinimizable(true);
         dSystem.setLocation(CLocation.base().minimalSouth());
@@ -201,4 +199,7 @@ public class MainWindow extends JFrame {
         return render;
     }
 
+    public StatusBar getStatusBar() {
+        return statusbar;
+    }
 }

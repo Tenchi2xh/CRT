@@ -45,7 +45,6 @@ public class ToolBar extends JToolBar {
         
         addSeparator();
         
-        add(Actions.settings);
         add(Actions.about);
     }
 }

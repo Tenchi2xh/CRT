@@ -23,6 +23,7 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.function.BiConsumer;
 import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
+import net.team2xh.crt.gui.util.SystemInformations;
 import static net.team2xh.crt.raytracer.Camera.ApertureShape.CIRCLE;
 import static net.team2xh.crt.raytracer.Camera.ApertureShape.GAUSSIAN;
 import static net.team2xh.crt.raytracer.Camera.ApertureShape.HEXAGON;
@@ -258,11 +259,22 @@ public class Tracer {
         SwingUtilities.invokeLater(() -> pb.setValue((int)(++counter * 100 / total)));
     }
     
-    public void parallelRender(int passes, BiConsumer<int[][], Integer> drawer, Scene scene) {
-        ForkJoinPool pool = new ForkJoinPool(6);
-        pool.execute(() -> render(passes, drawer, scene));
+    private ForkJoinPool pool;
+    
+    public void parallelRender(int passes, BiConsumer<int[][], Integer> drawer, Runnable ender, Scene scene) {
+        pool = new ForkJoinPool(SystemInformations.cores());
+        pool.execute(() -> {
+            render(passes, drawer, scene);
+            ender.run();
+        });
     }
 
+    public void stop() {
+        if (pool != null) {
+            pool.shutdownNow();
+        }
+    }
+    
     public int[][] render(int passes, BiConsumer<int[][], Integer> drawer, Scene scene) {
         Settings settings = scene.getSettings();
 
@@ -287,18 +299,18 @@ public class Tracer {
         counter = 0;
         int[][] image = new int[settings.width][settings.height];
 
-        // SwingUtilities.invokeLater(() -> pb.setValue(0));
+        SwingUtilities.invokeLater(() -> pb.setValue(0));
         long start = System.currentTimeMillis();
         for (int i = 0; i < passes; ++i) {
             final int j = i+1;
-            // SwingUtilities.invokeLater(() -> pb.setString("Pass " + j + "/" + passes));
+            SwingUtilities.invokeLater(() -> pb.setString("Pass " + j + "/" + passes));
             coords.get(i).parallelStream().forEach((int[] c) -> processPixel(c, image, scene));
             drawer.accept(image, passes - i - 1);
         }
         long end = System.currentTimeMillis();
 
-        // SwingUtilities.invokeLater(() -> pb.setString(String.format("%.3fs", (end - start) / 1000.0)));
-        // SwingUtilities.invokeLater(() -> pb.setValue(0));
+        SwingUtilities.invokeLater(() -> pb.setString(String.format("%.3fs", (end - start) / 1000.0)));
+        SwingUtilities.invokeLater(() -> pb.setValue(0));
 
         return image;
     }

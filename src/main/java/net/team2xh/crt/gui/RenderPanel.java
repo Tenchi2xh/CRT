@@ -24,8 +24,10 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.TexturePaint;
 import java.awt.image.BufferedImage;
+import java.util.concurrent.ForkJoinPool;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import net.team2xh.crt.gui.util.SystemInformations;
 import net.team2xh.crt.raytracer.Scene;
 import net.team2xh.crt.raytracer.Tracer;
 
@@ -80,8 +82,9 @@ public class RenderPanel extends JPanel {
         g2d.setPaint(texture);
         g2d.fillRect(0, 0, getWidth(), getHeight());
     }
+    
 
-    public static void renderScene(Scene scene, RenderPanel panel) {
+    public static void renderScene(Scene scene, Runnable endAction, RenderPanel panel) {
         scene.getSettings().setResolution(panel.getWidth(), panel.getHeight());
         
         int w = scene.getSettings().getWidth();
@@ -90,9 +93,11 @@ public class RenderPanel extends JPanel {
         image.setPreferredSize(new Dimension(w, h));
         bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
         
+        scene.getSettings().updateFov();
+        
         Tracer tracer = Tracer.getInstance();
-        tracer.parallelRender(4, (int[][] p, Integer i) -> draw(p, i, w, h), scene);
-
+        
+        tracer.parallelRender(4, (int[][] p, Integer i) -> draw(p, i, w, h), endAction, scene);
     }
 
     public static void draw(int[][] picture, int pass, int w, int h) {
@@ -111,5 +116,9 @@ public class RenderPanel extends JPanel {
             }
         }
         image.repaint();
+    }
+    
+    public static BufferedImage getImage() {
+        return bi;
     }
 }

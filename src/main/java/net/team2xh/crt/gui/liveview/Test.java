@@ -142,7 +142,7 @@ public class Test {
             frame.add(buttons, BorderLayout.PAGE_END);
 
             renderButton.addActionListener((ActionEvent e) -> {
-                RenderPanel.renderScene(scene, renderPanel);
+                RenderPanel.renderScene(scene, () -> {}, renderPanel);
             });
 
             frame.pack();

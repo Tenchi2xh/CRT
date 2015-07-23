@@ -16,24 +16,41 @@
  */
 package net.team2xh.crt.gui.menus;
 
+import java.awt.BorderLayout;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.net.URI;
 import java.nio.file.Paths;
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRootPane;
+import javax.swing.SwingConstants;
+import javax.swing.border.BevelBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import net.team2xh.crt.gui.MainWindow;
 import net.team2xh.crt.gui.RenderPanel;
 import net.team2xh.crt.gui.editor.EditorTextPane;
+import net.team2xh.crt.gui.util.GUIToolkit;
 import net.team2xh.crt.language.compiler.Script;
 import net.team2xh.crt.language.compiler.Compiler;
-import org.openide.util.Exceptions;
+import net.team2xh.crt.raytracer.Tracer;
 
 /**
  *
@@ -81,19 +98,27 @@ final public class Actions {
                     // TODO: do in forkpool for interrupt
                     String code = editor.getText();
                     Script script = Compiler.compile(code);
-                    RenderPanel.renderScene(script.getScene(), MainWindow.getInstance().getRenderer());
+                    RenderPanel.renderScene(script.getScene(), () -> {
+                        a.init("play", "Render", "Render the current scene", KeyEvent.VK_R);
+                        a.setUserObject(true);
+                    }, MainWindow.getInstance().getRenderer());
                 } else {
+                    Tracer.getInstance().stop();
                     a.init("play", "Render", "Render the current scene", KeyEvent.VK_R);
                     a.setUserObject(true);
+                    MainWindow.getInstance().getStatusBar().getProgressBar().setString("Canceled");
                 }
             }, true);
     
     public final static Action preview =
-            new Action("preview", "Preview", "Do a quick render of the current scene", KeyEvent.VK_P, (Action a) -> {
+            new Action("preview", "Preview", "Refresh the live preview window", KeyEvent.VK_P, (Action a) -> {
             });
     
     public final static Action export =
             new Action("export", "Export", "Export current render as an image file", KeyEvent.VK_E, (Action a) -> {
+                if (RenderPanel.getImage() != null) {
+                    saveImage(RenderPanel.getImage());
+                }
             });
     
     public final static Action perspCode =
@@ -104,12 +129,20 @@ final public class Actions {
             new Action("persp_live", "Live Perspective", "Switch to the live perspective", KeyEvent.VK_L, (Action a) -> {
             });
     
-    public final static Action fullscreen =
-            new Action("fullscreen", "Fullscreen", "Toggle fullscreen view", KeyEvent.VK_F, (Action a) -> {
-                if ((boolean) a.getUserObject()) {
-                    a.setUserObject(false);
-                } else {
+    public final static Action fullscreen
+            = new Action("fullscreen", "Fullscreen", "Toggle fullscreen view", KeyEvent.VK_F, (Action a) -> {
+                GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
+                MainWindow main = MainWindow.getInstance();
+
+                if (!(boolean) a.getUserObject()) {
+                    main.getRootPane().setWindowDecorationStyle(JRootPane.FRAME);
+                    device.setFullScreenWindow(null);
+                    main.setExtendedState(JFrame.MAXIMIZED_BOTH);
                     a.setUserObject(true);
+                } else {
+                    main.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
+                    device.setFullScreenWindow(main);
+                    a.setUserObject(false);
                 }
             }, true);
     
@@ -119,6 +152,42 @@ final public class Actions {
     
     public final static Action about =
             new Action("about", "About", "About this program", KeyEvent.VK_A, (Action a) -> {
+                try {
+                    JDialog d = new JDialog();
+                    d.setTitle("About CRT");
+                    
+                    JPanel contents = new JPanel();
+                    contents.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+                    contents.setLayout(new BorderLayout());
+
+                    URI uri = d.getClass().getResource("/images/logo.png").toURI();
+                    File file = new File(uri);
+                    ImageIcon logo = new ImageIcon(ImageIO.read(file));
+                    System.out.println(logo);
+
+                    JLabel logoL = new JLabel(logo);
+                    contents.add(logoL, BorderLayout.PAGE_START);
+                    JLabel text = new JLabel("<html><center><b>CRT &mdash; Cathode Ray Tracer</b></center>"
+                            + "<br/>Bachelor's Thesis Project at HEIG-VD.<br/>Code available on GitHub at http://github.com/Tenchi2xh/CRT"
+                            + "<br/><br/>Author: Hamza Haiken (tenchi@team2xh.net)"
+                            + "<br/>Advisor: Pier Donini (pier.donini@heig-vd.ch)"
+                            + "<br/><br/>Licensed under the GPL3 license"
+                            + "<br/>Copyright 2015 Team2xh</html>", SwingConstants.CENTER);
+                    contents.add(text, BorderLayout.CENTER);
+                    text.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+                    JButton b = new JButton("Ok");
+                    b.addActionListener((ActionEvent e) -> {
+                        d.setVisible(false);
+                        d.dispose();
+                    });
+                    contents.add(b, BorderLayout.PAGE_END);
+                    d.add(contents, BorderLayout.CENTER);
+                    d.pack();
+                    d.setVisible(true);
+                    GUIToolkit.centerFrame(d);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             });
     
     private Actions() { }
@@ -127,6 +196,11 @@ final public class Actions {
     static {
         fc.setFileFilter(new FileNameExtensionFilter("CRT Script", "crt"));
         fc.setAcceptAllFileFilterUsed(true);
+    }    
+    private static final JFileChooser fc2 = new JFileChooser();
+    static {
+        fc2.setFileFilter(new FileNameExtensionFilter("PNG Image", "png"));
+        fc2.setAcceptAllFileFilterUsed(false);
     }
 
     private static boolean checkChanged() {
@@ -196,6 +270,30 @@ final public class Actions {
                 ex.printStackTrace();
             }
         }
+    }
+
+    private static boolean saveImage(BufferedImage bi) {
+        MainWindow main = MainWindow.getInstance();
+        
+        fc2.setCurrentDirectory(new File(lastPath.substring(0, lastPath.toString().lastIndexOf(File.separator))));
+        int rval = fc2.showSaveDialog(main);
+        lastPath = fc2.getSelectedFile().getAbsolutePath();
+        
+        if (rval == JFileChooser.APPROVE_OPTION) {
+            File f = fc2.getSelectedFile();
+            if (!fc2.getSelectedFile().getAbsolutePath().endsWith(".png")) {
+                f = new File(fc2.getSelectedFile() + ".png");
+                lastPath = f.getAbsolutePath();
+                System.out.println(lastPath);
+            }
+            try {
+                ImageIO.write(bi, "PNG", f);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            return true;
+        }
+        return false;
     }
     
 }

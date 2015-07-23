@@ -61,7 +61,7 @@ final public class BackgroundConverter {
 
         for (int i = 0; i < 6; ++i) {
             scene.setCamera(cameras[i]);
-            Tracer.getInstance().parallelRender(1, (int[][] picture, Integer pass) -> draw(picture, pass), scene);
+            Tracer.getInstance().parallelRender(1, (int[][] picture, Integer pass) -> draw(picture, pass), () -> {}, scene);
             try {
                 synchronized (sync) {
                     sync.wait();

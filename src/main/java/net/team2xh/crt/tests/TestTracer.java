@@ -209,7 +209,7 @@ public class TestTracer {
             f.setVisible(true);
         }
         
-        tracer.parallelRender(4, (int[][] p, Integer i) -> draw(p, i, w, h), scene);
+        tracer.parallelRender(4, (int[][] p, Integer i) -> draw(p, i, w, h), () -> {}, scene);
         
         try {
             synchronized (sync) {
