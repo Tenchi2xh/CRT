@@ -24,10 +24,8 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.TexturePaint;
 import java.awt.image.BufferedImage;
-import java.util.concurrent.ForkJoinPool;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import net.team2xh.crt.gui.util.SystemInformations;
 import net.team2xh.crt.raytracer.Scene;
 import net.team2xh.crt.raytracer.Tracer;
 
@@ -35,7 +33,7 @@ import net.team2xh.crt.raytracer.Tracer;
  *
  * @author Hamza Haiken (hamza.haiken@heig-vd.ch)
  */
-public class RenderPanel extends JPanel {
+ public class RenderPanel extends JPanel {
 
     private final static BufferedImage pattern;
     private final static Rectangle rectangle;
@@ -57,8 +55,8 @@ public class RenderPanel extends JPanel {
         texture = new TexturePaint(pattern, rectangle);
     }
 
-    private static BufferedImage bi;
-    private static JLabel image = new JLabel() {
+    private BufferedImage bi;
+    private final JLabel image = new JLabel() {
         {
             setOpaque(false);
         }
@@ -90,35 +88,35 @@ public class RenderPanel extends JPanel {
         int w = scene.getSettings().getWidth();
         int h = scene.getSettings().getHeight();
 
-        image.setPreferredSize(new Dimension(w, h));
-        bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+        panel.image.setPreferredSize(new Dimension(w, h));
+        panel.bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
         
         scene.getSettings().updateFov();
         
         Tracer tracer = Tracer.getInstance();
         
-        tracer.parallelRender(4, (int[][] p, Integer i) -> draw(p, i, w, h), endAction, scene);
+        tracer.parallelRender(4, (int[][] p, Integer i) -> draw(panel, p, i, w, h), endAction, scene);
     }
 
-    public static void draw(int[][] picture, int pass, int w, int h) {
+    public static void draw(RenderPanel panel, int[][] picture, int pass, int w, int h) {
         int step = (int) Math.pow(2, pass);
         for (int x = 0; x < w - (w % step); x += step) {
             for (int y = 0; y < h - (h % step); y += step) {
                 if (pass == 0) {
-                    bi.setRGB(x, y, picture[x][y]);
+                    panel.bi.setRGB(x, y, picture[x][y]);
                 } else {
                     for (int i = 0; i < step; ++i) {
                         for (int j = 0; j < step; ++j) {
-                            bi.setRGB(x + i, y + j, picture[x][y]);
+                            panel.bi.setRGB(x + i, y + j, picture[x][y]);
                         }
                     }
                 }
             }
         }
-        image.repaint();
+        panel.image.repaint();
     }
     
-    public static BufferedImage getImage() {
+    public BufferedImage getImage() {
         return bi;
     }
 }

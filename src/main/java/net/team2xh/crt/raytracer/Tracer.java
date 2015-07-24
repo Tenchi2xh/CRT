@@ -299,18 +299,18 @@ public class Tracer {
         counter = 0;
         int[][] image = new int[settings.width][settings.height];
 
-        SwingUtilities.invokeLater(() -> pb.setValue(0));
+        if (pb != null) SwingUtilities.invokeLater(() -> pb.setValue(0));
         long start = System.currentTimeMillis();
         for (int i = 0; i < passes; ++i) {
             final int j = i+1;
-            SwingUtilities.invokeLater(() -> pb.setString("Pass " + j + "/" + passes));
+            if (pb != null) SwingUtilities.invokeLater(() -> pb.setString("Pass " + j + "/" + passes));
             coords.get(i).parallelStream().forEach((int[] c) -> processPixel(c, image, scene));
             drawer.accept(image, passes - i - 1);
         }
         long end = System.currentTimeMillis();
 
-        SwingUtilities.invokeLater(() -> pb.setString(String.format("%.3fs", (end - start) / 1000.0)));
-        SwingUtilities.invokeLater(() -> pb.setValue(0));
+        if (pb != null) SwingUtilities.invokeLater(() -> pb.setString(String.format("%.3fs", (end - start) / 1000.0)));
+        if (pb != null) SwingUtilities.invokeLater(() -> pb.setValue(0));
 
         return image;
     }

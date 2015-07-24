@@ -22,16 +22,11 @@ import com.threed.jpct.FrameBuffer;
 import com.threed.jpct.GLSLShader;
 import com.threed.jpct.IRenderer;
 import com.threed.jpct.Interact2D;
-import com.threed.jpct.Loader;
 import com.threed.jpct.Object3D;
-import com.threed.jpct.Primitives;
 import com.threed.jpct.Projector;
 import com.threed.jpct.SimpleVector;
-import com.threed.jpct.Texture;
 import com.threed.jpct.TextureManager;
 import com.threed.jpct.World;
-import com.threed.jpct.util.ExtendedPrimitives;
-import com.threed.jpct.util.Light;
 import com.threed.jpct.util.ShadowHelper;
 import com.threed.jpct.util.SkyBox;
 import java.awt.BorderLayout;
@@ -43,7 +38,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
-import java.io.InputStream;
 import java.util.Enumeration;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -52,17 +46,9 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
 import net.team2xh.crt.gui.RenderPanel;
-import net.team2xh.crt.gui.liveview.converters.BackgroundConverter;
+import net.team2xh.crt.gui.liveview.converters.SceneConverter;
 import net.team2xh.crt.gui.util.GUIToolkit;
-import net.team2xh.crt.raytracer.Material;
 import net.team2xh.crt.raytracer.Scene;
-import net.team2xh.crt.raytracer.entities.Box;
-import net.team2xh.crt.raytracer.entities.Entity;
-import net.team2xh.crt.raytracer.entities.Plane;
-import net.team2xh.crt.raytracer.entities.Sphere;
-import net.team2xh.crt.raytracer.lights.ParallelLight;
-import net.team2xh.crt.raytracer.lights.PointLight;
-import net.team2xh.crt.raytracer.math.Vector3;
 import org.openide.util.Exceptions;
 
 /**
@@ -70,46 +56,49 @@ import org.openide.util.Exceptions;
  *
  * @author Hamza Haiken <tenchi@team2xh.net>
  */
-public class Test {
+public class LiveViewPanel extends JPanel {
 
     private World world;
-    private SkyBox skybox;
-    private BufferPanel buffers[];
+    public SkyBox skybox;
+    public BufferPanel buffers[];
 
-    private ShadowHelper[] shs = new ShadowHelper[3];
-    private Projector projector;
+    public ShadowHelper[] shs = new ShadowHelper[3];
+    public Projector projector;
 
-    private JFrame frame;
+    private JFrame parent;
     private RenderPanel renderPanel;
 
-    private int distMult = 20;
+    public int distMult = 20;
 
-    SimpleVector sun = null;
-
-    private Scene scene = new TestScene();
-
+    public SimpleVector sun = null;
+    
     private JButton camLt;
     private JButton camRt;
     private JButton camUp;
     private JButton camDn;
     private JButton renderButton;
-    private JToggleButton toggleShdr;
+    public JToggleButton toggleShdr;
 
     private MouseListener ml;
 
     private Object3D lastHighlight = null;
     private Color lastColor = null;
 
-    private boolean useShaders = false;
-    private Camera cameraY;
-    private Camera cameraZ;
+    public boolean useShaders = false;
+    public Camera cameraY;
+    public Camera cameraZ;
+    private boolean isRunning = true;
 
-    public Test() {
-
+    public LiveViewPanel(Scene scene, JFrame parent) {
+        
+        this.parent = parent;
+        
         SwingUtilities.invokeLater(() -> {
-            frame = new JFrame("CRT OpenGL Renderer");
+            setLayout(new BorderLayout());
             JPanel panel = new JPanel(new GridLayout(2, 2));
 
+            TextureManager.getInstance().flush();
+            
             buffers = new BufferPanel[]{new BufferPanel(), new BufferPanel(), new BufferPanel()};
 
             renderPanel = new RenderPanel();
@@ -120,7 +109,7 @@ public class Test {
             panel.add(buffers[0]);
 
             // TODO: resize listener to resize buffers
-            frame.getContentPane().add(panel, BorderLayout.CENTER);
+            add(panel, BorderLayout.CENTER);
 
             ml = new MouseListener();
             buffers[0].getCanvas().addMouseListener(ml);
@@ -139,166 +128,19 @@ public class Test {
             buttons.add(camRt);
             buttons.add(renderButton);
             buttons.add(toggleShdr);
-            frame.add(buttons, BorderLayout.PAGE_END);
+            add(buttons, BorderLayout.PAGE_END);
 
             renderButton.addActionListener((ActionEvent e) -> {
                 RenderPanel.renderScene(scene, () -> {}, renderPanel);
             });
 
-            frame.pack();
-            frame.setVisible(true);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            GUIToolkit.centerFrame(frame);
-
             Config.lightMul = 1;
             Config.specPow = 100;
             Config.specTerm = 15;
             Config.glShadowZBias = 0.03f * distMult;
-
-            world = new World();
-            world.setAmbientLight(0, 0, 0);
-
-            InputStream unknown = getClass().getResourceAsStream("/images/unknown.png");
-            TextureManager.getInstance().addTexture("unknown", new Texture(unknown, true));
-
-            String vertex = Loader.loadTextFile(getClass().getResourceAsStream("shaders/vertex.glsl"));
-            String fragment = Loader.loadTextFile(getClass().getResourceAsStream("shaders/fragment.glsl"));
-
-            for (net.team2xh.crt.raytracer.lights.Light l0 : scene.getLights()) {
-                Light l1 = new Light(world);
-                Class type = l0.getClass();
-
-                if (type == PointLight.class) {
-                    PointLight pl = (PointLight) l0;
-                    l1.setPosition(pl.getOrigin().multiply(distMult).getRightHanded().simpleVector());
-
-                } else if (type == ParallelLight.class) {
-                    ParallelLight pl = (ParallelLight) l0;
-                    SimpleVector pos = pl.getDirection(Vector3.O).multiply(20 * distMult).getRightHanded().simpleVector();
-                    l1.setPosition(pos);
-                    // Shadows buggy with multiple viewports
-//                if (sun == null) {
-//                    sun = pos;
-//                    System.out.println(pos);
-//                }
-                }
-
-                SimpleVector intensity = l0.getPigment().getVector().simpleVector();
-                intensity.scalarMul(255f);
-                l1.setIntensity(intensity);
-                l1.setAttenuation((float) l0.getFalloff() * distMult);
-
-                if (type == ParallelLight.class) {
-                    intensity = l0.getPigment().getVector().simpleVector();
-                    intensity.scalarMul(255f);
-                    l1.setIntensity(intensity);
-                }
-            }
-
-            float vfov = (float) scene.getCamera().getVerticalFov();
-            float hfov = 2 * (float) Math.atan(Math.tan(vfov / 2) * scene.getSettings().getWidth() / scene.getSettings().getHeight());
-
-            world.getCamera().setFOVLimits(0, (float) (2 * Math.PI));
-            world.getCamera().setFovAngle(hfov);
-
-            camOrigPos = scene.getCamera().getPosition().multiply(distMult).getRightHanded().simpleVector();
-            camLookAt = scene.getCamera().getPointing().multiply(distMult).getRightHanded().simpleVector();
-            world.getCamera().setPosition(camOrigPos);
-            world.getCamera().lookAt(camLookAt);
-            world.getCamera().rotateCameraAxis(world.getCamera().getDirection(), (float) -scene.getCamera().getRoll());
-
-            cameraY = new Camera();
-            cameraZ = new Camera();
-            cameraY.setPosition(0, -5 * distMult, 0);
-            cameraZ.setPosition(0, 0, -5 * distMult);
-            cameraY.lookAt(SimpleVector.ORIGIN);
-            cameraZ.lookAt(SimpleVector.ORIGIN);
-
-            if (sun != null) {
-
-                projector = new Projector();
-                projector.setFOV(1.5f);
-                projector.setYFOV(1.5f);
-
-                for (int i = 0; i < 3; ++i) {
-                    ShadowHelper sh = new ShadowHelper(world, buffers[i].getBuffer(), projector, 4096);
-
-                    sh.setCullingMode(false);
-                    sh.setAmbientLight(new Color(0, 0, 0));
-                    sh.setLightMode(true);
-                    sh.setBorder(1);
-
-                    shs[i] = sh;
-                }
-            }
-
-            for (Entity e : scene.getEntities()) {
-                Object3D obj;
-                Class type = e.getClass();
-
-                boolean sprite = false;
-
-                if (type == Box.class) {
-                    Box box = (Box) e;
-                    SimpleVector dimensions = SimpleVector.create((float) box.getWidth() * distMult,
-                            (float) box.getHeight() * distMult,
-                            (float) box.getDepth() * distMult);
-                    obj = ExtendedPrimitives.createBox(dimensions);
-                    obj.translate(box.getMinCorner().multiply(distMult).getRightHanded().simpleVector());
-//                obj.setShadingMode(Object3D.SHADING_FAKED_FLAT);
-                } else if (type == Sphere.class) {
-                    Sphere sphere = (Sphere) e;
-                    obj = Primitives.getSphere((float) sphere.getRadius() * distMult);
-                } else if (type == Plane.class) {
-                    obj = ExtendedPrimitives.createPlane(distMult, 100);
-                } else {
-                    obj = ExtendedPrimitives.createSprite(0.2f * distMult);
-                    obj.setTexture("unknown");
-                    obj.setTransparency(20);
-                    sprite = true;
-                }
-
-                if (sun != null && !sprite) {
-                    for (int i = 0; i < 3; ++i) {
-                        shs[i].addCaster(obj);
-                        shs[i].addReceiver(obj);
-                    }
-                }
-
-                obj.translate(e.getCenter().multiply(distMult).getRightHanded().simpleVector());
-                obj.setCollisionMode(Object3D.COLLISION_CHECK_OTHERS);
-
-                Material m = e.getMaterial();
-
-                obj.setSpecularLighting(true);
-                obj.setAdditionalColor(m.color.getColor().darker().darker().darker());
-
-                GLSLShader shader = new GLSLShader(vertex, fragment);
-                shader.setUniform("isHighlighted", 0);
-                shader.setUniform("matColor", m.color.getColor().getColorComponents(null));
-                obj.setUserObject(shader);
-                if (useShaders) {
-                    obj.setRenderHook(shader);
-                }
-
-                // Compile has to be dynamic or else it crashes when having multiple viewports
-                obj.compile(true);
-                obj.build();
-
-                world.addObject(obj);
-            }
-
-            if (sun != null) {
-                projector.setPosition(sun);
-                projector.lookAt(SimpleVector.ORIGIN);
-
-                for (int i = 0; i < 3; ++i) {
-                    shs[i].updateShadowMap();
-                }
-            }
-
-            skybox = BackgroundConverter.convertBackground(scene.getBackground());
-
+            
+            world = SceneConverter.convertScene(scene, this);
+            
             toggleShdr.addItemListener(new ItemListener() {
 
                 @Override
@@ -330,9 +172,9 @@ public class Test {
             
         });
     }
-
-    private SimpleVector camOrigPos;
-    private SimpleVector camLookAt;
+    
+    public SimpleVector camOrigPos;
+    public SimpleVector camLookAt;
 
     private void moveCamera(float ax, float ay) {
 
@@ -395,7 +237,7 @@ public class Test {
     }
 
     private void loop() throws InterruptedException {
-        while (frame.isShowing()) {
+        while (isRunning) {
 
             float mdx = 0.0f;
             float mdy = 0.0f;
@@ -459,6 +301,10 @@ public class Test {
             p.getBuffer().disableRenderer(IRenderer.RENDERER_OPENGL);
             p.getBuffer().dispose();
         }
+        skybox.dispose();
+        world.removeAll();
+        world.dispose();
+        System.out.println("Stopped");
     }
 
     private class MouseListener extends MouseInputAdapter {
@@ -510,8 +356,22 @@ public class Test {
         }
 
     }
+    
+    public void stop() {
+        isRunning = false;
+    }
 
     public static void main(String[] args) {
-        Test t = new Test();
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("CRT OpenGL Renderer");
+            Scene scene = new TestScene();
+            LiveViewPanel t = new LiveViewPanel(scene, frame);
+            frame.add(t);
+            frame.pack();
+            frame.setVisible(true);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            GUIToolkit.centerFrame(frame);
+        });
+
     }
 }

@@ -95,9 +95,9 @@ final public class Actions {
                 if ((boolean) a.getUserObject()) {
                     a.init("stop", "Stop", "Cancel the render", KeyEvent.VK_R);
                     a.setUserObject(false);
-                    // TODO: do in forkpool for interrupt
                     String code = editor.getText();
                     Script script = Compiler.compile(code);
+                    script.getSettings().setResolution(main.getRenderer().getWidth(), main.getRenderer().getHeight());
                     RenderPanel.renderScene(script.getScene(), () -> {
                         a.init("play", "Render", "Render the current scene", KeyEvent.VK_R);
                         a.setUserObject(true);
@@ -112,12 +112,21 @@ final public class Actions {
     
     public final static Action preview =
             new Action("preview", "Preview", "Refresh the live preview window", KeyEvent.VK_P, (Action a) -> {
+                MainWindow main = MainWindow.getInstance();
+                EditorTextPane editor = main.getEditor();
+
+                String code = editor.getText();
+                Script script = Compiler.compile(code);
+                script.getSettings().setResolution(main.getLiveViewPanel().getWidth() / 2, main.getLiveViewPanel().getHeight() / 2);
+
+                main.updateLiveView(script.getScene());
             });
-    
+
     public final static Action export =
             new Action("export", "Export", "Export current render as an image file", KeyEvent.VK_E, (Action a) -> {
-                if (RenderPanel.getImage() != null) {
-                    saveImage(RenderPanel.getImage());
+                BufferedImage bi = MainWindow.getInstance().getRenderer().getImage();
+                if (bi != null) {
+                    saveImage(bi);
                 }
             });
     

@@ -36,14 +36,14 @@ public class BufferPanel extends JPanel implements ComponentListener {
     private Canvas canvas;
 
     public BufferPanel() {
-        buffer = new FrameBuffer(320, 180, FrameBuffer.SAMPLINGMODE_GL_AA_4X);
+        buffer = new FrameBuffer(379, 297, FrameBuffer.SAMPLINGMODE_GL_AA_4X);
         buffer.disableRenderer(IRenderer.RENDERER_SOFTWARE);
         canvas = buffer.enableGLCanvasRenderer();
 
         setLayout(new BorderLayout());
         add(canvas, BorderLayout.CENTER);
         addComponentListener(this);
-        setMinimumSize(new Dimension(160, 90));
+        //setMinimumSize(new Dimension(160, 90));
     }
 
     public FrameBuffer getBuffer() {
@@ -62,13 +62,20 @@ public class BufferPanel extends JPanel implements ComponentListener {
         this.canvas = canvas;
     }
 
-    @Override
-    public void componentResized(ComponentEvent e) {
+    private void update() {
         int w = getWidth();
         int h = getHeight();
         buffer.resize(w, h);
-        
-        SwingUtilities.invokeLater(() -> { canvas.update(canvas.getGraphics()); });
+
+        SwingUtilities.invokeLater(() -> {
+            canvas.update(canvas.getGraphics());
+            canvas.validate();
+        });
+    }
+    
+    @Override
+    public void componentResized(ComponentEvent e) {
+        update();
     }
 
     @Override

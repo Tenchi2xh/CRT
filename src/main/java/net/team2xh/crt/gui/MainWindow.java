@@ -37,11 +37,17 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import net.team2xh.crt.gui.editor.Editor;
 import net.team2xh.crt.gui.editor.EditorTextPane;
 import net.team2xh.crt.gui.entities.EntityTree;
 import net.team2xh.crt.gui.graphs.SystemPanel;
+import net.team2xh.crt.gui.liveview.LiveViewPanel;
+import net.team2xh.crt.gui.liveview.TestScene;
 import net.team2xh.crt.gui.menus.StatusBar;
 import net.team2xh.crt.gui.menus.ToolBar;
 import net.team2xh.crt.gui.util.GUIToolkit;
@@ -65,10 +71,18 @@ public class MainWindow extends JFrame {
     private final SystemPanel system;
     private final ConsolePanel console;
     private final StatusBar statusbar;
+    private LiveViewPanel liveview;
     
     public static MainWindow getInstance() {
         return instance;
     }
+    
+    private final DefaultCDockable dEditor;
+    private final DefaultCDockable dNavigator;
+    private final DefaultCDockable dRender;
+    private final DefaultCDockable dSystem;
+    private final DefaultCDockable dConsole;
+    private final DefaultCDockable dLiveview;
     
     private MainWindow() {
 
@@ -94,6 +108,7 @@ public class MainWindow extends JFrame {
         render = new RenderPanel();
         system = new SystemPanel();
         console = new ConsolePanel();
+        liveview = new LiveViewPanel(new TestScene(), this);
         
         CContentArea contentArea = control.getContentArea();
         ToolBar toolbar = new ToolBar();
@@ -105,17 +120,19 @@ public class MainWindow extends JFrame {
         add(statusbar, BorderLayout.PAGE_END);
 
 
-        DefaultCDockable dEditor = (DefaultCDockable) create("Script", editor);
-        DefaultCDockable dNavigator = (DefaultCDockable) create("Navigator", navigator);
-        DefaultCDockable dRender = (DefaultCDockable) create("Render", render);
-        DefaultCDockable dSystem = (DefaultCDockable) create("System", system);
-        DefaultCDockable dConsole = (DefaultCDockable) create("Console", console);
+        dEditor = (DefaultCDockable) create("Script", editor);
+        dNavigator = (DefaultCDockable) create("Navigator", navigator);
+        dRender = (DefaultCDockable) create("Render", render);
+        dSystem = (DefaultCDockable) create("System", system);
+        dConsole = (DefaultCDockable) create("Console", console);
+        dLiveview = (DefaultCDockable) create("Live view", liveview);
         
         dEditor.setTitleIcon(new ImageIcon(GUIToolkit.getIcon("/icons/script.png")));
         dNavigator.setTitleIcon(new ImageIcon(GUIToolkit.getIcon("/icons/navigator.png")));
         dRender.setTitleIcon(new ImageIcon(GUIToolkit.getIcon("/icons/renderer.png")));
         dSystem.setTitleIcon(new ImageIcon(GUIToolkit.getIcon("/icons/system.png")));
         dConsole.setTitleIcon(new ImageIcon(GUIToolkit.getIcon("/icons/console.png")));
+        dLiveview.setTitleIcon(new ImageIcon(GUIToolkit.getIcon("/icons/persp_live.png")));
 
         double wr = 0.4;
         double we = 0.4;
@@ -126,7 +143,7 @@ public class MainWindow extends JFrame {
         double h2 = 1 - h1;
 
         CGrid grid = new CGrid(control);
-        grid.add(0, 0, wr, h1, dRender);
+        grid.add(0, 0, wr, h1, dRender, dLiveview);
         grid.add(wr, 0, we, h1, dEditor);
         grid.add(wr + we, 0, wn, h1, dNavigator);
         grid.add(0, h1, wr + we, h2, dConsole);
@@ -139,6 +156,11 @@ public class MainWindow extends JFrame {
         dRender.setMinimizable(true);
         dRender.setLocation(CLocation.base().minimalWest());
         dRender.setExtendedMode(ExtendedMode.NORMALIZED);
+        
+        dLiveview.setMaximizable(true);
+        dLiveview.setMinimizable(true);
+        dLiveview.setLocation(CLocation.base().minimalWest());
+        dLiveview.setExtendedMode(ExtendedMode.NORMALIZED);
 
         dNavigator.setMinimizable(true);
         dNavigator.setLocation(CLocation.base().minimalEast());
@@ -201,5 +223,31 @@ public class MainWindow extends JFrame {
 
     public StatusBar getStatusBar() {
         return statusbar;
+    }
+    
+    public LiveViewPanel getLiveViewPanel() {
+        return liveview;
+    }
+
+    public void updateLiveView(Scene scene) {
+        JPanel p = new JPanel(new BorderLayout());
+        JLabel l = new JLabel("Initializing...", SwingConstants.CENTER);
+        p.add(l, BorderLayout.CENTER);
+        
+        liveview.stop();
+        dLiveview.remove(liveview);
+        dLiveview.add(p);
+        dLiveview.getContentPane().revalidate();
+        dLiveview.getContentPane().repaint();
+        
+        SwingUtilities.invokeLater(() -> {
+            liveview = new LiveViewPanel(scene, this);
+            liveview.repaint();
+            dLiveview.remove(p);
+            dLiveview.add(liveview);
+            dLiveview.getContentPane().revalidate();
+            dLiveview.getContentPane().repaint();
+        });
+
     }
 }

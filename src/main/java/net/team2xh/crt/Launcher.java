@@ -49,6 +49,9 @@ public class Launcher {
             Theme.setLightTheme();
             GUIToolkit.initGUI();
 
+            // Disable jPCT logger
+            com.threed.jpct.Logger.setLogLevel(com.threed.jpct.Logger.LL_ONLY_ERRORS);
+            
             TestMainWindow.main(args);
         } catch (Exception ex) {
             Logger.getLogger(Launcher.class.getName()).log(Level.SEVERE, null, ex);
