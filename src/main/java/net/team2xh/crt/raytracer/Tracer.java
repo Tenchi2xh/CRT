@@ -261,12 +261,13 @@ public class Tracer {
     
     private ForkJoinPool pool;
     
-    public void parallelRender(int passes, BiConsumer<int[][], Integer> drawer, Runnable ender, Scene scene) {
+    public ForkJoinPool parallelRender(int passes, BiConsumer<int[][], Integer> drawer, Runnable ender, Scene scene) {
         pool = new ForkJoinPool(SystemInformations.cores());
         pool.execute(() -> {
             render(passes, drawer, scene);
             ender.run();
         });
+        return pool;
     }
 
     public void stop() {

@@ -98,7 +98,7 @@ final public class Actions {
                     String code = editor.getText();
                     Script script = Compiler.compile(code);
                     script.getSettings().setResolution(main.getRenderer().getWidth(), main.getRenderer().getHeight());
-                    refreshLiveView(script);
+                    //refreshLiveView(script);
                     RenderPanel.renderScene(script.getScene(), () -> {
                         a.init("play", "Render", "Render the current scene", KeyEvent.VK_R);
                         a.setUserObject(true);

@@ -68,6 +68,7 @@ public class MainWindow extends JFrame {
     private final Editor editor;
     private final EntityTree navigator;
     private final RenderPanel render;
+    private final AnimationPanel animator;
     private final SystemPanel system;
     private final ConsolePanel console;
     private final StatusBar statusbar;
@@ -80,6 +81,7 @@ public class MainWindow extends JFrame {
     private final DefaultCDockable dEditor;
     private final DefaultCDockable dNavigator;
     private final DefaultCDockable dRender;
+    private final DefaultCDockable dAnimator;
     private final DefaultCDockable dSystem;
     private final DefaultCDockable dConsole;
     private final DefaultCDockable dLiveview;
@@ -106,6 +108,7 @@ public class MainWindow extends JFrame {
         editor = new Editor();
         navigator = new EntityTree();
         render = new RenderPanel();
+        animator = new AnimationPanel(editor.getEditor());
         system = new SystemPanel();
         console = new ConsolePanel();
         liveview = new LiveViewPanel(new TestScene(), this);
@@ -123,6 +126,7 @@ public class MainWindow extends JFrame {
         dEditor = (DefaultCDockable) create("Script", editor);
         dNavigator = (DefaultCDockable) create("Navigator", navigator);
         dRender = (DefaultCDockable) create("Render", render);
+        dAnimator = (DefaultCDockable) create("Animation", animator);
         dSystem = (DefaultCDockable) create("System", system);
         dConsole = (DefaultCDockable) create("Console", console);
         dLiveview = (DefaultCDockable) create("Live view", liveview);
@@ -130,6 +134,7 @@ public class MainWindow extends JFrame {
         dEditor.setTitleIcon(new ImageIcon(GUIToolkit.getIcon("/icons/script.png")));
         dNavigator.setTitleIcon(new ImageIcon(GUIToolkit.getIcon("/icons/navigator.png")));
         dRender.setTitleIcon(new ImageIcon(GUIToolkit.getIcon("/icons/renderer.png")));
+        dAnimator.setTitleIcon(new ImageIcon(GUIToolkit.getIcon("/icons/play.png")));
         dSystem.setTitleIcon(new ImageIcon(GUIToolkit.getIcon("/icons/system.png")));
         dConsole.setTitleIcon(new ImageIcon(GUIToolkit.getIcon("/icons/console.png")));
         dLiveview.setTitleIcon(new ImageIcon(GUIToolkit.getIcon("/icons/persp_live.png")));
@@ -143,7 +148,7 @@ public class MainWindow extends JFrame {
         double h2 = 1 - h1;
 
         CGrid grid = new CGrid(control);
-        grid.add(0, 0, wr, h1, dRender, dLiveview);
+        grid.add(0, 0, wr, h1, dRender, dLiveview, dAnimator);
         grid.add(wr, 0, we, h1, dEditor);
         grid.add(wr + we, 0, wn, h1, dNavigator);
         grid.add(0, h1, wr + we, h2, dConsole);
@@ -156,6 +161,12 @@ public class MainWindow extends JFrame {
         dRender.setMinimizable(true);
         dRender.setLocation(CLocation.base().minimalWest());
         dRender.setExtendedMode(ExtendedMode.NORMALIZED);
+
+        dAnimator.setExternalizable(true);
+        dAnimator.setMaximizable(true);
+        dAnimator.setMinimizable(true);
+        dAnimator.setLocation(CLocation.base().minimalWest());
+        dAnimator.setExtendedMode(ExtendedMode.NORMALIZED);
         
         dLiveview.setMaximizable(true);
         dLiveview.setMinimizable(true);
@@ -177,6 +188,8 @@ public class MainWindow extends JFrame {
 
         dEditor.setMaximizable(true);
 
+        dAnimator.toFront();
+        
         setVisible(true);
 
         System.out.println("Welcome to CRT");

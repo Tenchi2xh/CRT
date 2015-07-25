@@ -68,17 +68,25 @@ final public class Compiler extends CRTBaseVisitor {
         scope = new Scope();
     }
 
-    public static Script compile(String code) {
-
+    private static Script compile(String code, Compiler compiler) {
         CRTLexer lexer = new CRTLexer(new ANTLRInputStream(code));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         CRTParser parser = new CRTParser(tokens);
         ParseTree tree = parser.script();
 
-        Compiler compiler = new Compiler(code);
         compiler.visit(tree);
 
-        return compiler.script;
+        return compiler.script; 
+    }
+    
+    public static Script compile(String code) {
+        return compile(code, new Variable(new Identifier("t"), 0));
+    }
+    
+    public static Script compile(String code, Variable v) {
+        Compiler compiler = new Compiler(code);
+        compiler.scope.add(v);
+        return compile(code, compiler);
     }
 
     @Override
