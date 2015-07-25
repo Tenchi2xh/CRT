@@ -25,8 +25,12 @@ import java.awt.Rectangle;
 import java.awt.TexturePaint;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
+import javax.imageio.stream.FileImageOutputStream;
+import javax.imageio.stream.ImageOutputStream;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -35,12 +39,15 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import net.team2xh.crt.gui.editor.EditorTextPane;
+import net.team2xh.crt.gui.util.AnimatedGifEncoder;
+import net.team2xh.crt.gui.util.GifSequenceWriter;
 import net.team2xh.crt.language.compiler.Compiler;
 import net.team2xh.crt.language.compiler.Identifier;
 import net.team2xh.crt.language.compiler.Script;
 import net.team2xh.crt.language.compiler.Variable;
 import net.team2xh.crt.raytracer.Scene;
 import net.team2xh.crt.raytracer.Tracer;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -163,6 +170,30 @@ public class AnimationPanel extends JPanel {
             }
             slider.setEnabled(true);
             render.setEnabled(true);
+            
+            try {
+                // Save gif
+                ImageOutputStream output = new FileImageOutputStream(new File("./animationA_" + (System.currentTimeMillis() / 1000) + ".gif"));
+                GifSequenceWriter writer = new GifSequenceWriter(output, frames[0].getType(), 16, true);
+                for (int i = 0; i < frames.length; ++i) {
+                    writer.writeToSequence(frames[i]);
+                }
+                writer.close();
+                output.close();
+            } catch (IOException ex) {
+                Exceptions.printStackTrace(ex);
+            }
+            
+            AnimatedGifEncoder e = new AnimatedGifEncoder();
+            e.start("./animationB_" + (System.currentTimeMillis() / 1000) + ".gif");
+            e.setDelay(10);
+            for (int i = 0; i < frames.length; ++i) {
+                e.addFrame(frames[i]);
+            }
+            e.finish();
+
+            
+            
         })).start();
 
     }
