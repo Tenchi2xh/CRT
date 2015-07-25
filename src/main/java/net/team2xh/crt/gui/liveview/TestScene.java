@@ -155,8 +155,8 @@ public class TestScene extends Scene {
 //            double z = Math.sin(i / 3.0) * 0.2 - 0.3;
 //            this.add(new Sphere(new Vector3(x, y, z), 0.01, sphereMat));
 //        }
-        this.getSettings().setSupersampling(2);
-        this.getSettings().setDOFSamples(64);
+        this.getSettings().setSupersampling(1);
+        this.getSettings().setDOFSamples(16);
         camera.setAperture(15);
         camera.setFocalDistance(1.2);
     }

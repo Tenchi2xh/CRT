@@ -123,6 +123,14 @@ public final class Settings {
         this.notes = notes;
     }
 
+    public int getDOFSamples() {
+        return dofSamples;
+    }
+
+    public int getSupersampling() {
+        return supersampling;
+    }
+
     // TODO: own class with methods
     public enum Projection {
         PINHOLE("Pinhole"),

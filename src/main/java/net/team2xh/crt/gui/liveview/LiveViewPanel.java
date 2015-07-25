@@ -38,6 +38,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.Enumeration;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -48,7 +50,9 @@ import javax.swing.event.MouseInputAdapter;
 import net.team2xh.crt.gui.RenderPanel;
 import net.team2xh.crt.gui.liveview.converters.SceneConverter;
 import net.team2xh.crt.gui.util.GUIToolkit;
+import net.team2xh.crt.gui.util.SystemClipboard;
 import net.team2xh.crt.raytracer.Scene;
+import net.team2xh.crt.raytracer.math.Vector3;
 import org.openide.util.Exceptions;
 
 /**
@@ -77,6 +81,7 @@ public class LiveViewPanel extends JPanel {
     private JButton camUp;
     private JButton camDn;
     private JButton renderButton;
+    private JButton copyCam;
     public JToggleButton toggleShdr;
 
     private MouseListener ml;
@@ -88,9 +93,11 @@ public class LiveViewPanel extends JPanel {
     public Camera cameraY;
     public Camera cameraZ;
     private boolean isRunning = true;
+    private Camera[] cameras;
+    private final Scene scene;
 
     public LiveViewPanel(Scene scene, JFrame parent) {
-        
+        this.scene = scene;
         this.parent = parent;
         
         SwingUtilities.invokeLater(() -> {
@@ -114,24 +121,60 @@ public class LiveViewPanel extends JPanel {
             ml = new MouseListener();
             buffers[0].getCanvas().addMouseListener(ml);
             buffers[0].getCanvas().addMouseMotionListener(ml);
+            buffers[0].getCanvas().addMouseWheelListener(ml);
 
             JPanel buttons = new JPanel();
             camUp = new JButton("^");
             camDn = new JButton("v");
             camLt = new JButton("<");
             camRt = new JButton(">");
-            renderButton = new JButton("Render");
+            renderButton = new JButton("Preview");
             toggleShdr = new JToggleButton("Shaders");
+            copyCam = new JButton("Copy Camera");
             buttons.add(camUp);
             buttons.add(camDn);
             buttons.add(camLt);
             buttons.add(camRt);
+            buttons.add(copyCam);
             buttons.add(renderButton);
-            buttons.add(toggleShdr);
             add(buttons, BorderLayout.PAGE_END);
 
             renderButton.addActionListener((ActionEvent e) -> {
+                Camera c0 = cameras[0];
+                SimpleVector p = c0.getPosition();
+                net.team2xh.crt.raytracer.Camera c1 = scene.getCamera();
+                net.team2xh.crt.raytracer.Camera c2 = new net.team2xh.crt.raytracer.Camera(
+                        new Vector3(p.x / distMult, -p.y / distMult, p.z / distMult),
+                        c1.getPointing(),
+                        Math.toDegrees(c1.getVerticalFov())
+                );
+                scene.setCamera(c2);
                 RenderPanel.renderScene(scene, () -> {}, renderPanel);
+                
+            });
+            
+            copyCam.addActionListener((ActionEvent e) -> {
+                Camera c = cameras[0];
+                SimpleVector p = c.getPosition();
+                Vector3 l = scene.getCamera().getPointing();
+                
+                String result = String.format("Camera {\n"
+                        + "    position      -> vec3(%.1f, %.1f, %.1f)\n"
+                        + "    pointing      -> vec3(%.1f, %.1f, %.1f)\n"
+                        + "    fov           -> %.1f\n",
+                        p.x / distMult, -p.y / distMult, p.z / distMult,
+                        l.x, l.y, l.z,
+                        Math.toDegrees(scene.getCamera().getVerticalFov()));
+                
+                if (scene.getCamera().getAperture() != 3) {
+                    result += "    aperture      -> " + scene.getCamera().getAperture() + "\n";
+                }
+                if (scene.getCamera().getFocalDistance()!= 0.5) {
+                    result += "    focaldistance -> " + scene.getCamera().getFocalDistance() + "\n";
+                }
+                result += "}";
+                
+                SystemClipboard.copy(result);
             });
 
             Config.lightMul = 1;
@@ -265,7 +308,7 @@ public class LiveViewPanel extends JPanel {
                 highlightHoveredObject();
             }
 
-            Camera[] cameras = new Camera[]{world.getCamera(), cameraY, cameraZ};
+            cameras = new Camera[]{world.getCamera(), cameraY, cameraZ};
 
             // TODO: Only draw when needed
             for (int i = 0; i < 3; ++i) {
@@ -307,7 +350,7 @@ public class LiveViewPanel extends JPanel {
         System.out.println("Stopped");
     }
 
-    private class MouseListener extends MouseInputAdapter {
+    private class MouseListener extends MouseInputAdapter implements MouseWheelListener {
 
         private int x = 0;
         private int y = 0;
@@ -353,6 +396,16 @@ public class LiveViewPanel extends JPanel {
         public void mouseMoved(MouseEvent e) {
             x = e.getX();
             y = e.getY();
+        }
+        
+        @Override
+        public void mouseWheelMoved(MouseWheelEvent e) {
+            int notches = e.getWheelRotation();
+            float amount = notches * .01f;
+            double vfov = scene.getCamera().getVerticalFov() + amount;
+            float hfov = 2 * (float) Math.atan(Math.tan(vfov / 2) * scene.getSettings().getWidth() / scene.getSettings().getHeight());
+            cameras[0].setFOV(2f * (float) Math.tan(hfov / 2));
+            scene.getCamera().setVerticalFov(Math.toDegrees(vfov));
         }
 
     }

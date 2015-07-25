@@ -98,6 +98,7 @@ final public class Actions {
                     String code = editor.getText();
                     Script script = Compiler.compile(code);
                     script.getSettings().setResolution(main.getRenderer().getWidth(), main.getRenderer().getHeight());
+                    refreshLiveView(script);
                     RenderPanel.renderScene(script.getScene(), () -> {
                         a.init("play", "Render", "Render the current scene", KeyEvent.VK_R);
                         a.setUserObject(true);
@@ -112,14 +113,7 @@ final public class Actions {
     
     public final static Action preview =
             new Action("preview", "Preview", "Refresh the live preview window", KeyEvent.VK_P, (Action a) -> {
-                MainWindow main = MainWindow.getInstance();
-                EditorTextPane editor = main.getEditor();
-
-                String code = editor.getText();
-                Script script = Compiler.compile(code);
-                script.getSettings().setResolution(main.getLiveViewPanel().getWidth() / 2, main.getLiveViewPanel().getHeight() / 2);
-
-                main.updateLiveView(script.getScene());
+                refreshLiveView();
             });
 
     public final static Action export =
@@ -275,6 +269,7 @@ final public class Actions {
                 reader.read(chars);
                 editor.setText(new String(chars));
                 editor.resetChanged();
+                refreshLiveView();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -304,5 +299,23 @@ final public class Actions {
         }
         return false;
     }
+
+    private static void refreshLiveView() {
+        MainWindow main = MainWindow.getInstance();
+        EditorTextPane editor = main.getEditor();
+
+        String code = editor.getText();
+        Script script = Compiler.compile(code);
+        
+        refreshLiveView(script);
+    }
     
+    private static void refreshLiveView(Script script) {
+        MainWindow main = MainWindow.getInstance();
+
+        script.getSettings().setResolution(main.getLiveViewPanel().getWidth() / 2, main.getLiveViewPanel().getHeight() / 2);
+
+        main.updateLiveView(script.getScene());
+    }
+
 }

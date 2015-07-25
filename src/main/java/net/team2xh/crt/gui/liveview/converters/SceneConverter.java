@@ -95,18 +95,18 @@ final public class SceneConverter {
             }
         }
 
-        float vfov = (float) scene.getCamera().getVerticalFov();
-        float hfov = 2 * (float) Math.atan(Math.tan(vfov / 2) * scene.getSettings().getWidth() / scene.getSettings().getHeight());
-
-        world.getCamera().setFOVLimits(0, (float) (2 * Math.PI));
-        world.getCamera().setFovAngle(hfov);
-
         p.camOrigPos = scene.getCamera().getPosition().multiply(p.distMult).getRightHanded().simpleVector();
         p.camLookAt = scene.getCamera().getPointing().multiply(p.distMult).getRightHanded().simpleVector();
         world.getCamera().setPosition(p.camOrigPos);
         world.getCamera().lookAt(p.camLookAt);
         world.getCamera().rotateCameraAxis(world.getCamera().getDirection(), (float) -scene.getCamera().getRoll());
-
+        
+        float vfov = (float) scene.getCamera().getVerticalFov();
+        float hfov = 2 * (float) Math.atan(Math.tan(vfov / 2) * scene.getSettings().getWidth() / scene.getSettings().getHeight());
+        
+        world.getCamera().setFOVLimits(0, (float) (2 * Math.PI));
+        world.getCamera().setFOV(2f * (float) Math.tan(hfov / 2));
+        
         p.cameraY = new Camera();
         p.cameraZ = new Camera();
         p.cameraY.setPosition(0, -5 * p.distMult, 0);
@@ -151,6 +151,16 @@ final public class SceneConverter {
                 obj = Primitives.getSphere((float) sphere.getRadius() * p.distMult);
             } else if (type == Plane.class) {
                 obj = ExtendedPrimitives.createPlane(p.distMult, 100);
+                // From http://stackoverflow.com/a/13199273
+                SimpleVector n0 = SimpleVector.create(0.0f, 1.0f, 0.0f);
+                SimpleVector n1 = ((Plane) e).getNormal().getRightHanded().simpleVector();
+                if (n1.equals(SimpleVector.create(0.0f, 1.0f, 0.0f))) {
+                    obj.rotateX((float) Math.PI);
+                } else if (!n1.equals(SimpleVector.create(0.0f, -1.0f, 0.0f))) {
+                    SimpleVector axis = n0.calcCross(n1);
+                    float angle = (float) Math.acos(n0.calcDot(n1));
+                    obj.rotateAxis(axis, angle);
+                }
             } else {
                 obj = ExtendedPrimitives.createSprite(0.2f * p.distMult);
                 obj.setTexture("unknown");
