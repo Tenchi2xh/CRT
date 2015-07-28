@@ -208,3 +208,22 @@ Level              & Operator                       & Description               
 
 ## Compiling process
 
+The **compiler** takes a coded script, compiles it, and produces a `Scene` object along with its `Settings`. It works in a top-down approach, and although it appears long with its 800 lines of code, it is very easy to understand.
+
+Thanks to the visitor design pattern, the top-down approach works this way: for each rule in the grammar, a `visitRule()` method exists and recursively calls other visitor methods for each of the sub-rules contained.
+
+For example, if a line of code is `foo = 3 * 3`:
+
+- The parser determines that the line is an assignment (grammar rule 20), and `visitAssignment()` is called.
+- This method knows that there always are two operands around the equal sign, and will tell the visitor to accept both of them.
+- Because the left operand is an identifier (grammar rule 24), `visitIdentifier()` will be called and will return an `Identifier` objects
+- The right operand parses out as a multiplication (grammar rule 14), and so `visitMultiplication()` will be called.
+- For the multiplication, both operands will be fully resolved in a similar fashion. If one of the operand is an identifier, the compiler will try to find the value associated with the identifier name. When the result of the multiplication is computed, the value will be returned.
+
+After this top-down traversal is done, all the values are returned to a higher level, and a bottom-up traversal happens:
+
+- The visit of both operands of the multiplication return to the multiplication
+- The visit of the multiplication returns to the assignment
+- The visit of the identifier on the left of the equal sign returns to the assignment
+- The assignment now has both sides of the equal solved, creates a variable and returns it to the compiler
+- The compiler adds the variable to its scope

@@ -603,7 +603,7 @@ Three factors have an effect on how the depth of field blur will look like: aper
 
 The *focal distance*'s effect is very straight forward: it controls the distance at which the focal plane will reside, in which objects are in focus and not blurred.
 
-Finally, the aperture shape will determine the shape of the *bokeh* (see section \ref{sec:camera}). We need to model shapes, which will provide a method to obtain a uniformly distributed random point from inside their boundaries. A lazy but efficient approach is to take a random point from a square, which only consists of having two random float numbers ranging from 0 to 1 as $x$ and $y$ coordinates.
+Finally, the aperture shape will determine the shape of the *bokeh* (see section \ref{sec:camera}). We need to model shapes, which will provide a method to obtain a uniformly distributed random point from inside their boundaries. A lazy but efficient approach is to take random points from a square, which only consists of having two random float numbers ranging from 0 to 1 as $x$ and $y$ coordinates.
 
 A perfect model uses a disc, which is the shape cameras try to obtain. Efficient and correct algorithms to generate a random point in a circle already exists and were implemented in the project.
 
@@ -630,21 +630,32 @@ The depth of field model isn't very efficient performance-wise: because the sour
 
 ### Materials
 
-The following ideas were not implemented in the final project but were studied in detail. 
+The following concepts were not implemented in the final project but were studied. It is a very interesting domain on which could require a separate project on its own to fully master.
 
-Plain colours won't be enough for user creativity to fully bloom. The "traditional" rasterisation way to address this issue is to map external pictures to polygon --- or in our case, primitives. But another way is through **procedural texturing**.
+Plain colours won't be enough for user creativity to fully bloom. The "traditional" rasterisation way to address this issue is to map external pictures to polygon --- or in our case, primitives. But another way is through **procedural texturing**, which consists of algorithmically generating textures.
 
-INTRO TEXT
+One of the basis for procedural texturing lies within the *Perlin noise*, a type of gradient noise obtained by interpolating several grids of different sizes filled with random greyscale colours.
 
-TODO perlin noise picture
+\customfigC{img/perlin.png}{2D Perlin noise}{}{}{}
 
-- 3D texturing function
+A continuous three-dimensional version of the Perlin noise constitutes a primitive texture for procedural texturing. This volume of random noise has a contiguous aspect, and so can be sliced anywhere without showing any seams. Then, by arbitrarily applying operations, one can transform this 3D noise into interesting textures.
 
-- Procedural texturing
+The following example uses Perlin noise data to slightly alter the direction of the surface normal vectors of a sphere. This perturbation causes the spheres to appear rough in a realistic fashion.
 
-We can also use perlin noise to do bump mapping...
+\customfig{img/bumpmapping.jpg}{Bump mapping generated from perlin noise}{}{}{KTH Royal Institute of Technology}
 
-Map pictures to spheres or boxes UV mapping
+Other primitives can be used for texturing. For example, the following example uses a simple wave pattern that is easily mappable to a 3D space to produce a wooden texture. By applying random turbulences and varying the period, the very uniform wave pattern is transformed into a realistic looking wooden texture.
+
+\begin{figure}[!htbp]
+\centering
+\subfloat[Simple wave pattern]{\centering\makebox[.33\linewidth]{
+\includegraphics[width=0.28\linewidth,keepaspectratio]{img/waves.png}}}
+\subfloat[Some turbulences are applied]{\centering\makebox[.33\linewidth]{
+\includegraphics[width=0.28\linewidth,keepaspectratio]{img/noisewood.jpg}}}
+\subfloat[The 3D function is mapped to the colour of a primitive]{\centering\makebox[.33\linewidth]{
+\includegraphics[width=0.28\linewidth,keepaspectratio]{img/wood.png}}}
+\caption[Procedurally generated wood texture]{Procedurally generated wood texture}
+\end{figure}
 
 ### Supersampling \label{subsec:ss}
 
@@ -666,6 +677,13 @@ There are multiple ways to select coordinates inside a pixel: one could choose $
 
 In figure \ref{fig:ssaa}, we can see that the bigger grid we use, the more refined the final picture is. This, however, comes at a big cost: with a $4\times 4$ grid, a render will likely take at least 16 times as much time to render.
 
+\begin{figure*}[ht]
+  \includegraphics[width=\hsize,keepaspectratio]{img/pebbles.jpg}
+  \caption[Example of procedural textures]{With procedural texturing, the possibilities are endless. This picture by Jonathan \textsc{Hunt} was rendered with POV-Ray, which provides a very extensive array of tools for procedural texturing.}
+\end{figure*}
+
+\newpage
+
 ### Animations \label{sec:anim}
 
 An interesting thing to do with ray tracing is **animations**. The idea was suggested by prof. Pier \textsc{Donini} and fits nicely in the theme of the project.
@@ -683,3 +701,5 @@ At each frame, the value of $t$ is incremented and the user can use it in multip
 To use the animation mode, the user can switch to the "Animation" tab, choose how many frames to render and press "Render". After rendering the last frame, the user can go back and forth using the slider bar, and the animation is automatically saved in the GIF format in the application folder.
 
 An example of an animation can be found in the `demos/` folder, under the file name `demoAnimation.crt`.
+
+

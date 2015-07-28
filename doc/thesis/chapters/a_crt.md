@@ -120,7 +120,6 @@ Finally, here are a few useful functions not found in the examples: `sin(t)`, `c
 
 \thispagestyle{empty}
 \begin{figure}
-  \color{white}
   \includegraphics[width=\hsize,keepaspectratio]{img/poster1.png}
   \caption[Second example of a CRT render]{Second example of a CRT render -- this intricate sculpture was realized thanks to CSG operations. This picture will be used for the promotional poster (credits to prof. Alfred \textsc{Flückiger} for providing the panorama of the school).}
   \label{fig:ex2}
