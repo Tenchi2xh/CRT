@@ -187,7 +187,8 @@ public class MainWindow extends JFrame {
         dConsole.setExtendedMode(ExtendedMode.NORMALIZED);
 
         dEditor.setMaximizable(true);
-
+       
+        dNavigator.setExtendedMode(ExtendedMode.MINIMIZED);
         dRender.toFront();
         
         setVisible(true);

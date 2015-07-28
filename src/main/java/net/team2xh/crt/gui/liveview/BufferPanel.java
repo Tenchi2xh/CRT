@@ -36,7 +36,7 @@ public class BufferPanel extends JPanel implements ComponentListener {
     private Canvas canvas;
 
     public BufferPanel() {
-        buffer = new FrameBuffer(379, 297, FrameBuffer.SAMPLINGMODE_GL_AA_4X);
+        buffer = new FrameBuffer(471, 297, FrameBuffer.SAMPLINGMODE_GL_AA_4X);
         buffer.disableRenderer(IRenderer.RENDERER_SOFTWARE);
         canvas = buffer.enableGLCanvasRenderer();
 
