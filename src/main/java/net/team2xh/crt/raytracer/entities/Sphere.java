@@ -66,7 +66,7 @@ public class Sphere extends Entity {
         double d2 = (-b - Math.sqrt(delta)) / (2*a);
         
         // They're both behind
-        if (d1 < 0.00001 && d2 < Tracer.E)
+        if (d1 < Tracer.E && d2 < Tracer.E)
             return Hit.miss;
         
         double entry = 0;

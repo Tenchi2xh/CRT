@@ -703,3 +703,22 @@ To use the animation mode, the user can switch to the "Animation" tab, choose ho
 An example of an animation can be found in the `demos/` folder, under the file name `demoAnimation.crt`.
 
 
+\begin{figure*}[ht]
+  \includegraphics[width=\hsize,keepaspectratio]{img/zfighting.png}
+  \caption[Depth glitch]{Depth glitch}
+\end{figure*}
+
+\newpage 
+
+### Miscellaneous
+
+During the development of the ray tracing engine, one type of bug was encountered multiple times in all parts of the module, related to all the depth calculations.
+
+This glitch appears in two distinct cases:
+
+- During primitive intersection computations, some comparisons between double precision floating numbers have to be made, and due to their precision, the comparison can produce a false result and collisions happen.
+- When the intersection point between a ray and a primitive is precisely on the primitives surface, the shadow ray bouncing off the surface searching for a light source will immediately hit the point where it started, making the engine think the point is in shadow where it could have reached the light source.
+
+Thankfully, a simple but tedious fix has been found: defining a global $\varepsilon$ value, and using it in all occurrences of double comparisons and hit confirmation.
+
+In the code, this value has been arbitrarily set to \SI{1e-10} and is stored in `Tracer.E`. 
