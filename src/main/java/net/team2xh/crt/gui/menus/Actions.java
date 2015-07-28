@@ -166,7 +166,6 @@ final public class Actions {
                     URI uri = d.getClass().getResource("/images/logo.png").toURI();
                     File file = new File(uri);
                     ImageIcon logo = new ImageIcon(ImageIO.read(file));
-                    System.out.println(logo);
 
                     JLabel logoL = new JLabel(logo);
                     contents.add(logoL, BorderLayout.PAGE_START);
@@ -239,7 +238,7 @@ final public class Actions {
             if (!fc.getSelectedFile().getAbsolutePath().endsWith(".crt")) {
                 f = new File(fc.getSelectedFile() + ".crt");
                 lastPath = f.getAbsolutePath();
-                System.out.println(lastPath);
+                System.out.println("Saved script as " + lastPath);
             }
             try (Writer writer = new BufferedWriter(new FileWriter(f))) {
                 writer.write(editor.getText());
@@ -288,7 +287,7 @@ final public class Actions {
             if (!fc2.getSelectedFile().getAbsolutePath().endsWith(".png")) {
                 f = new File(fc2.getSelectedFile() + ".png");
                 lastPath = f.getAbsolutePath();
-                System.out.println(lastPath);
+                System.out.println("Saved image as " + lastPath);
             }
             try {
                 ImageIO.write(bi, "PNG", f);

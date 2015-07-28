@@ -1,22 +1,3 @@
-## Mathematical helper classes
-
-- `Matrix4`
-- `Vector3`
-- Poisson disk distribution
-    - Explanation
-    - Nice diagrams
-    - Explain why it's slow and not so useful
-- Uniform Distribution
-    - Explanation
-    - Nice diagrams
-    - Explain why it's nice
-    - Credits to J.-F. Hêche
-
-## GUI
-
-- Substance
-- `GUIToolkit`
-
 ## Development journal
 
 \subsection*{09.03.2015 - 15.03.2015}
@@ -160,3 +141,38 @@
 \subsection*{11.06.2015 - 17.06.2015}
 
 - Intermediary report
+
+\subsection*{18.06.2015 - 25.06.2015}
+
+- Finished the intermediary report
+- Intermediary presentation
+    + Made the presentation slides in \LaTeX
+    + Prepared the demo and fixed related bugs
+
+\subsection*{26.06.2015 - 03.07.2015}
+
+- Work on the paper
+- Work on the user interface
+
+\subsection*{04.07.2015 - 11.07.2015}
+
+- Work on the paper
+- Live view integration
+    + Refactoring
+    + Bug fixes
+    + Camera export
+    + FOV controls and corrections
+
+\subsection*{12.07.2015 - 18.07.2015}
+
+- Work on the paper
+- Animations
+    + GUI module
+    + Compiler modifications for preset variables
+    + GIF export
+- Added trigonometry and random functions to compiler
+
+\subsection*{19.07.2015 - 25.07.2015}
+
+- Final rush for bug fixes
+- Finished paper

@@ -159,8 +159,8 @@ public class LiveViewPanel extends JPanel {
                 Vector3 l = scene.getCamera().getPointing();
                 
                 String result = String.format("Camera {\n"
-                        + "    position      -> vec3(%.1f, %.1f, %.1f)\n"
-                        + "    pointing      -> vec3(%.1f, %.1f, %.1f)\n"
+                        + "    position      -> vec3(%.2f, %.2f, %.2f)\n"
+                        + "    pointing      -> vec3(%.2f, %.2f, %.2f)\n"
                         + "    fov           -> %.1f\n",
                         p.x / distMult, -p.y / distMult, p.z / distMult,
                         l.x, l.y, l.z,

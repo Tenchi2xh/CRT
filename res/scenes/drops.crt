@@ -1,0 +1,2259 @@
+l1 = PointLight {
+    origin -> vec3(2.12 + 0.5, 3.9, -2.12 + 1.6)
+    color -> rgb(0.7, 0.2, 0.2)
+    falloff -> 70.0
+}
+l2 = PointLight {
+    origin -> vec3(-2.12 + 0.5, 3.9, -2.12 + 1.6)
+    color -> rgb(0.2, 0.9, 0.2)
+    falloff -> 70.0
+}
+l3 = PointLight {
+    origin -> vec3(0.0 + 0.5, 3.9, 1.5 + 1.2)
+    color -> rgb(0.2, 0.2, 0.9)
+    falloff -> 70.0
+}
+
+sun = ParallelLight {
+    from -> vec3(-0.3, 1.5, -10.0)
+    pointing -> vec3(0.0, 0.0, 0.0)
+    color -> rgb(1.0, 1.0, 1.0)
+}
+
+cam = Camera {
+    position      -> vec3(1.9, 1.7, 4.2)
+    pointing      -> vec3(0.0, 1.5, 0.0)
+    fov           -> 75.0
+    aperture      -> 30.0
+    focaldistance -> 3.0
+}
+
+bg = Background {
+    image -> "/images/panorama/sky.jpg"
+    angle -> 3.4
+}
+
+Settings {
+    title      -> "Example 01"
+    author     -> "Tenchi (tenchi@team2xh.net)"
+    date       -> "24.06.2015"
+    notes      -> "Sample CRT scene in TRC language"
+    lights     -> [l1, l2, l3, sun]
+    camera     -> cam
+    background -> bg
+    supersampling -> 2
+    dofsamples -> 32
+}
+
+gmat = Material {
+    color -> rgb(1.0, 1.0, 1.0)
+    reflectivity -> 0.7
+}
+b0 = Box {
+    cornerA -> vec3(-5.0, -10.0, -5.0)
+    cornerB -> vec3(-4.5, 0.195, -4.5)
+    material -> gmat
+}
+
+b1 = Box {
+    cornerA -> vec3(-5.0, -10.0, -4.5)
+    cornerB -> vec3(-4.5, 0.083, -4.0)
+    material -> gmat
+}
+
+b2 = Box {
+    cornerA -> vec3(-5.0, -10.0, -4.0)
+    cornerB -> vec3(-4.5, 0.011, -3.5)
+    material -> gmat
+}
+
+b3 = Box {
+    cornerA -> vec3(-5.0, -10.0, -3.5)
+    cornerB -> vec3(-4.5, 0.102, -3.0)
+    material -> gmat
+}
+
+b4 = Box {
+    cornerA -> vec3(-5.0, -10.0, -3.0)
+    cornerB -> vec3(-4.5, 0.151, -2.5)
+    material -> gmat
+}
+
+b5 = Box {
+    cornerA -> vec3(-5.0, -10.0, -2.5)
+    cornerB -> vec3(-4.5, 0.067, -2.0)
+    material -> gmat
+}
+
+b6 = Box {
+    cornerA -> vec3(-5.0, -10.0, -2.0)
+    cornerB -> vec3(-4.5, 0.022, -1.5)
+    material -> gmat
+}
+
+b7 = Box {
+    cornerA -> vec3(-5.0, -10.0, -1.5)
+    cornerB -> vec3(-4.5, 0.100, -1.0)
+    material -> gmat
+}
+
+b8 = Box {
+    cornerA -> vec3(-5.0, -10.0, -1.0)
+    cornerB -> vec3(-4.5, 0.161, -0.5)
+    material -> gmat
+}
+
+b9 = Box {
+    cornerA -> vec3(-5.0, -10.0, -0.5)
+    cornerB -> vec3(-4.5, 0.100, 0.0)
+    material -> gmat
+}
+
+b10 = Box {
+    cornerA -> vec3(-5.0, -10.0, 0.0)
+    cornerB -> vec3(-4.5, 0.145, 0.5)
+    material -> gmat
+}
+
+b11 = Box {
+    cornerA -> vec3(-5.0, -10.0, 0.5)
+    cornerB -> vec3(-4.5, 0.065, 1.0)
+    material -> gmat
+}
+
+b12 = Box {
+    cornerA -> vec3(-5.0, -10.0, 1.0)
+    cornerB -> vec3(-4.5, 0.082, 1.5)
+    material -> gmat
+}
+
+b13 = Box {
+    cornerA -> vec3(-5.0, -10.0, 1.5)
+    cornerB -> vec3(-4.5, 0.140, 2.0)
+    material -> gmat
+}
+
+b14 = Box {
+    cornerA -> vec3(-5.0, -10.0, 2.0)
+    cornerB -> vec3(-4.5, 0.180, 2.5)
+    material -> gmat
+}
+
+b15 = Box {
+    cornerA -> vec3(-5.0, -10.0, 2.5)
+    cornerB -> vec3(-4.5, 0.160, 3.0)
+    material -> gmat
+}
+
+b16 = Box {
+    cornerA -> vec3(-5.0, -10.0, 3.0)
+    cornerB -> vec3(-4.5, 0.029, 3.5)
+    material -> gmat
+}
+
+b17 = Box {
+    cornerA -> vec3(-5.0, -10.0, 3.5)
+    cornerB -> vec3(-4.5, 0.141, 4.0)
+    material -> gmat
+}
+
+b18 = Box {
+    cornerA -> vec3(-5.0, -10.0, 4.0)
+    cornerB -> vec3(-4.5, 0.013, 4.5)
+    material -> gmat
+}
+
+b19 = Box {
+    cornerA -> vec3(-4.5, -10.0, -5.0)
+    cornerB -> vec3(-4.0, 0.164, -4.5)
+    material -> gmat
+}
+
+b20 = Box {
+    cornerA -> vec3(-4.5, -10.0, -4.5)
+    cornerB -> vec3(-4.0, 0.059, -4.0)
+    material -> gmat
+}
+
+b21 = Box {
+    cornerA -> vec3(-4.5, -10.0, -4.0)
+    cornerB -> vec3(-4.0, 0.069, -3.5)
+    material -> gmat
+}
+
+b22 = Box {
+    cornerA -> vec3(-4.5, -10.0, -3.5)
+    cornerB -> vec3(-4.0, 0.051, -3.0)
+    material -> gmat
+}
+
+b23 = Box {
+    cornerA -> vec3(-4.5, -10.0, -3.0)
+    cornerB -> vec3(-4.0, 0.170, -2.5)
+    material -> gmat
+}
+
+b24 = Box {
+    cornerA -> vec3(-4.5, -10.0, -2.5)
+    cornerB -> vec3(-4.0, 0.030, -2.0)
+    material -> gmat
+}
+
+b25 = Box {
+    cornerA -> vec3(-4.5, -10.0, -2.0)
+    cornerB -> vec3(-4.0, 0.117, -1.5)
+    material -> gmat
+}
+
+b26 = Box {
+    cornerA -> vec3(-4.5, -10.0, -1.5)
+    cornerB -> vec3(-4.0, 0.199, -1.0)
+    material -> gmat
+}
+
+b27 = Box {
+    cornerA -> vec3(-4.5, -10.0, -1.0)
+    cornerB -> vec3(-4.0, 0.027, -0.5)
+    material -> gmat
+}
+
+b28 = Box {
+    cornerA -> vec3(-4.5, -10.0, -0.5)
+    cornerB -> vec3(-4.0, 0.081, 0.0)
+    material -> gmat
+}
+
+b29 = Box {
+    cornerA -> vec3(-4.5, -10.0, 0.0)
+    cornerB -> vec3(-4.0, 0.077, 0.5)
+    material -> gmat
+}
+
+b30 = Box {
+    cornerA -> vec3(-4.5, -10.0, 0.5)
+    cornerB -> vec3(-4.0, 0.028, 1.0)
+    material -> gmat
+}
+
+b31 = Box {
+    cornerA -> vec3(-4.5, -10.0, 1.0)
+    cornerB -> vec3(-4.0, 0.014, 1.5)
+    material -> gmat
+}
+
+b32 = Box {
+    cornerA -> vec3(-4.5, -10.0, 1.5)
+    cornerB -> vec3(-4.0, 0.001, 2.0)
+    material -> gmat
+}
+
+b33 = Box {
+    cornerA -> vec3(-4.5, -10.0, 2.0)
+    cornerB -> vec3(-4.0, 0.165, 2.5)
+    material -> gmat
+}
+
+b34 = Box {
+    cornerA -> vec3(-4.5, -10.0, 2.5)
+    cornerB -> vec3(-4.0, 0.141, 3.0)
+    material -> gmat
+}
+
+b35 = Box {
+    cornerA -> vec3(-4.5, -10.0, 3.0)
+    cornerB -> vec3(-4.0, 0.200, 3.5)
+    material -> gmat
+}
+
+b36 = Box {
+    cornerA -> vec3(-4.5, -10.0, 3.5)
+    cornerB -> vec3(-4.0, 0.054, 4.0)
+    material -> gmat
+}
+
+b37 = Box {
+    cornerA -> vec3(-4.5, -10.0, 4.0)
+    cornerB -> vec3(-4.0, 0.122, 4.5)
+    material -> gmat
+}
+
+b38 = Box {
+    cornerA -> vec3(-4.0, -10.0, -5.0)
+    cornerB -> vec3(-3.5, 0.089, -4.5)
+    material -> gmat
+}
+
+b39 = Box {
+    cornerA -> vec3(-4.0, -10.0, -4.5)
+    cornerB -> vec3(-3.5, 0.167, -4.0)
+    material -> gmat
+}
+
+b40 = Box {
+    cornerA -> vec3(-4.0, -10.0, -4.0)
+    cornerB -> vec3(-3.5, 0.019, -3.5)
+    material -> gmat
+}
+
+b41 = Box {
+    cornerA -> vec3(-4.0, -10.0, -3.5)
+    cornerB -> vec3(-3.5, 0.122, -3.0)
+    material -> gmat
+}
+
+b42 = Box {
+    cornerA -> vec3(-4.0, -10.0, -3.0)
+    cornerB -> vec3(-3.5, 0.194, -2.5)
+    material -> gmat
+}
+
+b43 = Box {
+    cornerA -> vec3(-4.0, -10.0, -2.5)
+    cornerB -> vec3(-3.5, 0.115, -2.0)
+    material -> gmat
+}
+
+b44 = Box {
+    cornerA -> vec3(-4.0, -10.0, -2.0)
+    cornerB -> vec3(-3.5, 0.010, -1.5)
+    material -> gmat
+}
+
+b45 = Box {
+    cornerA -> vec3(-4.0, -10.0, -1.5)
+    cornerB -> vec3(-3.5, 0.128, -1.0)
+    material -> gmat
+}
+
+b46 = Box {
+    cornerA -> vec3(-4.0, -10.0, -1.0)
+    cornerB -> vec3(-3.5, 0.168, -0.5)
+    material -> gmat
+}
+
+b47 = Box {
+    cornerA -> vec3(-4.0, -10.0, -0.5)
+    cornerB -> vec3(-3.5, 0.111, 0.0)
+    material -> gmat
+}
+
+b48 = Box {
+    cornerA -> vec3(-4.0, -10.0, 0.0)
+    cornerB -> vec3(-3.5, 0.043, 0.5)
+    material -> gmat
+}
+
+b49 = Box {
+    cornerA -> vec3(-4.0, -10.0, 0.5)
+    cornerB -> vec3(-3.5, 0.029, 1.0)
+    material -> gmat
+}
+
+b50 = Box {
+    cornerA -> vec3(-4.0, -10.0, 1.0)
+    cornerB -> vec3(-3.5, 0.014, 1.5)
+    material -> gmat
+}
+
+b51 = Box {
+    cornerA -> vec3(-4.0, -10.0, 1.5)
+    cornerB -> vec3(-3.5, 0.113, 2.0)
+    material -> gmat
+}
+
+b52 = Box {
+    cornerA -> vec3(-4.0, -10.0, 2.0)
+    cornerB -> vec3(-3.5, 0.061, 2.5)
+    material -> gmat
+}
+
+b53 = Box {
+    cornerA -> vec3(-4.0, -10.0, 2.5)
+    cornerB -> vec3(-3.5, 0.172, 3.0)
+    material -> gmat
+}
+
+b54 = Box {
+    cornerA -> vec3(-4.0, -10.0, 3.0)
+    cornerB -> vec3(-3.5, 0.100, 3.5)
+    material -> gmat
+}
+
+b55 = Box {
+    cornerA -> vec3(-4.0, -10.0, 3.5)
+    cornerB -> vec3(-3.5, 0.107, 4.0)
+    material -> gmat
+}
+
+b56 = Box {
+    cornerA -> vec3(-4.0, -10.0, 4.0)
+    cornerB -> vec3(-3.5, 0.192, 4.5)
+    material -> gmat
+}
+
+b57 = Box {
+    cornerA -> vec3(-3.5, -10.0, -5.0)
+    cornerB -> vec3(-3.0, 0.030, -4.5)
+    material -> gmat
+}
+
+b58 = Box {
+    cornerA -> vec3(-3.5, -10.0, -4.5)
+    cornerB -> vec3(-3.0, 0.089, -4.0)
+    material -> gmat
+}
+
+b59 = Box {
+    cornerA -> vec3(-3.5, -10.0, -4.0)
+    cornerB -> vec3(-3.0, 0.001, -3.5)
+    material -> gmat
+}
+
+b60 = Box {
+    cornerA -> vec3(-3.5, -10.0, -3.5)
+    cornerB -> vec3(-3.0, 0.149, -3.0)
+    material -> gmat
+}
+
+b61 = Box {
+    cornerA -> vec3(-3.5, -10.0, -3.0)
+    cornerB -> vec3(-3.0, 0.044, -2.5)
+    material -> gmat
+}
+
+b62 = Box {
+    cornerA -> vec3(-3.5, -10.0, -2.5)
+    cornerB -> vec3(-3.0, 0.048, -2.0)
+    material -> gmat
+}
+
+b63 = Box {
+    cornerA -> vec3(-3.5, -10.0, -2.0)
+    cornerB -> vec3(-3.0, 0.069, -1.5)
+    material -> gmat
+}
+
+b64 = Box {
+    cornerA -> vec3(-3.5, -10.0, -1.5)
+    cornerB -> vec3(-3.0, 0.061, -1.0)
+    material -> gmat
+}
+
+b65 = Box {
+    cornerA -> vec3(-3.5, -10.0, -1.0)
+    cornerB -> vec3(-3.0, 0.091, -0.5)
+    material -> gmat
+}
+
+b66 = Box {
+    cornerA -> vec3(-3.5, -10.0, -0.5)
+    cornerB -> vec3(-3.0, 0.181, 0.0)
+    material -> gmat
+}
+
+b67 = Box {
+    cornerA -> vec3(-3.5, -10.0, 0.0)
+    cornerB -> vec3(-3.0, 0.116, 0.5)
+    material -> gmat
+}
+
+b68 = Box {
+    cornerA -> vec3(-3.5, -10.0, 0.5)
+    cornerB -> vec3(-3.0, 0.045, 1.0)
+    material -> gmat
+}
+
+b69 = Box {
+    cornerA -> vec3(-3.5, -10.0, 1.0)
+    cornerB -> vec3(-3.0, 0.185, 1.5)
+    material -> gmat
+}
+
+b70 = Box {
+    cornerA -> vec3(-3.5, -10.0, 1.5)
+    cornerB -> vec3(-3.0, 0.084, 2.0)
+    material -> gmat
+}
+
+b71 = Box {
+    cornerA -> vec3(-3.5, -10.0, 2.0)
+    cornerB -> vec3(-3.0, 0.086, 2.5)
+    material -> gmat
+}
+
+b72 = Box {
+    cornerA -> vec3(-3.5, -10.0, 2.5)
+    cornerB -> vec3(-3.0, 0.074, 3.0)
+    material -> gmat
+}
+
+b73 = Box {
+    cornerA -> vec3(-3.5, -10.0, 3.0)
+    cornerB -> vec3(-3.0, 0.169, 3.5)
+    material -> gmat
+}
+
+b74 = Box {
+    cornerA -> vec3(-3.5, -10.0, 3.5)
+    cornerB -> vec3(-3.0, 0.132, 4.0)
+    material -> gmat
+}
+
+b75 = Box {
+    cornerA -> vec3(-3.5, -10.0, 4.0)
+    cornerB -> vec3(-3.0, 0.057, 4.5)
+    material -> gmat
+}
+
+b76 = Box {
+    cornerA -> vec3(-3.0, -10.0, -5.0)
+    cornerB -> vec3(-2.5, 0.065, -4.5)
+    material -> gmat
+}
+
+b77 = Box {
+    cornerA -> vec3(-3.0, -10.0, -4.5)
+    cornerB -> vec3(-2.5, 0.156, -4.0)
+    material -> gmat
+}
+
+b78 = Box {
+    cornerA -> vec3(-3.0, -10.0, -4.0)
+    cornerB -> vec3(-2.5, 0.107, -3.5)
+    material -> gmat
+}
+
+b79 = Box {
+    cornerA -> vec3(-3.0, -10.0, -3.5)
+    cornerB -> vec3(-2.5, 0.154, -3.0)
+    material -> gmat
+}
+
+b80 = Box {
+    cornerA -> vec3(-3.0, -10.0, -3.0)
+    cornerB -> vec3(-2.5, 0.098, -2.5)
+    material -> gmat
+}
+
+b81 = Box {
+    cornerA -> vec3(-3.0, -10.0, -2.5)
+    cornerB -> vec3(-2.5, 0.117, -2.0)
+    material -> gmat
+}
+
+b82 = Box {
+    cornerA -> vec3(-3.0, -10.0, -2.0)
+    cornerB -> vec3(-2.5, 0.116, -1.5)
+    material -> gmat
+}
+
+b83 = Box {
+    cornerA -> vec3(-3.0, -10.0, -1.5)
+    cornerB -> vec3(-2.5, 0.071, -1.0)
+    material -> gmat
+}
+
+b84 = Box {
+    cornerA -> vec3(-3.0, -10.0, -1.0)
+    cornerB -> vec3(-2.5, 0.198, -0.5)
+    material -> gmat
+}
+
+b85 = Box {
+    cornerA -> vec3(-3.0, -10.0, -0.5)
+    cornerB -> vec3(-2.5, 0.049, 0.0)
+    material -> gmat
+}
+
+b86 = Box {
+    cornerA -> vec3(-3.0, -10.0, 0.0)
+    cornerB -> vec3(-2.5, 0.149, 0.5)
+    material -> gmat
+}
+
+b87 = Box {
+    cornerA -> vec3(-3.0, -10.0, 0.5)
+    cornerB -> vec3(-2.5, 0.097, 1.0)
+    material -> gmat
+}
+
+b88 = Box {
+    cornerA -> vec3(-3.0, -10.0, 1.0)
+    cornerB -> vec3(-2.5, 0.146, 1.5)
+    material -> gmat
+}
+
+b89 = Box {
+    cornerA -> vec3(-3.0, -10.0, 1.5)
+    cornerB -> vec3(-2.5, 0.135, 2.0)
+    material -> gmat
+}
+
+b90 = Box {
+    cornerA -> vec3(-3.0, -10.0, 2.0)
+    cornerB -> vec3(-2.5, 0.180, 2.5)
+    material -> gmat
+}
+
+b91 = Box {
+    cornerA -> vec3(-3.0, -10.0, 2.5)
+    cornerB -> vec3(-2.5, 0.123, 3.0)
+    material -> gmat
+}
+
+b92 = Box {
+    cornerA -> vec3(-3.0, -10.0, 3.0)
+    cornerB -> vec3(-2.5, 0.098, 3.5)
+    material -> gmat
+}
+
+b93 = Box {
+    cornerA -> vec3(-3.0, -10.0, 3.5)
+    cornerB -> vec3(-2.5, 0.015, 4.0)
+    material -> gmat
+}
+
+b94 = Box {
+    cornerA -> vec3(-3.0, -10.0, 4.0)
+    cornerB -> vec3(-2.5, 0.156, 4.5)
+    material -> gmat
+}
+
+b95 = Box {
+    cornerA -> vec3(-2.5, -10.0, -5.0)
+    cornerB -> vec3(-2.0, 0.117, -4.5)
+    material -> gmat
+}
+
+b96 = Box {
+    cornerA -> vec3(-2.5, -10.0, -4.5)
+    cornerB -> vec3(-2.0, 0.014, -4.0)
+    material -> gmat
+}
+
+b97 = Box {
+    cornerA -> vec3(-2.5, -10.0, -4.0)
+    cornerB -> vec3(-2.0, 0.154, -3.5)
+    material -> gmat
+}
+
+b98 = Box {
+    cornerA -> vec3(-2.5, -10.0, -3.5)
+    cornerB -> vec3(-2.0, 0.145, -3.0)
+    material -> gmat
+}
+
+b99 = Box {
+    cornerA -> vec3(-2.5, -10.0, -3.0)
+    cornerB -> vec3(-2.0, 0.121, -2.5)
+    material -> gmat
+}
+
+b100 = Box {
+    cornerA -> vec3(-2.5, -10.0, -2.5)
+    cornerB -> vec3(-2.0, 0.092, -2.0)
+    material -> gmat
+}
+
+b101 = Box {
+    cornerA -> vec3(-2.5, -10.0, -2.0)
+    cornerB -> vec3(-2.0, 0.012, -1.5)
+    material -> gmat
+}
+
+b102 = Box {
+    cornerA -> vec3(-2.5, -10.0, -1.5)
+    cornerB -> vec3(-2.0, 0.199, -1.0)
+    material -> gmat
+}
+
+b103 = Box {
+    cornerA -> vec3(-2.5, -10.0, -1.0)
+    cornerB -> vec3(-2.0, 0.110, -0.5)
+    material -> gmat
+}
+
+b104 = Box {
+    cornerA -> vec3(-2.5, -10.0, -0.5)
+    cornerB -> vec3(-2.0, 0.122, 0.0)
+    material -> gmat
+}
+
+b105 = Box {
+    cornerA -> vec3(-2.5, -10.0, 0.0)
+    cornerB -> vec3(-2.0, 0.069, 0.5)
+    material -> gmat
+}
+
+b106 = Box {
+    cornerA -> vec3(-2.5, -10.0, 0.5)
+    cornerB -> vec3(-2.0, 0.127, 1.0)
+    material -> gmat
+}
+
+b107 = Box {
+    cornerA -> vec3(-2.5, -10.0, 1.0)
+    cornerB -> vec3(-2.0, 0.171, 1.5)
+    material -> gmat
+}
+
+b108 = Box {
+    cornerA -> vec3(-2.5, -10.0, 1.5)
+    cornerB -> vec3(-2.0, 0.149, 2.0)
+    material -> gmat
+}
+
+b109 = Box {
+    cornerA -> vec3(-2.5, -10.0, 2.0)
+    cornerB -> vec3(-2.0, 0.196, 2.5)
+    material -> gmat
+}
+
+b110 = Box {
+    cornerA -> vec3(-2.5, -10.0, 2.5)
+    cornerB -> vec3(-2.0, 0.088, 3.0)
+    material -> gmat
+}
+
+b111 = Box {
+    cornerA -> vec3(-2.5, -10.0, 3.0)
+    cornerB -> vec3(-2.0, 0.079, 3.5)
+    material -> gmat
+}
+
+b112 = Box {
+    cornerA -> vec3(-2.5, -10.0, 3.5)
+    cornerB -> vec3(-2.0, 0.089, 4.0)
+    material -> gmat
+}
+
+b113 = Box {
+    cornerA -> vec3(-2.5, -10.0, 4.0)
+    cornerB -> vec3(-2.0, 0.080, 4.5)
+    material -> gmat
+}
+
+b114 = Box {
+    cornerA -> vec3(-2.0, -10.0, -5.0)
+    cornerB -> vec3(-1.5, 0.160, -4.5)
+    material -> gmat
+}
+
+b115 = Box {
+    cornerA -> vec3(-2.0, -10.0, -4.5)
+    cornerB -> vec3(-1.5, 0.085, -4.0)
+    material -> gmat
+}
+
+b116 = Box {
+    cornerA -> vec3(-2.0, -10.0, -4.0)
+    cornerB -> vec3(-1.5, 0.199, -3.5)
+    material -> gmat
+}
+
+b117 = Box {
+    cornerA -> vec3(-2.0, -10.0, -3.5)
+    cornerB -> vec3(-1.5, 0.034, -3.0)
+    material -> gmat
+}
+
+b118 = Box {
+    cornerA -> vec3(-2.0, -10.0, -3.0)
+    cornerB -> vec3(-1.5, 0.143, -2.5)
+    material -> gmat
+}
+
+b119 = Box {
+    cornerA -> vec3(-2.0, -10.0, -2.5)
+    cornerB -> vec3(-1.5, 0.161, -2.0)
+    material -> gmat
+}
+
+b120 = Box {
+    cornerA -> vec3(-2.0, -10.0, -2.0)
+    cornerB -> vec3(-1.5, 0.054, -1.5)
+    material -> gmat
+}
+
+b121 = Box {
+    cornerA -> vec3(-2.0, -10.0, -1.5)
+    cornerB -> vec3(-1.5, 0.045, -1.0)
+    material -> gmat
+}
+
+b122 = Box {
+    cornerA -> vec3(-2.0, -10.0, -1.0)
+    cornerB -> vec3(-1.5, 0.119, -0.5)
+    material -> gmat
+}
+
+b123 = Box {
+    cornerA -> vec3(-2.0, -10.0, -0.5)
+    cornerB -> vec3(-1.5, 0.132, 0.0)
+    material -> gmat
+}
+
+b124 = Box {
+    cornerA -> vec3(-2.0, -10.0, 0.0)
+    cornerB -> vec3(-1.5, 0.028, 0.5)
+    material -> gmat
+}
+
+b125 = Box {
+    cornerA -> vec3(-2.0, -10.0, 0.5)
+    cornerB -> vec3(-1.5, 0.087, 1.0)
+    material -> gmat
+}
+
+b126 = Box {
+    cornerA -> vec3(-2.0, -10.0, 1.0)
+    cornerB -> vec3(-1.5, 0.051, 1.5)
+    material -> gmat
+}
+
+b127 = Box {
+    cornerA -> vec3(-2.0, -10.0, 1.5)
+    cornerB -> vec3(-1.5, 0.098, 2.0)
+    material -> gmat
+}
+
+b128 = Box {
+    cornerA -> vec3(-2.0, -10.0, 2.0)
+    cornerB -> vec3(-1.5, 0.025, 2.5)
+    material -> gmat
+}
+
+b129 = Box {
+    cornerA -> vec3(-2.0, -10.0, 2.5)
+    cornerB -> vec3(-1.5, 0.160, 3.0)
+    material -> gmat
+}
+
+b130 = Box {
+    cornerA -> vec3(-2.0, -10.0, 3.0)
+    cornerB -> vec3(-1.5, 0.081, 3.5)
+    material -> gmat
+}
+
+b131 = Box {
+    cornerA -> vec3(-2.0, -10.0, 3.5)
+    cornerB -> vec3(-1.5, 0.028, 4.0)
+    material -> gmat
+}
+
+b132 = Box {
+    cornerA -> vec3(-2.0, -10.0, 4.0)
+    cornerB -> vec3(-1.5, 0.122, 4.5)
+    material -> gmat
+}
+
+b133 = Box {
+    cornerA -> vec3(-1.5, -10.0, -5.0)
+    cornerB -> vec3(-1.0, 0.157, -4.5)
+    material -> gmat
+}
+
+b134 = Box {
+    cornerA -> vec3(-1.5, -10.0, -4.5)
+    cornerB -> vec3(-1.0, 0.026, -4.0)
+    material -> gmat
+}
+
+b135 = Box {
+    cornerA -> vec3(-1.5, -10.0, -4.0)
+    cornerB -> vec3(-1.0, 0.068, -3.5)
+    material -> gmat
+}
+
+b136 = Box {
+    cornerA -> vec3(-1.5, -10.0, -3.5)
+    cornerB -> vec3(-1.0, 0.152, -3.0)
+    material -> gmat
+}
+
+b137 = Box {
+    cornerA -> vec3(-1.5, -10.0, -3.0)
+    cornerB -> vec3(-1.0, 0.103, -2.5)
+    material -> gmat
+}
+
+b138 = Box {
+    cornerA -> vec3(-1.5, -10.0, -2.5)
+    cornerB -> vec3(-1.0, 0.191, -2.0)
+    material -> gmat
+}
+
+b139 = Box {
+    cornerA -> vec3(-1.5, -10.0, -2.0)
+    cornerB -> vec3(-1.0, 0.051, -1.5)
+    material -> gmat
+}
+
+b140 = Box {
+    cornerA -> vec3(-1.5, -10.0, -1.5)
+    cornerB -> vec3(-1.0, 0.174, -1.0)
+    material -> gmat
+}
+
+b141 = Box {
+    cornerA -> vec3(-1.5, -10.0, -1.0)
+    cornerB -> vec3(-1.0, 0.052, -0.5)
+    material -> gmat
+}
+
+b142 = Box {
+    cornerA -> vec3(-1.5, -10.0, -0.5)
+    cornerB -> vec3(-1.0, 0.062, 0.0)
+    material -> gmat
+}
+
+b143 = Box {
+    cornerA -> vec3(-1.5, -10.0, 0.0)
+    cornerB -> vec3(-1.0, 0.182, 0.5)
+    material -> gmat
+}
+
+b144 = Box {
+    cornerA -> vec3(-1.5, -10.0, 0.5)
+    cornerB -> vec3(-1.0, 0.168, 1.0)
+    material -> gmat
+}
+
+b145 = Box {
+    cornerA -> vec3(-1.5, -10.0, 1.0)
+    cornerB -> vec3(-1.0, 0.125, 1.5)
+    material -> gmat
+}
+
+b146 = Box {
+    cornerA -> vec3(-1.5, -10.0, 1.5)
+    cornerB -> vec3(-1.0, 0.132, 2.0)
+    material -> gmat
+}
+
+b147 = Box {
+    cornerA -> vec3(-1.5, -10.0, 2.0)
+    cornerB -> vec3(-1.0, 0.165, 2.5)
+    material -> gmat
+}
+
+b148 = Box {
+    cornerA -> vec3(-1.5, -10.0, 2.5)
+    cornerB -> vec3(-1.0, 0.019, 3.0)
+    material -> gmat
+}
+
+b149 = Box {
+    cornerA -> vec3(-1.5, -10.0, 3.0)
+    cornerB -> vec3(-1.0, 0.111, 3.5)
+    material -> gmat
+}
+
+b150 = Box {
+    cornerA -> vec3(-1.5, -10.0, 3.5)
+    cornerB -> vec3(-1.0, 0.129, 4.0)
+    material -> gmat
+}
+
+b151 = Box {
+    cornerA -> vec3(-1.5, -10.0, 4.0)
+    cornerB -> vec3(-1.0, 0.055, 4.5)
+    material -> gmat
+}
+
+b152 = Box {
+    cornerA -> vec3(-1.0, -10.0, -5.0)
+    cornerB -> vec3(-0.5, 0.188, -4.5)
+    material -> gmat
+}
+
+b153 = Box {
+    cornerA -> vec3(-1.0, -10.0, -4.5)
+    cornerB -> vec3(-0.5, 0.144, -4.0)
+    material -> gmat
+}
+
+b154 = Box {
+    cornerA -> vec3(-1.0, -10.0, -4.0)
+    cornerB -> vec3(-0.5, 0.133, -3.5)
+    material -> gmat
+}
+
+b155 = Box {
+    cornerA -> vec3(-1.0, -10.0, -3.5)
+    cornerB -> vec3(-0.5, 0.087, -3.0)
+    material -> gmat
+}
+
+b156 = Box {
+    cornerA -> vec3(-1.0, -10.0, -3.0)
+    cornerB -> vec3(-0.5, 0.137, -2.5)
+    material -> gmat
+}
+
+b157 = Box {
+    cornerA -> vec3(-1.0, -10.0, -2.5)
+    cornerB -> vec3(-0.5, 0.063, -2.0)
+    material -> gmat
+}
+
+b158 = Box {
+    cornerA -> vec3(-1.0, -10.0, -2.0)
+    cornerB -> vec3(-0.5, 0.189, -1.5)
+    material -> gmat
+}
+
+b159 = Box {
+    cornerA -> vec3(-1.0, -10.0, -1.5)
+    cornerB -> vec3(-0.5, 0.195, -1.0)
+    material -> gmat
+}
+
+b160 = Box {
+    cornerA -> vec3(-1.0, -10.0, -1.0)
+    cornerB -> vec3(-0.5, 0.163, -0.5)
+    material -> gmat
+}
+
+b161 = Box {
+    cornerA -> vec3(-1.0, -10.0, -0.5)
+    cornerB -> vec3(-0.5, 0.102, 0.0)
+    material -> gmat
+}
+
+b162 = Box {
+    cornerA -> vec3(-1.0, -10.0, 0.0)
+    cornerB -> vec3(-0.5, 0.152, 0.5)
+    material -> gmat
+}
+
+b163 = Box {
+    cornerA -> vec3(-1.0, -10.0, 0.5)
+    cornerB -> vec3(-0.5, 0.027, 1.0)
+    material -> gmat
+}
+
+b164 = Box {
+    cornerA -> vec3(-1.0, -10.0, 1.0)
+    cornerB -> vec3(-0.5, 0.052, 1.5)
+    material -> gmat
+}
+
+b165 = Box {
+    cornerA -> vec3(-1.0, -10.0, 1.5)
+    cornerB -> vec3(-0.5, 0.029, 2.0)
+    material -> gmat
+}
+
+b166 = Box {
+    cornerA -> vec3(-1.0, -10.0, 2.0)
+    cornerB -> vec3(-0.5, 0.102, 2.5)
+    material -> gmat
+}
+
+b167 = Box {
+    cornerA -> vec3(-1.0, -10.0, 2.5)
+    cornerB -> vec3(-0.5, 0.191, 3.0)
+    material -> gmat
+}
+
+b168 = Box {
+    cornerA -> vec3(-1.0, -10.0, 3.0)
+    cornerB -> vec3(-0.5, 0.086, 3.5)
+    material -> gmat
+}
+
+b169 = Box {
+    cornerA -> vec3(-1.0, -10.0, 3.5)
+    cornerB -> vec3(-0.5, 0.086, 4.0)
+    material -> gmat
+}
+
+b170 = Box {
+    cornerA -> vec3(-1.0, -10.0, 4.0)
+    cornerB -> vec3(-0.5, 0.083, 4.5)
+    material -> gmat
+}
+
+b171 = Box {
+    cornerA -> vec3(-0.5, -10.0, -5.0)
+    cornerB -> vec3(0.0, 0.047, -4.5)
+    material -> gmat
+}
+
+b172 = Box {
+    cornerA -> vec3(-0.5, -10.0, -4.5)
+    cornerB -> vec3(0.0, 0.116, -4.0)
+    material -> gmat
+}
+
+b173 = Box {
+    cornerA -> vec3(-0.5, -10.0, -4.0)
+    cornerB -> vec3(0.0, 0.164, -3.5)
+    material -> gmat
+}
+
+b174 = Box {
+    cornerA -> vec3(-0.5, -10.0, -3.5)
+    cornerB -> vec3(0.0, 0.156, -3.0)
+    material -> gmat
+}
+
+b175 = Box {
+    cornerA -> vec3(-0.5, -10.0, -3.0)
+    cornerB -> vec3(0.0, 0.021, -2.5)
+    material -> gmat
+}
+
+b176 = Box {
+    cornerA -> vec3(-0.5, -10.0, -2.5)
+    cornerB -> vec3(0.0, 0.126, -2.0)
+    material -> gmat
+}
+
+b177 = Box {
+    cornerA -> vec3(-0.5, -10.0, -2.0)
+    cornerB -> vec3(0.0, 0.189, -1.5)
+    material -> gmat
+}
+
+b178 = Box {
+    cornerA -> vec3(-0.5, -10.0, -1.5)
+    cornerB -> vec3(0.0, 0.023, -1.0)
+    material -> gmat
+}
+
+b179 = Box {
+    cornerA -> vec3(-0.5, -10.0, -1.0)
+    cornerB -> vec3(0.0, 0.090, -0.5)
+    material -> gmat
+}
+
+b180 = Box {
+    cornerA -> vec3(-0.5, -10.0, -0.5)
+    cornerB -> vec3(0.0, 0.188, 0.0)
+    material -> gmat
+}
+
+b181 = Box {
+    cornerA -> vec3(-0.5, -10.0, 0.0)
+    cornerB -> vec3(0.0, 0.018, 0.5)
+    material -> gmat
+}
+
+b182 = Box {
+    cornerA -> vec3(-0.5, -10.0, 0.5)
+    cornerB -> vec3(0.0, 0.153, 1.0)
+    material -> gmat
+}
+
+b183 = Box {
+    cornerA -> vec3(-0.5, -10.0, 1.0)
+    cornerB -> vec3(0.0, 0.044, 1.5)
+    material -> gmat
+}
+
+b184 = Box {
+    cornerA -> vec3(-0.5, -10.0, 1.5)
+    cornerB -> vec3(0.0, 0.055, 2.0)
+    material -> gmat
+}
+
+b185 = Box {
+    cornerA -> vec3(-0.5, -10.0, 2.0)
+    cornerB -> vec3(0.0, 0.002, 2.5)
+    material -> gmat
+}
+
+b186 = Box {
+    cornerA -> vec3(-0.5, -10.0, 2.5)
+    cornerB -> vec3(0.0, 0.150, 3.0)
+    material -> gmat
+}
+
+b187 = Box {
+    cornerA -> vec3(-0.5, -10.0, 3.0)
+    cornerB -> vec3(0.0, 0.094, 3.5)
+    material -> gmat
+}
+
+b188 = Box {
+    cornerA -> vec3(-0.5, -10.0, 3.5)
+    cornerB -> vec3(0.0, 0.012, 4.0)
+    material -> gmat
+}
+
+b189 = Box {
+    cornerA -> vec3(-0.5, -10.0, 4.0)
+    cornerB -> vec3(0.0, 0.160, 4.5)
+    material -> gmat
+}
+
+b190 = Box {
+    cornerA -> vec3(0.0, -10.0, -5.0)
+    cornerB -> vec3(0.5, 0.134, -4.5)
+    material -> gmat
+}
+
+b191 = Box {
+    cornerA -> vec3(0.0, -10.0, -4.5)
+    cornerB -> vec3(0.5, 0.153, -4.0)
+    material -> gmat
+}
+
+b192 = Box {
+    cornerA -> vec3(0.0, -10.0, -4.0)
+    cornerB -> vec3(0.5, 0.072, -3.5)
+    material -> gmat
+}
+
+b193 = Box {
+    cornerA -> vec3(0.0, -10.0, -3.5)
+    cornerB -> vec3(0.5, 0.171, -3.0)
+    material -> gmat
+}
+
+b194 = Box {
+    cornerA -> vec3(0.0, -10.0, -3.0)
+    cornerB -> vec3(0.5, 0.196, -2.5)
+    material -> gmat
+}
+
+b195 = Box {
+    cornerA -> vec3(0.0, -10.0, -2.5)
+    cornerB -> vec3(0.5, 0.020, -2.0)
+    material -> gmat
+}
+
+b196 = Box {
+    cornerA -> vec3(0.0, -10.0, -2.0)
+    cornerB -> vec3(0.5, 0.003, -1.5)
+    material -> gmat
+}
+
+b197 = Box {
+    cornerA -> vec3(0.0, -10.0, -1.5)
+    cornerB -> vec3(0.5, 0.066, -1.0)
+    material -> gmat
+}
+
+b198 = Box {
+    cornerA -> vec3(0.0, -10.0, -1.0)
+    cornerB -> vec3(0.5, 0.095, -0.5)
+    material -> gmat
+}
+
+b199 = Box {
+    cornerA -> vec3(0.0, -10.0, -0.5)
+    cornerB -> vec3(0.5, 0.003, 0.0)
+    material -> gmat
+}
+
+b200 = Box {
+    cornerA -> vec3(0.0, -10.0, 0.0)
+    cornerB -> vec3(0.5, 0.190, 0.5)
+    material -> gmat
+}
+
+b201 = Box {
+    cornerA -> vec3(0.0, -10.0, 0.5)
+    cornerB -> vec3(0.5, 0.044, 1.0)
+    material -> gmat
+}
+
+b202 = Box {
+    cornerA -> vec3(0.0, -10.0, 1.0)
+    cornerB -> vec3(0.5, 0.150, 1.5)
+    material -> gmat
+}
+
+b203 = Box {
+    cornerA -> vec3(0.0, -10.0, 1.5)
+    cornerB -> vec3(0.5, 0.122, 2.0)
+    material -> gmat
+}
+
+b204 = Box {
+    cornerA -> vec3(0.0, -10.0, 2.0)
+    cornerB -> vec3(0.5, 0.133, 2.5)
+    material -> gmat
+}
+
+b205 = Box {
+    cornerA -> vec3(0.0, -10.0, 2.5)
+    cornerB -> vec3(0.5, 0.035, 3.0)
+    material -> gmat
+}
+
+b206 = Box {
+    cornerA -> vec3(0.0, -10.0, 3.0)
+    cornerB -> vec3(0.5, 0.158, 3.5)
+    material -> gmat
+}
+
+b207 = Box {
+    cornerA -> vec3(0.0, -10.0, 3.5)
+    cornerB -> vec3(0.5, 0.023, 4.0)
+    material -> gmat
+}
+
+b208 = Box {
+    cornerA -> vec3(0.0, -10.0, 4.0)
+    cornerB -> vec3(0.5, 0.157, 4.5)
+    material -> gmat
+}
+
+b209 = Box {
+    cornerA -> vec3(0.5, -10.0, -5.0)
+    cornerB -> vec3(1.0, 0.014, -4.5)
+    material -> gmat
+}
+
+b210 = Box {
+    cornerA -> vec3(0.5, -10.0, -4.5)
+    cornerB -> vec3(1.0, 0.024, -4.0)
+    material -> gmat
+}
+
+b211 = Box {
+    cornerA -> vec3(0.5, -10.0, -4.0)
+    cornerB -> vec3(1.0, 0.086, -3.5)
+    material -> gmat
+}
+
+b212 = Box {
+    cornerA -> vec3(0.5, -10.0, -3.5)
+    cornerB -> vec3(1.0, 0.103, -3.0)
+    material -> gmat
+}
+
+b213 = Box {
+    cornerA -> vec3(0.5, -10.0, -3.0)
+    cornerB -> vec3(1.0, 0.005, -2.5)
+    material -> gmat
+}
+
+b214 = Box {
+    cornerA -> vec3(0.5, -10.0, -2.5)
+    cornerB -> vec3(1.0, 0.145, -2.0)
+    material -> gmat
+}
+
+b215 = Box {
+    cornerA -> vec3(0.5, -10.0, -2.0)
+    cornerB -> vec3(1.0, 0.188, -1.5)
+    material -> gmat
+}
+
+b216 = Box {
+    cornerA -> vec3(0.5, -10.0, -1.5)
+    cornerB -> vec3(1.0, 0.196, -1.0)
+    material -> gmat
+}
+
+b217 = Box {
+    cornerA -> vec3(0.5, -10.0, -1.0)
+    cornerB -> vec3(1.0, 0.010, -0.5)
+    material -> gmat
+}
+
+b218 = Box {
+    cornerA -> vec3(0.5, -10.0, -0.5)
+    cornerB -> vec3(1.0, 0.038, 0.0)
+    material -> gmat
+}
+
+b219 = Box {
+    cornerA -> vec3(0.5, -10.0, 0.0)
+    cornerB -> vec3(1.0, 0.054, 0.5)
+    material -> gmat
+}
+
+b220 = Box {
+    cornerA -> vec3(0.5, -10.0, 0.5)
+    cornerB -> vec3(1.0, 0.069, 1.0)
+    material -> gmat
+}
+
+b221 = Box {
+    cornerA -> vec3(0.5, -10.0, 1.0)
+    cornerB -> vec3(1.0, 0.074, 1.5)
+    material -> gmat
+}
+
+b222 = Box {
+    cornerA -> vec3(0.5, -10.0, 1.5)
+    cornerB -> vec3(1.0, 0.002, 2.0)
+    material -> gmat
+}
+
+b223 = Box {
+    cornerA -> vec3(0.5, -10.0, 2.0)
+    cornerB -> vec3(1.0, 0.099, 2.5)
+    material -> gmat
+}
+
+b224 = Box {
+    cornerA -> vec3(0.5, -10.0, 2.5)
+    cornerB -> vec3(1.0, 0.187, 3.0)
+    material -> gmat
+}
+
+b225 = Box {
+    cornerA -> vec3(0.5, -10.0, 3.0)
+    cornerB -> vec3(1.0, 0.077, 3.5)
+    material -> gmat
+}
+
+b226 = Box {
+    cornerA -> vec3(0.5, -10.0, 3.5)
+    cornerB -> vec3(1.0, 0.121, 4.0)
+    material -> gmat
+}
+
+b227 = Box {
+    cornerA -> vec3(0.5, -10.0, 4.0)
+    cornerB -> vec3(1.0, 0.123, 4.5)
+    material -> gmat
+}
+
+b228 = Box {
+    cornerA -> vec3(1.0, -10.0, -5.0)
+    cornerB -> vec3(1.5, 0.164, -4.5)
+    material -> gmat
+}
+
+b229 = Box {
+    cornerA -> vec3(1.0, -10.0, -4.5)
+    cornerB -> vec3(1.5, 0.057, -4.0)
+    material -> gmat
+}
+
+b230 = Box {
+    cornerA -> vec3(1.0, -10.0, -4.0)
+    cornerB -> vec3(1.5, 0.148, -3.5)
+    material -> gmat
+}
+
+b231 = Box {
+    cornerA -> vec3(1.0, -10.0, -3.5)
+    cornerB -> vec3(1.5, 0.081, -3.0)
+    material -> gmat
+}
+
+b232 = Box {
+    cornerA -> vec3(1.0, -10.0, -3.0)
+    cornerB -> vec3(1.5, 0.151, -2.5)
+    material -> gmat
+}
+
+b233 = Box {
+    cornerA -> vec3(1.0, -10.0, -2.5)
+    cornerB -> vec3(1.5, 0.065, -2.0)
+    material -> gmat
+}
+
+b234 = Box {
+    cornerA -> vec3(1.0, -10.0, -2.0)
+    cornerB -> vec3(1.5, 0.067, -1.5)
+    material -> gmat
+}
+
+b235 = Box {
+    cornerA -> vec3(1.0, -10.0, -1.5)
+    cornerB -> vec3(1.5, 0.063, -1.0)
+    material -> gmat
+}
+
+b236 = Box {
+    cornerA -> vec3(1.0, -10.0, -1.0)
+    cornerB -> vec3(1.5, 0.181, -0.5)
+    material -> gmat
+}
+
+b237 = Box {
+    cornerA -> vec3(1.0, -10.0, -0.5)
+    cornerB -> vec3(1.5, 0.167, 0.0)
+    material -> gmat
+}
+
+b238 = Box {
+    cornerA -> vec3(1.0, -10.0, 0.0)
+    cornerB -> vec3(1.5, 0.056, 0.5)
+    material -> gmat
+}
+
+b239 = Box {
+    cornerA -> vec3(1.0, -10.0, 0.5)
+    cornerB -> vec3(1.5, 0.075, 1.0)
+    material -> gmat
+}
+
+b240 = Box {
+    cornerA -> vec3(1.0, -10.0, 1.0)
+    cornerB -> vec3(1.5, 0.134, 1.5)
+    material -> gmat
+}
+
+b241 = Box {
+    cornerA -> vec3(1.0, -10.0, 1.5)
+    cornerB -> vec3(1.5, 0.060, 2.0)
+    material -> gmat
+}
+
+b242 = Box {
+    cornerA -> vec3(1.0, -10.0, 2.0)
+    cornerB -> vec3(1.5, 0.030, 2.5)
+    material -> gmat
+}
+
+b243 = Box {
+    cornerA -> vec3(1.0, -10.0, 2.5)
+    cornerB -> vec3(1.5, 0.167, 3.0)
+    material -> gmat
+}
+
+b244 = Box {
+    cornerA -> vec3(1.0, -10.0, 3.0)
+    cornerB -> vec3(1.5, 0.105, 3.5)
+    material -> gmat
+}
+
+b245 = Box {
+    cornerA -> vec3(1.0, -10.0, 3.5)
+    cornerB -> vec3(1.5, 0.063, 4.0)
+    material -> gmat
+}
+
+b246 = Box {
+    cornerA -> vec3(1.0, -10.0, 4.0)
+    cornerB -> vec3(1.5, 0.011, 4.5)
+    material -> gmat
+}
+
+b247 = Box {
+    cornerA -> vec3(1.5, -10.0, -5.0)
+    cornerB -> vec3(2.0, 0.083, -4.5)
+    material -> gmat
+}
+
+b248 = Box {
+    cornerA -> vec3(1.5, -10.0, -4.5)
+    cornerB -> vec3(2.0, 0.160, -4.0)
+    material -> gmat
+}
+
+b249 = Box {
+    cornerA -> vec3(1.5, -10.0, -4.0)
+    cornerB -> vec3(2.0, 0.196, -3.5)
+    material -> gmat
+}
+
+b250 = Box {
+    cornerA -> vec3(1.5, -10.0, -3.5)
+    cornerB -> vec3(2.0, 0.188, -3.0)
+    material -> gmat
+}
+
+b251 = Box {
+    cornerA -> vec3(1.5, -10.0, -3.0)
+    cornerB -> vec3(2.0, 0.131, -2.5)
+    material -> gmat
+}
+
+b252 = Box {
+    cornerA -> vec3(1.5, -10.0, -2.5)
+    cornerB -> vec3(2.0, 0.109, -2.0)
+    material -> gmat
+}
+
+b253 = Box {
+    cornerA -> vec3(1.5, -10.0, -2.0)
+    cornerB -> vec3(2.0, 0.094, -1.5)
+    material -> gmat
+}
+
+b254 = Box {
+    cornerA -> vec3(1.5, -10.0, -1.5)
+    cornerB -> vec3(2.0, 0.081, -1.0)
+    material -> gmat
+}
+
+b255 = Box {
+    cornerA -> vec3(1.5, -10.0, -1.0)
+    cornerB -> vec3(2.0, 0.133, -0.5)
+    material -> gmat
+}
+
+b256 = Box {
+    cornerA -> vec3(1.5, -10.0, -0.5)
+    cornerB -> vec3(2.0, 0.120, 0.0)
+    material -> gmat
+}
+
+b257 = Box {
+    cornerA -> vec3(1.5, -10.0, 0.0)
+    cornerB -> vec3(2.0, 0.098, 0.5)
+    material -> gmat
+}
+
+b258 = Box {
+    cornerA -> vec3(1.5, -10.0, 0.5)
+    cornerB -> vec3(2.0, 0.135, 1.0)
+    material -> gmat
+}
+
+b259 = Box {
+    cornerA -> vec3(1.5, -10.0, 1.0)
+    cornerB -> vec3(2.0, 0.122, 1.5)
+    material -> gmat
+}
+
+b260 = Box {
+    cornerA -> vec3(1.5, -10.0, 1.5)
+    cornerB -> vec3(2.0, 0.164, 2.0)
+    material -> gmat
+}
+
+b261 = Box {
+    cornerA -> vec3(1.5, -10.0, 2.0)
+    cornerB -> vec3(2.0, 0.135, 2.5)
+    material -> gmat
+}
+
+b262 = Box {
+    cornerA -> vec3(1.5, -10.0, 2.5)
+    cornerB -> vec3(2.0, 0.187, 3.0)
+    material -> gmat
+}
+
+b263 = Box {
+    cornerA -> vec3(1.5, -10.0, 3.0)
+    cornerB -> vec3(2.0, 0.187, 3.5)
+    material -> gmat
+}
+
+b264 = Box {
+    cornerA -> vec3(1.5, -10.0, 3.5)
+    cornerB -> vec3(2.0, 0.084, 4.0)
+    material -> gmat
+}
+
+b265 = Box {
+    cornerA -> vec3(1.5, -10.0, 4.0)
+    cornerB -> vec3(2.0, 0.007, 4.5)
+    material -> gmat
+}
+
+b266 = Box {
+    cornerA -> vec3(2.0, -10.0, -5.0)
+    cornerB -> vec3(2.5, 0.138, -4.5)
+    material -> gmat
+}
+
+b267 = Box {
+    cornerA -> vec3(2.0, -10.0, -4.5)
+    cornerB -> vec3(2.5, 0.057, -4.0)
+    material -> gmat
+}
+
+b268 = Box {
+    cornerA -> vec3(2.0, -10.0, -4.0)
+    cornerB -> vec3(2.5, 0.114, -3.5)
+    material -> gmat
+}
+
+b269 = Box {
+    cornerA -> vec3(2.0, -10.0, -3.5)
+    cornerB -> vec3(2.5, 0.103, -3.0)
+    material -> gmat
+}
+
+b270 = Box {
+    cornerA -> vec3(2.0, -10.0, -3.0)
+    cornerB -> vec3(2.5, 0.091, -2.5)
+    material -> gmat
+}
+
+b271 = Box {
+    cornerA -> vec3(2.0, -10.0, -2.5)
+    cornerB -> vec3(2.5, 0.136, -2.0)
+    material -> gmat
+}
+
+b272 = Box {
+    cornerA -> vec3(2.0, -10.0, -2.0)
+    cornerB -> vec3(2.5, 0.086, -1.5)
+    material -> gmat
+}
+
+b273 = Box {
+    cornerA -> vec3(2.0, -10.0, -1.5)
+    cornerB -> vec3(2.5, 0.139, -1.0)
+    material -> gmat
+}
+
+b274 = Box {
+    cornerA -> vec3(2.0, -10.0, -1.0)
+    cornerB -> vec3(2.5, 0.132, -0.5)
+    material -> gmat
+}
+
+b275 = Box {
+    cornerA -> vec3(2.0, -10.0, -0.5)
+    cornerB -> vec3(2.5, 0.107, 0.0)
+    material -> gmat
+}
+
+b276 = Box {
+    cornerA -> vec3(2.0, -10.0, 0.0)
+    cornerB -> vec3(2.5, 0.177, 0.5)
+    material -> gmat
+}
+
+b277 = Box {
+    cornerA -> vec3(2.0, -10.0, 0.5)
+    cornerB -> vec3(2.5, 0.054, 1.0)
+    material -> gmat
+}
+
+b278 = Box {
+    cornerA -> vec3(2.0, -10.0, 1.0)
+    cornerB -> vec3(2.5, 0.016, 1.5)
+    material -> gmat
+}
+
+b279 = Box {
+    cornerA -> vec3(2.0, -10.0, 1.5)
+    cornerB -> vec3(2.5, 0.177, 2.0)
+    material -> gmat
+}
+
+b280 = Box {
+    cornerA -> vec3(2.0, -10.0, 2.0)
+    cornerB -> vec3(2.5, 0.151, 2.5)
+    material -> gmat
+}
+
+b281 = Box {
+    cornerA -> vec3(2.0, -10.0, 2.5)
+    cornerB -> vec3(2.5, 0.192, 3.0)
+    material -> gmat
+}
+
+b282 = Box {
+    cornerA -> vec3(2.0, -10.0, 3.0)
+    cornerB -> vec3(2.5, 0.078, 3.5)
+    material -> gmat
+}
+
+b283 = Box {
+    cornerA -> vec3(2.0, -10.0, 3.5)
+    cornerB -> vec3(2.5, 0.017, 4.0)
+    material -> gmat
+}
+
+b284 = Box {
+    cornerA -> vec3(2.0, -10.0, 4.0)
+    cornerB -> vec3(2.5, 0.065, 4.5)
+    material -> gmat
+}
+
+b285 = Box {
+    cornerA -> vec3(2.5, -10.0, -5.0)
+    cornerB -> vec3(3.0, 0.187, -4.5)
+    material -> gmat
+}
+
+b286 = Box {
+    cornerA -> vec3(2.5, -10.0, -4.5)
+    cornerB -> vec3(3.0, 0.114, -4.0)
+    material -> gmat
+}
+
+b287 = Box {
+    cornerA -> vec3(2.5, -10.0, -4.0)
+    cornerB -> vec3(3.0, 0.057, -3.5)
+    material -> gmat
+}
+
+b288 = Box {
+    cornerA -> vec3(2.5, -10.0, -3.5)
+    cornerB -> vec3(3.0, 0.172, -3.0)
+    material -> gmat
+}
+
+b289 = Box {
+    cornerA -> vec3(2.5, -10.0, -3.0)
+    cornerB -> vec3(3.0, 0.044, -2.5)
+    material -> gmat
+}
+
+b290 = Box {
+    cornerA -> vec3(2.5, -10.0, -2.5)
+    cornerB -> vec3(3.0, 0.003, -2.0)
+    material -> gmat
+}
+
+b291 = Box {
+    cornerA -> vec3(2.5, -10.0, -2.0)
+    cornerB -> vec3(3.0, 0.141, -1.5)
+    material -> gmat
+}
+
+b292 = Box {
+    cornerA -> vec3(2.5, -10.0, -1.5)
+    cornerB -> vec3(3.0, 0.154, -1.0)
+    material -> gmat
+}
+
+b293 = Box {
+    cornerA -> vec3(2.5, -10.0, -1.0)
+    cornerB -> vec3(3.0, 0.070, -0.5)
+    material -> gmat
+}
+
+b294 = Box {
+    cornerA -> vec3(2.5, -10.0, -0.5)
+    cornerB -> vec3(3.0, 0.186, 0.0)
+    material -> gmat
+}
+
+b295 = Box {
+    cornerA -> vec3(2.5, -10.0, 0.0)
+    cornerB -> vec3(3.0, 0.052, 0.5)
+    material -> gmat
+}
+
+b296 = Box {
+    cornerA -> vec3(2.5, -10.0, 0.5)
+    cornerB -> vec3(3.0, 0.019, 1.0)
+    material -> gmat
+}
+
+b297 = Box {
+    cornerA -> vec3(2.5, -10.0, 1.0)
+    cornerB -> vec3(3.0, 0.086, 1.5)
+    material -> gmat
+}
+
+b298 = Box {
+    cornerA -> vec3(2.5, -10.0, 1.5)
+    cornerB -> vec3(3.0, 0.075, 2.0)
+    material -> gmat
+}
+
+b299 = Box {
+    cornerA -> vec3(2.5, -10.0, 2.0)
+    cornerB -> vec3(3.0, 0.116, 2.5)
+    material -> gmat
+}
+
+b300 = Box {
+    cornerA -> vec3(2.5, -10.0, 2.5)
+    cornerB -> vec3(3.0, 0.171, 3.0)
+    material -> gmat
+}
+
+b301 = Box {
+    cornerA -> vec3(2.5, -10.0, 3.0)
+    cornerB -> vec3(3.0, 0.153, 3.5)
+    material -> gmat
+}
+
+b302 = Box {
+    cornerA -> vec3(2.5, -10.0, 3.5)
+    cornerB -> vec3(3.0, 0.035, 4.0)
+    material -> gmat
+}
+
+b303 = Box {
+    cornerA -> vec3(2.5, -10.0, 4.0)
+    cornerB -> vec3(3.0, 0.023, 4.5)
+    material -> gmat
+}
+
+b304 = Box {
+    cornerA -> vec3(3.0, -10.0, -5.0)
+    cornerB -> vec3(3.5, 0.087, -4.5)
+    material -> gmat
+}
+
+b305 = Box {
+    cornerA -> vec3(3.0, -10.0, -4.5)
+    cornerB -> vec3(3.5, 0.095, -4.0)
+    material -> gmat
+}
+
+b306 = Box {
+    cornerA -> vec3(3.0, -10.0, -4.0)
+    cornerB -> vec3(3.5, 0.165, -3.5)
+    material -> gmat
+}
+
+b307 = Box {
+    cornerA -> vec3(3.0, -10.0, -3.5)
+    cornerB -> vec3(3.5, 0.100, -3.0)
+    material -> gmat
+}
+
+b308 = Box {
+    cornerA -> vec3(3.0, -10.0, -3.0)
+    cornerB -> vec3(3.5, 0.058, -2.5)
+    material -> gmat
+}
+
+b309 = Box {
+    cornerA -> vec3(3.0, -10.0, -2.5)
+    cornerB -> vec3(3.5, 0.086, -2.0)
+    material -> gmat
+}
+
+b310 = Box {
+    cornerA -> vec3(3.0, -10.0, -2.0)
+    cornerB -> vec3(3.5, 0.175, -1.5)
+    material -> gmat
+}
+
+b311 = Box {
+    cornerA -> vec3(3.0, -10.0, -1.5)
+    cornerB -> vec3(3.5, 0.069, -1.0)
+    material -> gmat
+}
+
+b312 = Box {
+    cornerA -> vec3(3.0, -10.0, -1.0)
+    cornerB -> vec3(3.5, 0.119, -0.5)
+    material -> gmat
+}
+
+b313 = Box {
+    cornerA -> vec3(3.0, -10.0, -0.5)
+    cornerB -> vec3(3.5, 0.002, 0.0)
+    material -> gmat
+}
+
+b314 = Box {
+    cornerA -> vec3(3.0, -10.0, 0.0)
+    cornerB -> vec3(3.5, 0.157, 0.5)
+    material -> gmat
+}
+
+b315 = Box {
+    cornerA -> vec3(3.0, -10.0, 0.5)
+    cornerB -> vec3(3.5, 0.192, 1.0)
+    material -> gmat
+}
+
+b316 = Box {
+    cornerA -> vec3(3.0, -10.0, 1.0)
+    cornerB -> vec3(3.5, 0.046, 1.5)
+    material -> gmat
+}
+
+b317 = Box {
+    cornerA -> vec3(3.0, -10.0, 1.5)
+    cornerB -> vec3(3.5, 0.005, 2.0)
+    material -> gmat
+}
+
+b318 = Box {
+    cornerA -> vec3(3.0, -10.0, 2.0)
+    cornerB -> vec3(3.5, 0.122, 2.5)
+    material -> gmat
+}
+
+b319 = Box {
+    cornerA -> vec3(3.0, -10.0, 2.5)
+    cornerB -> vec3(3.5, 0.099, 3.0)
+    material -> gmat
+}
+
+b320 = Box {
+    cornerA -> vec3(3.0, -10.0, 3.0)
+    cornerB -> vec3(3.5, 0.067, 3.5)
+    material -> gmat
+}
+
+b321 = Box {
+    cornerA -> vec3(3.0, -10.0, 3.5)
+    cornerB -> vec3(3.5, 0.144, 4.0)
+    material -> gmat
+}
+
+b322 = Box {
+    cornerA -> vec3(3.0, -10.0, 4.0)
+    cornerB -> vec3(3.5, 0.141, 4.5)
+    material -> gmat
+}
+
+b323 = Box {
+    cornerA -> vec3(3.5, -10.0, -5.0)
+    cornerB -> vec3(4.0, 0.164, -4.5)
+    material -> gmat
+}
+
+b324 = Box {
+    cornerA -> vec3(3.5, -10.0, -4.5)
+    cornerB -> vec3(4.0, 0.033, -4.0)
+    material -> gmat
+}
+
+b325 = Box {
+    cornerA -> vec3(3.5, -10.0, -4.0)
+    cornerB -> vec3(4.0, 0.097, -3.5)
+    material -> gmat
+}
+
+b326 = Box {
+    cornerA -> vec3(3.5, -10.0, -3.5)
+    cornerB -> vec3(4.0, 0.057, -3.0)
+    material -> gmat
+}
+
+b327 = Box {
+    cornerA -> vec3(3.5, -10.0, -3.0)
+    cornerB -> vec3(4.0, 0.144, -2.5)
+    material -> gmat
+}
+
+b328 = Box {
+    cornerA -> vec3(3.5, -10.0, -2.5)
+    cornerB -> vec3(4.0, 0.084, -2.0)
+    material -> gmat
+}
+
+b329 = Box {
+    cornerA -> vec3(3.5, -10.0, -2.0)
+    cornerB -> vec3(4.0, 0.197, -1.5)
+    material -> gmat
+}
+
+b330 = Box {
+    cornerA -> vec3(3.5, -10.0, -1.5)
+    cornerB -> vec3(4.0, 0.115, -1.0)
+    material -> gmat
+}
+
+b331 = Box {
+    cornerA -> vec3(3.5, -10.0, -1.0)
+    cornerB -> vec3(4.0, 0.050, -0.5)
+    material -> gmat
+}
+
+b332 = Box {
+    cornerA -> vec3(3.5, -10.0, -0.5)
+    cornerB -> vec3(4.0, 0.179, 0.0)
+    material -> gmat
+}
+
+b333 = Box {
+    cornerA -> vec3(3.5, -10.0, 0.0)
+    cornerB -> vec3(4.0, 0.185, 0.5)
+    material -> gmat
+}
+
+b334 = Box {
+    cornerA -> vec3(3.5, -10.0, 0.5)
+    cornerB -> vec3(4.0, 0.112, 1.0)
+    material -> gmat
+}
+
+b335 = Box {
+    cornerA -> vec3(3.5, -10.0, 1.0)
+    cornerB -> vec3(4.0, 0.020, 1.5)
+    material -> gmat
+}
+
+b336 = Box {
+    cornerA -> vec3(3.5, -10.0, 1.5)
+    cornerB -> vec3(4.0, 0.187, 2.0)
+    material -> gmat
+}
+
+b337 = Box {
+    cornerA -> vec3(3.5, -10.0, 2.0)
+    cornerB -> vec3(4.0, 0.175, 2.5)
+    material -> gmat
+}
+
+b338 = Box {
+    cornerA -> vec3(3.5, -10.0, 2.5)
+    cornerB -> vec3(4.0, 0.125, 3.0)
+    material -> gmat
+}
+
+b339 = Box {
+    cornerA -> vec3(3.5, -10.0, 3.0)
+    cornerB -> vec3(4.0, 0.139, 3.5)
+    material -> gmat
+}
+
+b340 = Box {
+    cornerA -> vec3(3.5, -10.0, 3.5)
+    cornerB -> vec3(4.0, 0.155, 4.0)
+    material -> gmat
+}
+
+b341 = Box {
+    cornerA -> vec3(3.5, -10.0, 4.0)
+    cornerB -> vec3(4.0, 0.154, 4.5)
+    material -> gmat
+}
+
+b342 = Box {
+    cornerA -> vec3(4.0, -10.0, -5.0)
+    cornerB -> vec3(4.5, 0.117, -4.5)
+    material -> gmat
+}
+
+b343 = Box {
+    cornerA -> vec3(4.0, -10.0, -4.5)
+    cornerB -> vec3(4.5, 0.184, -4.0)
+    material -> gmat
+}
+
+b344 = Box {
+    cornerA -> vec3(4.0, -10.0, -4.0)
+    cornerB -> vec3(4.5, 0.129, -3.5)
+    material -> gmat
+}
+
+b345 = Box {
+    cornerA -> vec3(4.0, -10.0, -3.5)
+    cornerB -> vec3(4.5, 0.043, -3.0)
+    material -> gmat
+}
+
+b346 = Box {
+    cornerA -> vec3(4.0, -10.0, -3.0)
+    cornerB -> vec3(4.5, 0.152, -2.5)
+    material -> gmat
+}
+
+b347 = Box {
+    cornerA -> vec3(4.0, -10.0, -2.5)
+    cornerB -> vec3(4.5, 0.053, -2.0)
+    material -> gmat
+}
+
+b348 = Box {
+    cornerA -> vec3(4.0, -10.0, -2.0)
+    cornerB -> vec3(4.5, 0.192, -1.5)
+    material -> gmat
+}
+
+b349 = Box {
+    cornerA -> vec3(4.0, -10.0, -1.5)
+    cornerB -> vec3(4.5, 0.156, -1.0)
+    material -> gmat
+}
+
+b350 = Box {
+    cornerA -> vec3(4.0, -10.0, -1.0)
+    cornerB -> vec3(4.5, 0.087, -0.5)
+    material -> gmat
+}
+
+b351 = Box {
+    cornerA -> vec3(4.0, -10.0, -0.5)
+    cornerB -> vec3(4.5, 0.049, 0.0)
+    material -> gmat
+}
+
+b352 = Box {
+    cornerA -> vec3(4.0, -10.0, 0.0)
+    cornerB -> vec3(4.5, 0.193, 0.5)
+    material -> gmat
+}
+
+b353 = Box {
+    cornerA -> vec3(4.0, -10.0, 0.5)
+    cornerB -> vec3(4.5, 0.162, 1.0)
+    material -> gmat
+}
+
+b354 = Box {
+    cornerA -> vec3(4.0, -10.0, 1.0)
+    cornerB -> vec3(4.5, 0.112, 1.5)
+    material -> gmat
+}
+
+b355 = Box {
+    cornerA -> vec3(4.0, -10.0, 1.5)
+    cornerB -> vec3(4.5, 0.040, 2.0)
+    material -> gmat
+}
+
+b356 = Box {
+    cornerA -> vec3(4.0, -10.0, 2.0)
+    cornerB -> vec3(4.5, 0.193, 2.5)
+    material -> gmat
+}
+
+b357 = Box {
+    cornerA -> vec3(4.0, -10.0, 2.5)
+    cornerB -> vec3(4.5, 0.128, 3.0)
+    material -> gmat
+}
+
+b358 = Box {
+    cornerA -> vec3(4.0, -10.0, 3.0)
+    cornerB -> vec3(4.5, 0.169, 3.5)
+    material -> gmat
+}
+
+b359 = Box {
+    cornerA -> vec3(4.0, -10.0, 3.5)
+    cornerB -> vec3(4.5, 0.086, 4.0)
+    material -> gmat
+}
+
+b360 = Box {
+    cornerA -> vec3(4.0, -10.0, 4.0)
+    cornerB -> vec3(4.5, 0.087, 4.5)
+    material -> gmat
+}
+
+sph = Sphere {
+    center -> vec3(0.5, 1.5, 1.2)
+    radius -> 0.85
+    material -> gmat
+}
+
+sph2 = Sphere {
+    center -> vec3(0.5, 2.0, 1.2)
+    radius -> 0.55
+    material -> gmat
+}
+
+sph3 = Sphere {
+    center -> vec3(0.5, 2.4, 1.2)
+    radius -> 0.35
+    material -> gmat
+}
+
+box = Box {
+    cornerA -> vec3(-10.0, 1.5 - 0.2, -10.0)
+    cornerB -> vec3(10.0, 10.0, 10.0)
+    material -> gmat
+}
+
+box2 = Box {
+    cornerA -> vec3(-10.0, 2.0 - 0.13 , -10.0)
+    cornerB -> vec3(10.0, 10.0, 10.0)
+    material -> gmat
+}
+
+box3 = Box {
+    cornerA -> vec3(-10.0, 2.4 - 0.08 , -10.0)
+    cornerB -> vec3(10.0, 10.0, 10.0)
+    material -> gmat
+}
+
+Scene {
+    sph - box
+    sph2 - box2
+    sph3 - box3
+    b0 b1 b2 b3 b4 b5 b6 b7 b8 b9 b10 b11 b12 b13 b14 b15 b16 b17 b18 b19 b20 b21 b22 b23 b24 b25 b26 b27 b28 b29 b30 b31 b32 b33 b34 b35 b36 b37 b38 b39 b40 b41 b42 b43 b44 b45 b46 b47 b48 b49 b50 b51 b52 b53 b54 b55 b56 b57 b58 b59 b60 b61 b62 b63 b64 b65 b66 b67 b68 b69 b70 b71 b72 b73 b74 b75 b76 b77 b78 b79 b80 b81 b82 b83 b84 b85 b86 b87 b88 b89 b90 b91 b92 b93 b94 b95 b96 b97 b98 b99 b100 b101 b102 b103 b104 b105 b106 b107 b108 b109 b110 b111 b112 b113 b114 b115 b116 b117 b118 b119 b120 b121 b122 b123 b124 b125 b126 b127 b128 b129 b130 b131 b132 b133 b134 b135 b136 b137 b138 b139 b140 b141 b142 b143 b144 b145 b146 b147 b148 b149 b150 b151 b152 b153 b154 b155 b156 b157 b158 b159 b160 b161 b162 b163 b164 b165 b166 b167 b168 b169 b170 b171 b172 b173 b174 b175 b176 b177 b178 b179 b180 b181 b182 b183 b184 b185 b186 b187 b188 b189 b190 b191 b192 b193 b194 b195 b196 b197 b198 b199 b200 b201 b202 b203 b204 b205 b206 b207 b208 b209 b210 b211 b212 b213 b214 b215 b216 b217 b218 b219 b220 b221 b222 b223 b224 b225 b226 b227 b228 b229 b230 b231 b232 b233 b234 b235 b236 b237 b238 b239 b240 b241 b242 b243 b244 b245 b246 b247 b248 b249 b250 b251 b252 b253 b254 b255 b256 b257 b258 b259 b260 b261 b262 b263 b264 b265 b266 b267 b268 b269 b270 b271 b272 b273 b274 b275 b276 b277 b278 b279 b280 b281 b282 b283 b284 b285 b286 b287 b288 b289 b290 b291 b292 b293 b294 b295 b296 b297 b298 b299 b300 b301 b302 b303 b304 b305 b306 b307 b308 b309 b310 b311 b312 b313 b314 b315 b316 b317 b318 b319 b320 b321 b322 b323 b324 b325 b326 b327 b328 b329 b330 b331 b332 b333 b334 b335 b336 b337 b338 b339 b340 b341 b342 b343 b344 b345 b346 b347 b348 b349 b350 b351 b352 b353 b354 b355 b356 b357 b358 b359 b360
+}

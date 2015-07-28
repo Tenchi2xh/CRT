@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import net.team2xh.crt.language.parser.CRTBaseVisitor;
 import net.team2xh.crt.language.parser.CRTLexer;
 import net.team2xh.crt.language.parser.CRTParser;
@@ -61,11 +62,18 @@ final public class Compiler extends CRTBaseVisitor {
     private final static String RGB  = "rgb";
     private final static String RGBA = "rgba";
     private final static String VEC3 = "vec3";
+    private final static String SIN = "sin";
+    private final static String COS = "cos";
+    private final static String TAN = "tan";
+    private final static String RAND = "rand";
+    
+    private Random rand;
 
     private Compiler(String code) {
         this.code = code;
         script = new Script();
         scope = new Scope();
+        rand = new Random(1337);
     }
 
     private static Script compile(String code, Compiler compiler) {
@@ -275,6 +283,12 @@ final public class Compiler extends CRTBaseVisitor {
                 assertAttributeType(pointing, "pointing", ctx, Vector3.class);
                 assertAttributeType(color, "color", ctx, Pigment.class);
                 o = new ParallelLight((Vector3) from, (Vector3) pointing, (Pigment) color);
+                
+                Object ambient = attributes.get("ambient");
+                if (ambient != null) {
+                    assertAttributeType(ambient, "ambient", ctx, Double.class);
+                    ((ParallelLight) o).setAmbient((double) ambient);
+                }
                 break;
             }
             case "PointLight": {
@@ -440,6 +454,20 @@ final public class Compiler extends CRTBaseVisitor {
             case VEC3:
                 args = checkArguments(arguments, VEC3, 3, ctx);
                 return new Vector3(args[0], args[1], args[2]);
+            case SIN:
+                args = checkArguments(arguments, SIN, 1, ctx);
+                return Math.sin(args[0]);
+            case COS:
+                args = checkArguments(arguments, COS, 1, ctx);
+                return Math.cos(args[0]);
+            case TAN:
+                args = checkArguments(arguments, TAN, 1, ctx);
+                return Math.tan(args[0]);
+            case RAND:
+                args = checkArguments(arguments, RAND, 2, ctx);
+                Double r = rand.nextDouble() * Math.abs(args[0] - args[1]) + Math.min(args[0], args[1]);
+                System.out.println(r);
+                return r;
             default:
                 // TODO: macro call
                 return null;

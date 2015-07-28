@@ -188,7 +188,7 @@ public class MainWindow extends JFrame {
 
         dEditor.setMaximizable(true);
 
-        dAnimator.toFront();
+        dRender.toFront();
         
         setVisible(true);
 

@@ -23,15 +23,15 @@ sun = ParallelLight {
 d = 0.6
 cam = Camera {
     position -> vec3(d*2.5, d*0.3, d*-2.0)
-    pointing -> vec3(0.0, 0.5, 0.0)
-    fov -> 90.0
+    pointing -> vec3(-0.2, 0.0, 0.0)
+    fov -> 75.0
     -- Faire varier ap & dist
-    aperture -> 20.0
-    focaldistance -> d*5
+    aperture -> 50.0
+    focaldistance -> 3.7
 }
 
 bg = Background {
-    image -> "/images/panorama/stars2.jpg"
+    image -> "/images/panorama/sky.jpg"
     angle -> 3.4
 }
 
@@ -40,11 +40,11 @@ Settings {
     author     -> "Tenchi (tenchi@team2xh.net)"
     date       -> "24.06.2015"
     notes      -> "Sample CRT scene in TRC language"
-    lights     -> [l1, l2, l3]
+    lights     -> [l1, l2, l3, sun]
     camera     -> cam
     background -> bg
-    --supersampling -> 2
-    --dofsamples -> 10
+    supersampling -> 1
+    dofsamples -> 50
 }
 
 ground = Plane {
@@ -84,21 +84,45 @@ sph2 = Sphere {
     material -> redmat
 }
 sph3 = Sphere {
-    center -> vec3(-1.0, r - 0.5, 2.0) 
+    center -> vec3(-1.0, r - 0.5, 0.0) 
     radius -> r
     material -> redmat
 }
 sph4 = Sphere {
+    center -> vec3(-1.0, r - 0.5, 1.0) 
+    radius -> r
+    material -> redmat
+}
+sph5 = Sphere {
+    center -> vec3(-1.0, r - 0.5, 2.0) 
+    radius -> r
+    material -> redmat
+}
+sph6 = Sphere {
+    center -> vec3(-1.0, r - 0.5, 3.0) 
+    radius -> r
+    material -> redmat
+}
+sph7 = Sphere {
+    center -> vec3(-1.0, r - 0.5, 4.0) 
+    radius -> r
+    material -> redmat
+}
+sph8 = Sphere {
     center -> vec3(-1.0, r - 0.5, 5.0) 
     radius -> r
     material -> redmat
 }
 
 Scene {
-    box
-    --box - sph
-    --sph2
-    --sph3
-    --sph4
+    --box
+    box - sph
+    sph2
+    sph3
+    sph4
+    sph5
+    sph6
+    sph7
+    sph8
     ground
 }

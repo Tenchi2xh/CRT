@@ -17,11 +17,6 @@ os.system('> ' + fn)
 
 print "Concatenating files..."
 
-add("""\\onecolumn
-\\chapter*{Foreword}
-\\addcontentsline{toc}{chapter}{Foreword}""")
-cat("thesis/foreword.md")
-
 add("""\\twocolumn
 \pagenumbering{arabic}""")
 

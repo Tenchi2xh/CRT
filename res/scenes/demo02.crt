@@ -18,6 +18,7 @@ Settings {
     lights     -> [l]
     camera     -> cam
     recursiondepth -> 10
+    supersampling -> 4
 }
 
 mirror = Material {

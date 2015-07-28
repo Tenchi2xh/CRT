@@ -46,7 +46,7 @@ public class Launcher {
 
             // Set GUI
             // TODO: Implement dynamic theme changing
-            Theme.setLightTheme();
+            //Theme.setLightTheme();
             GUIToolkit.initGUI();
 
             // Disable jPCT logger

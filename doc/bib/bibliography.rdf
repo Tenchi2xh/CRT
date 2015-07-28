@@ -169,6 +169,28 @@
             </dcterms:URI>
         </dc:identifier>
     </bib:Document>
+    <bib:Document rdf:about="http://www.flipcode.com/archives/articles.shtml">
+        <z:itemType>blogPost</z:itemType>
+        <dcterms:isPartOf>
+           <z:Blog><dc:title>flipcode</dc:title></z:Blog>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Jacco</foaf:surname>
+                        <foaf:givenname>Bikker</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Raytracing Topics &amp; Techniques</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.flipcode.com/archives/articles.shtml</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </bib:Document>
     <bib:Document rdf:about="http://stackoverflow.com/a/5838991">
         <z:itemType>forumPost</z:itemType>
         <dcterms:isPartOf>
@@ -189,6 +211,18 @@
             </dcterms:URI>
         </dc:identifier>
     </bib:Document>
+    <bib:Document rdf:about="http://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-ray-tracing">
+        <z:itemType>blogPost</z:itemType>
+        <dcterms:isPartOf>
+           <z:Blog><dc:title>Scratchapixel</dc:title></z:Blog>
+        </dcterms:isPartOf>
+        <dc:title>Introduction to Ray Tracing</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-ray-tracing</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </bib:Document>
     <bib:Document rdf:about="http://www.rorydriscoll.com/2009/01/07/better-sampling/">
         <z:itemType>blogPost</z:itemType>
         <dcterms:isPartOf>
@@ -202,6 +236,22 @@
             </dcterms:URI>
         </dc:identifier>
     </bib:Document>
+    <rdf:Description rdf:about="http://docs.oracle.com/javase/8/docs/api/">
+        <z:itemType>document</z:itemType>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                   <foaf:Person><foaf:surname>Oracle</foaf:surname></foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Java Platform, Standard Edition 8 - API Specification</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>http://docs.oracle.com/javase/8/docs/api/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </rdf:Description>
     <bib:Document rdf:about="http://dock.javaforge.com/dockingFrames_v1.1.1/doc/index.html">
         <z:itemType>webpage</z:itemType>
         <dcterms:isPartOf>
@@ -266,6 +316,28 @@
         <dc:rights>Creative Commons Attribution-ShareAlike License</dc:rights>
         <dc:description>Page Version ID: 645471517</dc:description>
     </rdf:Description>
+    <bib:Document rdf:about="http://mathworld.wolfram.com/TrianglePointPicking.html">
+        <z:itemType>blogPost</z:itemType>
+        <dcterms:isPartOf>
+           <z:Blog><dc:title>MathWorld</dc:title></z:Blog>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Eric W.</foaf:surname>
+                        <foaf:givenname>Weisstein</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Triangle Point Picking</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://mathworld.wolfram.com/TrianglePointPicking.html</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </bib:Document>
     <bib:Document rdf:about="http://supercomputingblog.com/graphics/coding-bilinear-interpolation/">
         <z:itemType>blogPost</z:itemType>
         <dcterms:isPartOf>
@@ -276,6 +348,28 @@
         <dc:identifier>
             <dcterms:URI>
                 <rdf:value>http://supercomputingblog.com/graphics/coding-bilinear-interpolation/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </bib:Document>
+    <bib:Document rdf:about="http://elliot.kroo.net/software/java/GifSequenceWriter/">
+        <z:itemType>blogPost</z:itemType>
+        <dcterms:isPartOf>
+           <z:Blog></z:Blog>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Elliot</foaf:surname>
+                        <foaf:givenname>Kroo</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Animated GIF Writer</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://elliot.kroo.net/software/java/GifSequenceWriter/</rdf:value>
             </dcterms:URI>
         </dc:identifier>
     </bib:Document>
@@ -338,6 +432,26 @@
             </dcterms:URI>
         </dc:identifier>
     </bib:Document>
+    <bib:Document rdf:about="http://stackoverflow.com/a/13199273">
+        <z:itemType>forumPost</z:itemType>
+        <dcterms:isPartOf>
+           <z:Forum></z:Forum>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                   <foaf:Person><foaf:surname>Nobody</foaf:surname></foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Find OpenGL rotation matrix for a plane, given the normal vector after the rotation</dc:title>
+        <dc:date>11/2/2012</dc:date>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>http://stackoverflow.com/a/13199273</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </bib:Document>
     <bib:Document rdf:about="http://stackoverflow.com/a/21962037">
         <z:itemType>forumPost</z:itemType>
         <dcterms:isPartOf>
@@ -355,6 +469,28 @@
         <dc:identifier>
             <dcterms:URI>
                <rdf:value>http://stackoverflow.com/a/21962037</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </bib:Document>
+    <bib:Document rdf:about="http://www.java2s.com/Code/Java/2D-Graphics-GUI/AnimatedGifEncoder.htm">
+        <z:itemType>blogPost</z:itemType>
+        <dcterms:isPartOf>
+           <z:Blog><dc:title>java2s</dc:title></z:Blog>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Kevin</foaf:surname>
+                        <foaf:givenname>Weiner</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Animated GIF Encoder</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.java2s.com/Code/Java/2D-Graphics-GUI/AnimatedGifEncoder.htm</rdf:value>
             </dcterms:URI>
         </dc:identifier>
     </bib:Document>
