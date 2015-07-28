@@ -1,14 +1,14 @@
 # CRT
 
+\customfig{../res/logo/logo_small.png}{The CRT logo}{, showing commonly ray-traced primitives and an old-fashioned cathode ray tube pixelated effect.}{}{}
+
 This paper is about the development of **CRT**, a project done for the requirements of my Bachelor's degree at HEIG-VD, under the guidance of Prof. Pier \textsc{Donini}.
 
-The goal of this project was to study, design and implement an artistic conception tool for creating realistic three-dimensional images, based on a physical simulation of light and its fundamental properties (diffusion, reflection and refraction), method known as *ray tracing*, along with a custom *scripting language* used to describe scenes, that will be compiled then rendered.
+The goal of this project was to study, design and implement an artistic conception tool for creating realistic three-dimensional images, based on a physical simulation of light and its fundamental properties (diffusion, reflection and refraction), method known as *ray tracing*, along with designing a custom *scripting language* used to describe scenes, that will then be compiled then rendered. Additionally, a pleasant IDE-like user interface will be developed to create, edit and render ray-traced scenes.
 
-Ray tracing is a technique for computer optical calculations used for rendering an image or for optical studies. This technique involves simulating the inverse path light takes from the camera and compute the interactions of light rays with abstract primitive objects, composing a scene. This technique is used in the entertainment industry by Pixar and Dreamworks for animation, and by 3D artists for concept art.
+**Ray tracing** is a technique for computer optical calculations used for rendering an image or for optical studies. This technique involves simulating the inverse path light takes *from* the camera and compute the interactions of light rays with abstract primitive objects, composing a scene. This technique is used in the entertainment industry by *Pixar* and *Dreamworks* for animation, and by 3D artists for concept art.
 
-The project was designed to involve a lot of different computer science and general science fields: mathematics, physics, algorithms, grammar, compilation, user interfaces and object-oriented design patterns.
-
-\customfig{../res/logo/logo_small.png}{The CRT logo}{, showing commonly ray-traced primitives and an old-fashioned cathode ray tube pixelated effect.}{}{}
+The project goals were designed to involve a lot of different computer science domains and general science fields: mathematics, physics, algorithms, language grammar, compilation, user interfaces and object-oriented design patterns.
 
 ## Technologies
 
@@ -32,7 +32,7 @@ The following sections contain:
 
 - What was the introduction for the intermediary report (the state the project at that time and what remained to be done. 
 - The current state of the project after a month of finishing touches.
-- A quick overview of the companion archive file
+- An overview of the companion archive file
 - A quick manual
 
 ### Intermediary state
@@ -55,9 +55,9 @@ The following feature were missing from the project state:
 
 ### Progress since intermediary report
 
-Not everything could be done in the remaining month after the intermediary report. However, the application is in a very satisfactory state and can produce high quality images (see figures \ref{fig:ex1} and \ref{fig:ex2} in the next pages).
+Not everything could be done in the remaining month after the intermediary report. However, the application is in a very satisfactory state and can produce high quality artistic images (see figures \ref{fig:ex1} and \ref{fig:ex2} in the next pages).
 
-The goals stated in the first section were reached and a lot was learned throughout the year about ray tracing mechanics, language design and compilation, and user interface design.
+The goals stated in the first section were reached, and a lot was learned throughout the year about ray tracing mechanics, language design and compilation, and user interface design.
 
 Here is the list of features that were stated missing in the last report:
 
@@ -82,27 +82,28 @@ To launch the application, use one of the provided shortcuts:
 - `CRT_Dark.sh` or `CRT_Dark.bat` for the dark theme
 - `CRT_Light.sh` or `CRT_Light.bat` for the light theme
 
-The way to use the application is quite straight-forward: write code in the editor, compile, and see the result.
+The way to use the application is quite straight-forward: the user can write code in the editor, compile, and see the result.
 
-To learn the scripting language, open the examples contained in the `demos/` folder: use the "Open" button in the toolbar.
+To learn the CRT language syntax, many examples can be found in the `demos/` folder: use the "Open" button in the toolbar, or `ALT+O`. Some of these examples can take a long time to render --- if they do, the user can cancel the rendering and reduce the quality settings:
 
-When a scene takes a long time to preview, a few things can be done:
-
-- Temporarily reduce the `supersampling` and `dofsamples` values in the `Settings` block
-- Use the live view module
+- Set the `supersampling` to 1 in the `Settings` block
+- Set the `dofsamples` value to a lower value in the `Settings` block
+- Or use the live view module (see below)
 
 A few useful keyboard shortcuts: 
 
-- `ALT+R` compiles and renders the current code, or stops the render
+- `ALT+R` compiles and renders the current code, or stops the render if it is in progress
 - `ALT+S` saves the current code
 - `ALT+O` opens a saved project
 - `ALT+E` exports the current render to a PNG file
 - `ALT+P` refreshes the live view module
 - `CTRL+M` extends any extendable tab
 
-When valid code is present in the editor, press the eye button in the toolbar to compile and refresh the live view, which will provide you with a free camera that you can drag around using the mouse. You can also use the mouse wheel to change the field of view, and preview a small ray-traced render of the current camera. When a satisfactory point of view has been found, the "Copy camera" button will put the current camera in the clipboard for you to paste in the appropriate section of the script.
+When valid code is present in the editor, press the eye button in the toolbar to compile and refresh the live view, which will provide you with a free camera that you can *drag* around using the mouse. You can also use the mouse wheel to change the field of view, and use the preview feature to obtain a small ray-traced render as seen from the current camera.
 
-To produce animations, the variable named `t` can be used in the script to represent time (see section \ref{sec:anim}). Then, in the "animation" tab, choose the desired amount of frames to render, and press the "Render" button. When finished, a GIF file will be saved in the current directory, and by using the slider, the animation can be previewed at will.
+When a satisfactory point of view has been found, the "Copy camera" button will put the current camera in the clipboard for you to paste in the appropriate section of the script.
+
+To produce animations, the variable named `t` can be used in the script to represent time (see section \ref{sec:anim}). Then, in the "Animation" tab, choose the desired amount of frames to render, and press the "Render" button. When finished, a GIF file will be saved in the current directory, and by using the slider, the animation can be previewed at will.
 
 Finally, here are a few useful functions not found in the examples: `sin(t)`, `cos(t)`, `tan(t)`, `rand(min, max)`.
 

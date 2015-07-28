@@ -537,9 +537,9 @@ Rendering purely mathematical primitive volumes is nice and fun but a little dul
 
 The first option is very basic and only provides a base colour for all rays that hit infinity.
 
-The second option is more advanced and is a good compromise if an artist does not yet have a panoramic picture for his background: it generates a gradient from horizon to zenith by interpolating between the two colours depending on the angle the ray has compared to the $xz$ plane.
+The second option is more advanced and is a good compromise if an artist does not yet have a panoramic picture for his background: it generates a *gradient* from horizon to zenith by interpolating between the two colours depending on the angle the ray has compared to the $xz$ plane.
 
-The interesting one is the latter, which takes a \SI{360}{\degree} panorama and a direction vector, and returns the colour at which the vector would point if the panorama was wrapped around the scene on an infinitely big sphere.
+The interesting one is the latter, which takes a \SI{360}{\degree} *panorama* and a direction vector, and returns the colour at which the vector would point towards if the panorama was wrapped around the scene on an infinitely big sphere.
 
 The way the pixel coordinates are computed on the panorama picture is as follows: using `atan2()`, the angle of the vector projected on the $xz$ plane (*yaw*) is mapped to the $x$ coordinate on the picture, and the angle of the vector projected on the $yz$ plane (*pitch*) is mapped to the $y$ coordinate. The final colour is then bilinearly interpolated and returned to the ray tracer.
 
@@ -559,7 +559,7 @@ The way the pixel coordinates are computed on the panorama picture is as follows
 
 To simulate a *real camera*, the implemented ray tracing model supports **depth of field** simulation. It provides an additional layer of realism and dynamism to the rendered pictures by making all out of focus objects blurred in a physically realistic way.
 
-In order to achieve this effect, the ray tracing model is modified from the rays all originating from one point to another model where rays can originate from any point on a *disc* (mimicking the fact that a camera has a disc-shaped aperture hole and not a single point hole).
+In order to achieve this effect, the ray tracing model is modified: instead of having all the rays originating from one point, in this model the rays can originate from any point on a *disc* (mimicking the fact that a camera has a disc-shaped aperture hole and not a single point hole).
 
 \begin{figure}[!htpb]
 \centering
@@ -591,7 +591,7 @@ In order to achieve this effect, the ray tracing model is modified from the rays
 
 As can be seen on the diagram, the primary rays can be generated anywhere on the origin disc, and aim at the desired object, projected on the focal along the centre axis from the disc. If the object lies on that focal plane, all rays originating from the disc will land on the *same spot* on the object.
 
-However, as shown in the diagram, if the object is further away from the focal plane, rays originating from different location on the disc will meet on the focal plane but then diverge until they reach their destination, which will not always be the object aimed at (in the example, only the middle ray hits the point $p$, and the other two travel further behind).
+However, as shown in the diagram, if the object is further away from the focal plane, rays originating from different location on the disc will meet on the focal plane but then *diverge* until they reach their destination, which will not always be the object aimed at (in the example, only the middle ray hits the point $\vec{p}$, and the other two travel further behind).
 
 By *averaging* the colour resulting from these rays, the final colour will either be the object's precise colour if it lies on the focal plane, or a mixture of the object's colour and the background around it. This effectively creates a depth of field blur.
 
@@ -601,13 +601,11 @@ Three factors have an effect on how the depth of field blur will look like: aper
 
 **Aperture size** determines the "thickness" of the area that will be in focus (literally the *depth* of the visible field), and will in practice represent the radius of the aperture disc (or other regular polygon). The *smaller* this disc is, the *more* it will be like a point-source, and thus resembling more the normal model with no depth of field. The bigger it is, the shallower the area where objects are in focus will be (and the blurrier out-of-focus objects will appear).
 
-The *focal distance*'s effect is very straight forward: it controls the distance at which the focal plane will reside, in which objects are in focus and not blurred.
+The *focal distance*'s effect is very straight forward: it controls the distance at which the focal plane will reside, in which objects are in focus and not blurred. Finally, the aperture shape will determine the shape of the *bokeh* (see section \ref{sec:camera}). In the aperture of a real camera, a very big number of light rays go through and hit almost all possible points on the disc. When ray-tracing, we can only trace a limited number of rays, and will choose their location *randomly*.
 
-Finally, the aperture shape will determine the shape of the *bokeh* (see section \ref{sec:camera}). We need to model shapes, which will provide a method to obtain a uniformly distributed random point from inside their boundaries. A lazy but efficient approach is to take random points from a square, which only consists of having two random float numbers ranging from 0 to 1 as $x$ and $y$ coordinates.
+For this, we need to model shapes, which will provide a method to obtain a uniformly distributed random point from inside their boundaries. A lazy but efficient approach is to take random points from a square, which only consists of having two random float numbers ranging from 0 to 1 as $x$ and $y$ coordinates. A perfect model uses a disc, which is the shape cameras try to obtain. Efficient and correct algorithms to generate a random point in a circle already exists and were implemented in the project.
 
-A perfect model uses a disc, which is the shape cameras try to obtain. Efficient and correct algorithms to generate a random point in a circle already exists and were implemented in the project.
-
-In reality, because real life cameras need their aperture size to change for different exposures, their aperture mechanism is constructed of a number of blades that can change the size of the hole they create:
+Because real life cameras need their aperture size to change for different exposures, their aperture mechanism is constructed of a number of blades that can change the size of the hole they create:
 
 \customfig{img/blades.jpg}{Aperture blades}{, also called iris, here with a pentagonal shape}{}{Nayu Kim on Flickr}
 
