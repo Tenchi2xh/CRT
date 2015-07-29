@@ -15,7 +15,7 @@ ________________________________________________________________________________
 
 > CRT - Cathode Ray Tracer
 
-Author: Hamza Haiken (tenchi@team2xh.net)
+Author: Hamza Haiken <tenchi@team2xh.net>
 Source: https://github.com/Tenchi2xh/CRT
 
 Quick start . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . line 26
@@ -235,3 +235,19 @@ Toolbar     ALT+N         New CRT script
 
 Misc        CTRL+M        Expand active tab
             CTRL+SHIFT+E  Quick switch to tab
+________________________________________________________________________________
+
+Copyright (c) 2015 Hamza Haiken <tenchi@team2xh.net>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
