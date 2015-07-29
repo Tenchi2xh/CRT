@@ -226,7 +226,7 @@ public class Tracer {
         this.pb = pb;
     }
 
-    private void processPixel(int[] coords, int[][] image, Scene scene) {
+    private void processPixel(int[] coords, int[][] image, Scene scene, boolean verbose) {
         Settings settings = scene.getSettings();
 
         int supersampling = settings.supersampling;
@@ -251,7 +251,7 @@ public class Tracer {
             // Ray ray = getPrimaryRay(x, y);
             // image[x][y] = trace(ray, settings.recurDepth, 0).rgb();
         }
-        if (pb != null)
+        if (pb != null && verbose)
             incrementProgressBar();
     }
 
@@ -261,10 +261,10 @@ public class Tracer {
     
     private ForkJoinPool pool;
     
-    public ForkJoinPool parallelRender(int passes, BiConsumer<int[][], Integer> drawer, Runnable ender, Scene scene) {
+    public ForkJoinPool parallelRender(int passes, BiConsumer<int[][], Integer> drawer, Runnable ender, Scene scene, boolean verbose) {
         pool = new ForkJoinPool(SystemInformations.cores());
         pool.execute(() -> {
-            render(passes, drawer, scene);
+            render(passes, drawer, scene, verbose);
             ender.run();
         });
         return pool;
@@ -276,8 +276,9 @@ public class Tracer {
         }
     }
     
-    public int[][] render(int passes, BiConsumer<int[][], Integer> drawer, Scene scene) {
+    public int[][] render(int passes, BiConsumer<int[][], Integer> drawer, Scene scene, boolean verbose) {
         Settings settings = scene.getSettings();
+        if (verbose) System.out.println("Rendering " + settings.getTitle() + "...");
 
         boolean[][] done = new boolean[settings.width][settings.height];
 
@@ -300,19 +301,23 @@ public class Tracer {
         counter = 0;
         int[][] image = new int[settings.width][settings.height];
 
-        if (pb != null) SwingUtilities.invokeLater(() -> pb.setValue(0));
+        if (pb != null && verbose) SwingUtilities.invokeLater(() -> pb.setValue(0));
         long start = System.currentTimeMillis();
         for (int i = 0; i < passes; ++i) {
             final int j = i+1;
-            if (pb != null) SwingUtilities.invokeLater(() -> pb.setString("Pass " + j + "/" + passes));
-            coords.get(i).parallelStream().forEach((int[] c) -> processPixel(c, image, scene));
+            if (pb != null && verbose) SwingUtilities.invokeLater(() -> pb.setString("Pass " + j + "/" + passes));
+            coords.get(i).parallelStream().forEach((int[] c) -> processPixel(c, image, scene, verbose));
             drawer.accept(image, passes - i - 1);
         }
         long end = System.currentTimeMillis();
 
-        if (pb != null) SwingUtilities.invokeLater(() -> pb.setString(String.format("%.3fs", (end - start) / 1000.0)));
-        if (pb != null) SwingUtilities.invokeLater(() -> pb.setValue(0));
-
+        if (verbose) {
+            String time = String.format("%.3fs", (end - start) / 1000.0);
+            if (pb != null) SwingUtilities.invokeLater(() -> pb.setString(time));
+            if (pb != null) SwingUtilities.invokeLater(() -> pb.setValue(0));
+            System.out.println("Rendering completed in " + time);
+        }
+        
         return image;
     }
 

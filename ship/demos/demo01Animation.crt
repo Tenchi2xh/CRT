@@ -1,0 +1,123 @@
+-- To try the animation, switch to the animation tab.
+-- Animation was calibrated for around 20 frames.
+-- To make the animation render a bit faster,
+-- disconnect the animation tab and resize it
+-- to a smaller size, or set "dofsamples" to 1
+
+-- Lights --------------------------------------------------
+
+l = PointLight {
+    origin -> vec3(1.0 - t*0.1, 2.0 - t*0.1, -1.0)
+    color -> rgb(0.7, 0.7, 0.7)
+    -- Try a falloff of -1.0 for a magical light
+    -- that never fades with distance
+    falloff -> 70.0
+}
+
+-- Misc ----------------------------------------------------
+
+cam = Camera {
+    position -> vec3(0.5, 0.5, -0.3)
+    -- Camera will yaw to the right and pitch up with time
+    pointing -> vec3(0.0 + t*0.01, 0.5 + t*0.01, 1.0)
+    fov -> 90.0
+    -- Camera will focus further back with time
+    focaldistance -> 1.6 + t*0.05
+    aperture -> 40.0
+}
+
+mirrorMat = Material {
+    color -> rgb(1.0, 1.0, 1.0)
+    -- 1.0 reflectivity will look weird because
+    -- absolutely perfect mirrors don't exist
+    reflectivity -> 0.93
+}
+sphMat = Material {
+    color -> rgb(0.5, 0.5, 0.5)
+    reflectivity -> 0.65
+}
+
+-- Entities ------------------------------------------------
+
+ground = Plane {
+    normal -> vec3(0.0, 1.0, 0.0)
+    position -> vec3(0.0, -0.5, 0.0)
+    material -> Material { color -> rgb(0.5, 0.5, 0.5) }
+}
+ceiling = Plane {
+    normal -> vec3(0.0, -1.0, 0.0)
+    position -> vec3(0.0, 2.5, 0.0)
+    material -> Material { color -> rgb(0.0, 0.5, 0.0) }
+}
+wallBack = Plane {
+    normal -> vec3(0.0, 0.0, -1.0)
+    position -> vec3(0.0, 0.0, 3.0)
+    material -> mirrorMat
+}
+wallFront = Plane {
+    normal -> vec3(0.0, 0.0, 1.0)
+    position -> vec3(0.0, 0.0, -1.1)
+    material -> mirrorMat
+}
+wallRight = Plane {
+    normal -> vec3(-1.0, 0.0, 0.0)
+    position -> vec3(1.7, 0.0, 0.0)
+    material -> Material { color -> rgb(0.5, 0.0, 0.0) }
+}
+wallLeft = Plane {
+    normal -> vec3(1.0, 0.0, 0.0)
+    position -> vec3(-1.7, 0.0, 0.0)
+    material -> Material { color -> rgb(0.0, 0.0, 0.5) }
+}
+
+-- Sphere will move further back, right and up with time
+sph = Sphere {
+    center -> vec3(-1.0 + t*0.04, 0.0 + t*0.03, 1.0 + t*0.06)
+    radius -> 0.5
+    material -> sphMat
+}
+-- All following spheres' radius will increase with time
+sph2 = Sphere {
+    center -> vec3(1.0, 0.5, 1.0)
+    radius -> 0.0 + t*0.008
+    material -> sphMat
+}
+sph3 = Sphere {
+    center -> vec3(1.0, 0.5, 1.5)
+    radius -> 0.0 + t*0.008
+    material -> sphMat
+}
+sph4 = Sphere {
+    center -> vec3(1.0, 0.5, 2.0)
+    radius -> 0.0 + t*0.008
+    material -> sphMat
+}
+
+-- Settings ------------------------------------------------
+
+Settings {
+    title      -> "Animation demo"
+    author     -> "Tenchi (tenchi@team2xh.net)"
+    date       -> "28.07.2015"
+    notes      -> "Animated mirror room"
+    lights     -> [l]
+    camera     -> cam
+    recursiondepth -> 10
+    supersampling -> 1
+    dofsamples -> 16
+}
+
+-- Scene ---------------------------------------------------
+
+Scene {
+    sph
+    ground
+    ceiling
+    wallBack
+    wallFront
+    wallRight
+    wallLeft
+    sph2
+    sph3
+    sph4
+}

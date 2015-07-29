@@ -95,7 +95,7 @@ import net.team2xh.crt.raytracer.Tracer;
         
         Tracer tracer = Tracer.getInstance();
         
-        tracer.parallelRender(4, (int[][] p, Integer i) -> draw(panel, p, i, w, h), endAction, scene);
+        tracer.parallelRender(4, (int[][] p, Integer i) -> draw(panel, p, i, w, h), endAction, scene, true);
     }
 
     public static void draw(RenderPanel panel, int[][] picture, int pass, int w, int h) {

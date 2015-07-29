@@ -26,8 +26,13 @@ import net.team2xh.crt.raytracer.entities.Entity;
  */
 public abstract class CSG extends Entity {
 
-    public CSG(Material material) {
+    protected Entity a;
+    protected Entity b;
+    
+    public CSG(Material material, Entity a, Entity b) {
         super(material);
+        this.a = a;
+        this.b = b;
     }
 
     public static Difference subtract(List<Entity> entities) {
@@ -67,6 +72,14 @@ public abstract class CSG extends Entity {
         }
 
         return (Union) accu;
+    }
+
+    public Entity getA() {
+        return a;
+    }
+
+    public Entity getB() {
+        return b;
     }
 
 }

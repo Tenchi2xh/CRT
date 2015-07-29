@@ -1,0 +1,4 @@
+These two scripts are the two examples from the beginning of the report. 
+I didn't take the time to comment them, so open them at your own risk.
+
+Also, drops.crt contains a lot of entities and is likely to make the editor freeze for a while when opening - try copying the text from an external editor.

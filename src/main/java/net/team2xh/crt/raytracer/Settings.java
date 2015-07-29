@@ -35,10 +35,10 @@ public final class Settings {
     boolean showClip = false;
     Projection projection = Projection.PINHOLE;
 
-    private String title;
-    private String author;
-    private String date;
-    private String notes;
+    private String title = "Unnamed Scene";
+    private String author = "Unknown Author";
+    private String date = "Unknown Date";
+    private String notes = "";
 
     private Settings(Scene parent, int width, int height) {
         this.parent = parent;

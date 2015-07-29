@@ -121,7 +121,6 @@ public class GifSequenceWriter {
             throw new IIOException("No GIF Image Writers Exist");
         } else {
             ImageWriter iw = iter.next();
-            System.out.println(">> " + iw);
             return iw;
         }
     }

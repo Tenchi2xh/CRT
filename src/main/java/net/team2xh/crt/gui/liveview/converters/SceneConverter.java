@@ -38,6 +38,7 @@ import net.team2xh.crt.raytracer.entities.Box;
 import net.team2xh.crt.raytracer.entities.Entity;
 import net.team2xh.crt.raytracer.entities.Plane;
 import net.team2xh.crt.raytracer.entities.Sphere;
+import net.team2xh.crt.raytracer.entities.csg.CSG;
 import net.team2xh.crt.raytracer.lights.ParallelLight;
 import net.team2xh.crt.raytracer.lights.PointLight;
 import net.team2xh.crt.raytracer.math.Vector3;
@@ -133,69 +134,7 @@ final public class SceneConverter {
         }
 
         for (Entity e : scene.getEntities()) {
-            Object3D obj;
-            Class type = e.getClass();
-
-            boolean sprite = false;
-
-            if (type == Box.class) {
-                Box box = (Box) e;
-                SimpleVector dimensions = SimpleVector.create((float) box.getWidth() * p.distMult,
-                        (float) box.getHeight() * p.distMult,
-                        (float) box.getDepth() * p.distMult);
-                obj = ExtendedPrimitives.createBox(dimensions);
-                obj.translate(box.getMinCorner().multiply(p.distMult).getRightHanded().simpleVector());
-//                obj.setShadingMode(Object3D.SHADING_FAKED_FLAT);
-            } else if (type == Sphere.class) {
-                Sphere sphere = (Sphere) e;
-                obj = Primitives.getSphere((float) sphere.getRadius() * p.distMult);
-            } else if (type == Plane.class) {
-                obj = ExtendedPrimitives.createPlane(p.distMult, 100);
-                // From http://stackoverflow.com/a/13199273
-                SimpleVector n0 = SimpleVector.create(0.0f, 1.0f, 0.0f);
-                SimpleVector n1 = ((Plane) e).getNormal().getRightHanded().simpleVector();
-                if (n1.equals(SimpleVector.create(0.0f, 1.0f, 0.0f))) {
-                    obj.rotateX((float) Math.PI);
-                } else if (!n1.equals(SimpleVector.create(0.0f, -1.0f, 0.0f))) {
-                    SimpleVector axis = n0.calcCross(n1);
-                    float angle = (float) Math.acos(n0.calcDot(n1));
-                    obj.rotateAxis(axis, angle);
-                }
-            } else {
-                obj = ExtendedPrimitives.createSprite(0.2f * p.distMult);
-                obj.setTexture("unknown");
-                obj.setTransparency(20);
-                sprite = true;
-            }
-
-            if (p.sun != null && !sprite) {
-                for (int i = 0; i < 3; ++i) {
-                    p.shs[i].addCaster(obj);
-                    p.shs[i].addReceiver(obj);
-                }
-            }
-
-            obj.translate(e.getCenter().multiply(p.distMult).getRightHanded().simpleVector());
-            obj.setCollisionMode(Object3D.COLLISION_CHECK_OTHERS);
-
-            Material m = e.getMaterial();
-
-            obj.setSpecularLighting(true);
-            obj.setAdditionalColor(m.color.getColor().darker().darker().darker());
-
-            GLSLShader shader = new GLSLShader(vertex, fragment);
-            shader.setUniform("isHighlighted", 0);
-            shader.setUniform("matColor", m.color.getColor().getColorComponents(null));
-            obj.setUserObject(shader);
-            if (p.useShaders) {
-                obj.setRenderHook(shader);
-            }
-
-            // Compile has to be dynamic or else it crashes when having multiple viewports
-            obj.compile(true);
-            obj.build();
-
-            world.addObject(obj);
+            addEntity(e, p, vertex, fragment, world);
         }
 
         if (p.sun != null) {
@@ -210,5 +149,76 @@ final public class SceneConverter {
         p.skybox = BackgroundConverter.convertBackground(scene.getBackground());
 
         return world;
+    }
+
+    private static void addEntity(Entity e, LiveViewPanel p, String vertex, String fragment, World world) {
+        Object3D obj;
+        Class type = e.getClass();
+
+        boolean sprite = false;
+
+        if (type == Box.class) {
+            Box box = (Box) e;
+            SimpleVector dimensions = SimpleVector.create((float) box.getWidth() * p.distMult,
+                    (float) box.getHeight() * p.distMult,
+                    (float) box.getDepth() * p.distMult);
+            obj = ExtendedPrimitives.createBox(dimensions);
+            obj.translate(box.getMinCorner().multiply(p.distMult).getRightHanded().simpleVector());
+//                obj.setShadingMode(Object3D.SHADING_FAKED_FLAT);
+        } else if (type == Sphere.class) {
+            Sphere sphere = (Sphere) e;
+            obj = Primitives.getSphere((float) sphere.getRadius() * p.distMult);
+        } else if (type == Plane.class) {
+            obj = ExtendedPrimitives.createPlane(p.distMult, 100);
+            // From http://stackoverflow.com/a/13199273
+            SimpleVector n0 = SimpleVector.create(0.0f, 1.0f, 0.0f);
+            SimpleVector n1 = ((Plane) e).getNormal().getRightHanded().simpleVector();
+            if (n1.equals(SimpleVector.create(0.0f, 1.0f, 0.0f))) {
+                obj.rotateX((float) Math.PI);
+            } else if (!n1.equals(SimpleVector.create(0.0f, -1.0f, 0.0f))) {
+                SimpleVector axis = n0.calcCross(n1);
+                float angle = (float) Math.acos(n0.calcDot(n1));
+                obj.rotateAxis(axis, angle);
+            }
+        } else if (e instanceof CSG) {
+            addEntity(((CSG) e).getA(), p, vertex, fragment, world);
+            addEntity(((CSG) e).getB(), p, vertex, fragment, world);
+            return;
+        } else {
+            obj = ExtendedPrimitives.createSprite(0.2f * p.distMult);
+            obj.setTexture("unknown");
+            obj.setTransparency(20);
+            sprite = true;
+        }
+
+        if (p.sun != null && !sprite) {
+            for (int i = 0; i < 3; ++i) {
+                p.shs[i].addCaster(obj);
+                p.shs[i].addReceiver(obj);
+            }
+        }
+
+        obj.translate(e.getCenter().multiply(p.distMult).getRightHanded().simpleVector());
+        obj.setCollisionMode(Object3D.COLLISION_CHECK_OTHERS);
+
+        Material m = e.getMaterial();
+
+        obj.setSpecularLighting(true);
+        obj.setAdditionalColor(m.color.getColor().darker().darker().darker());
+
+        GLSLShader shader = new GLSLShader(vertex, fragment);
+        shader.setUniform("isHighlighted", 0);
+        shader.setUniform("matColor", m.color.getColor().getColorComponents(null));
+        obj.setUserObject(shader);
+        if (p.useShaders) {
+            obj.setRenderHook(shader);
+        }
+
+        // Compile has to be dynamic or else it crashes when having multiple viewports
+        obj.compile(true);
+        obj.build();
+
+        world.addObject(obj);
+
     }
 }

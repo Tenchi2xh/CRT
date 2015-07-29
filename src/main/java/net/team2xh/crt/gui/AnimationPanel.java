@@ -148,12 +148,15 @@ public class AnimationPanel extends JPanel {
             frames[i] = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
         
         (new Thread(() -> {
-            System.out.println("Rendering " + frames.length + " frames...");
+            String f = frames.length > 1 ? "frames" : "frame";
+            System.out.println("Rendering " + frames.length + " " + f + "...");
+            if (frames.length == 1)
+                System.err.println("Warning: you may want to render more than 1 frame for an animation");
             for (int i = 0; i < frames.length; ++i) {
 
                 currentFrame = i;
                 slider.setValue(i + 1);
-                System.out.println((currentFrame + 1) + " / " + frames.length + " : " + frames[currentFrame]);
+                System.out.println("Rendering frame " + (currentFrame + 1) + " / " + frames.length);
                 
                 Script script = Compiler.compile(code, new Variable(new Identifier("t"), i));
                 Scene scene = script.getScene();
@@ -163,7 +166,7 @@ public class AnimationPanel extends JPanel {
 
                 Tracer tracer = Tracer.getInstance();
 
-                ForkJoinPool pool = tracer.parallelRender(4, (int[][] p, Integer pass) -> draw(this, p, pass, w, h), endAction, scene);
+                ForkJoinPool pool = tracer.parallelRender(4, (int[][] p, Integer pass) -> draw(this, p, pass, w, h), endAction, scene, true);
                 pool.awaitQuiescence(365, TimeUnit.DAYS);
                 
                 image.repaint();
@@ -171,21 +174,22 @@ public class AnimationPanel extends JPanel {
             slider.setEnabled(true);
             render.setEnabled(true);
             
-            try {
-                // Save gif
-                ImageOutputStream output = new FileImageOutputStream(new File("./animationA_" + (System.currentTimeMillis() / 1000) + ".gif"));
-                GifSequenceWriter writer = new GifSequenceWriter(output, frames[0].getType(), 16, true);
-                for (int i = 0; i < frames.length; ++i) {
-                    writer.writeToSequence(frames[i]);
-                }
-                writer.close();
-                output.close();
-            } catch (IOException ex) {
-                Exceptions.printStackTrace(ex);
-            }
+            // This writer has worse quality
+//            try {
+//                // Save gif
+//                ImageOutputStream output = new FileImageOutputStream(new File("./animationA_" + (System.currentTimeMillis() / 1000) + ".gif"));
+//                GifSequenceWriter writer = new GifSequenceWriter(output, frames[0].getType(), 16, true);
+//                for (int i = 0; i < frames.length; ++i) {
+//                    writer.writeToSequence(frames[i]);
+//                }
+//                writer.close();
+//                output.close();
+//            } catch (IOException ex) {
+//                Exceptions.printStackTrace(ex);
+//            }
             
             AnimatedGifEncoder e = new AnimatedGifEncoder();
-            e.start("./animationB_" + (System.currentTimeMillis() / 1000) + ".gif");
+            e.start("./animation_" + (System.currentTimeMillis() / 1000) + ".gif");
             e.setDelay(10);
             for (int i = 0; i < frames.length; ++i) {
                 e.addFrame(frames[i]);

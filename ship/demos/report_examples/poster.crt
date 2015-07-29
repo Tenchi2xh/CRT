@@ -1,0 +1,223 @@
+intensity = 0.3
+sun = ParallelLight {
+    from -> vec3(-0.1, 1.0, -0.1)
+    pointing -> vec3(0.0, 0.0, 0.0)
+    color -> rgb(intensity*1.0, intensity*1.0, intensity*1.0)
+    ambient -> 0.3
+}
+
+campos = vec3(-1.0, 0.0, 2.0)
+cam = Camera {
+    position -> campos
+    pointing -> vec3(0.0, 0.85, 0.0)
+    fov -> 80.0
+    aperture -> 50.0
+    focaldistance -> 2.5 - 0.2
+}
+
+bg = Background {
+    image -> "/images/panorama/heig.jpg"
+    -- also try:
+    -- image -> "/images/panorama/church.jpg"
+    angle -> 3.14
+}
+
+sphmat = Material {
+    color -> rgb(1.0, 1.0, 1.0)
+    reflectivity -> 0.5
+}
+
+sph1 = Sphere {
+    center -> vec3(0.5, 0.0, 0.0)
+    radius -> 0.68
+    material -> sphmat
+}
+sph2 = Sphere {
+    center -> vec3(-0.5, 0.0, 0.0)
+    radius -> 0.68
+    material -> sphmat
+}
+sph3 = Sphere {
+    center -> vec3(0.0, 0.0, 0.5)
+    radius -> 0.68
+    material -> sphmat
+}
+sph4 = Sphere {
+    center -> vec3(0.0, 0.0, -0.5)
+    radius -> 0.68
+    material -> sphmat
+}
+
+bw = 0.025
+box2 = Box {
+    cornerA -> vec3(-bw, 0.0, -bw)
+    cornerB -> vec3(bw, 0.8, bw)
+    material -> Material { color -> rgb(1.0, 1.0, 1.0) }
+}
+
+disk1h = 0.45
+disk1 = Sphere {
+    center -> vec3(0.0, disk1h, 0.0)
+    radius -> 0.3
+    material -> sphmat
+}
+disk1mask1 = Box {
+    cornerA -> vec3(-10.0, disk1h-bw, -10.0)
+    cornerB -> vec3(10.0, -10.0, 10.0)
+    material -> sphmat
+}
+disk1mask2 = Box {
+    cornerA -> vec3(-10.0, disk1h+bw, -10.0)
+    cornerB -> vec3(10.0, 10.0, 10.0)
+    material -> sphmat
+}
+
+disk2h = disk1h + 5*bw
+disk2 = Sphere {
+    center -> vec3(0.0, disk2h, 0.0)
+    radius -> 0.2
+    material -> sphmat
+}
+disk2mask1 = Box {
+    cornerA -> vec3(-10.0, disk2h-bw, -10.0)
+    cornerB -> vec3(10.0, -10.0, 10.0)
+    material -> sphmat
+}
+disk2mask2 = Box {
+    cornerA -> vec3(-10.0, disk2h+bw, -10.0)
+    cornerB -> vec3(10.0, 10.0, 10.0)
+    material -> sphmat
+}
+
+disk3h = disk2h + 5*bw
+disk3 = Sphere {
+    center -> vec3(0.0, disk3h, 0.0)
+    radius -> 0.1
+    material -> sphmat
+}
+disk3mask1 = Box {
+    cornerA -> vec3(-10.0, disk3h-bw, -10.0)
+    cornerB -> vec3(10.0, -10.0, 10.0)
+    material -> sphmat
+}
+disk3mask2 = Box {
+    cornerA -> vec3(-10.0, disk3h+bw, -10.0)
+    cornerB -> vec3(10.0, 10.0, 10.0)
+    material -> sphmat
+}
+
+bigsph = Sphere {
+    center -> vec3(0.0, 1.3, 0.0)
+    radius -> 0.5
+    material -> sphmat
+}
+bigsph2 = Sphere {
+    center -> vec3(0.0, 1.3, 0.0)
+    radius -> 0.5 - 2*bw
+    material -> sphmat
+}
+bigsphmask = Box {
+    cornerA -> vec3(-10.0, 1.3-3*bw, -10.0)
+    cornerB -> vec3(10.0, 1.3+3*bw, 10.0)
+    material -> sphmat
+}
+
+rr = 0.75
+beam1 = Box {
+    cornerA -> vec3(-rr, 1.3 - bw, -bw)
+    cornerB -> vec3(+rr, 1.3 + bw, +bw)
+    material -> Material { color -> rgb(1.0, 1.0, 1.0) }
+}
+beam2 = Box {
+    cornerA -> vec3(-bw, 1.3 - bw, -rr)
+    cornerB -> vec3(+bw, 1.3 + bw, +rr)
+    material -> Material { color -> rgb(1.0, 1.0, 1.0) }
+}
+
+bi = 2.5
+bc = rgb(bi*(162./255), bi*(153./255), bi*(137./255))
+basemat = Material {
+    color -> bc
+    reflectivity -> 0.3
+}
+base = Box {
+    cornerA -> vec3(-0.5, -1.6, -0.5)
+    cornerB -> vec3(0.5, -0.45-2*bw, 0.5)
+    material -> basemat
+}
+base2 = Box {
+    cornerA -> vec3(-0.5-2*bw, -0.45-2*bw, -0.5-2*bw)
+    cornerB -> vec3(0.5+2*bw, -0.45, 0.5+2*bw)
+    material -> basemat
+}
+
+bigbox = Box {
+    cornerA -> vec3(-rr, 1.3-rr, -rr)
+    cornerB -> vec3(+rr, 1.3+rr, +rr)
+    material -> sphmat
+}
+bigboxmask = Sphere {
+    center -> vec3(0.0, 1.3, 0.0)
+    radius -> rr*1.34
+    material -> sphmat
+}
+bigboxmask2 = Sphere {
+    center -> vec3(0.0, 1.3, 0.0)
+    radius -> rr*1.44
+    material -> sphmat
+}
+
+srr = rr*0.7
+support1 = Box {
+    cornerA -> vec3(srr, -0.45, srr)
+    cornerB -> vec3(+srr-1.5*bw, 0.6, +srr-1.5*bw)
+    material -> sphmat
+}
+support2 = Box {
+    cornerA -> vec3(srr, -0.45, -srr)
+    cornerB -> vec3(+srr-1.5*bw, 0.6, -srr+1.5*bw)
+    material -> sphmat
+}
+support3 = Box {
+    cornerA -> vec3(-srr, -0.45, srr)
+    cornerB -> vec3(-srr+1.5*bw, 0.6, +srr-1.5*bw)
+    material -> sphmat
+}
+support4 = Box {
+    cornerA -> vec3(-srr, -0.45, -srr)
+    cornerB -> vec3(-srr+1.5*bw, 0.6, -srr+1.5*bw)
+    material -> sphmat
+}
+
+flash = PointLight {
+    origin ->  vec3(-1.2, 0.1, 2.0)
+    color -> rgb(1.0, 1.0, 1.0)
+    falloff -> 3.0
+}
+
+Settings {
+    title      -> "Example 01"
+    author     -> "Tenchi (tenchi@team2xh.net)"
+    date       -> "24.06.2015"
+    notes      -> "Sample CRT scene in TRC language"
+    lights     -> [sun, flash]
+    camera     -> cam
+    background -> bg
+    supersampling -> 2
+    dofsamples -> 50
+    recursiondepth -> 50
+}
+
+Scene {
+    sph1 ^ sph4 ^ sph3 ^ sph2
+    base base2
+    box2
+    disk1 - disk1mask1 - disk1mask2
+    disk2 - disk2mask1 - disk2mask2
+    disk3 - disk3mask1 - disk3mask2
+    bigsph -- bigsphmask
+    -- bigsph2
+    -- beam1 beam2
+    bigbox - bigboxmask ^ bigboxmask2
+    support1 support2 support3 support4
+}

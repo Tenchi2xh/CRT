@@ -130,8 +130,8 @@ final public class Compiler extends CRTBaseVisitor {
 
         script.getSettings().setParent(script.getScene());
 
-        System.out.println(scope.getVariables());
-        System.out.println(script.getScene());
+        //System.out.println(scope.getVariables());
+        System.out.println("Scene compiled (" + script.getScene().toString() + ")");
 
         return script;
     }
@@ -157,7 +157,7 @@ final public class Compiler extends CRTBaseVisitor {
                     break;
                 case "date":
                     assertAttributeType(value, "date", expr, String.class);
-                    settings.setTitle((String) value);
+                    settings.setDate((String) value);
                     break;
                 case "notes":
                     assertAttributeType(value, "notes", expr, String.class);
@@ -267,6 +267,11 @@ final public class Compiler extends CRTBaseVisitor {
                 if (aperture != null) {
                     assertAttributeType(aperture, "aperture", ctx, Double.class);
                     ((Camera) o).setAperture((double) aperture);
+                }
+                Object apertureShape = attributes.get("apertureshape");
+                if (apertureShape != null) {
+                    assertAttributeType(apertureShape, "apertureshape", ctx, String.class);
+                    ((Camera) o).setShape(Camera.ApertureShape.valueOf(((String) apertureShape).toUpperCase()));
                 }
                 Object focaldistance = attributes.get("focaldistance");
                 if (focaldistance != null) {
@@ -466,7 +471,6 @@ final public class Compiler extends CRTBaseVisitor {
             case RAND:
                 args = checkArguments(arguments, RAND, 2, ctx);
                 Double r = rand.nextDouble() * Math.abs(args[0] - args[1]) + Math.min(args[0], args[1]);
-                System.out.println(r);
                 return r;
             default:
                 // TODO: macro call
