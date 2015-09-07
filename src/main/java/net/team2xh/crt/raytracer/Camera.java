@@ -37,7 +37,7 @@ public final class Camera {
     private double focalDistance = 0.5; // Radius around the camera's position that is in focus
     private double aperture = 3;        // Size of the aperture hole -- amount of "blurriness"
 
-    private ApertureShape shape = ApertureShape.PENTAGON; // Shape of the aperture
+    private ApertureShape shape = ApertureShape.CIRCLE; // Shape of the aperture
 
     /**
      * Constructs a camera placed at z = -1, 

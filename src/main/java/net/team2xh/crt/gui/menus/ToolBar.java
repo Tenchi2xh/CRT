@@ -39,8 +39,8 @@ public class ToolBar extends JToolBar {
         
         addSeparator();
         
-        add(Actions.perspCode);
-        add(Actions.perspLive);
+//        add(Actions.perspCode);
+//        add(Actions.perspLive);
         add(Actions.fullscreen);
         
         addSeparator();

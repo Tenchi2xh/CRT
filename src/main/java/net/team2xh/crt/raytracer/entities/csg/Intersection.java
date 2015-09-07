@@ -28,13 +28,8 @@ import net.team2xh.crt.raytracer.math.Vector3;
  */
 public class Intersection extends CSG {
 
-    // A ^ B
-    private final Entity a, b;
-
     public Intersection(Entity a, Entity b) {
-        super(a.material);
-        this.a = a;
-        this.b = b;
+        super(a.material, a, b);
     }
     
     @Override

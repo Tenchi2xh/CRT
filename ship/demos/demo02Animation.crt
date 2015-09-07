@@ -1,0 +1,166 @@
+-- To try the animation, switch to the animation tab.
+-- Animation was calibrated for 60 frames.
+-- To make the animation render a bit faster,
+-- disconnect the animation tab and resize it
+-- to a smaller size, or set "dofsamples" to 1
+
+-- Lights --------------------------------------------------
+
+-- Red point light
+l1 = PointLight {
+    origin -> vec3(2.0, 1.0, -2.0)
+    color -> rgb(0.7, 0.2, 0.2)
+    falloff -> 15.0
+}
+-- Green point light
+l2 = PointLight {
+    origin -> vec3(-2.0, 1.0, -2.0)
+    color -> rgb(0.2, 0.9, 0.2)
+    falloff -> 15.0
+}
+-- Blue point light
+l3 = PointLight {
+    origin -> vec3(0.0, 1.0, 2.0)
+    color -> rgb(0.2, 0.2, 0.9)
+    falloff -> 15.0
+}
+-- White sun
+sun = ParallelLight {
+    from -> vec3(-0.2, 1.0, -0.2)
+    pointing -> vec3(0.0, 0.0, 0.0)
+    color -> rgb(1.0, 1.0, 1.0)
+}
+
+-- Misc ----------------------------------------------------
+
+-- Distance will vary with time
+-- sine period is 2pi, we want 30 frames for going out
+-- and 30 to come back
+-- 2pi / 60 ~= 0.104
+d = 1.1 + 0.5 * sin(t*0.104 - 1.57)
+cam = Camera {
+    position -> vec3(d*2.5, d*0.3, d*-2.0)
+    pointing -> vec3(-0.2, 0.0, 0.0)
+    fov -> 75.0 / (d / 0.6)
+    aperture -> 50.0
+    -- Middle spheres are in focus
+    focaldistance -> 3.7 * (d / 0.6)
+    apertureshape -> "pentagon"
+}
+bg = Background {
+    image -> "/images/panorama/sky.jpg"
+    angle -> 3.4
+}
+boxMat = Material {
+    color -> rgb(0.5, 0.5, 0.5)
+}
+
+-- Entities ------------------------------------------------
+
+-- Slightly reflective ground plane, a bit below the horizon
+ground = Plane {
+    normal -> vec3(0.0, 1.0, 0.0)
+    position -> vec3(0.0, -0.5, 0.0)
+    material -> Material {
+        color -> rgb(1.0, 1.0, 1.0)
+        reflectivity -> 0.25
+    }
+}
+
+-- Carved-out box
+box = Box {
+    cornerA -> vec3(-0.5, -0.5, -0.5)
+    cornerB -> vec3(0.5, 0.5, 0.5)
+    material -> boxMat
+}
+boxMask = Sphere {
+    center -> vec3(0.0, 0.0, 0.0)
+    radius -> 0.68
+    material -> boxMat
+}
+carvedBox = box - boxMask
+
+-- Randomly colored spheres
+r = 0.3
+sph1 = Sphere {
+    center -> vec3(-1.0, r - 0.5, -1.0) 
+    radius -> r
+    material -> Material {
+        color -> rgb(rand(0.0, 1.0), rand(0.0, 1.0), rand(0.0, 1.0))
+        reflectivity -> 0.5
+    }
+}
+sph2 = Sphere {
+    center -> vec3(-1.0, r - 0.5, 0.0) 
+    radius -> r
+    material -> Material {
+        color -> rgb(rand(0.0, 1.0), rand(0.0, 1.0), rand(0.0, 1.0))
+        reflectivity -> 0.5
+    }
+}
+sph3 = Sphere {
+    center -> vec3(-1.0, r - 0.5, 1.0) 
+    radius -> r
+    material -> Material {
+        color -> rgb(rand(0.0, 1.0), rand(0.0, 1.0), rand(0.0, 1.0))
+        reflectivity -> 0.5
+    }
+}
+sph4 = Sphere {
+    center -> vec3(-1.0, r - 0.5, 2.0) 
+    radius -> r
+    material -> Material {
+        color -> rgb(rand(0.0, 1.0), rand(0.0, 1.0), rand(0.0, 1.0))
+        reflectivity -> 0.5
+    }
+}
+sph5 = Sphere {
+    center -> vec3(-1.0, r - 0.5, 3.0) 
+    radius -> r
+    material -> Material {
+        color -> rgb(rand(0.0, 1.0), rand(0.0, 1.0), rand(0.0, 1.0))
+        reflectivity -> 0.5
+    }
+}
+sph6 = Sphere {
+    center -> vec3(-1.0, r - 0.5, 4.0) 
+    radius -> r
+    material -> Material {
+        color -> rgb(rand(0.0, 1.0), rand(0.0, 1.0), rand(0.0, 1.0))
+        reflectivity -> 0.5
+    }
+}
+sph7 = Sphere {
+    center -> vec3(-1.0, r - 0.5, 5.0) 
+    radius -> r
+    material -> Material {
+        color -> rgb(rand(0.0, 1.0), rand(0.0, 1.0), rand(0.0, 1.0))
+        reflectivity -> 0.5
+    }
+}
+coloredSpheres = sph1 + sph2 + sph3 + sph4 + sph5 + sph6 + sph7
+
+-- Settings ------------------------------------------------
+
+Settings {
+    title      -> "Animation demo 02"
+    author     -> "Tenchi (tenchi@team2xh.net)"
+    date       -> "28.07.2015"
+    notes      -> "Animated sample scene"
+    -- Try to remove the sun and change the background
+    -- image (in the Misc section) to "stars.jpg"
+    lights     -> [l1, l2, l3, sun]
+    camera     -> cam
+    background -> bg
+    supersampling -> 1
+    -- Change to 1 for fast rendering 
+    dofsamples -> 1
+}
+
+-- Scene ---------------------------------------------------
+
+Scene {
+    carvedBox
+    coloredSpheres
+    ground
+}

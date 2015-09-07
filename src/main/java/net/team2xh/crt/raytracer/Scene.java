@@ -89,7 +89,7 @@ public class Scene {
     
     @Override
     public String toString() {
-        return String.format("Scene (%d entities, %d lights)", entities.size(), lights.size());
+        return String.format("%d entities, %d lights", entities.size(), lights.size());
     }
 
 }
