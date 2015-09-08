@@ -31,6 +31,10 @@
 
 ---
 
+![Example of a rendered 3D image](img/example3.png)
+
+---
+
 ## Technologies
 
 - Java 8
